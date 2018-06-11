@@ -1432,4 +1432,3 @@ fn read_to_string(filename: &str) -> io::Result<String> {
 In summary, it's possible to write perfectly safe Rust that isn't ugly, without
 needing exceptions.
 
-

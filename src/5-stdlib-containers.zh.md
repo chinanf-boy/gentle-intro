@@ -1,0 +1,468 @@
+
+# 标准库容器
+
+## 阅读文档
+
+在本节中,我将简要介绍Rust标准库的一些常见部分. 文档非常好,但有一点背景和一些例子总是有用的. 
+
+最初,阅读Rust文档可能很具挑战性,所以我会经历`Vec`举个例子. 一个有用的提示是勾选'[-]'框来折叠文档.  (如果使用下载标准库源代码`锈蚀组分添加防锈剂`一个 '[src]'链接将出现在此旁边. ) 这可以让您全面了解所有可用的方法. 
+
+首先要注意的是_并非所有可能的方法_被定义`Vec`本身. 它们是 (大部分) 可改变矢量的方法,例如`推`. 有些方法仅适用于类型匹配某些约束的向量. 例如,你只能打电话`去重` (删除重复项) ,如果这个类型确实是可以相互比较的东西. 有多个`impl`定义的块`Vec`针对不同类型的约束. 
+
+然后是非常特殊的关系`VEC <T>`和`&[T]`. 任何在切片上工作的方法也可以直接在矢量上工作,而不必明确地使用`as_slice`方法. 这种关系表达为`DEREF <目标= [T]>`. 当你通过引用预计会发生切片的东西来传递一个向量时,这也会起作用 - 这是类型之间自动转换的少数几个地方之一. 所以像切片方法`第一`,它可能 - 返回对第一个元素的引用,或者`持续`,也为向量工作. 许多方法与相应的字符串方法类似,所以就是这样`split_at`为了在索引处获得一对切片,`以. . 开始`检查矢量是否以值序列开始,并且`包含`检查矢量是否包含特定值. 
+
+没有`搜索`方法来查找特定值的索引,但这里有一条经验法则: 如果在容器上找不到方法,请在迭代器上查找一个方法: 
+
+```rust
+    let v = vec![10,20,30,40,50];
+    assert_eq!(v.iter().position(|&i| i == 30).unwrap(), 2);
+```
+
+ (该`&`是因为这是一个迭代器_引用_- 或者你可以说`*我== 30`为了比较) . 
+
+同样,没有`地图`对矢量的方法,因为`国际热核实验堆 () . 地图 (......) . 收集 () `也会做这项工作. Rust不喜欢不必要地分配 - 通常你不需要这样的结果`地图`作为实际分配的向量. 
+
+所以我建议你熟悉所有的迭代器方法,因为它们对编写好的Rust代码至关重要,而不必一直写出循环. 与往常一样,编写小程序来探索迭代器方法,而不是在更复杂的程序中与它们搏斗. 
+
+该`VEC <T>`和`&[T]`方法之后是共同的特征: 向量知道如何进行自己的调试显示 (但只有在元素实现时才是如此) `调试`) . 同样,如果它们的元素是可克隆的,它们是可克隆的. 他们执行`下降`当矢量最终死亡时发生这种情况;内存被释放,并且所有元素也被丢弃. 
+
+该`延伸`特征意味着来自迭代器的值可以被添加到一个没有循环的向量中: 
+
+```rust
+v.extend([60,70,80].iter());
+let mut strings = vec!["hello".to_string(), "dolly".to_string()];
+strings.extend(["you","are","fine"].iter().map(|s| s.to_string()));
+```
+
+还有`FromIterator`,它可以让矢量_建_来自迭代器.  (迭代器`搜集`方法倾向于此) . 
+
+任何容器都需要可迭代. 回想一下有[三种迭代器](2-structs-enums-lifetimes.html#the-three-kinds-of-iterators)
+
+```rust
+for x in v {...} // returns T, consumes v
+for x in &v {...} // returns &T
+for x in &mut v {...} // returns &mut T
+```
+
+该`对于`声明依赖于`IntoIterator`特质,实际上有三种实现. 
+
+然后是索引,由...控制`指数` (从矢量中读取) 和`IndexMut` (修改一个向量) . 有很多可能性,因为还有分片索引,就像`v [0..2]`,返回这些返回片,以及平原`v [0]`它返回对第一个元素的引用. 
+
+这里有一些实现`从`特征. 例如`VEC ::从 ( "你好" .to_string () ) `会给你一个字符串底层字节的向量`VEC <U8>`. 现在,已经有一种方法`into_bytes`上`串`,为什么冗余?有多种方式来做同样的事情似乎令人困惑. 但是这是必要的,因为显式特征使泛型方法成为可能. 
+
+有时候Rust类型系统的局限性会让事情变得笨拙. 这里的一个例子是如何`PartialEq`是_分别_定义为最大尺寸为32的阵列! (这会变得更好. ) 这可以方便地将向量与数组进行比较,但要注意大小限制. 
+
+还有[隐藏的宝石](http://xion.io/post/code/rust-iter-patterns.html)深埋在文档中. 正如Karol Kuczmarski所说: "因为说实话: 没有人滚动那么远". 如何处理迭代器中的错误?假设你映射了一些可能失败并返回的操作`结果`,然后想要收集结果: 
+
+```rust
+fn main() {
+    let nums = ["5","52","65"];
+    let iter = nums.iter().map(|s| s.parse::<i32>());
+    let converted: Vec<_> = iter.collect();
+    println!("{:?}",converted);
+}
+//[Ok(5), Ok(52), Ok(65)]
+```
+
+很公平,但现在你必须小心地解开这些错误!但是,如果你要求矢量的话,Rust已经知道如何做正确的事情_载_在一个`结果`- 也就是说,无论是矢量还是错误: 
+
+```rust
+    let converted: Result<Vec<_>,_> = iter.collect();
+//Ok([5, 52, 65])
+```
+
+如果转换错误?然后你会得到`呃`遇到第一个错误. 这是非常灵活的一个很好的例子`搜集`是.  (这里的符号可能会吓人 -`VEC <_>`意味着"这是一个向量,为我制定出实际的类型`和`结果&lt;VEC &lt;_>_>还要求Rust计算错误类型. ) 
+
+所以有一个_批量_文档中的详细信息. 但它肯定比C ++文档所说的更清晰`的std ::矢量`
+
+> 对元素施加的要求取决于对容器执行的实际操作. 一般来说,要求元素类型是完整类型并且符合Erasable的要求,但是许多成员函数会施加更严格的要求. 
+
+用C ++,你是独立的. 鲁斯特的清晰度一开始令人望而生畏,但当你学习阅读约束条件时,你将确切地知道任何特定的方法`Vec`需要. 
+
+我建议你使用源代码`锈蚀组分添加防锈剂`,因为标准库源代码非常易读,并且方法实现通常不如方法声明那么可怕. 
+
+## 地图
+
+_地图_ (有时叫_关联数组_要么_http&#x3A;//stardict.sourceforge.net/Dictionaries.php下载_) 让你查看与a相关的值_键_. 这不是一个真正的花式概念,可以用一系列元组来完成: 
+
+```rust
+    let entries = [("one","eins"),("two","zwei"),("three","drei")];
+
+    if let Some(val) = entries.iter().find(|t| t.0 == "two") {
+        assert_eq!(val.1,"zwei");
+    }
+```
+
+这对于小地图来说很好,只需要为键定义相等,但搜索需要线性时间 - 与地图大小成比例. 
+
+一个`HashMap中`有一个更好_批量_要搜索的键/值对的列表: 
+
+```rust
+use std::collections::HashMap;
+
+let mut map = HashMap::new();
+map.insert("one","eins");
+map.insert("two","zwei");
+map.insert("three","drei");
+
+assert_eq! (map.contains_key("two"), true);
+assert_eq! (map.get("two"), Some(&"zwei"));
+```
+
+`与"ZWEI"`?这是因为`得到`返回一个_参考_到价值,而不是价值本身. 这里的值类型是`&STR`,所以我们得到一个`&&海峡`. 一般来说它_具有_作为参考,因为我们不能_移动_一种超出其拥有类型的价值. 
+
+`get_mut`就好像`得到`但返回一个可能的可变参考. 这里我们有一个从字符串到整数的映射,并希望更新键'two'的值: 
+
+```rust
+let mut map = HashMap::new();
+map.insert("one",1);
+map.insert("two",2);
+map.insert("three",3);
+
+println!("before {}", map.get("two").unwrap());
+
+{
+    let mut mref = map.get_mut("two").unwrap();
+    *mref = 20;
+}
+
+println!("after {}", map.get("two").unwrap());
+// before 2
+// after 20
+```
+
+请注意,获取可写入的引用发生在它自己的块中 - 否则,我们将有一个可变的借位持续到结束,然后Rust不会允许您从`地图`再次与`map.get ( "二") `;它不能允许任何可读的引用,同时已经有一个可写参考的范围.  (如果是这样,它不能保证那些可读的引用将保持有效. ) 所以解决方案是确保可变借用不会持续很长时间. 
+
+这不是最优雅的API,但我们不能抛弃任何可能的错误. Python会抛出一个异常,而C ++只会创建一个默认值.  (这很方便,但偷偷摸摸;容易忘记的价格a_map \[ "2"]`总是返回一个整数是我们不能区分零和'未找到'之间的区别,`加_一个额外的条目被创建!) _没有人只是打电话
+
+摅`,例子中除外. `但是,您看到的大多数Rust代码都由一些独立的示例组成!比赛发生的可能性更大: 我们可以遍历键/值对,但不是以任何特定的顺序. 
+
+```rust
+if let Some(v) = map.get("two") {
+    let res = v + 1;
+    assert_eq!(res, 3);
+}
+...
+match map.get_mut("two") {
+    Some(mref) => *mref = 20,
+    None => panic!("_now_ we can panic!")
+}
+```
+
+也有
+
+```rust
+for (k,v) in map.iter() {
+    println!("key {} value {}", k,v);
+}
+// key one value eins
+// key three value drei
+// key two value zwei
+```
+
+按键`和`值`方法分别通过键和值返回迭代器,这使得创建值的向量变得容易. `示例: 计算单词
+
+## 与文本有关的一个有趣的事情是计数字频率. 
+
+将文本分解为单词很简单split_whitespace`,但是我们真的要尊重标点符号. `所以这些词应该被定义为只包含字母字符. 这些词也需要作为小写字母进行比较. 在地图上做一个可变的查找很简单,但是处理查找失败的情况有点尴尬. 
+
+幸运的是,有一种更新地图值的方式: 
+
+```rust
+let mut map = HashMap::new();
+
+for s in text.split(|c: char| ! c.is_alphabetic()) {
+    let word = s.to_lowercase();
+    let mut count = map.entry(word).or_insert(0);
+    *count += 1;
+}
+```
+
+如果没有对应于某个单词的现有计数,那么让我们为该单词和单词创建一个包含零的新条目_插_它进入地图. 它正是C ++映射所做的,除非它明确地完成并且没有偷偷摸摸. 
+
+这段代码中只有一个显式类型,这就是`烧焦`因为弦的怪癖而需要`模式`使用的特质`分裂`. 但我们可以推断出关键类型是`串`值类型是`i32`. 
+
+运用[福尔摩斯历险记](http://www.gutenberg.org/cache/epub/1661/pg1661.txt)来自古腾堡计划,我们可以更彻底地进行测试. 唯一字词的总数 (`map.len () `) 是8071. 
+
+如何找到最常见的二十个单词?首先,将映射转换为 (键,值) 元组的向量.  (因为我们使用了,所以这消耗了地图`into_iter`. ) 
+
+```rust
+let mut entries: Vec<_> = map.into_iter().collect();
+```
+
+接下来我们可以按降序排列. `排序方式`期待的结果`cmp`方法来自于`奥德`特征,它是由整型值类型实现的: 
+
+```rust
+    entries.sort_by(|a,b| b.1.cmp(&a.1));
+```
+
+最后打印出前20个条目: 
+
+```rust
+    for e in entries.iter().take(20) {
+        println!("{} {}", e.0, e.1);
+    }
+```
+
+ (好吧,你_可以_只是循环`0..20`并在这里给这个向量编制索引 - 这没有错,只是有点不经意 - 而且对于大型迭代来说可能更昂贵. ) 
+
+     38765
+    the 5810
+    and 3088
+    i 3038
+    to 2823
+    of 2778
+    a 2701
+    in 1823
+    that 1767
+    it 1749
+    you 1572
+    he 1486
+    was 1411
+    his 1159
+    is 1150
+    my 1007
+    have 929
+    with 877
+    as 863
+    had 830
+
+有点惊喜 - 那个空话是什么?这是因为`分裂`适用于单字符分隔符,因此任何标点符号或额外空格都会导致新的分割. 
+
+## 集
+
+集合是地图,您只关心关键字,而不关联任何关联的值. 所以`插`只需要一个值,然后使用`包含`用于测试一个值是否在一个集合中. 
+
+像所有容器一样,您可以创建一个`HashSet的`来自迭代器. 这正是什么`搜集`确实,一旦你给了它必要的类型提示. 
+
+```rust
+// set1.rs
+use std::collections::HashSet;
+
+fn make_set(words: &str) -> HashSet<&str> {
+    words.split_whitespace().collect()
+}
+
+fn main() {
+    let fruit = make_set("apple orange pear orange");
+
+    println!("{:?}", fruit);
+}
+// {"orange", "pear", "apple"}
+```
+
+注意 (如预期的那样) 重复插入同一个键不起作用,并且集合中值的顺序并不重要. 
+
+没有通常的操作,它们不会被设置: 
+
+```rust
+let fruit = make_set("apple orange pear");
+let colours = make_set("brown purple orange yellow");
+
+for c in fruit.intersection(&colours) {
+    println!("{:?}",c);
+}
+// "orange"
+```
+
+他们都创建迭代器,并且可以使用`搜集`使这些成为集合. 
+
+这是一个快捷方式,就像我们为矢量定义的那样: 
+
+```rust
+use std::hash::Hash;
+
+trait ToSet<T> {
+    fn to_set(self) -> HashSet<T>;
+}
+
+impl <T,I> ToSet<T> for I
+where T: Eq + Hash, I: Iterator<Item=T> {
+
+    fn to_set(self) -> HashSet<T> {
+       self.collect()
+    }
+}
+
+...
+
+let intersect = fruit.intersection(&colours).to_set();
+```
+
+就像所有的Rust泛型一样,你需要限制类型 - 这只能用于理解平等的类型 (`公式`) 并且为其存在"散列函数" (`哈希`) . 请记住,没有_类型_叫`迭代器`,所以`一世`代表任何类型_器物_ `迭代器`. 
+
+这种在标准库类型上实现我们自己的方法的技术似乎有点过于强大,但是同样存在规则. 我们只能为自己的特质做到这一点. 如果结构和特征来自同一个箱子 (特别是stdlib) ,那么这种实现将不被允许. 通过这种方式,您可以避免造成混乱. 
+
+在祝贺自己如此聪明,方便的捷径之前,您应该意识到后果. 如果`make_set`是这样写的,所以这些是拥有字符串的集合,然后是实际类型`相交`可能会惊喜: 
+
+```rust
+fn make_set(words: &str) -> HashSet<String> {
+    words.split_whitespace().map(|s| s.to_string()).collect()
+}
+...
+// intersect is HashSet<&String>!
+let intersect = fruit.intersection(&colours).to_set();
+```
+
+除此之外,Rust不会突然开始复制拥有的字符串. `相交`包含单个`&串`借来的`水果`. 我可以向你保证,当你开始修补生命时,这会给你带来麻烦!更好的解决方案是使用迭代器的`克隆`方法来创建交集的所有字符串副本. 
+
+```rust
+// intersect is HashSet<String> - much better
+let intersect = fruit.intersection(&colours).cloned().to_set();
+```
+
+一个更强大的定义`设置`可能`self.cloned () . 收集 () `,我邀请您试用. 
+
+## 示例: 交互式命令处理
+
+与程序进行交互式会话通常很有用. 每行都被读入并分成单词;该命令在第一个单词上查找,其余单词作为参数传递给该命令. 
+
+自然实现是从命令名到闭包的映射. 但是,我们如何存储关闭,因为它们都会有不同的大小?拳击他们将他们复制到堆上: 
+
+这是第一次尝试: 
+
+```rust
+    let mut v = Vec::new();
+    v.push(Box::new(|x| x * x));
+    v.push(Box::new(|x| x / 2.0));
+
+    for f in v.iter() {
+        let res = f(1.0);
+        println!("res {}", res);
+    }
+```
+
+我们在第二次推动时遇到了非常明显的错误: 
+
+      = note: expected type `[closure@closure4.rs:4:21: 4:28]`
+      = note:    found type `[closure@closure4.rs:5:21: 5:28]`
+    note: no two closures, even if identical, have the same type
+
+`rustc`推导出了一个过于具体的类型,所以有必要强制该向量具有该类型_盒装特质类型_在事情刚刚开始之前: 
+
+```rust
+    let mut v: Vec<Box<Fn(f64)->f64>> = Vec::new();
+```
+
+我们现在可以使用相同的技巧,并将这些盒装封口保存在一个`HashMap中`. 我们仍然需要警惕终身,因为关闭可以从他们的环境中借用. 
+
+作为第一个制作它们很诱人`FnMut`- 也就是说,他们可以修改任何捕获的变量. 但是我们会有不止一个命令,每个命令都有自己的闭包,所以你不能随意借用相同的变量. 
+
+所以关闭通过了_可变参考_作为一个参数,加上一段字符串切片 (`&[&STR]`) 代表命令参数. 他们会返回一些`结果`- 我们会用`串`首先是错误. 
+
+`D`是数据类型,可以是任何大小的数据. 
+
+```rust
+type CliResult = Result<String,String>;
+
+struct Cli<'a,D> {
+    data: D,
+    callbacks: HashMap<String, Box<Fn(&mut D,&[&str])->CliResult + 'a>>
+}
+
+impl <'a,D: Sized> Cli<'a,D> {
+    fn new(data: D) -> Cli<'a,D> {
+        Cli{data: data, callbacks: HashMap::new()}
+    }
+
+    fn cmd<F>(&mut self, name: &str, callback: F)
+    where F: Fn(&mut D, &[&str])->CliResult + 'a {
+        self.callbacks.insert(name.to_string(),Box::new(callback));
+    }
+```
+
+`cmd`传递一个名称和任何与我们的签名相匹配的封闭,这个签名被装箱并输入到地图中. `Fn`意味着我们的关闭借用他们的环境,但不能修改它. 它是声明比实际实现更可怕的通用方法之一!忘记明确的生命是一个常见的错误 -  Rust不会让我们忘记这些封闭只限于他们的环境!
+
+现在阅读和运行命令: 
+
+```rust
+    fn process(&mut self,line: &str) -> CliResult {
+        let parts: Vec<_> = line.split_whitespace().collect();
+        if parts.len() == 0 {
+            return Ok("".to_string());
+        }
+        match self.callbacks.get(parts[0]) {
+            Some(callback) => callback(&mut self.data,&parts[1..]),
+            None => Err("no such command".to_string())
+        }
+    }
+
+    fn go(&mut self) {
+        let mut buff = String::new();
+        while io::stdin().read_line(&mut buff).expect("error") > 0 {
+            {
+                let line = buff.trim_left();
+                let res = self.process(line);
+                println!("{:?}", res);
+
+            }
+            buff.clear();
+        }
+    }
+```
+
+这是非常简单明了的 - 将行分成单词作为矢量,查找地图中的第一个单词,并用存储的可变数据和其余单词调用闭包. 空行会被忽略,不会被视为错误. 
+
+接下来,让我们定义一些帮助函数,使我们的闭包更容易返回正确和不正确的结果. 有一个_小_有点聪明在继续;它们是通用函数,适用于任何可以转换为的类型`串`. 
+
+```rust
+fn ok<T: ToString>(s: T) -> CliResult {
+    Ok(s.to_string())
+}
+
+fn err<T: ToString>(s: T) -> CliResult {
+    Err(s.to_string())
+}
+```
+
+最后,主程序. 看看如何`OK (答案) `作品 - 因为整数知道如何将自己转换为字符串!
+
+```rust
+use std::error::Error;
+
+fn main() {
+    println!("Welcome to the Interactive Prompt! ");
+
+    struct Data {
+        answer: i32
+    }
+
+    let mut cli = Cli::new(Data{answer: 42});
+
+    cli.cmd("go",|data,args| {
+        if args.len() == 0 { return err("need 1 argument"); }
+        data.answer = match args[0].parse::<i32>() {
+            Ok(n) => n,
+            Err(e) => return err(e.description())
+        };
+        println!("got {:?}", args);
+        ok(data.answer)
+    });
+
+    cli.cmd("show",|data,_| {
+        ok(data.answer)
+    });
+
+    cli.go();
+}
+```
+
+这里的错误处理有点笨拙,我们稍后会看到如何在这种情况下使用问号运算符. 基本上,特定的错误`的std :: NUM :: ParseIntError`实现这个特点`的std ::错误::错误`,我们必须把它带入使用范围`描述`方法 - 铁锈不让特征运作,除非它们是可见的. 
+
+在行动中: 
+
+    Welcome to the Interactive Prompt!
+    go 32
+    got ["32"]
+    Ok("32")
+    show
+    Ok("32")
+    goop one two three
+    Err("no such command")
+    go 42 one two three
+    got ["42", "one", "two", "three"]
+    Ok("42")
+    go boo!
+    Err("invalid digit found in string")
+
+以下是一些明显的改进,供您尝试. 首先,如果我们给`cmd`第三个参数是帮助行,然后我们可以存储这些帮助行并自动执行"帮助"命令. 其次,有一些命令编辑和历史是_非常_方便,所以使用[rustyline](https://crates.io/crates/rustyline)从货物箱. 
