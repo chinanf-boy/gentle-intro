@@ -1,0 +1,599 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>面向对象编程 - A Gentle Introduction to Rust</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Introduction to the Rust language, standard library and ecosystem">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="_FontAwesome/css/font-awesome.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+
+    </head>
+    <body class="light">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html" class="active"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">A Gentle Introduction to Rust</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="object-orientation.zh.html#a面向对象的rust每个人都来自某个地方以前的编程语言以特定的方式实现了面向对象编程-oop-的可能性很大" id="a面向对象的rust每个人都来自某个地方以前的编程语言以特定的方式实现了面向对象编程-oop-的可能性很大"><h2>面向对象的Rust每个人都来自某个地方,以前的编程语言以特定的方式实现了面向对象编程 (OOP) 的可能性很大:</h2></a>
+<p>'班'作为工厂生成对象</p>
+<ul>
+<li>(通常被称为_实例_) 并定义唯一的类型. _类可能_继承</li>
+<li>来自其他班级 (他们的_父母_) ,继承数据 (<em>领域</em>) 和行为 (<em>方法</em>) _如果B从A继承,那么可以将B的一个实例传递给期望A (_分型</li>
+<li>) _一个对象应该隐藏它的数据 (_封装</li>
+<li>) ,只能用方法操作. _面向对象_设计</li>
+</ul>
+<p>然后是识别类 ('名词') 和方法 ('动词') ,然后建立它们之间的关系,<em>是-A_和_有一个</em>. _在旧版&quot;星际迷航&quot;系列中,医生会对船长说: &quot;这是人生,吉姆,而不是我们所知道的生活&quot;. _这非常适用于Rust风格的面向对象: 它会带来震撼,因为Rust数据聚合 (结构,枚举和元组) 是愚蠢的.</p>
+<p>你可以在其上定义方法,并使数据本身是私有的,所有通常的封装策略,但它们都是_无关的类型_. 没有数据分类和数据继承 (除了专门的案例) <code>Deref</code>强制转换. )</p>
+<p>Rust中各种数据类型之间的关系使用_性状_. 学习Rust的很大一部分是理解标准库特征如何操作,因为这是将所有数据类型粘合在一起的意义网络.</p>
+<p>特质很有趣,因为它们与主流语言的概念之间没有一一对应的关系. 这取决于你是动态还是静态思考. 在动态的情况下,它们更像Java或Go接口. 特质对象考虑一下第一个用来介绍特质的例子:</p>
+<a class="header" href="object-orientation.zh.html#a这是一个有很大影响的小程序" id="a这是一个有很大影响的小程序"><h3>这是一个有很大影响的小程序:</h3></a>
+<p>这是一个Rust需要某种类型指导的情况 - 我特别需要一个引用任何实现的引用的向量</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+trait Show {
+    fn show(&amp;self) -&gt; String;
+}
+
+impl Show for i32 {
+    fn show(&amp;self) -&gt; String {
+        format!(&quot;four-byte signed {}&quot;, self)
+    }
+}
+
+impl Show for f64 {
+    fn show(&amp;self) -&gt; String {
+        format!(&quot;eight-byte float {}&quot;, self)
+    }
+}
+#}</code></pre></pre>
+<p>显示</p>
+<pre><pre class="playpen"><code class="language-rust">fn main() {
+    let answer = 42;
+    let maybe_pi = 3.14;
+    let v: Vec&lt;&amp;Show&gt; = vec![&amp;answer,&amp;maybe_pi];
+    for d in v.iter() {
+        println!(&quot;show {}&quot;,d.show());
+    }
+}
+// show four-byte signed 42
+// show eight-byte float 3.14
+</code></pre></pre>
+<p>. 现在请注意<code>I32</code>和F64<code>彼此没有任何关系,但他们都明白这一点</code>显示<code>方法,因为它们都实施相同的特质.</code>这种方法是<code>虚拟</code>,因为实际的方法对于不同的类型有不同的代码,但是正确的方法是基于的_运行_信息. _这些引用被调用_特质对象<a href="https://doc.rust-lang.org/stable/book/trait-objects.html">. </a>和</p>
+<p>那_是如何将不同类型的对象放在同一个向量中. _如果您来自Java或Go背景,您可以考虑<code>显示</code>充当界面.</p>
+<p>这个例子的一点细化 - 我们框_价值. _一个盒子包含对分配在堆上的数据的引用,并且非常像引用 - 它是一个智能指针. _当箱子超出范围和_下降踢进来,然后释放内存. <code>不同之处在于,您现在可以使用此矢量,将其作为参考传递给它,或者不必跟踪任何借用的引用就可以将其传递出去.</code>当矢量被丢弃时,这些框将被丢弃,并且所有的内存都被回收.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let answer = Box::new(42);
+let maybe_pi = Box::new(3.14);
+
+let show_list: Vec&lt;Box&lt;Show&gt;&gt; = vec![question,answer];
+for d in &amp;show_list {
+    println!(&quot;show {}&quot;,d.show());
+}
+#}</code></pre></pre>
+<p>动物出于某种原因,任何关于面向对象和继承的讨论似乎最终都会讨论动物.</p>
+<a class="header" href="object-orientation.zh.html#a它创造了一个不错的故事-看猫是食肉动物食肉动物是动物" id="a它创造了一个不错的故事-看猫是食肉动物食肉动物是动物"><h2>它创造了一个不错的故事: &quot;看,猫是食肉动物,食肉动物是动物&quot;.</h2></a>
+<p>但我会从Ruby宇宙的经典口号开始: &quot;如果它嘎嘎,那就是鸭子&quot;. 你所有的对象必须做的是定义嘎嘎他们可以被认为是鸭子,虽然在一个非常狭窄的方式. 在这里,我们有两种完全不同的类型 (其中一个非常愚蠢,甚至没有数据) ,并且是的,它们都是<code>嘎嘎 ()</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+trait Quack {
+    fn quack(&amp;self);
+}
+
+struct Duck ();
+
+impl Quack for Duck {
+    fn quack(&amp;self) {
+        println!(&quot;quack!&quot;);
+    }
+}
+
+struct RandomBird {
+    is_a_parrot: bool
+}
+
+impl Quack for RandomBird {
+    fn quack(&amp;self) {
+        if ! self.is_a_parrot {
+            println!(&quot;quack!&quot;);
+        } else {
+            println!(&quot;squawk!&quot;);
+        }
+    }
+}
+
+let duck1 = Duck();
+let duck2 = RandomBird{is_a_parrot: false};
+let parrot = RandomBird{is_a_parrot: true};
+
+let ducks: Vec&lt;&amp;Quack&gt; = vec![&amp;duck1,&amp;duck2,&amp;parrot];
+
+for d in &amp;ducks {
+    d.quack();
+}
+// quack!
+// quack!
+// squawk!
+#}</code></pre></pre>
+<p>其中一个有点奇怪 (对于鸭子) ,但他们共享相同的方法名称,Rust可以以类型安全的方式保存这些对象的集合. <code>类型安全是一件奇妙的事情.</code>没有静态类型,你可以插入一个猫进入这个Quackers集合,导致运行时混乱.</p>
+<p>这是一个有趣的: _我能说什么?_它呱呱叫,它一定是一只鸭子.</p>
+<p>有趣的是,你可以将你的特征应用于任何锈值,而不仅仅是&quot;对象&quot;.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// and why the hell not!
+impl Quack for i32 {
+    fn quack(&amp;self) {
+        for i in 0..*self {
+            print!(&quot;quack {} &quot;,i);
+        }
+        println!(&quot;&quot;);
+    }
+}
+
+let int = 4;
+
+let ducks: Vec&lt;&amp;Quack&gt; = vec![&amp;duck1,&amp;duck2,&amp;parrot,&amp;int];
+...
+// quack!
+// quack!
+// squawk!
+// quack 0 quack 1 quack 2 quack 3
+#}</code></pre></pre>
+<p>(以来<code>嘎嘎</code>通过引用,有明确的解除引用<code>*</code>得到整数. )</p>
+<p>然而,你只能用同一个箱子的特质和类型来做这件事,所以标准库不能'猴子补丁',这是另一块红宝石人的做法 (也不是最受人羡慕的) .</p>
+<p>到目前为止,这个特质<code>嘎嘎</code>表现得非常像Java接口,并且像现代Java接口一样_提供_如果你已经实现了这个方法,它将提供一个默认实现_需要_方法.  (该<code>迭代器</code>特质就是一个很好的例子. )</p>
+<p>但是,请注意特质不属于_定义_您可以定义和实施任何类型的新特征,但要受同一箱子限制. 可以将参考传递给任何人</p>
+<p>嘎嘎<code>实施者:</code>这是分类,Rust风格.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn quack_ref (q: &amp;Quack) {
+    q.quack();
+}
+
+quack_ref(&amp;d);
+#}</code></pre></pre>
+<p>由于我们在这里进行编程语言比较101,所以我会提到Go对这个嘎嘎的业务有一个有趣的看法 - 如果有一个Go接口嘎嘎</p>
+<p>,而一个类型有一个嘎嘎<code>方法,那么类型就满足了</code>嘎嘎<code>而不需要明确的定义.</code>这也打破了定义好的Java模型,并且允许编译时鸭式输入,代价是一些清晰和类型安全. <code>但是鸭子打字有一个问题.</code>坏OOP的标志之一是太多的方法有一些通用名称</p>
+<p>跑<code>.</code>&quot;如果它已经运行 () ,它必须是可运行的&quot;听起来不像原来那么容易!_所以Go接口可能会是偶然有效. _在Rust,两者都是<code>调试</code>和<code>显示</code>特质定义<code>fmt</code>方法,但他们真的意味着不同的事情.</p>
+<p>所以Rust的特质允许传​​统_多态_OOP. 但是遗传呢?人们通常是指_实现继承_而Rust则是_接口继承_. 就好像一位Java程序员从未使用过<code>延伸</code>而是使用<code>器物</code>. 实际上,这是<a href="http://www.javaworld.com/article/2073649/core-java/why-extends-is-evil.html">推荐的做法</a>通过Alan Holub. 他说:</p>
+<blockquote>
+<p>我曾经参加过一个Java用户组会议,James Gosling (Java的发明人) 是特色演讲者. 在令人难忘的问答环节中,有人问他: &quot;如果你能再做一次Java,你会改变什么?&quot;&quot;我不会上课,&quot;他回答. 笑声平息后,他解释说,真正的问题不是类本身,而是实现继承 (扩展关系) . 接口继承 (实现关系) 是可取的.</p>
+</blockquote>
+<p>尽可能避免实现继承</p>
+<p>所以即使在Java中,你也可能过度使用类. 实现继承有一些严重的问题. _但它的确如此_方便. <code>有这个胖基类叫</code>动物<code>它有很多有用的功能 (它甚至可能暴露它的内部!) ,我们的派生类</code>猫可以使用. 也就是说,它是一种代码重用的形式.</p>
+<p>但是代码重用是一个单独的问题.</p>
+<p>理解Rust时,区分实现和接口继承很重要. <em>请注意,性状可能有_提供方法. <code>考虑</code>迭代器- 只有你_有_重写<code>下一个</code>,但免费获得大量的方法. 这与现代Java接口的&quot;默认&quot;方法类似. 这里我们只定义<code>名称</code>和<code>upper_case</code>是为我们定义的. 我们_可以_覆盖<code>upper_case</code>也是,但事实并非如此_需要</em>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+trait Named {
+    fn name(&amp;self) -&gt; String;
+
+    fn upper_case(&amp;self) -&gt; String {
+        self.name().to_uppercase()
+    }
+}
+
+struct Boo();
+
+impl Named for Boo {
+    fn name(&amp;self) -&gt; String {
+        &quot;boo&quot;.to_string()
+    }
+}
+
+let f = Boo();
+
+assert_eq!(f.name(),&quot;boo&quot;.to_string());
+assert_eq!(f.upper_case(),&quot;BOO&quot;.to_string());
+#}</code></pre></pre>
+<p>这是一个_类_的代码重用,为真,但请注意,它不适用于数据,只有界面!</p>
+<a class="header" href="object-orientation.zh.html#a鸭子和泛型" id="a鸭子和泛型"><h2>鸭子和泛型</h2></a>
+<p>Rust中一个通用友好的鸭子函数的例子就是这样一个简单的例子: 类型参数是</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn quack&lt;Q&gt; (q: &amp;Q)
+where Q: Quack {
+    q.quack();
+}
+
+let d = Duck();
+quack(&amp;d);
+#}</code></pre></pre>
+<p>任何_实现的类型_嘎嘎<code>.</code>之间有一个重要的区别嘎嘎<code>和</code>quack_ref<code>在上一节中定义.</code>这个函数的主体是编译的每_的调用类型,并且不需要虚拟方法;_这些功能可以完全内联. <code>它使用特质嘎嘎</code>以不同的方式,作为一个_约束_在泛型类型上.</p>
+<p>这是相当于通用的C ++<code>嘎嘎</code> (注意<code>常量</code>) :</p>
+<pre><code class="language-cpp">template &lt;class Q&gt;
+void quack(const Q&amp; q) {
+    q.quack();
+}
+</code></pre>
+<p>请注意,类型参数不受任何限制.</p>
+<p>这是非常多的编译时鸭式输入 - 如果我们将引用传递给非quackable类型,那么编译器会抱怨不嘎嘎方法. 至少这个错误是在编译时发现的,但是当一个类型被意外Quackable时会更糟,就像Go一样. 更多涉及的模板函数和类导致可怕的错误消息,因为有<code>没有</code>对泛型的限制. _你可以定义一个可以处理Quacker指针迭代的函数: 这将会被执行每_迭代器类型</p>
+<p>它</p>
+<pre><code class="language-cpp">template &lt;class It&gt;
+void quack_everyone (It start, It finish) {
+    for (It i = start; i != finish; i++) {
+        (*i)-&gt;quack();
+    }
+}
+</code></pre>
+<p>. _Rust的等价物有点更具挑战性: _Rust中的迭代器不是鸭式的,但是必须实现的类型<code>迭代器</code>,在这种情况下,迭代器提供了一些盒子</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn quack_everyone &lt;I&gt; (iter: I)
+where I: Iterator&lt;Item=Box&lt;Quack&gt;&gt; {
+    for d in iter {
+        d.quack();
+    }
+}
+
+let ducks: Vec&lt;Box&lt;Quack&gt;&gt; = vec![Box::new(duck1),Box::new(duck2),Box::new(parrot),Box::new(int)];
+
+quack_everyone(ducks.into_iter());
+#}</code></pre></pre>
+<p>嘎嘎<code>.</code>所涉及的类型没有歧义,值必须满足<code>嘎嘎</code>. <code>通常,函数签名是关于通用Rust函数的最具挑战性的事情,这就是为什么我建议阅读标准库的源代码 - 实现通常比声明简单得多!</code>这里唯一的类型参数是实际的迭代器类型,这意味着这将适用于任何可以传递序列的任何东西<code>框&lt;鸭&gt;</code>,而不仅仅是一个向量迭代器.</p>
+<a class="header" href="object-orientation.zh.html#a遗产" id="a遗产"><h2>遗产</h2></a>
+<p>面向对象设计的一个常见问题是试图将事情强加到一个_是-A关系,而忽视_有一个_关系. 该_四人帮二十二年前在他们的设计模式书中说过&quot;首选组合继承&quot;. <a href="https://en.wikipedia.org/wiki/Design_Patterns">这里有一个例子: 你想模拟一些公司的员工,并且</a>雇员似乎是一个班的好名字.</p>
+<p>然后,经理是一个员工 (这是真的) ,所以我们开始用a构建我们的层次结构<code>经理</code>的子类雇员. <code>这并不像看起来那么聪明.</code>也许我们对识别重要名词感到厌倦,也许我们 (无意识地) 认为经理和员工是不同种类的动物?<code>这更好</code>雇员有一个角色收集,然后一个经理就是一个<code>雇员</code>有更多的责任和能力. 或考虑车辆 - 从自行车到300吨矿车. <code>有多种方式可以考虑车辆,道路 (全地形,城市,铁路等) ,电源 (电力,柴油,柴油电力等) ,货物或人等等</code>. <code>您根据一个方面创建的任何固定层次的类都会忽略所有其他方面.</code>也就是说,有多种可能的车辆分类!</p>
+<p>构成在Rust中更为重要,原因很明显,您无法从基类以惰性方式继承功能.</p>
+<p>组合也很重要,因为借用检查器足够聪明,可以知道借用不同的结构域是单独的借入.</p>
+<p>你可以有一个字段的可变借入,同时拥有另一个字段的不可变借入,等等. _Rust不能告诉一个方法只访问一个字段,所以为了方便实现,这些字段应该用自己的方法来构造. _ (该</p>
+<p>外部</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+struct Foo {
+    one: String,
+    two: String
+}
+
+impl Foo {
+    fn borrow_one_mut(&amp;mut self) -&gt; &amp;mut String {
+        &amp;mut self.one
+    }
+    ....
+}
+#}</code></pre></pre>
+<p>结构的接口可以是任何你喜欢使用合适的特征的. ) <code>&quot;拆分拆分&quot;的一个具体例子会使这个更清晰. 我们拥有一个拥有一些字符串的结构,并且有一个可变的借用第一个字符串的方法. (这是Rust命名约定的一个例子 - 这些方法应该以_mut)</code>现在,一种借用两个字符串的方法,重用第一种方法:</p>
+<p>哪个不行!</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    fn borrow_both(&amp;self) -&gt; (&amp;str,&amp;str) {
+        (self.borrow_one_mut(), &amp;self.two)
+    }
+#}</code></pre></pre>
+<p>我们从可变的可怜的<code>自</code>和_也_从中无限借用<code>自</code>. 如果Rust允许这样的情况发生,那么无法保证不可改变的引用不会改变.</p>
+<p>解决方案很简单:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    fn borrow_both(&amp;self) -&gt; (&amp;str,&amp;str) {
+        (&amp;self.one, &amp;self.two)
+    }
+#}</code></pre></pre>
+<p>这很好,因为借款检查员认为这些是独立的借款. 所以想象这些字段是一些任意的类型,你可以看到在这些字段上调用的方法不会导致借用问题.</p>
+<p>有一种限制但非常重要的&quot;继承&quot;<a href="https://rust-lang.github.io/book/second-edition/ch15-02-deref.html">Deref</a>,这是'取消引用'操作符的特征<code>*</code>. <code>串</code>器物<code>DEREF &lt;目标= STR&gt;</code>所有的方法定义在<code>&amp;STR</code>自动可用<code>串</code>以及!以类似的方式,<code>富</code>可以直接调用<code>框&lt;美孚&gt;</code>. 有些人觉得这有点神奇,但它非常方便. 现代Rust中有一种更简单的语言,但使用起来并不令人愉快. 它确实应该用于拥有可变类型和更简单的借用类型的情况.</p>
+<p>一般在Rust中有_特质继承_:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+trait Show {
+    fn show(&amp;self) -&gt; String;
+}
+
+trait Location {
+    fn location(&amp;self) -&gt; String;
+}
+
+trait ShowTell: Show + Location {}
+#}</code></pre></pre>
+<p>最后一个特征简单地将我们两个不同的特征合并为一个,尽管它可以指定其他方法.</p>
+<p>现在的情况和以前一样:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+#[derive(Debug)]
+struct Foo {
+    name: String,
+    location: String
+}
+
+impl Foo {
+    fn new(name: &amp;str, location: &amp;str) -&gt; Foo {
+        Foo{
+            name: name.to_string(),
+            location: location.to_string()
+        }
+    }
+}
+
+impl Show for Foo {
+    fn show(&amp;self) -&gt; String {
+        self.name.clone()
+    }
+}
+
+impl Location for Foo {
+    fn location(&amp;self) -&gt; String {
+        self.location.clone()
+    }
+}
+
+impl ShowTell for Foo {}
+#}</code></pre></pre>
+<p>现在,如果我有价值<code>foo</code>类型<code>富</code>,那么对该值的引用将会满足<code>&amp;显示</code>,<code>&amp;位置</code>要么<code>&amp;ShowTell</code> (这暗示着两者) .</p>
+<p>这是一个有用的小宏:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+macro_rules! dbg {
+    ($x:expr) =&gt; {
+        println!(&quot;{} = {:?}&quot;,stringify!($x),$x);
+    }
+}
+#}</code></pre></pre>
+<p>它需要一个参数 (用. 表示) <code>$ X</code>) 必须是'表达'. 我们打印出它的价值,并且a_字符串化_值的版本. C程序员可以是_小_在这一点上得意,但这意味着如果我通过了<code>1 + 2</code> (一个表达) <code>字符串化! (1 + 2)</code>是文字字符串&quot;1 + 2&quot;. 这会为我们在玩代码时节省一些打字的时间:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let foo = Foo::new(&quot;Pete&quot;,&quot;bathroom&quot;);
+dbg!(foo.show());
+dbg!(foo.location());
+
+let st: &amp;ShowTell = &amp;foo;
+
+dbg!(st.show());
+dbg!(st.location());
+
+fn show_it_all(r: &amp;ShowTell) {
+    dbg!(r.show());
+    dbg!(r.location());
+}
+
+let boo = Foo::new(&quot;Alice&quot;,&quot;cupboard&quot;);
+show_it_all(&amp;boo);
+
+fn show(s: &amp;Show) {
+    dbg!(s.show());
+}
+
+show(&amp;boo);
+
+// foo.show() = &quot;Pete&quot;
+// foo.location() = &quot;bathroom&quot;
+// st.show() = &quot;Pete&quot;
+// st.location() = &quot;bathroom&quot;
+// r.show() = &quot;Alice&quot;
+// r.location() = &quot;cupboard&quot;
+// s.show() = &quot;Alice&quot;
+#}</code></pre></pre>
+<p>这个_是_面向对象,而不是你习惯的那种.</p>
+<p>请注意<code>显示</code>参考传递给<code>显示</code>不可能是_动态_升级为<code>ShowTell</code>!具有更多动态类系统的语言允许您检查给定对象是否是类的实例,然后对该类型执行动态转换. 一般来说这不是一个好主意,因为这个原因,特别是不能在Rust中工作<code>显示</code>参考已经&quot;忘记&quot;它最初是一个<code>ShowTell</code>参考.</p>
+<p>你总是有选择: 多态,通过特质对象,或单态,通过泛型约束的特质. _现代C ++和Rust标准库倾向于采用通用路由,但多态路由并未过时. 您必须了解不同的权衡 - 泛型生成最快的代码,可以内联. 这可能会导致代码膨胀. 但并非所有事情都必须如此尽可能快- 在典型的程序运行的生命周期中,它可能只发生&quot;少&quot;几次. _所以,这里有一个总结:</p>
+<p>扮演的角色</p>
+<ul>
+<li>类<code>在数据和特征之间共享</code>结构和枚举是愚蠢的,虽然你可以定义方法和做数据隐藏</li>
+<li>一个</li>
+<li>有限_子类型的形式是可能的数据使用_DEREF<code>特征</code>特征没有任何数据,但可以实现任何类型 (不仅仅是结构)</li>
+<li>性状可以从其他特征继承</li>
+<li>特征可以提供方法,允许接口代码重用</li>
+<li>性状给你两个虚拟方法 (多态) 和通用约束 (单态)</li>
+<li>示例: Windows API</li>
+</ul>
+<a class="header" href="object-orientation.zh.html#gui工具包是传统oop广泛使用的领域之一" id="gui工具包是传统oop广泛使用的领域之一"><h2>GUI工具包是传统OOP广泛使用的领域之一.</h2></a>
+<p>一个<code>EditControl</code>或者a<code>ListWindow</code>是-A窗口<code>等等.</code>这使得编写Rust绑定到GUI工具包比编写它更困难. Win32编程可以完成</p>
+<p>直<a href="https://www.codeproject.com/Tips/1053658/Win-GUI-Programming-In-Rust-Language">在Rust中,它比原来的C稍微笨拙一点. 当我从C到C ++毕业时,我想要更干净的东西,并且做了我自己的OOP包装. </a>典型的Win32 API函数是的ShowWindow</p>
+<p>用于控制窗口的可见性. <a href="https://docs.rs/user32-sys/0.0.9/i686-pc-windows-gnu/user32_sys/fn.ShowWindow.html">现在,一个</a>EditControl有一些专门的功能,但它都是用Win32完成的<code>HWND</code> ('窗口句柄') 不透明的值. <code>你想要</code>EditControl也有一个<code>显示</code>方法,传统上这将通过实现继承来完成. <code>您</code>不想要为每种类型输出所有这些继承的方法!_但Rust特征提供了一个解决方案. _会有一个<code>窗口</code>特征:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+trait Window {
+    // you need to define this!
+    fn get_hwnd(&amp;self) -&gt; HWND;
+
+    // and all these will be provided
+    fn show(&amp;self, visible: bool) {
+        unsafe {
+         user32_sys::ShowWindow(self.get_hwnd(), if visible {1} else {0})
+        }
+    }
+
+    // ..... oodles of methods operating on Windows
+
+}
+#}</code></pre></pre>
+<p>所以,实现struct为<code>EditControl</code>可以包含一个<code>HWND</code>并执行<code>窗口</code>通过定义一种方法;<code>EditControl</code>是一种继承自的特质<code>窗口</code>并定义扩展接口. 就像是<code>ComboxBox</code>- 其行为像一个EditControl<code>和</code> _一个_ListWindow<code>可以通过特征继承轻松实现.</code>Win32 API ('32'不再意味着'32位') 实际上是面向对象的,但是老式的,受Alan Kay定义的影响: 对象包含隐藏的数据,并且由</p>
+<p>消息. 因此,任何Windows应用程序的核心都有一个消息循环,各种窗口 (称为'窗口类') 都用它们自己的switch语句实现这些方法. _有一个消息叫_WM_SETTEXT但实现可能会有所不同: 标签的文本更改,但顶级窗口的标题更改. 这里<code>是一个相当有前途的最小Windows GUI框架.</code>但根据我的口味,有太多了</p>
+<p><a href="https://gabdube.github.io/native-windows-gui/book_20.html">摅</a>实例正在发生 - 其中一些甚至没有错误. <code>这是因为NWG正在利用消息的松散动态性质.</code>通过适当的类型安全接口,编译时会捕获更多的错误.</p>
+<p>该<a href="https://rust-lang.github.io/book/second-edition/ch17-00-oop.html">下一版</a>Rust编程语言手册对Rust中面向对象的含义进行了很好的讨论.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="7-shared-and-networking.zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="nom-intro.zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="7-shared-and-networking.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="nom-intro.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+    </body>
+</html>

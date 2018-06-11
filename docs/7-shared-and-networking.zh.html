@@ -1,0 +1,789 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>线程,网络和共享 - A Gentle Introduction to Rust</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Introduction to the Rust language, standard library and ecosystem">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="_FontAwesome/css/font-awesome.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+
+    </head>
+    <body class="light">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html" class="active"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">A Gentle Introduction to Rust</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="7-shared-and-networking.zh.html#a线程网络和共享" id="a线程网络和共享"><h1>线程,网络和共享</h1></a>
+<a class="header" href="7-shared-and-networking.zh.html#a改变不变" id="a改变不变"><h2>改变不变</h2></a>
+<p>如果你感觉猪头 (如我) ,你想知道是否_曾经_可能避开借用检查器的限制.</p>
+<p>考虑下面的小程序,它编译和运行没有问题.</p>
+<pre><pre class="playpen"><code class="language-rust">// cell.rs
+use std::cell::Cell;
+
+fn main() {
+    let answer = Cell::new(42);
+
+    assert_eq!(answer.get(), 42);
+
+    answer.set(77);
+
+    assert_eq!(answer.get(), 77);
+}
+</code></pre></pre>
+<p>答案已经改变了 - 但还是_变量_ <code>回答</code>是不可变的!</p>
+<p>这显然是非常安全的,因为单元格内的值只能通过访问<code>组</code>和<code>得到</code>. 这是通过的盛大名称_内部可变性_. 通常被称为_遗传可变性_: 如果我有一个结构值<code>v</code>,那么我只能写字段<code>v.a</code>如果<code>v</code>本身是可写的. <code>细胞</code>价值观放宽了这个规则,因为我们可以改变其中包含的价值<code>组</code>即使细胞本身不可变.</p>
+<p>然而,<code>细胞</code>只适用于<code>复制</code>类型 (例如派生的原始类型和用户类型) <code>复制</code>特征) .</p>
+<p>对于其他值,我们必须得到一个可以工作的参考,可变或不可变. 这是什么<code>RefCell</code>规定 - 您明确要求参考包含的值:</p>
+<pre><pre class="playpen"><code class="language-rust">// refcell.rs
+use std::cell::RefCell;
+
+fn main() {
+    let greeting = RefCell::new(&quot;hello&quot;.to_string());
+
+    assert_eq!(*greeting.borrow(), &quot;hello&quot;);
+    assert_eq!(greeting.borrow().len(), 5);
+
+    *greeting.borrow_mut() = &quot;hola&quot;.to_string();
+
+    assert_eq!(*greeting.borrow(), &quot;hola&quot;);
+}
+</code></pre></pre>
+<p>再次,<code>欢迎</code>没有被宣布为可变!</p>
+<p>明确的解除引用操作符<code>*</code>可能在Rust中有点混乱,因为通常你不需要它 - 例如<code>greeting.borrow () . LEN ()</code>因为方法调用会隐含地解除引用,所以很好. 但是你_做_需要<code>*</code>拉出底层<code>&amp;串</code>从<code>greeting.borrow ()</code>或者<code>&amp;mut字符串</code>从<code>greeting.borrow_mut ()</code>.</p>
+<p>用一个<code>RefCell</code>并不总是安全的,因为从这些方法返回的任何引用必须遵循通常的规则.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let mut gr = greeting.borrow_mut(); // gr is a mutable borrow
+    *gr = &quot;hola&quot;.to_string();
+
+    assert_eq!(*greeting.borrow(), &quot;hola&quot;); // &lt;== we blow up here!
+....
+thread 'main' panicked at 'already mutably borrowed: BorrowError'
+#}</code></pre></pre>
+<p>如果你已经可以借用,你不能永久借钱!除了 - 这很重要 - 违反规则的事情发生在_运行_. 解决方案 (一如既往) 是尽可能地限制可变借入的范围 - 在这种情况下,您可以在此处放置前两行的块,以便可变参考<code>gr</code>在我们再次借用之前下降.</p>
+<p>所以,这不是一个你没有理由使用的功能,因为你会的_不_得到一个编译时错误. 这些类型提供_动态借款_在通常的规则使某些事情不可能的情况下.</p>
+<a class="header" href="7-shared-and-networking.zh.html#a共享引用" id="a共享引用"><h2>共享引用</h2></a>
+<p>到目前为止,价值与其借用引用之间的关系在编译时已经清楚并且已知. 价值是所有者,并且引用不能超过它. 但许多案例根本不适合这种整洁的模式. 例如,假设我们有一个<code>播放机</code>结构和a<code>角色</code>结构. 一个<code>播放机</code>保持引用的向量<code>角色</code>对象. 这些价值观之间并没有一个整齐的一对一关系,并且说服了对方<code>rustc</code>合作变得讨厌.</p>
+<p><code>Rc</code>作品像<code>框</code>- 堆内存被分配并且值被移动到它. 如果你克隆一个<code>框</code>它会分配一个值的完整克隆副本. 但克隆一个<code>Rc</code>是便宜的,因为每次你克隆它只是更新一个_引用计数_到了_相同的数据_. 这是一种古老且非常流行的内存管理策略,例如用于iOS / MacOS上的Objective C运行时.  (在现代C ++中,它是用<code>的std :: shared_ptr的</code>. )</p>
+<p>当一个<code>Rc</code>被丢弃时,引用计数递减. 当该计数变为零时,拥有的值将被丢弃并释放内存.</p>
+<pre><pre class="playpen"><code class="language-rust">// rc1.rs
+use std::rc::Rc;
+
+fn main() {
+    let s = &quot;hello dolly&quot;.to_string();
+    let rs1 = Rc::new(s); // s moves to heap; ref count 1
+    let rs2 = rs1.clone(); // ref count 2
+
+    println!(&quot;len {}, {}&quot;, rs1.len(), rs2.len());
+} // both rs1 and rs2 drop, string dies.
+</code></pre></pre>
+<p>您可以根据自己的喜好制作尽可能多的参考文献,以获得最初的价值 - 是的_动态借款_再次. 您不必仔细追踪价值之间的关系<code>Ť</code>及其参考资料<code>&amp;T</code>. 有一些运行时间成本,所以它不是_第一_你选择的解决方案,但它使分享的模式成为可能,这将会使借用检查器变得不合适. 注意<code>Rc</code>为您提供不可变的共享引用,因为否则这会破坏借用的基本规则之一. 一只豹在不停止成为豹的情况下不能改变其斑点.</p>
+<p>在a的情况下<code>播放机</code>,它现在可以保持它的角色<code>VEC &lt;RC &lt;角色&gt;&gt;</code>并且事情很好 - 我们可以添加或删除角色,但不能_更改_他们在创作之后.</p>
+<p>但是,如果每个都是<code>播放机</code>需要保持对a的引用_球队_作为一个向量<code>播放机</code>参考?然后一切都变得不可变,因为所有的东西<code>播放机</code>值需要被存储为<code>Rc</code>!这是地方<code>RefCell</code>变得必要. 团队可能被定义为<code>VEC &lt;RC &lt;RefCell &lt;玩家&gt;&gt;&gt;</code>. 现在可以更改一个<code>播放机</code>价值使用<code>borrow_mut</code>,_提供_没有人'检查出'一个参考<code>播放机</code>与此同时. 例如,假设我们有一条规则,即如果某位球员发生了某种特殊情况,那么他们的所有球队都会变得更强大:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    for p in &amp;self.team {
+        p.borrow_mut().make_stronger();
+    }
+#}</code></pre></pre>
+<p>所以应用程序代码不是太糟糕,但类型签名会有点吓人. 你总是可以用一个简化它们<code>类型</code>别名:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+type PlayerRef = Rc&lt;RefCell&lt;Player&gt;&gt;;
+#}</code></pre></pre>
+<a class="header" href="7-shared-and-networking.zh.html#a多线程" id="a多线程"><h2>多线程</h2></a>
+<p>在过去的二十年中,从原始处理速度转向具有多核的CPU. 因此,充分利用现代计算机的唯一方法是保持所有这些内核的繁忙. 正如我们所看到的那样,在后台产生子进程当然是可能的<code>命令</code>但仍然存在一个同步问题: 我们不确切地知道这些孩子何时完成而不等待他们.</p>
+<p>还有其他原因需要分开_执行线程_, 当然. 例如,您无法锁定整个流程,只能等待阻止I / O.</p>
+<p>产卵线程在Rust中很简单 - 喂食<code>卵</code>一个在后台执行的闭包.</p>
+<pre><pre class="playpen"><code class="language-rust">// thread1.rs
+use std::thread;
+use std::time;
+
+fn main() {
+    thread::spawn(|| println!(&quot;hello&quot;));
+    thread::spawn(|| println!(&quot;dolly&quot;));
+
+    println!(&quot;so fine&quot;);
+    // wait a little bit
+    thread::sleep(time::Duration::from_millis(100));
+}
+// so fine
+// hello
+// dolly
+</code></pre></pre>
+<p>显然,只是&quot;稍等一下&quot;并不是一个非常严格的解决方案!打电话最好<code>加入</code>在返回的对象上 - 然后主线程等待生成的线程完成.</p>
+<pre><pre class="playpen"><code class="language-rust">// thread2.rs
+use std::thread;
+
+fn main() {
+    let t = thread::spawn(|| {
+        println!(&quot;hello&quot;);
+    });
+    println!(&quot;wait {:?}&quot;, t.join());
+}
+// hello
+// wait Ok(())
+</code></pre></pre>
+<p>这是一个有趣的变化: 强制新线程恐慌.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let t = thread::spawn(|| {
+        println!(&quot;hello&quot;);
+        panic!(&quot;I give up!&quot;);
+    });
+    println!(&quot;wait {:?}&quot;, t.join());
+#}</code></pre></pre>
+<p>我们如预期般惊慌失措,但只有恐慌线程死亡!我们仍然设法打印出来的错误信息<code>加入</code>. 所以是的,恐慌并不总是致命的,但线程相对昂贵,所以这不应被视为处理恐慌的常规方式.</p>
+<pre><code>hello
+thread '&lt;unnamed&gt;' panicked at 'I give up!', thread2.rs:7
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+wait Err(Any)
+</code></pre>
+<p>返回的对象可以用来跟踪多个线程:</p>
+<pre><pre class="playpen"><code class="language-rust">// thread4.rs
+use std::thread;
+
+fn main() {
+    let mut threads = Vec::new();
+
+    for i in 0..5 {
+        let t = thread::spawn(move || {
+            println!(&quot;hello {}&quot;, i);
+        });
+        threads.push(t);
+    }
+
+    for t in threads {
+        t.join().expect(&quot;thread failed&quot;);
+    }
+}
+// hello 0
+// hello 2
+// hello 4
+// hello 3
+// hello 1
+</code></pre></pre>
+<p>Rust坚持我们处理连接失败的情况 - 即该线程发生恐慌.  (当发生这种情况时,你通常不会退出主程序,只记下错误,重试等)</p>
+<p>没有特定的线程执行顺序 (该程序为不同的运行提供不同的顺序) ,这是关键 - 它们确实是_独立的执行线程_. 多线程很简单;什么是困难的_并发_- 管理和同步多个执行线程.</p>
+<a class="header" href="7-shared-and-networking.zh.html#a线程不会借用" id="a线程不会借用"><h2>线程不会借用</h2></a>
+<p>线程闭包有可能捕获值,但是可以通过_移动_,而不是_借款_!</p>
+<pre><pre class="playpen"><code class="language-rust">// thread3.rs
+use std::thread;
+
+fn main() {
+    let name = &quot;dolly&quot;.to_string();
+    let t = thread::spawn(|| {
+        println!(&quot;hello {}&quot;, name);
+    });
+    println!(&quot;wait {:?}&quot;, t.join());
+}
+</code></pre></pre>
+<p>以下是有用的错误消息:</p>
+<pre><code>error[E0373]: closure may outlive the current function, but it borrows `name`, which is owned by the current function
+ --&gt; thread3.rs:6:27
+  |
+6 |     let t = thread::spawn(|| {
+  |                           ^^ may outlive borrowed value `name`
+7 |         println!(&quot;hello {}&quot;, name);
+  |                             ---- `name` is borrowed here
+  |
+help: to force the closure to take ownership of `name` (and any other referenced variables), use the `move` keyword, as shown:
+  |     let t = thread::spawn(move || {
+</code></pre>
+<p>这很公平!想象一下,从一个函数产生这个线程 - 它将在函数调用完成后存在<code>名称</code>被丢弃. 所以补充<code>移动</code>解决了我们的问题.</p>
+<p>但这是一个_移动_,所以<code>名称</code>可能只会出现在一个线程中!我想强调一下_是_可能分享参考,但他们需要有<code>静态的</code>一生:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let name = &quot;dolly&quot;;
+let t1 = thread::spawn(move || {
+    println!(&quot;hello {}&quot;, name);
+});
+let t2 = thread::spawn(move || {
+    println!(&quot;goodbye {}&quot;, name);
+});
+#}</code></pre></pre>
+<p><code>名称</code>在整个项目期间存在<code>静态的</code>) ,所以<code>rustc</code>对封闭永不过时感到满意<code>名称</code>. 但是,大多数有趣的参考文献没有<code>静态的</code>寿命!</p>
+<p>线程无法共享相同的环境 -  by_设计_在铁锈. 特别是,他们不能共享常规引用,因为关闭会移动捕获的变量.</p>
+<p><em>共享参考_但很好,因为他们的生命是'只要需要' - 但你不能使用<code>Rc</code>为了这. 这是因为<code>Rc</code>不是_线程安全</em>- 它针对非线程情况进行了优化. 幸运的是,这是一个编译错误使用<code>Rc</code>这里;编译器一直在看你的背部.</p>
+<p>对于线程,你需要<code>的std ::同步::弧</code>- '弧'代表'原子参考计数'. 也就是说,它保证了引用计数将在一个逻辑操作中被修改. 为了保证这一点,它必须确保操作被锁定,以便只有当前线程才能访问. <code>克隆</code>但实际上制作副本的成本仍然要低得多.</p>
+<pre><pre class="playpen"><code class="language-rust">// thread5.rs
+use std::thread;
+use std::sync::Arc;
+
+struct MyString(String);
+
+impl MyString {
+    fn new(s: &amp;str) -&gt; MyString {
+        MyString(s.to_string())
+    }
+}
+
+fn main() {
+    let mut threads = Vec::new();
+    let name = Arc::new(MyString::new(&quot;dolly&quot;));
+
+    for i in 0..5 {
+        let tname = name.clone();
+        let t = thread::spawn(move || {
+            println!(&quot;hello {} count {}&quot;, tname.0, i);
+        });
+        threads.push(t);
+    }
+
+    for t in threads {
+        t.join().expect(&quot;thread failed&quot;);
+    }
+}
+</code></pre></pre>
+<p>我故意创建了一个包装类型<code>串</code>这里 ('新类型') 自从我们的<code>MyString的</code>不执行<code>克隆</code>. 但是_共享参考_可以克隆!</p>
+<p>共享参考<code>名称</code>通过使用新的引用传递给每个新线程<code>克隆</code>并将其移入封口. 这有点冗长,但这是一种安全模式. 恰恰因为问题如此不可预测,安全在并发中很重要. 一个程序可能在你的机器上运行良好,但偶尔会在服务器上崩溃,通常在周末. 更糟糕的是,这些问题的症状不容易诊断.</p>
+<a class="header" href="7-shared-and-networking.zh.html#a通道" id="a通道"><h2>通道</h2></a>
+<p>有线程间发送数据的方法. 这是在Rust使用_渠道_. <code>的std ::同步:: MPSC ::信道 ()</code>返回由...组成的元组_接收器_频道和_寄件人_渠道. 每个线程都通过发件人的副本<code>克隆</code>,和电话<code>发送</code>. 同时主线程调用<code>的recv</code>在接收器上.</p>
+<p>'MPSC'代表'Multiple Producer Single Consumer'. 我们创建了多个试图发送到频道的线程,并且主线程&quot;消耗&quot;了频道.</p>
+<pre><pre class="playpen"><code class="language-rust">// thread9.rs
+use std::thread;
+use std::sync::mpsc;
+
+fn main() {
+    let nthreads = 5;
+    let (tx, rx) = mpsc::channel();
+
+    for i in 0..nthreads {
+        let tx = tx.clone();
+        thread::spawn(move || {
+            let response = format!(&quot;hello {}&quot;, i);
+            tx.send(response).unwrap();
+        });
+    }
+
+    for _ in 0..nthreads {
+        println!(&quot;got {:?}&quot;, rx.recv());
+    }
+}
+// got Ok(&quot;hello 0&quot;)
+// got Ok(&quot;hello 1&quot;)
+// got Ok(&quot;hello 3&quot;)
+// got Ok(&quot;hello 4&quot;)
+// got Ok(&quot;hello 2&quot;)
+</code></pre></pre>
+<p>由于线程在结束执行之前发送响应,因此无需在此加入,但显然这可能随时发生. <code>的recv</code>将阻塞,并且如果发送者通道断开连接,将返回错误. <code>recv_timeout</code>只会在给定的时间段内阻塞,并且可能还会返回超时错误.</p>
+<p><code>发送</code>从不阻塞,这很有用,因为线程可以在不等待接收器处理的情况下推出数据. 另外,通道被缓冲,所以可以发生多个发送操作,这将按顺序接收.</p>
+<p>但是,不阻止意味着<code>好</code>并不意味着'已成功发送消息'!</p>
+<p>一个<code>sync_channel</code> <em>不_阻止发送. 如果参数为零,则发送阻塞直到recv发生. 线程必须满足或_会合</em> (根据声音原则,法语中大多数声音听起来更好. )</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let (tx, rx) = mpsc::sync_channel(0);
+
+    let t1 = thread::spawn(move || {
+        for i in 0..5 {
+            tx.send(i).unwrap();
+        }
+    });
+
+    for _ in 0..5 {
+        let res = rx.recv().unwrap();
+        println!(&quot;{}&quot;,res);
+    }
+    t1.join().unwrap();
+#}</code></pre></pre>
+<p>通过调用,我们可以很容易地导致错误<code>的recv</code>当没有相应的时候<code>发送</code>例如通过循环<code>因为我在0..4</code>. 线程结束,并且<code>tx</code>滴,然后<code>的recv</code>将失败. 这也会发生,如果线程恐慌,导致其堆栈解开,丢弃任何值.</p>
+<p>如果<code>sync_channel</code>是用一个非零参数创建的<code>ñ</code>,那么它的行为就像一个最大尺寸为的队列<code>ñ</code>-<code>发送</code>只会在尝试添加多个时才会阻止<code>ñ</code>值到队列.</p>
+<p>频道是强类型的 - 在这里频道有类型<code>i32</code>- 但类型推理使得这种隐含的. 如果您需要传递不同类型的数据,那么枚举是表达这一点的好方法.</p>
+<a class="header" href="7-shared-and-networking.zh.html#a同步" id="a同步"><h2>同步</h2></a>
+<p>我们来看看_同步_. <code>加入</code>是非常基本的,只是等到一个特定的线程完成. 一个<code>sync_channel</code>同步两个线程 - 在最后一个例子中,衍生线程和主线程完全锁定在一起.</p>
+<p>屏障同步是线程必须等到的检查点_所有_他们已经达到了这一点. 然后他们可以像以前一样继续前进. 屏障是由我们想要等待的线程数创建的. 和以前一样,我们使用use<code>弧</code>与所有主题共享障碍.</p>
+<pre><pre class="playpen"><code class="language-rust">// thread7.rs
+use std::thread;
+use std::sync::Arc;
+use std::sync::Barrier;
+
+fn main() {
+    let nthreads = 5;
+    let mut threads = Vec::new();
+    let barrier = Arc::new(Barrier::new(nthreads));
+
+    for i in 0..nthreads {
+        let barrier = barrier.clone();
+        let t = thread::spawn(move || {
+            println!(&quot;before wait {}&quot;, i);
+            barrier.wait();
+            println!(&quot;after wait {}&quot;, i);
+        });
+        threads.push(t);
+    }
+
+    for t in threads {
+        t.join().unwrap();
+    }
+}
+// before wait 2
+// before wait 0
+// before wait 1
+// before wait 3
+// before wait 4
+// after wait 4
+// after wait 2
+// after wait 3
+// after wait 0
+// after wait 1
+</code></pre></pre>
+<p>线程做他们半随机的事情,全部满足,然后继续. 它就像一种可恢复的<code>加入</code>当您需要将工作片段分散到不同的线程并且想要在所有片断完成时采取一些行动时有用.</p>
+<a class="header" href="7-shared-and-networking.zh.html#a共享状态" id="a共享状态"><h2>共享状态</h2></a>
+<p>线程怎么样_修改_共享状态?</p>
+<p>回想一下<code>RC &lt;RefCell &lt;T &gt;&gt;</code>战略_动态_在共享引用上做一个可变的借用. 线程相当于<code>RefCell</code>是<code>互斥</code>- 你可以通过调用来获得可变参考<code>锁</code>. 虽然存在此引用,但其他线程无法访问它. <code>互斥</code>代表'相互排斥' - 我们锁定了一段代码,以便只有一个线程可以访问它,然后解锁它. 你拿到了锁<code>锁</code>方法,并在参考被删除时解锁.</p>
+<pre><pre class="playpen"><code class="language-rust">// thread9.rs
+use std::thread;
+use std::sync::Arc;
+use std::sync::Mutex;
+
+fn main() {
+    let answer = Arc::new(Mutex::new(42));
+
+    let answer_ref = answer.clone();
+    let t = thread::spawn(move || {
+        let mut answer = answer_ref.lock().unwrap();
+        *answer = 55;
+    });
+
+    t.join().unwrap();
+
+    let ar = answer.lock().unwrap();
+    assert_eq!(*ar, 55);
+
+}
+</code></pre></pre>
+<p>这不像使用那样简单<code>RefCell</code>因为如果另一个线程在锁定时发生恐慌,那么请求互斥锁就可能失败.  (在这种情况下,文档实际上建议只是退出线程<code>摅</code>因为事情严重错了!)</p>
+<p>把这个可变的借用保持尽可能短是更重要的,因为只要互斥锁被锁定,其他的线程_受阻_. 这不是昂贵的计算的地方!所以通常这样的代码会像这样使用:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// ... do something in the thread
+// get a locked reference and use it briefly!
+{
+    let mut data = data_ref.lock().unwrap();
+    // modify data
+}
+//... continue with the thread
+#}</code></pre></pre>
+<a class="header" href="7-shared-and-networking.zh.html#a更高级别的操作" id="a更高级别的操作"><h2>更高级别的操作</h2></a>
+<p>最好找到更高级的线程化方法,而不是自己管理同步. 一个例子是当你需要平行做事并收集结果时. 一个非常酷的箱子是<a href="https://docs.rs/pipeliner/0.1.1/pipeliner/">流水线化</a>它有一个非常直接的API. 这是'你好,世界!'<code>- 一个迭代器给我们输入,我们执行到</code>ñ</p>
+<pre><pre class="playpen"><code class="language-rust">extern crate pipeliner;
+use pipeliner::Pipeline;
+
+fn main() {
+    for result in (0..10).with_threads(4).map(|x| x + 1) {
+        println!(&quot;result: {}&quot;, result);
+    }
+}
+// result: 1
+// result: 2
+// result: 5
+// result: 3
+// result: 6
+// result: 7
+// result: 8
+// result: 9
+// result: 10
+// result: 4
+</code></pre></pre>
+<p>并行操作的值.</p>
+<p>这当然是一个愚蠢的例子,因为该操作的计算起来非常便宜,但显示了并行运行代码的容易程度. 这是更有用的东西. _并行执行网络操作非常有用,因为它们可能需要时间,并且您不希望等待它们_所有</p>
+<p>在开始工作之前完成. 这个例子非常粗糙 (相信我,有更好的方法可以做到这一点) ,但这里我们要关注这个原则. <code>我们重用这个</code>贝壳<code>函数定义在第4节中调用</code>平</p>
+<pre><pre class="playpen"><code class="language-rust">extern crate pipeliner;
+use pipeliner::Pipeline;
+
+use std::process::Command;
+
+fn shell(cmd: &amp;str) -&gt; (String,bool) {
+    let cmd = format!(&quot;{} 2&gt;&amp;1&quot;,cmd);
+    let output = Command::new(&quot;/bin/sh&quot;)
+        .arg(&quot;-c&quot;)
+        .arg(&amp;cmd)
+        .output()
+        .expect(&quot;no shell?&quot;);
+    (
+        String::from_utf8_lossy(&amp;output.stdout).trim_right().to_string(),
+        output.status.success()
+    )
+}
+
+fn main() {
+    let addresses: Vec&lt;_&gt; = (1..40).map(|n| format!(&quot;ping -c1 192.168.0.{}&quot;,n)).collect();
+    let n = addresses.len();
+
+    for result in addresses.with_threads(n).map(|s| shell(&amp;s)) {
+        if result.1 {
+            println!(&quot;got: {}&quot;, result.0);
+        }
+    }
+
+}
+</code></pre></pre>
+<p>在一系列IP4地址上.</p>
+<pre><code>got: PING 192.168.0.1 (192.168.0.1) 56(84) bytes of data.
+64 bytes from 192.168.0.1: icmp_seq=1 ttl=64 time=43.2 ms
+
+--- 192.168.0.1 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 43.284/43.284/43.284/0.000 ms
+got: PING 192.168.0.18 (192.168.0.18) 56(84) bytes of data.
+64 bytes from 192.168.0.18: icmp_seq=1 ttl=64 time=0.029 ms
+
+--- 192.168.0.18 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.029/0.029/0.029/0.000 ms
+got: PING 192.168.0.3 (192.168.0.3) 56(84) bytes of data.
+64 bytes from 192.168.0.3: icmp_seq=1 ttl=64 time=110 ms
+
+--- 192.168.0.3 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 110.008/110.008/110.008/0.000 ms
+got: PING 192.168.0.5 (192.168.0.5) 56(84) bytes of data.
+64 bytes from 192.168.0.5: icmp_seq=1 ttl=64 time=207 ms
+...
+</code></pre>
+<p>我的家庭网络上的结果如下所示: 在前半秒内,活动地址会非常快速地通过,然后等待负面结果进入. 否则,我们会等待一分钟的好时间!您现在可以继续从输出中删除ping时间等事情,尽管这只能在Linux上运行. <code>平</code>是普遍的,但确切的输出格式对于每个平台都是不同的. 为了做得更好,我们需要使用跨平台的Rust网络API,所以让我们进入网络.</p>
+<a class="header" href="7-shared-and-networking.zh.html#a解决地址问题的更好方法" id="a解决地址问题的更好方法"><h2>解决地址问题的更好方法</h2></a>
+<p>如果你_只是_想要可用性和不详细的ping统计信息<code>的std ::网:: ToSocketAddrs</code>特质将为你做任何DNS解析:</p>
+<pre><pre class="playpen"><code class="language-rust">use std::net::*;
+
+fn main() {
+    for res in &quot;google.com:80&quot;.to_socket_addrs().expect(&quot;bad&quot;) {
+        println!(&quot;got {:?}&quot;, res);
+    }
+}
+// got V4(216.58.223.14:80)
+// got V6([2c0f:fb50:4002:803::200e]:80)
+</code></pre></pre>
+<p>它是一个迭代器,因为通常有多个接口与一个域相关联 - 同时有Google的IPV4和IPV6接口.</p>
+<p>所以,我们天真地使用这种方法来重写流水线示例. 大多数网络协议都使用地址和端口:</p>
+<pre><pre class="playpen"><code class="language-rust">extern crate pipeliner;
+use pipeliner::Pipeline;
+
+use std::net::*;
+
+fn main() {
+    let addresses: Vec&lt;_&gt; = (1..40).map(|n| format!(&quot;192.168.0.{}:0&quot;,n)).collect();
+    let n = addresses.len();
+
+    for result in addresses.with_threads(n).map(|s| s.to_socket_addrs()) {
+        println!(&quot;got: {:?}&quot;, result);
+    }
+}
+// got: Ok(IntoIter([V4(192.168.0.1:0)]))
+// got: Ok(IntoIter([V4(192.168.0.39:0)]))
+// got: Ok(IntoIter([V4(192.168.0.2:0)]))
+// got: Ok(IntoIter([V4(192.168.0.3:0)]))
+// got: Ok(IntoIter([V4(192.168.0.5:0)]))
+// ....
+</code></pre></pre>
+<p>这比ping示例快得多,因为它只是检查IP地址是否有效 - 如果我们为它提供了一个实际域名列表,DNS查找可能需要一些时间,因此并行性的重要性.</p>
+<p>令人惊讶的是,它只是工作. 标准库中的所有内容实现的事实<code>调试</code>非常适合勘探和调试. 迭代器正在返回<code>结果</code> (因此<code>好</code>) 和在那<code>结果</code>是一个<code>IntoIter</code>变成一个<code>SocketAddr</code>这是一个带有ipv4或ipv6地址的枚举. 为什么<code>IntoIter</code>?由于套接字可能有多个地址 (例如,ipv4和ipv6) . 至少对于我们这个简单的例子来说,这也起到了令人惊讶的作用.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    for result in addresses.with_threads(n)
+        .map(|s| s.to_socket_addrs().unwrap().next().unwrap())
+    {
+        println!(&quot;got: {:?}&quot;, result);
+    }
+// got: V4(192.168.0.1:0)
+// got: V4(192.168.0.39:0)
+// got: V4(192.168.0.3:0)
+#}</code></pre></pre>
+<p>首先摅<code>摆脱了</code>结果<code>,然后我们明确地将第一个值从迭代器中取出.</code>该结果<code>当我们给出一个无意义的地址时 (比如没有端口的地址名称) ,通常会变得很糟糕.</code>TCP客户端服务器</p>
+<a class="header" href="7-shared-and-networking.zh.html#rust为最常用的网络协议tcp提供了一个直接的界面" id="rust为最常用的网络协议tcp提供了一个直接的界面"><h2>Rust为最常用的网络协议TCP提供了一个直接的界面.</h2></a>
+<p>它具有很强的抗错能力,是我们网络世界的基础 -包_的数据被发送和接收,并带有确认. _相比之下,UDP将数据包发送到野外而没有得到确认 - 有一个笑话是&quot;我可以告诉你一个关于UDP的笑话,但你可能得不到它. &quot; (关于网络的笑话只对&quot;有趣&quot;这个词的特殊含义有趣)</p>
+<p>但是,错误处理是_非常_对于网络来说很重要,因为任何事情都可能发生,并且最终会.</p>
+<p>TCP作为客户端/服务器模型工作;服务器监听一个地址和一个特定的地址_网络端口_,并且客户端连接到该服务器. 建立连接后,客户端和服务器可以与套接字进行通信.</p>
+<p><code>TcpStream ::连接</code>需要任何可以转换成一个<code>SocketAddr</code>,特别是我们一直使用的纯色琴弦.</p>
+<p>Rust中的一个简单的TCP客户端很容易 -  a<code>TcpStream</code>结构是可读和可写的. 像往常一样,我们必须带来<code>读</code>,<code>写</code>和别的<code>的std :: IO</code>特质纳入范围:</p>
+<pre><pre class="playpen"><code class="language-rust">// client.rs
+use std::net::TcpStream;
+use std::io::prelude::*;
+
+fn main() {
+    let mut stream = TcpStream::connect(&quot;127.0.0.1:8000&quot;).expect(&quot;connection failed&quot;);
+
+    write!(stream,&quot;hello from the client!\n&quot;).expect(&quot;write failed&quot;);
+ }
+</code></pre></pre>
+<p>服务器并不复杂,我们建立了一个监听器并等待连接. 当客户端连接时,我们得到一个<code>TcpStream</code>在服务器端. 在这种情况下,我们读取客户端写入字符串的所有内容.</p>
+<pre><pre class="playpen"><code class="language-rust">// server.rs
+use std::net::TcpListener;
+use std::io::prelude::*;
+
+fn main() {
+
+    let listener = TcpListener::bind(&quot;127.0.0.1:8000&quot;).expect(&quot;could not start server&quot;);
+
+    // accept connections and get a TcpStream
+    for connection in listener.incoming() {
+        match connection {
+            Ok(mut stream) =&gt; {
+                let mut text = String::new();
+                stream.read_to_string(&amp;mut text).expect(&quot;read failed&quot;);
+                println!(&quot;got '{}'&quot;, text);
+            }
+            Err(e) =&gt; { println!(&quot;connection failed {}&quot;, e); }
+        }
+    }
+}
+</code></pre></pre>
+<p>这里我随机选择了一个更无端口的端口号,但是<a href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers">大多数港口</a>被赋予一些含义.</p>
+<p>请注意,双方必须就协议达成一致意见 - 客户希望它能够向流写入文本,并且服务器期望从流中读取文本. 如果他们不玩同一个游戏,那么情况就会发生在一方被阻塞的情况下,等待从未到来的字节.</p>
+<p>检查错误非常重要 - 网络I / O可能因多种原因失败,并且在本地文件系统上可能出现一次蓝色月亮的错误可能会定期发生. 有人可以通过网线传输,另一方可能会崩溃,等等. 这个小服务器不是很健壮,因为它会在第一次读取错误时崩溃.</p>
+<p>这是一个更坚实的服务器,可以在不失败的情况下处理错误. 它还具体读取一个_线_从流,这是使用完成<code>IO :: BufReader</code>创造一个<code>IO ::的BufRead</code>我们可以打电话给他们<code>read_line</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">// server2.rs
+use std::net::{TcpListener, TcpStream};
+use std::io::prelude::*;
+use std::io;
+
+fn handle_connection(stream: TcpStream) -&gt; io::Result&lt;()&gt;{
+    let mut rdr = io::BufReader::new(stream);
+    let mut text = String::new();
+    rdr.read_line(&amp;mut text)?;
+    println!(&quot;got '{}'&quot;, text.trim_right());
+    Ok(())
+}
+
+fn main() {
+
+    let listener = TcpListener::bind(&quot;127.0.0.1:8000&quot;).expect(&quot;could not start server&quot;);
+
+    // accept connections and get a TcpStream
+    for connection in listener.incoming() {
+        match connection {
+            Ok(stream) =&gt; {
+                if let Err(e) = handle_connection(stream) {
+                    println!(&quot;error {:?}&quot;, e);
+                }
+            }
+            Err(e) =&gt; { print!(&quot;connection failed {}\n&quot;, e); }
+        }
+    }
+}
+</code></pre></pre>
+<p><code>read_line</code>可能会失败<code>handle_connection</code>,但由此产生的错误是安全处理的.</p>
+<p>像这样的单向通信当然是有用的 - 例如. 通过网络提供的一组服务,希望在一个中心位置将他们的状态报告集中在一起. 但期望有礼貌的回复是合理的,即使只是'好'!</p>
+<p>一个简单的例子是一个基本的'回声'服务器. 客户端将一些以换行符结尾的文本写入服务器,并使用换行符接收相同的文本 - 流是可读写的.</p>
+<pre><pre class="playpen"><code class="language-rust">// client_echo.rs
+use std::io::prelude::*;
+use std::net::TcpStream;
+
+fn main() {
+    let mut stream = TcpStream::connect(&quot;127.0.0.1:8000&quot;).expect(&quot;connection failed&quot;);
+    let msg = &quot;hello from the client!&quot;;
+
+    write!(stream,&quot;{}\n&quot;, msg).expect(&quot;write failed&quot;);
+
+    let mut resp = String::new();
+    stream.read_to_string(&amp;mut resp).expect(&quot;read failed&quot;);
+    let text = resp.trim_right();
+    assert_eq!(msg,text);
+}
+</code></pre></pre>
+<p>服务器有一个有趣的转折点. 只要<code>handle_connection</code>变化:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn handle_connection(stream: TcpStream) -&gt; io::Result&lt;()&gt;{
+    let mut ostream = stream.try_clone()?;
+    let mut rdr = io::BufReader::new(stream);
+    let mut text = String::new();
+    rdr.read_line(&amp;mut text)?;
+    ostream.write_all(text.as_bytes())?;
+    Ok(())
+}
+#}</code></pre></pre>
+<p>这是一个简单的双向套接字通信的常见问题;我们想要读取一行,因此需要将可读流提供给<code>BufReader</code>- 但它_消耗_溪流!所以我们必须克隆这个流,创建一个引用相同底层套接字的新结构. 然后我们有幸福.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="6-error-handling.zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="object-orientation.zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="6-error-handling.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="object-orientation.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+    </body>
+</html>

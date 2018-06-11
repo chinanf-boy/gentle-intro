@@ -1,0 +1,1678 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>结构,枚举和匹配 - A Gentle Introduction to Rust</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Introduction to the Rust language, standard library and ecosystem">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="_FontAwesome/css/font-awesome.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+
+    </head>
+    <body class="light">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html" class="active"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">A Gentle Introduction to Rust</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="2-structs-enums-lifetimes.zh.html#a结构枚举和匹配" id="a结构枚举和匹配"><h1>结构,枚举和匹配</h1></a>
+<a class="header" href="2-structs-enums-lifetimes.zh.html#rust喜欢移动它移动它" id="rust喜欢移动它移动它"><h2>Rust喜欢移动它,移动它</h2></a>
+<p>我想稍微回过头来,给你看一些令人惊讶的东西:</p>
+<pre><pre class="playpen"><code class="language-rust">// move1.rs
+fn main() {
+    let s1 = &quot;hello dolly&quot;.to_string();
+    let s2 = s1;
+    println!(&quot;s1 {}&quot;, s1);
+}
+</code></pre></pre>
+<p>我们得到以下错误:</p>
+<pre><code>error[E0382]: use of moved value: `s1`
+ --&gt; move1.rs:5:22
+  |
+4 |     let s2 = s1;
+  |         -- value moved here
+5 |     println!(&quot;s1 {}&quot;, s1);
+  |                      ^^ value used here after move
+  |
+  = note: move occurs because `s1` has type `std::string::String`,
+  which does not implement the `Copy` trait
+</code></pre>
+<p>Rust与其他语言有不同的行为. 在变量总是引用 (如Java或Python) 的语言中,<code>s2</code>成为对引用的字符串对象的又一个引用<code>s1</code>. 在C ++中,<code>s1</code>是一种价值,它是_复制_至<code>s2</code>. 但Rust会改变价值. 它没有看到字符串是可复制的 (&quot;不实现复制特征&quot;) .</p>
+<p>我们不会看到像数字这样的&quot;原始&quot;类型,因为它们只是数值;他们被允许复制,因为他们便宜复制. 但<code>串</code>已经分配了包含&quot;Hello dolly&quot;的内存,并且复制将涉及分配更多内存并复制字符. Rust不会默默地做到这一点.</p>
+<p>考虑一个<code>串</code>包含&quot;Moby-Dick&quot;的全文. 它不是一个很大的结构,只有文本的内存地址,它的大小以及分配块的大小. 复制这将是昂贵的,因为该内存分配在堆上,副本将需要自己分配的块.</p>
+<pre><code>    String
+    | addr | ---------&gt; Call me Ishmael.....
+    | size |                    |
+    | cap  |                    |
+                                |
+    &amp;str                        |
+    | addr | -------------------|
+    | size |
+
+    f64
+    | 8 bytes |
+</code></pre>
+<p>第二个值是一个字符串片 (<code>&amp;STR</code>) ,它与字符串指向相同的内存,大小 - 只是人的名字. 便宜复制!</p>
+<p>第三个值是一个<code>f64</code>- 只有8个字节. 它不涉及任何其他内存,所以它的复制和移动一样便宜.</p>
+<p><code>复制</code>值只能通过它们在内存中的表示来定义,而当Rust拷贝时,它只是在其他地方复制这些字节. 类似地,<code>复制</code>价值也是_刚搬家_. 与C ++不同,在复制和移动方面没有聪明之处.</p>
+<p>用函数调用重写将显示完全相同的错误:</p>
+<pre><pre class="playpen"><code class="language-rust">// move2.rs
+
+fn dump(s: String) {
+    println!(&quot;{}&quot;, s);
+}
+
+fn main() {
+    let s1 = &quot;hello dolly&quot;.to_string();
+    dump(s1);
+    println!(&quot;s1 {}&quot;, s1); // &lt;---error: 'value used here after move'
+}
+</code></pre></pre>
+<p>在这里,你有一个选择. 您可以传递对该字符串的引用,或者使用其明确拷贝它<code>克隆</code>方法. 一般来说,第一种是更好的方法.</p>
+<pre><pre class="playpen"><code class="language-rust">fn dump(s: &amp;String) {
+    println!(&quot;{}&quot;, s);
+}
+
+fn main() {
+    let s1 = &quot;hello dolly&quot;.to_string();
+    dump(&amp;s1);
+    println!(&quot;s1 {}&quot;, s1);
+}
+</code></pre></pre>
+<p>错误消失. 但你很少看到一个平原<code>串</code>像这样的参考,因为传递一个字符串文字是非常丑陋的_和_涉及创建一个临时字符串.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    dump(&amp;&quot;hello world&quot;.to_string());
+#}</code></pre></pre>
+<p>因此,声明该函数的最佳方式是:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn dump(s: &amp;str) {
+    println!(&quot;{}&quot;, s);
+}
+#}</code></pre></pre>
+<p>然后两个<code>转储 (S1)</code>和<code>转储 (&quot;你好世界&quot;)</code>好好工作.  (这里<code>Deref</code>强制踢进来,Rust会转换<code>&amp;串</code>至<code>&amp;STR</code>为你. ) 总而言之,分配非复制值将值从一个位置移动到另一个位置.</p>
+<p>否则,锈将被迫_隐式_做一个副本,并打破承诺,明确分配.</p>
+<a class="header" href="2-structs-enums-lifetimes.zh.html#a变量的范围" id="a变量的范围"><h2>变量的范围</h2></a>
+<p>所以,经验法则是更愿意保留对原始数据的引用 - 以&quot;借用&quot;它.</p>
+<p>但一个参考必须_不_超过老板!</p>
+<p>首先,Rust是一个_块范围的_语言. 变量仅在其块的持续时间内存在:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+{
+    let a = 10;
+    let b = &quot;hello&quot;;
+    {
+        let c = &quot;hello&quot;.to_string();
+        // a,b and c are visible
+    }
+    // the string c is dropped
+    // a,b are visible
+    for i in 0..a {
+        let b = &amp;b[1..];
+        // original b is no longer visible - it is shadowed.
+    }
+    // the slice b is dropped
+    // i is _not_ visible!
+}
+#}</code></pre></pre>
+<p>循环变量 (如<code>一世</code>) 有点不同,它们只在循环块中可见. 创建一个使用相同名称的新变量并不是一个错误 ('阴影') ,但它可能会造成混淆.</p>
+<p>当一个变量'超出范围',那么它是_下降_. 任何使用的内存都会被回收,而其他内存则被回收_资源_由该变量所拥有的信息将返回给系统 - 例如,丢弃一个<code>文件</code>关闭它. 这是一件好事. 未使用的资源在不需要时立即回收.</p>
+<p>(另一个特定于Rust的问题是变量可能看起来在范围内,但其值已经移动. ) 这里有一个参考</p>
+<p>RS1<code>是有价值的</code>TMP<code>它只在其封锁期间存在:</code>我们借用的价值</p>
+<pre><pre class="playpen"><code class="language-rust">01 // ref1.rs
+02 fn main() {
+03    let s1 = &quot;hello dolly&quot;.to_string();
+04    let mut rs1 = &amp;s1;
+05    {
+06        let tmp = &quot;hello world&quot;.to_string();
+07        rs1 = &amp;tmp;
+08    }
+09    println!(&quot;ref {}&quot;, rs1);
+10 }
+</code></pre></pre>
+<p>S1<code>然后借用的价值</code>TMP<code>.</code>但<code>tmp</code>在该块之外不存在价值!</p>
+<pre><code>error: `tmp` does not live long enough
+  --&gt; ref1.rs:8:5
+   |
+7  |         rs1 = &amp;tmp;
+   |                --- borrow occurs here
+8  |     }
+   |     ^ `tmp` dropped here while still borrowed
+9  |     println!(&quot;ref {}&quot;, rs1);
+10 | }
+   | - borrowed value needs to live until here
+</code></pre>
+<p>哪里<code>tmp</code>?走了,死了,回到了天空中的大堆: <em>下降</em>. 铁锈在这里拯救你从C的可怕的'悬挂指针'问题 - 一个指向陈旧数据的参考.</p>
+<a class="header" href="2-structs-enums-lifetimes.zh.html#a元组" id="a元组"><h2>元组</h2></a>
+<p>从函数返回多个值有时非常有用. 元组是一个方便的解决方案:</p>
+<pre><pre class="playpen"><code class="language-rust">// tuple1.rs
+
+fn add_mul(x: f64, y: f64) -&gt; (f64,f64) {
+    (x + y, x * y)
+}
+
+fn main() {
+    let t = add_mul(2.0,10.0);
+
+    // can debug print
+    println!(&quot;t {:?}&quot;, t);
+
+    // can 'index' the values
+    println!(&quot;add {} mul {}&quot;, t.0,t.1);
+
+    // can _extract_ values
+    let (add,mul) = t;
+    println!(&quot;add {} mul {}&quot;, add,mul);
+}
+// t (12, 20)
+// add 12 mul 20
+// add 12 mul 20
+</code></pre></pre>
+<p>元组可能包含_不同_类型,这是与数组的主要区别.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let tuple = (&quot;hello&quot;, 5, 'c');
+
+assert_eq!(tuple.0, &quot;hello&quot;);
+assert_eq!(tuple.1, 5);
+assert_eq!(tuple.2, 'c');
+#}</code></pre></pre>
+<p>他们出现在一些<code>迭代器</code>方法. <code>枚举</code>就像同名的Python生成器一样:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    for t in [&quot;zero&quot;,&quot;one&quot;,&quot;two&quot;].iter().enumerate() {
+        print!(&quot; {} {};&quot;,t.0,t.1);
+    }
+    //  0 zero; 1 one; 2 two;
+#}</code></pre></pre>
+<p><code>压缩</code>将两个迭代器组合成一个包含来自两者的值的元组的迭代器:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let names = [&quot;ten&quot;,&quot;hundred&quot;,&quot;thousand&quot;];
+    let nums = [10,100,1000];
+    for p in names.iter().zip(nums.iter()) {
+        print!(&quot; {} {};&quot;, p.0,p.1);
+    }
+    //  ten 10; hundred 100; thousand 1000;
+#}</code></pre></pre>
+<a class="header" href="2-structs-enums-lifetimes.zh.html#a结构" id="a结构"><h2>结构</h2></a>
+<p>元组很方便,但是在说<code>t.1</code>并且追踪每个部分的含义对于任何不直截了当的事情来说都很乏味.</p>
+<p>锈_结构_包含命名_领域_:</p>
+<pre><pre class="playpen"><code class="language-rust">// struct1.rs
+
+struct Person {
+    first_name: String,
+    last_name: String
+}
+
+fn main() {
+    let p = Person {
+        first_name: &quot;John&quot;.to_string(),
+        last_name: &quot;Smith&quot;.to_string()
+    };
+    println!(&quot;person {} {}&quot;, p.first_name,p.last_name);
+}
+</code></pre></pre>
+<p>虽然不应该假定任何特定的内存布局,但是结构体的值将在内存中相邻放置,因为编译器会组织内存以提高效率,而不是大小,并且可能会存在填充.</p>
+<p>初始化这个结构有点笨拙,所以我们想要移动构造一个<code>人</code>融入其自身的功能. 这个功能可以做成一个_关联功能_的<code>人</code>把它放进去<code>impl</code>块:</p>
+<pre><pre class="playpen"><code class="language-rust">// struct2.rs
+
+struct Person {
+    first_name: String,
+    last_name: String
+}
+
+impl Person {
+
+    fn new(first: &amp;str, name: &amp;str) -&gt; Person {
+        Person {
+            first_name: first.to_string(),
+            last_name: name.to_string()
+        }
+    }
+
+}
+
+fn main() {
+    let p = Person::new(&quot;John&quot;,&quot;Smith&quot;);
+    println!(&quot;person {} {}&quot;, p.first_name,p.last_name);
+}
+</code></pre></pre>
+<p>这个名字没有什么魔力或保留<code>新</code>这里. 请注意,它使用C ++进行访问 - 如使用双冒号的符号<code>::</code>.</p>
+<p>这是一个<code>人</code> <em>方法</em>,这需要一个_参考自我_论据:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+impl Person {
+    ...
+
+    fn full_name(&amp;self) -&gt; String {
+        format!(&quot;{} {}&quot;, self.first_name, self.last_name)
+    }
+
+}
+...
+    println!(&quot;fullname {}&quot;, p.full_name());
+// fullname John Smith
+#}</code></pre></pre>
+<p>该<code>自</code>明确使用并作为参考传递.  (你可以想到<code>&amp;自</code>作为简称<code>自我: &amp;人</code>. )</p>
+<p>关键字<code>自</code>指的是结构类型 - 你可以在脑海中替代<code>人</code>对于<code>自</code>这里:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    fn copy(&amp;self) -&gt; Self {
+        Self::new(&amp;self.first_name,&amp;self.last_name)
+    }
+#}</code></pre></pre>
+<p>方法可以允许使用a修改数据_可变的自我_论据:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    fn set_first_name(&amp;mut self, name: &amp;str) {
+        self.first_name = name.to_string();
+    }
+#}</code></pre></pre>
+<p>数据会_移动_当使用简单的自参数时,</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    fn to_tuple(self) -&gt; (String,String) {
+        (self.first_name, self.last_name)
+    }
+#}</code></pre></pre>
+<p>(尝试与<code>&amp;自</code>- 结构不会在没有战斗的情况下放开数据!)</p>
+<p>请注意,之后<code>v.to_tuple ()</code>被调用,然后<code>v</code>已经移动并且不再可用.</p>
+<p>总结:</p>
+<ul>
+<li>没有<code>自</code>参数: 您可以将函数与结构关联,如<code>新</code>&quot;构造&quot;.</li>
+<li><code>&amp;自</code>参数: 可以使用结构体的值,但不能改变它们</li>
+<li><code>&amp;mut自我</code>参数: 可以修改这些值</li>
+<li><code>自</code>参数: 将消耗将移动的值.</li>
+</ul>
+<p>如果您尝试执行a的调试转储<code>人</code>,你会得到一个信息错误:</p>
+<pre><code>error[E0277]: the trait bound `Person: std::fmt::Debug` is not satisfied
+  --&gt; struct2.rs:23:21
+   |
+23 |     println!(&quot;{:?}&quot;, p);
+   |                     ^ the trait `std::fmt::Debug` is not implemented for `Person`
+   |
+   = note: `Person` cannot be formatted using `:?`; if it is defined in your crate,
+    add `#[derive(Debug)]` or manually implement it
+   = note: required by `std::fmt::Debug::fmt`
+</code></pre>
+<p>编译器提供建议,所以我们放了<code>#[导出 (调试) ]</code>在前面<code>人</code>,现在有明智的输出:</p>
+<pre><code>Person { first_name: &quot;John&quot;, last_name: &quot;Smith&quot; }
+</code></pre>
+<p>该_指示_使编译器生成一个<code>调试</code>实施,这是非常有益的. 对于你的结构来说这是一个很好的习惯,所以它们可以打印出来 (或者用字符串写成<code>格式!</code>) .  (这样做_默认_会非常不生锈. ) 这是最后的小程序:</p>
+<p>寿命开始咬人</p>
+<pre><pre class="playpen"><code class="language-rust">// struct4.rs
+use std::fmt;
+
+#[derive(Debug)]
+struct Person {
+    first_name: String,
+    last_name: String
+}
+
+impl Person {
+
+    fn new(first: &amp;str, name: &amp;str) -&gt; Person {
+        Person {
+            first_name: first.to_string(),
+            last_name: name.to_string()
+        }
+    }
+
+    fn full_name(&amp;self) -&gt; String {
+        format!(&quot;{} {}&quot;,self.first_name, self.last_name)
+    }
+
+    fn set_first_name(&amp;mut self, name: &amp;str) {
+        self.first_name = name.to_string();
+    }
+
+    fn to_tuple(self) -&gt; (String,String) {
+        (self.first_name, self.last_name)
+    }
+}
+
+fn main() {
+    let mut p = Person::new(&quot;John&quot;,&quot;Smith&quot;);
+
+    println!(&quot;{:?}&quot;, p);
+
+    p.set_first_name(&quot;Jane&quot;);
+
+    println!(&quot;{:?}&quot;, p);
+
+    println!(&quot;{:?}&quot;, p.to_tuple());
+    // p has now moved.
+
+}
+// Person { first_name: &quot;John&quot;, last_name: &quot;Smith&quot; }
+// Person { first_name: &quot;Jane&quot;, last_name: &quot;Smith&quot; }
+// (&quot;Jane&quot;, &quot;Smith&quot;)
+</code></pre></pre>
+<a class="header" href="2-structs-enums-lifetimes.zh.html#a通常结构体包含值但通常它们还需要包含引用" id="a通常结构体包含值但通常它们还需要包含引用"><h2>通常结构体包含值,但通常它们还需要包含引用.</h2></a>
+<p>假设我们想在一个结构中放置一个字符串切片,而不是一个字符串值. 为了理解投诉,你必须从Rust的角度看问题.</p>
+<pre><pre class="playpen"><code class="language-rust">// life1.rs
+
+#[derive(Debug)]
+struct A {
+    s: &amp;str
+}
+
+fn main() {
+    let a = A { s: &quot;hello dammit&quot; };
+
+    println!(&quot;{:?}&quot;, a);
+}
+</code></pre></pre>
+<pre><code>error[E0106]: missing lifetime specifier
+ --&gt; life1.rs:5:8
+  |
+5 |     s: &amp;str
+  |        ^ expected lifetime parameter
+</code></pre>
+<p>如果不知道它的生命周期,它将不允许存储引用. 所有参考文献都是从某个价值中借用的,而且所有的价值都是有生命的. 参考的生命周期不能长于该值的生命周期. Rust不能允许这种提及可能突然失效的情况. 现在,字符串切片借用</p>
+<p>字符串文字_像&quot;你好&quot;或来自_串<code>值.</code>字符串字面量在整个程序期间存在,称为&quot;静态&quot;寿命.</p>
+<p>所以这是有效的 - 我们向Rust保证字符串切片总是指向这样的静态字符串:</p>
+<pre><pre class="playpen"><code class="language-rust">// life2.rs
+
+#[derive(Debug)]
+struct A {
+    s: &amp;'static str
+}
+
+fn main() {
+    let a = A { s: &quot;hello dammit&quot; };
+
+    println!(&quot;{:?}&quot;, a);
+}
+// A { s: &quot;hello dammit&quot; }
+</code></pre></pre>
+<p>这不是最多的_漂亮_符号,但有时丑是精确的必要代价.</p>
+<p>这也可以用来指定从函数返回的字符串片段:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn how(i: u32) -&gt; &amp;'static str {
+    match i {
+    0 =&gt; &quot;none&quot;,
+    1 =&gt; &quot;one&quot;,
+    _ =&gt; &quot;many&quot;
+    }
+}
+#}</code></pre></pre>
+<p>这适用于静态字符串的特殊情况,但这是非常严格的.</p>
+<p>但是我们可以指定参考的生命周期_至少与之一样长_就像结构本身一样.</p>
+<pre><pre class="playpen"><code class="language-rust">// life3.rs
+
+#[derive(Debug)]
+struct A &lt;'a&gt; {
+    s: &amp;'a str
+}
+
+fn main() {
+    let s = &quot;I'm a little string&quot;.to_string();
+    let a = A { s: &amp;s };
+
+    println!(&quot;{:?}&quot;, a);
+}
+</code></pre></pre>
+<p>生活时间通常被称为'a','b'等,但您可以在此称之为'我'.</p>
+<p>在这之后,我们的<code>一个</code>结构和<code>小号</code>字符串受到严格合同的约束: <code>一个</code>借用<code>小号</code>,并且不能超越它.</p>
+<p>有了这个结构体定义,我们想写一个函数返回一个<code>一个</code>值:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn makes_a() -&gt; A {
+    let string = &quot;I'm a little string&quot;.to_string();
+    A { s: &amp;string }
+}
+#}</code></pre></pre>
+<p>但<code>一个</code>需要一生 - &quot;预期寿命参数&quot;:</p>
+<pre><code>  = help: this function's return type contains a borrowed value,
+   but there is no value for it to be borrowed from
+  = help: consider giving it a 'static lifetime
+</code></pre>
+<p><code>rustc</code>提供建议,所以我们遵循它:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn makes_a() -&gt; A&lt;'static&gt; {
+    let string = &quot;I'm a little string&quot;.to_string();
+    A { s: &amp;string }
+}
+#}</code></pre></pre>
+<p>而现在的错误是</p>
+<pre><code>8 |      A { s: &amp;string }
+  |              ^^^^^^ does not live long enough
+9 | }
+  | - borrowed value only lives until here
+</code></pre>
+<p>这是无法安全工作的,因为<code>串</code>将在函数结束时被删除,并且不会引用<code>串</code>可以超过它.</p>
+<p>您可以将生命周期参数视为值类型的一部分.</p>
+<p>有时候,结构中包含一个值似乎是个好主意_和_从该价值中借鉴的参考. 这基本上是不可能的,因为结构必须是_活动_,任何移动都将使参考无效. 没有必要这样做 - 例如,如果你的结构有一个字符串字段,并且需要提供切片,那么它可以保留索引并且有一个方法来生成实际的切片.</p>
+<a class="header" href="2-structs-enums-lifetimes.zh.html#a性状" id="a性状"><h2>性状</h2></a>
+<p>请注意Rust不会拼写<code>结构</code> <em>类</em>. 关键字<code>类</code>在其他语言中是如此超载,意味着它有效地关闭了原来的想法.</p>
+<p>让我们这样说吧: Rust结构不能_继承_来自其他结构;他们都是独特的类型. 没有_子打字_. 他们是愚蠢的数据.</p>
+<p>又怎样_不_一个建立类型之间的关系?这是哪里_性状_进来.</p>
+<p><code>rustc</code>经常谈到<code>实现X特质</code>所以现在是时候正确地讨论特质了.</p>
+<p>这里有一个定义特质的例子_实施_它适用于特定类型.</p>
+<pre><pre class="playpen"><code class="language-rust">// trait1.rs
+
+trait Show {
+    fn show(&amp;self) -&gt; String;
+}
+
+impl Show for i32 {
+    fn show(&amp;self) -&gt; String {
+        format!(&quot;four-byte signed {}&quot;, self)
+    }
+}
+
+impl Show for f64 {
+    fn show(&amp;self) -&gt; String {
+        format!(&quot;eight-byte float {}&quot;, self)
+    }
+}
+
+fn main() {
+    let answer = 42;
+    let maybe_pi = 3.14;
+    let s1 = answer.show();
+    let s2 = maybe_pi.show();
+    println!(&quot;show {}&quot;, s1);
+    println!(&quot;show {}&quot;, s2);
+}
+// show four-byte signed 42
+// show eight-byte float 3.14
+</code></pre></pre>
+<p>它太酷了;我们有_增加了一种新方法_二者皆是<code>i32</code>和<code>f64</code>!</p>
+<p>熟悉Rust就会学习标准库的基本特征 (他们倾向于打包打包) . 调试</p>
+<p><code>是非常普遍的.</code>我们给人<code>一个方便的默认实现</code>#[导出 (调试) ]<code>,但说我们想要一个</code>人<code>以全名显示:</code>写!</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+use std::fmt;
+
+impl fmt::Debug for Person {
+    fn fmt(&amp;self, f: &amp;mut fmt::Formatter) -&gt; fmt::Result {
+        write!(f, &quot;{}&quot;, self.full_name())
+    }
+}
+...
+    println!(&quot;{:?}&quot;, p);
+    // John Smith
+#}</code></pre></pre>
+<p><code>是一个非常有用的宏 - 在这里</code>F<code>是什么实现</code>写<code>.</code> (这也适用于文件<code>- 甚至是一个</code>串<code>. )</code>显示控制如何使用&quot;{}&quot;打印值,并以如下方式执行</p>
+<p><code>调试</code>. <code>作为一个有用的副作用,</code>的ToString<code>自动实现任何实现</code>显示<code>.</code>所以如果我们执行<code>显示</code>对于<code>人</code>, 然后<code>p.to_string ()</code>也适用.</p>
+<p><code>克隆</code>定义了该方法<code>克隆</code>,并且可以简单地用&quot;#&quot;[得到 (克隆) ]&quot;如果所有的领域都实施<code>克隆</code>.</p>
+<a class="header" href="2-structs-enums-lifetimes.zh.html#a示例-遍历浮点范围的迭代器" id="a示例-遍历浮点范围的迭代器"><h2>示例: 遍历浮点范围的迭代器</h2></a>
+<p>我们已经遇到范围之前 (<code>0..n</code>) 但它们不适用于浮点值.  (您可以_力_这一点,但最终你会得到一个无趣的1.0步. ) 回想一下迭代器的非正式定义;</p>
+<p>它是一个带有a的结构体下一个<code>方法可能会返回</code>一些<code>事情或</code>没有<code>.</code>在这个过程中,迭代器本身被修改,它保持迭代的状态 (如下一个索引等等) . 迭代的数据通常不会改变, (但请参阅<code>VEC ::漏</code>对于修改其数据的有趣的迭代器) .</p>
+<p>这里是正式的定义: <a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html">迭代器特征</a>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+trait Iterator {
+    type Item;
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt;;
+    ...
+}
+#}</code></pre></pre>
+<p>我们在这里见面<a href="https://doc.rust-lang.org/stable/book/associated-types.html">关联类型</a>的<code>迭代器</code>特征. 这个特征必须适用于任何类型,所以你必须以某种方式指定返回类型. 方法<code>下一个</code>可以在不使用特定类型的情况下编写 - 而是指那个类型参数<code>项目</code>通过<code>自</code>.</p>
+<p>迭代器特征<code>f64</code>写入<code>迭代&lt;物品= F64&gt;</code>,它可以理解为&quot;Iterator的关联类型Item设置为f64&quot;.</p>
+<p>该<code>...</code>指的是_提供的方法_的<code>迭代器</code>. 你只需要定义<code>项目</code>和<code>下一个</code>,并为您定义提供的方法.</p>
+<pre><pre class="playpen"><code class="language-rust">// trait3.rs
+
+struct FRange {
+    val: f64,
+    end: f64,
+    incr: f64
+}
+
+fn range(x1: f64, x2: f64, skip: f64) -&gt; FRange {
+    FRange {val: x1, end: x2, incr: skip}
+}
+
+impl Iterator for FRange {
+    type Item = f64;
+
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+        let res = self.val;
+        if res &gt;= self.end {
+            None
+        } else {
+            self.val += self.incr;
+            Some(res)
+        }
+    }
+}
+
+
+fn main() {
+    for x in range(0.0, 1.0, 0.1) {
+        println!(&quot;{} &quot;, x);
+    }
+}
+</code></pre></pre>
+<p>而相当凌乱的结果是</p>
+<pre><code>0
+0.1
+0.2
+0.30000000000000004
+0.4
+0.5
+0.6
+0.7
+0.7999999999999999
+0.8999999999999999
+0.9999999999999999
+</code></pre>
+<p>这是因为0.1不能精确表示为float,所以需要一些格式化帮助. 更换<code>调用println!</code>有了这个</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+println!(&quot;{:.1} &quot;, x);
+#}</code></pre></pre>
+<p>我们得到更清洁的产出 (这个<a href="https://doc.rust-lang.org/std/fmt/index.html">格式</a>意思是'小数点后一位小数'. ) 所有默认的迭代器方法都可用,所以我们可以将这些值收集到一个向量中,映射它们等等.</p>
+<p>通用函数</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let v: Vec&lt;f64&gt; = range(0.0, 1.0, 0.1).map(|x| x.sin()).collect();
+#}</code></pre></pre>
+<a class="header" href="2-structs-enums-lifetimes.zh.html#a我们需要一个函数来抛出实现的任何值" id="a我们需要一个函数来抛出实现的任何值"><h2>我们需要一个函数来抛出实现的任何值</h2></a>
+<p>调试<code>.</code>以下是对通用函数的第一次尝试,我们可以在其中传递参考_任何_价值类型. <code>Ť</code>是一个类型参数,需要在函数名称后面声明:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn dump&lt;T&gt; (value: &amp;T) {
+    println!(&quot;value is {:?}&quot;,value);
+}
+
+let n = 42;
+dump(&amp;n);
+#}</code></pre></pre>
+<p>但是,Rust显然对这种通用类型一无所知<code>Ť</code>:</p>
+<pre><code>error[E0277]: the trait bound `T: std::fmt::Debug` is not satisfied
+...
+   = help: the trait `std::fmt::Debug` is not implemented for `T`
+   = help: consider adding a `where T: std::fmt::Debug` bound
+</code></pre>
+<p>为了这个工作,Rust需要被告知<code>Ť</code>确实实施<code>调试</code>!</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn dump&lt;T&gt; (value: &amp;T)
+where T: std::fmt::Debug {
+    println!(&quot;value is {:?}&quot;,value);
+}
+
+let n = 42;
+dump(&amp;n);
+// value is 42
+#}</code></pre></pre>
+<p>Rust通用功能需要_特质边界_on类型 - 我们在这里说&quot;T是实现Debug的任何类型&quot;. <code>rustc</code>是非常有用的,并且确切地说明需要提供什么界限.</p>
+<p>现在Rust知道这个特质<code>Ť</code>,它可以给你敏感的编译器消息:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+struct Foo {
+    name: String
+}
+
+let foo = Foo{name: &quot;hello&quot;.to_string()};
+
+dump(&amp;foo)
+#}</code></pre></pre>
+<p>而错误是&quot;特质<code>的std :: FMT ::调试</code>没有实施<code>富</code>&quot;.</p>
+<p>函数在动态语言中已经是泛型的,因为值会带有它们的实际类型,并且类型检查在运行时发生 - 或者惨败. 对于较大的程序,我们确实想在编译时想知道问题!这些语言的程序员不应平静地坐在编译器的错误之中,而必须处理程序运行时才会出现的问题. 墨菲定律意味着这些问题往往会发生在最不方便/灾难性的时刻.</p>
+<p>平方数的操作是通用的: <code>X * X</code>将适用于整数,浮点数和一般用于任何关于乘法运算符的知识<code>*</code>. 但是类型边界是什么?</p>
+<pre><pre class="playpen"><code class="language-rust">// gen1.rs
+
+fn sqr&lt;T&gt; (x: T) -&gt; T {
+    x * x
+}
+
+fn main() {
+    let res = sqr(10.0);
+    println!(&quot;res {}&quot;,res);
+}
+</code></pre></pre>
+<p>第一个问题是Rust不知道<code>Ť</code>可以乘以:</p>
+<pre><code>error[E0369]: binary operation `*` cannot be applied to type `T`
+ --&gt; gen1.rs:4:5
+  |
+4 |     x * x
+  |     ^
+  |
+note: an implementation of `std::ops::Mul` might be missing for `T`
+ --&gt; gen1.rs:4:5
+  |
+4 |     x * x
+  |     ^
+</code></pre>
+<p>遵循编译器的建议,让我们使用限制该类型参数<a href="https://doc.rust-lang.org/std/ops/trait.Mul.html">那个特质</a>,用于实现乘法运算符<code>*</code>:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn sqr&lt;T&gt; (x: T) -&gt; T
+where T: std::ops::Mul {
+    x * x
+}
+#}</code></pre></pre>
+<p>哪个仍然不起作用:</p>
+<pre><code>rror[E0308]: mismatched types
+ --&gt; gen2.rs:6:5
+  |
+6 |     x * x
+  |     ^^^ expected type parameter, found associated type
+  |
+  = note: expected type `T`
+  = note:    found type `&lt;T as std::ops::Mul&gt;::Output`
+</code></pre>
+<p>什么<code>rustc</code>是说这种类型的<code>X * X</code>是关联的类型<code>T ::输出</code>,不<code>Ť</code>. 实际上没有理由的类型<code>X * X</code>与类型相同<code>x</code>,例如,两个向量的点积是一个标量.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn sqr&lt;T&gt; (x: T) -&gt; T::Output
+where T: std::ops::Mul {
+    x * x
+}
+#}</code></pre></pre>
+<p>现在的错误是:</p>
+<pre><code>error[E0382]: use of moved value: `x`
+ --&gt; gen2.rs:6:7
+  |
+6 |     x * x
+  |     - ^ value used here after move
+  |     |
+  |     value moved here
+  |
+  = note: move occurs because `x` has type `T`, which does not implement the `Copy` trait
+</code></pre>
+<p>所以,我们需要进一步限制类型!</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn sqr&lt;T&gt; (x: T) -&gt; T::Output
+where T: std::ops::Mul + Copy {
+    x * x
+}
+#}</code></pre></pre>
+<p>那 (终于) 起作用了. 冷静地倾听编译器经常会让你更接近魔术点,当......事情干净地编译时.</p>
+<p>它_是_在C ++中更简单一点:</p>
+<pre><code class="language-cpp">template &lt;typename T&gt;
+T sqr(x: T) {
+    return x * x;
+}
+</code></pre>
+<p>但 (说实话) C ++在这里采用牛仔策略. C ++模板错误很不好,因为所有的编译器都知道 (最终) 是某些操作符或方法没有被定义. C ++委员会知道这是一个问题,所以他们正在努力<a href="https://en.wikipedia.org/wiki/Concepts_(C%2B%2B)">概念</a>,这几乎与Rust中的特征约束类型参数非常相似.</p>
+<p>Rust通用函数一开始可能看起来有点压倒性,但是显式意味着只要看看定义,就能确切地知道可以安全地提供哪种值.</p>
+<p>这些函数被调用_单态_,与...相反_多态_. 函数的主体是为每个唯一类型分别编译的. 通过多态函数,相同的机器代码可以动态地与每种匹配类型一起工作_调度_正确的方法.</p>
+<p>Monomorphic生成更快的代码,专用于特定类型,并且通常可以_内联_. 所以何时<code>SQR (x) 的</code>被看到,它被有效地取代<code>X * X</code>. 缺点是大的泛型函数会产生大量的代码,对于每一种可能导致的类型_代码膨胀_. 与往常一样,有折衷;有经验的人学会为工作做出正确的选择.</p>
+<a class="header" href="2-structs-enums-lifetimes.zh.html#a简单的枚举" id="a简单的枚举"><h2>简单的枚举</h2></a>
+<p>枚举类型具有一些确定的值. 例如,一个方向只有四个可能的值.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+enum Direction {
+    Up,
+    Down,
+    Left,
+    Right
+}
+...
+    // `start` is type `Direction`
+    let start = Direction::Left;
+#}</code></pre></pre>
+<p>他们可以在结构上定义方法,就像结构一样. 该<code>比赛</code>表达是处理的基本方式<code>枚举</code>值.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+impl Direction {
+    fn as_str(&amp;self) -&gt; &amp;'static str {
+        match *self { // *self has type Direction
+            Direction::Up =&gt; &quot;Up&quot;,
+            Direction::Down =&gt; &quot;Down&quot;,
+            Direction::Left =&gt; &quot;Left&quot;,
+            Direction::Right =&gt; &quot;Right&quot;
+        }
+    }
+}
+#}</code></pre></pre>
+<p>标点符号很重要. 注意<code>*</code>之前<code>自</code>. 很容易忘记,因为Rust经常会假设它 (我们说过<code>self.first_name</code>,不<code>(*个体经营) .first_name</code>) . 但是,匹配是一个更精确的业务. 将它排除在外可能会产生一大堆消息,这些消息可归结为这种类型的不匹配:</p>
+<pre><code>   = note: expected type `&amp;Direction`
+   = note:    found type `Direction`
+</code></pre>
+<p>这是因为<code>自</code>有类型<code>&amp;方向</code>,所以我们必须投入<code>*</code>至_尊重_方式.</p>
+<p>像结构一样,枚举可以实现特征,也可以实现我们的朋友<code>#[导出 (调试) ]</code>可以添加到<code>方向</code>:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+        println!(&quot;start {:?}&quot;,start);
+        // start Left
+#}</code></pre></pre>
+<p>以便<code>as_str</code>方法并不是真的必要,因为我们总是可以从中得到名字<code>调试</code>.  (但<code>as_str</code>不_不分配_,这可能很重要. ) 你不应该在这里假设任何特定的顺序 - 没有暗示的整数&quot;序数&quot;值.</p>
+<p>这里有一个方法来定义每个的'后继者'</p>
+<p>方向<code>值.</code>非常方便通配符使用_暂时将枚举名称放入方法上下文中: _所以这将在这个特定的,任意的顺序中通过各个方向循环不休.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    fn next(&amp;self) -&gt; Direction {
+        use Direction::*;
+        match *self {
+            Up =&gt; Right,
+            Right =&gt; Down,
+            Down =&gt; Left,
+            Left =&gt; Up
+        }
+    }
+    ...
+
+    let mut d = start;
+    for _ in 0..8 {
+        println!(&quot;d {:?}&quot;, d);
+        d = d.next();
+    }
+    // d Left
+    // d Up
+    // d Right
+    // d Down
+    // d Left
+    // d Up
+    // d Right
+    // d Down
+#}</code></pre></pre>
+<p>它 (事实上) 非常简单状态机_. _这些枚举值无法比较:</p>
+<p>解决办法就是说</p>
+<pre><code>assert_eq!(start, Direction::Left);
+
+error[E0369]: binary operation `==` cannot be applied to type `Direction`
+  --&gt; enum1.rs:42:5
+   |
+42 |     assert_eq!(start, Direction::Left);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: an implementation of `std::cmp::PartialEq` might be missing for `Direction`
+  --&gt; enum1.rs:42:5
+</code></pre>
+<p>#[派生 (调试,PartialEq) ]<code>在前面</code>枚举方向<code>.</code>这是一个重要的观点 -  Rust用户定义的类型开始新鲜和朴素.</p>
+<p>你通过实施共同的特点给他们合理的默认行为. 这也适用于结构 - 如果你要求Rust得出结论PartialEq<code>对于一个结构体来说,它会做出明智的事情,假设所有的领域都实现它并建立一个比较.</code>如果不是这样,或者你想重新定义平等,那么你可以自由定义<code>PartialEq</code>明确.</p>
+<p>Rust也有'C风格的枚举':</p>
+<pre><pre class="playpen"><code class="language-rust">// enum2.rs
+
+enum Speed {
+    Slow = 10,
+    Medium = 20,
+    Fast = 50
+}
+
+fn main() {
+    let s = Speed::Slow;
+    let speed = s as u32;
+    println!(&quot;speed {}&quot;, speed);
+}
+</code></pre></pre>
+<p>它们用一个整数值进行初始化,并可以通过类型转换将其转换为该整数.</p>
+<p>你只需要给名字一个值,然后每次增加一个值:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+enum Difficulty {
+    Easy = 1,
+    Medium,  // is 2
+    Hard   // is 3
+}
+#}</code></pre></pre>
+<p>顺便说一下,'名字'太模糊了,就像一直在说'thingy'. 这里的合适名词是_变种_-<code>速度</code>有变种<code>慢</code>,<code>中</code>和<code>快速</code>.</p>
+<p>这些枚举_做_有一个自然的顺序,但你必须很好地问. 放置后<code>#[派生 (PartialEq,PartialOrd) ]</code>在前面<code>枚举速度</code>,那确实如此<code>速度::快速&gt;速度::慢</code>和<code>速度::中等!=速度::慢</code>.</p>
+<a class="header" href="2-structs-enums-lifetimes.zh.html#a以其全部荣耀枚举" id="a以其全部荣耀枚举"><h2>以其全部荣耀枚举</h2></a>
+<p>完全形式的锈烯类似于类固醇上的C联盟,就像法拉利相比,菲亚特Uno. 考虑以类型安全的方式存储不同值的问题.</p>
+<pre><pre class="playpen"><code class="language-rust">// enum3.rs
+
+#[derive(Debug)]
+enum Value {
+    Number(f64),
+    Str(String),
+    Bool(bool)
+}
+
+fn main() {
+    use Value::*;
+    let n = Number(2.3);
+    let s = Str(&quot;hello&quot;.to_string());
+    let b = Bool(true);
+
+    println!(&quot;n {:?} s {:?} b {:?}&quot;, n,s,b);
+}
+// n Number(2.3) s Str(&quot;hello&quot;) b Bool(true)
+</code></pre></pre>
+<p>同样,这个枚举只能包含_一_这些价值观;其大小将是最大变体的大小.</p>
+<p>到目前为止,并不是真正的超级跑车,虽然枚举知道如何打印出来是很酷的. 但他们也知道如何_哪一种_它们包含的价值,和_那_是超级大国<code>比赛</code>:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn eat_and_dump(v: Value) {
+    use Value::*;
+    match v {
+        Number(n) =&gt; println!(&quot;number is {}&quot;, n),
+        Str(s) =&gt; println!(&quot;string is '{}'&quot;, s),
+        Bool(b) =&gt; println!(&quot;boolean is {}&quot;, b)
+    }
+}
+....
+eat_and_dump(n);
+eat_and_dump(s);
+eat_and_dump(b);
+//number is 2.3
+//string is 'hello'
+//boolean is true
+#}</code></pre></pre>
+<p>(那就是这样<code>选项</code>和<code>结果</code>是 - 枚举. ) 我们喜欢这个</p>
+<p>eat_and_dump<code>函数,但我们希望将该值作为参考传递,因为当前发生了移动并且该值被'吃掉'了:</code>借用参考资料你无法做到.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn dump(v: &amp;Value) {
+    use Value::*;
+    match *v {  // type of *v is Value
+        Number(n) =&gt; println!(&quot;number is {}&quot;, n),
+        Str(s) =&gt; println!(&quot;string is '{}'&quot;, s),
+        Bool(b) =&gt; println!(&quot;boolean is {}&quot;, b)
+    }
+}
+
+error[E0507]: cannot move out of borrowed content
+  --&gt; enum3.rs:12:11
+   |
+12 |     match *v {
+   |           ^^ cannot move out of borrowed content
+13 |     Number(n) =&gt; println!(&quot;number is {}&quot;,n),
+14 |     Str(s) =&gt; println!(&quot;string is '{}'&quot;,s),
+   |         - hint: to prevent move, use `ref s` or `ref mut s`
+#}</code></pre></pre>
+<p>Rust不会让你提取_包含在原始值中的字符串. _它没有抱怨数<code>因为它很高兴复制</code>F64<code>,但是</code>串<code>不执行</code>复制<code>.</code>我之前提到过</p>
+<p>比赛<code>挑剔</code>精确_类型;_在这里,我们按照提示进行操作;</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn dump(v: &amp;Value) {
+    use Value::*;
+    match *v {
+        Number(n) =&gt; println!(&quot;number is {}&quot;, n),
+        Str(ref s) =&gt; println!(&quot;string is '{}'&quot;, s),
+        Bool(b) =&gt; println!(&quot;boolean is {}&quot;, b)
+    }
+}
+    ....
+
+    dump(&amp;s);
+    // string is 'hello'
+#}</code></pre></pre>
+<p>现在我们只是借用对包含字符串的引用. 在我们继续前进之前,充满了成功的Rust编辑的欣快感,让我们暂停一下. <code>rustc</code>在生成足够上下文以供人类使用的错误方面非常优秀_固定_错误不一定_理解_错误.</p>
+<p>这个问题是匹配的正确性,以及借用检查者决定阻止任何违反规则的企图的结合. 其中一条规则是你不能抽出属于某种拥有类型的价值. C ++的一些知识在这里是一个障碍,因为C ++将复制出问题的方式,无论是复制甚至是_说得通_. 如果你尝试从一个矢量中抽出一个字符串,你会得到完全相同的错误<code>* v.get (0) .unwrap ()</code> (<code>*</code>因为索引返回引用. ) 它不会让你这样做.  (有时克隆<code>这不是一个坏的解决方案. )</code> (顺便一提,v [0]</p>
+<p>正是出于这个原因,它不适用于像字符串这样的非可复制值. <code>你必须或者借用</code>&amp;V [0]或克隆<code>v [0] .clone ()</code>) <code>至于</code>比赛</p>
+<p>,你可以看到<code>Str (s) =&gt;</code>作为简称<code>Str (s: String) =&gt;</code>. <code>局部变量 (通常称为</code>捆绑)  被建造. _通常推断的类型很酷,当你吃掉一个值并提取其内容时. _但我们真正需要的是<code>s: &amp;String</code>,和<code>ref</code>是一个暗示,确保这一点: 我们只是想借用该字符串.</p>
+<p>在这里,我们确实想提取该字符串,并且不关心之后的枚举值. <code>_</code>像往常一样会匹配任何东西</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+impl Value {
+    fn to_str(self) -&gt; Option&lt;String&gt; {
+        match self {
+        Value::Str(s) =&gt; Some(s),
+        _ =&gt; None
+        }
+    }
+}
+    ...
+    println!(&quot;s? {:?}&quot;, s.to_str());
+    // s? Some(&quot;hello&quot;)
+    // println!(&quot;{:?}&quot;, s) // error! s has moved...
+#}</code></pre></pre>
+<p>命名重要 - 这就是所谓的<code>to_str</code>,不<code>as_str</code>. 你可以编写一个方法,只是将该字符串作为一个借用<code>选项&lt;&amp;字符串&gt;</code> (引用将需要与枚举值相同的生命周期. ) 但是你不会调用它to_str<code>.</code>你可以写</p>
+<p>to_str<code>像这样 - 它完全等价:</code>更多关于匹配</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    fn to_str(self) -&gt; Option&lt;String&gt; {
+        if let Value::Str(s) = self {
+            Some(s)
+        } else {
+            None
+        }
+    }
+#}</code></pre></pre>
+<a class="header" href="2-structs-enums-lifetimes.zh.html#a回想一下元组的值可以用--来提取" id="a回想一下元组的值可以用--来提取"><h2>回想一下,元组的值可以用' () '来提取:</h2></a>
+<p>这是一个特例</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let t = (10,&quot;hello&quot;.to_string());
+    ...
+    let (n,s) = t;
+    // t has been moved. It is No More
+    // n is i32, s is String
+#}</code></pre></pre>
+<p>解构_;_我们有一些数据,并希望将其分开 (像这里) 或只是借用它的值. 无论哪种方式,我们都可以得到结构的各个部分. 语法与在中使用的相似</p>
+<p>比赛<code>.</code>这里我们明确地借用了这些值.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let (ref n,ref s) = t;
+    // n and s are borrowed from t. It still lives!
+    // n is &amp;i32, s is &amp;String
+#}</code></pre></pre>
+<p>解构与结构一起工作:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    struct Point {
+        x: f32,
+        y: f32
+    }
+
+    let p = Point{x:1.0,y:2.0};
+    ...
+    let Point{x,y} = p;
+    // p still lives, since x and y can and will be copied
+    // both x and y are f32
+#}</code></pre></pre>
+<p>时间重温<code>比赛</code>有一些新的模式. 前两种模式完全一样<code>让</code>解构 - 它只匹配第一个元素为零的元组,但是_任何_串;第二个增加了一个<code>如果</code>所以它只匹配<code>(1, &quot;你好&quot;)</code>. 最后,只是一个变量匹配_什么_. 这是有用的,如果<code>比赛</code>适用于表达式,并且不希望将变量绑定到该表达式. <code>_</code>像变量一样工作,但被忽略. 这是完成一个常用的方法<code>比赛</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn match_tuple(t: (i32,String)) {
+    let text = match t {
+        (0, s) =&gt; format!(&quot;zero {}&quot;, s),
+        (1, ref s) if s == &quot;hello&quot; =&gt; format!(&quot;hello one!&quot;),
+        tt =&gt; format!(&quot;no match {:?}&quot;, tt),
+        // or say _ =&gt; format!(&quot;no match&quot;) if you're not interested in the value
+     };
+    println!(&quot;{}&quot;, text);
+}
+#}</code></pre></pre>
+<p>为什么不匹配<code>(1, &quot;你好&quot;)</code>?匹配是一个确切的业务,编译器会抱怨:</p>
+<pre><code>  = note: expected type `std::string::String`
+  = note:    found type `&amp;'static str`
+</code></pre>
+<p>我们为什么需要<code>ref s</code>?这是一个稍微隐晦的问题 (查找E00008错误) ,如果你有一个_如果守卫_你需要借用,因为如果守卫发生在不同的环境中,否则将会发生移动. 这是实施漏洞的情况.</p>
+<p>如果类型_是_ <code>&amp;STR</code>那么我们直接匹配它:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    match (42,&quot;answer&quot;) {
+        (42,&quot;answer&quot;) =&gt; println!(&quot;yes&quot;),
+        _ =&gt; println!(&quot;no&quot;)
+    };
+#}</code></pre></pre>
+<p>什么适用于<code>比赛</code>适用于<code>如果让</code>. 这是一个很酷的例子,因为如果我们得到一个<code>一些</code>,我们可以在里面匹配,只从元组中提取字符串. 所以没有必要嵌套<code>如果让</code>陈述在这里. 我们用<code>_</code>因为我们对元组的第一部分不感兴趣.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let ot = Some((2,&quot;hello&quot;.to_string());
+
+    if let Some((_,ref s)) = ot {
+        assert_eq!(s, &quot;hello&quot;);
+    }
+    // we just borrowed the string, no 'destructive destructuring'
+#}</code></pre></pre>
+<p>使用时会出现一个有趣的问题<code>解析</code> (或任何需要从上下文中计算出其返回类型的函数)</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    if let Ok(n) = &quot;42&quot;.parse() {
+        ...
+    }
+#}</code></pre></pre>
+<p>那么,这是什么类型的<code>ñ</code>?不知何故,你必须提供一个提示 - 什么样的整数?它甚至是一个整数?</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    if let Ok(n) = &quot;42&quot;.parse::&lt;i32&gt;() {
+        ...
+    }
+#}</code></pre></pre>
+<p>这种不太优雅的语法被称为&quot;涡轮运算符&quot;.</p>
+<p>如果你正在返回一个函数<code>结果</code>,那么问号运算符提供了一个更加优雅的解决方案:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let n: i32 = &quot;42&quot;.parse()?;
+#}</code></pre></pre>
+<p>但是,解析错误需要转换为错误类型<code>结果</code>,这是我们稍后讨论时要讨论的话题<a href="6-error-handling.html">错误处理</a>.</p>
+<a class="header" href="2-structs-enums-lifetimes.zh.html#a关闭" id="a关闭"><h2>关闭</h2></a>
+<p>Rust的力量来源于很多_关闭_. 它们最简单的形式就像快捷功能一样:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let f = |x| x * x;
+
+    let res = f(10);
+
+    println!(&quot;res {}&quot;, res);
+    // res 100
+#}</code></pre></pre>
+<p>在这个例子中没有明确的类型 - 一切都是从整数字面量10开始推导出来的.</p>
+<p>如果我们打电话,我们会收到错误<code>f</code>在不同类型 -  Rust已经决定<code>f</code>必须在整数类型上调用:</p>
+<pre><code>    let res = f(10);
+
+    let resf = f(1.2);
+  |
+8 |     let resf = f(1.2);
+  |                  ^^^ expected integral variable, found floating-point variable
+  |
+  = note: expected type `{integer}`
+  = note:    found type `{float}`
+</code></pre>
+<p>所以,第一次调用修复了参数的类型<code>x</code>. 这相当于这个功能:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    fn f (x: i32) -&gt; i32 {
+        x * x
+    }
+#}</code></pre></pre>
+<p>但功能和封闭之间存在很大差异,_距离_从明确的打字需要. 这里我们评估一个线性函数:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let m = 2.0;
+    let c = 1.0;
+
+    let lin = |x| m*x + c;
+
+    println!(&quot;res {} {}&quot;, lin(1.0), lin(2.0));
+    // res 3 5
+#}</code></pre></pre>
+<p>你不能用明确的做<code>fn</code>形式 - 它不知道封闭范围内的变量. 关闭了_借_ <code>米</code>和<code>c</code>从其上下文来看.</p>
+<p>现在,这是什么类型<code>林</code>?只要<code>rustc</code>知道. 在引擎盖下,封闭是一个_结构_这是可调用的 ('实现调用操作符') . 它的行为就好像它是这样写出来的:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+struct MyAnonymousClosure1&lt;'a&gt; {
+    m: &amp;'a f64,
+    c: &amp;'a f64
+}
+
+impl &lt;'a&gt;MyAnonymousClosure1&lt;'a&gt; {
+    fn call(&amp;self, x: f64) -&gt; f64 {
+        self.m * x  + self.c
+    }
+}
+#}</code></pre></pre>
+<p>编译器当然是有帮助的,把简单的闭包语法变成所有的代码!你确实需要知道闭包是一个_结构_和它_借阅_来自其环境的价值. 因此它有一个_一生_.</p>
+<p>所有关闭都是独特的类型,但它们有共同的特点. 所以即使我们不知道确切的类型,我们知道一般的约束:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn apply&lt;F&gt;(x: f64, f: F) -&gt; f64
+where F: Fn(f64)-&gt;f64  {
+    f(x)
+}
+...
+    let res1 = apply(3.0,lin);
+    let res2 = apply(3.14, |x| x.sin());
+#}</code></pre></pre>
+<p>用英语: <code>应用</code>效劳于_任何_类型<code>Ť</code>这样<code>Ť</code>器物<code>FN (F64) - &gt; F64</code>- 也就是说,这是一个需要的功能<code>f64</code>并返回<code>f64</code>.</p>
+<p>打完电话后<code>申请 (3.0,LIN)</code>,试图访问<code>林</code>给出一个有趣的错误:</p>
+<pre><code>    let l = lin;
+error[E0382]: use of moved value: `lin`
+  --&gt; closure2.rs:22:9
+   |
+16 |     let res = apply(3.0,lin);
+   |                         --- value moved here
+...
+22 |     let l = lin;
+   |         ^ value used here after move
+   |
+   = note: move occurs because `lin` has type
+    `[closure@closure2.rs:12:15: 12:26 m:&amp;f64, c:&amp;f64]`,
+     which does not implement the `Copy` trait
+</code></pre>
+<p>而已,<code>应用</code>吃了我们的关闭. 还有这个结构的实际类型<code>rustc</code>弥补实施它. 始终将封闭视为结构是有帮助的.</p>
+<p>调用闭包是_方法调用_: 三种功能特征对应于三种方法:</p>
+<ul>
+<li><code>Fn</code>结构传递为<code>&amp;自</code></li>
+<li><code>FnMut</code>结构传递为<code>&amp;mut自我</code></li>
+<li><code>FnOnce</code>结构传递为<code>自</code></li>
+</ul>
+<p>所以封闭可能会改变它的_捕获_引用:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    fn mutate&lt;F&gt;(mut f: F)
+    where F: FnMut() {
+        f()
+    }
+    let mut s = &quot;world&quot;;
+    mutate(|| s = &quot;hello&quot;);
+    assert_eq!(s, &quot;hello&quot;);
+#}</code></pre></pre>
+<p>注意<code>mut</code>-<code>f</code>需要可变这个工作.</p>
+<p>但是,你无法逃避借贷规则. 考虑这个:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let mut s = &quot;world&quot;;
+
+// closure does a mutable borrow of s
+let mut changer = || s = &quot;world&quot;;
+
+changer();
+// does an immutable borrow of s
+assert_eq!(s, &quot;world&quot;);
+#}</code></pre></pre>
+<p>无法完成!错误是我们不能借用<code>小号</code>在声明中,因为它之前已经被封闭借用过<code>换</code>作为可变的. 只要封闭存在,其他代码就不能访问<code>小号</code>,所以解决方案是通过将闭包放在一个有限的范围内来控制这个生命周期:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let mut s = &quot;world&quot;;
+{
+    let mut changer = || s = &quot;world&quot;;
+    changer();
+}
+assert_eq!(s, &quot;world&quot;);
+#}</code></pre></pre>
+<p>在这一点上,如果你习惯了JavaScript或Lua等语言,你可能会想到Rust闭包的复杂性,而不是它们在这些语言中的直截了当. 这是Rust承诺不作出任何分配的必要成本. 在JavaScript中,等效<code>mutate (function () {s =&quot;hello&quot;;})</code>将始终导致动态分配闭包.</p>
+<p>有时你不希望封闭借用这些变量,而是_移动_他们.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let name = &quot;dolly&quot;.to_string();
+    let age = 42;
+
+    let c = move || {
+        println!(&quot;name {} age {}&quot;, name,age);
+    };
+
+    c();
+
+    println!(&quot;name {}&quot;,name);
+#}</code></pre></pre>
+<p>最后的错误<code>的println</code>是: &quot;使用移动值: <code>名称</code>&quot;所以这里有一个解决方案 - 如果我们没有_想保持_名称<code>活着 - 是将克隆副本移入关闭中:</code>为什么需要移动关闭?</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let cname = name.to_string();
+    let c = move || {
+        println!(&quot;name {} age {}&quot;,cname,age);
+    };
+#}</code></pre></pre>
+<p>因为我们可能需要在原始上下文不再存在的地方调用它们. 经典案例是创建一个线_. _移动的封闭不会借用,所以没有一生. 迭代器方法中主要使用闭包.</p>
+<p>回想一下范围<code>我们定义的迭代器遍历一系列浮点数.</code>使用闭包对此 (或任何其他迭代器) 进行操作很简单: 地图</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let sine: Vec&lt;f64&gt; = range(0.0,1.0,0.1).map(|x| x.sin()).collect();
+#}</code></pre></pre>
+<p><code>没有在向量上定义 (尽管很容易创建一个这样的特征) ,因为那样</code>一切_地图将创建一个新的矢量. _这样,我们有一个选择. 总之,没有创建临时对象: 它 (事实上) 会像写出明确的循环一样快!</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+ let sum: f64 = range(0.0,1.0,0.1).map(|x| x.sin()).sum();
+#}</code></pre></pre>
+<p>如果Rust关闭与Javascript关闭一样&quot;无摩擦&quot;,那么这种性能保证是不可能的. 过滤</p>
+<p><code>是另一种有用的迭代器方法 - 它只允许通过匹配条件的值:</code>三种迭代器</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let tuples = [(10,&quot;ten&quot;),(20,&quot;twenty&quot;),(30,&quot;thirty&quot;),(40,&quot;forty&quot;)];
+    let iter = tuples.iter().filter(|t| t.0 &gt; 20).map(|t| t.1);
+
+    for name in iter {
+        println!(&quot;{} &quot;, name);
+    }
+    // thirty
+    // forty
+#}</code></pre></pre>
+<a class="header" href="2-structs-enums-lifetimes.zh.html#a三种类型-再次-对应于三种基本参数类型" id="a三种类型-再次-对应于三种基本参数类型"><h2>三种类型 (再次) 对应于三种基本参数类型.</h2></a>
+<p>假设我们有一个向量串<code>值.</code>以下是显式的迭代器类型,然后_隐式_,以及迭代器返回的实际类型.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+for s in vec.iter() {...} // &amp;String
+for s in vec.iter_mut() {...} // &amp;mut String
+for s in vec.into_iter() {...} // String
+
+// implicit!
+for s in &amp;vec {...} // &amp;String
+for s in &amp;mut vec {...} // &amp;mut String
+for s in vec {...} // String
+#}</code></pre></pre>
+<p>就我个人而言,我更喜欢明确,但了解这两种形式及其含义非常重要.</p>
+<p><code>into_iter</code> _消耗_矢量并提取它的字符串,所以之后矢量不再可用 - 它已被移动. 这是Pythonistas过去常说的一个确定的问题<code>对于vec中的s</code>!</p>
+<p>所以隐含的形式<code>对于in&amp;vec</code>通常是你想要的,就像<code>&amp;T</code>在向函数传递参数时是一个很好的默认值.</p>
+<p>理解这三种类型是如何工作是很重要的,因为Rust严重依赖于类型推导 - 在关闭参数中你不会经常看到明确的类型. 这是一件好事,因为如果所有这些类型都明确的话它会很嘈杂_键入_. 然而,这个紧凑的代码的价格是你需要知道隐式类型究竟是什么!</p>
+<p><code>地图</code>取得迭代器返回的任何值并将其转换为其他值,但是<code>过滤</code>需要一个_参考_到那个价值. 在这种情况下,我们正在使用<code>iter</code>所以迭代器项目类型是<code>&amp;串</code>. 注意<code>过滤</code>接收到这种类型的引用.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+for n in vec.iter().map(|x: &amp;String| x.len()) {...} // n is usize
+....
+}
+
+for s in vec.iter().filter(|x: &amp;&amp;String| x.len() &gt; 2) { // s is &amp;String
+...
+}
+#}</code></pre></pre>
+<p>在调用方法时,Rust会自动删除,所以问题不明显. 但<code>| x: &amp;&amp; String |</code>x ==&quot;one&quot;|将_不_工作,因为操作员对类型匹配更加严格. <code>rustc</code>会抱怨没有这样的运营商进行比较<code>&amp;&amp;串</code>和<code>&amp;STR</code>. 所以你需要明确的尊重来做到这一点<code>&amp;&amp;串</code>变成一个<code>&amp;串</code>哪一个_不_比赛.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+for s in vec.iter().filter(|x: &amp;&amp;String| *x == &quot;one&quot;) {...}
+// same as implicit form:
+for s in vec.iter().filter(|x| *x == &quot;one&quot;) {...}
+#}</code></pre></pre>
+<p>如果省略显式类型,则可以修改参数以使其类型<code>小号</code>就是现在<code>&amp;串</code>:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+for s in vec.iter().filter(|&amp;x| x == &quot;one&quot;)
+#}</code></pre></pre>
+<p>这通常是你将如何看待它写的.</p>
+<a class="header" href="2-structs-enums-lifetimes.zh.html#a用动态数据构建" id="a用动态数据构建"><h2>用动态数据构建</h2></a>
+<p>一个最强大的技术是_一个包含对自身引用的结构_.</p>
+<p>这是a的基本构建块_二叉树_,用C表示 (每个人最喜欢的老亲戚都喜欢使用没有保护的电动工具. )</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    struct Node {
+        const char *payload;
+        struct Node *left;
+        struct Node *right;
+    };
+#}</code></pre></pre>
+<p>你不能这样做_直_包含<code>节点</code>领域,因为那么大小<code>节点</code>取决于大小<code>节点</code>...它只是不计算. 所以我们使用指针<code>节点</code>结构,因为指针的大小总是已知的.</p>
+<p>如果<code>剩下</code>不<code>空值</code>,<code>节点</code>将有一个左指向另一个节点,因此无限期无限.</p>
+<p>Rust不会<code>空值</code> (至少不是_安然_) 所以这显然是一份工作<code>选项</code>. 但你不能只是把一个<code>节点</code>在那里面<code>选项</code>,因为我们不知道大小<code>节点</code> (等等) . 这是一份工作<code>框</code>,因为它包含一个指向数据的分配指针,并且一直具有固定大小.</p>
+<p>所以这里是Rust的等价物,使用<code>类型</code>创建一个别名:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+type NodeBox = Option&lt;Box&lt;Node&gt;&gt;;
+
+#[derive(Debug)]
+struct Node {
+    payload: String,
+    left: NodeBox,
+    right: NodeBox
+}
+#}</code></pre></pre>
+<p>(Rust以这种方式宽恕 - 不需要前瞻性声明. ) 并且第一个测试程序:</p>
+<p>由于&quot;{: #?}&quot; ('#'表示'extended') ,输出结果非常漂亮.</p>
+<pre><pre class="playpen"><code class="language-rust">impl Node {
+    fn new(s: &amp;str) -&gt; Node {
+        Node{payload: s.to_string(), left: None, right: None}
+    }
+
+    fn boxer(node: Node) -&gt; NodeBox {
+        Some(Box::new(node))
+    }
+
+    fn set_left(&amp;mut self, node: Node) {
+        self.left = Self::boxer(node);
+    }
+
+    fn set_right(&amp;mut self, node: Node) {
+        self.right = Self::boxer(node);
+    }
+
+}
+
+
+fn main() {
+    let mut root = Node::new(&quot;root&quot;);
+    root.set_left(Node::new(&quot;left&quot;));
+    root.set_right(Node::new(&quot;right&quot;));
+
+    println!(&quot;arr {:#?}&quot;, root);
+}
+</code></pre></pre>
+<p>现在,什么时候发生根</p>
+<pre><code>root Node {
+    payload: &quot;root&quot;,
+    left: Some(
+        Node {
+            payload: &quot;left&quot;,
+            left: None,
+            right: None
+        }
+    ),
+    right: Some(
+        Node {
+            payload: &quot;right&quot;,
+            left: None,
+            right: None
+        }
+    )
+}
+</code></pre>
+<p>被丢弃?<code>所有字段都被删除;</code>如果树的&quot;分支&quot;被丢弃,它们就会下降其领域等等. _箱::新_可能是最接近你会得到一个<code>新</code>关键字,但我们没有必要<code>删除</code>要么<code>自由</code>. <code>我们现在必须为这棵树制定一个用途.</code>请注意,可以订购字符串: 'bar'&lt;'foo','abba'&gt;'aardvark';</p>
+<p>所谓的&quot;字母顺序&quot;.  (严格来说,这是词汇顺序,因为人类语言非常多样化,并且有着奇怪的规则. ) _这是一个按字符串的顺序插入节点的方法. _我们将新数据与当前节点进行比较 - 如果较少,则尝试插入左侧,否则尝试插入右侧.</p>
+<p>左边可能没有节点,那么<code>set_left</code>等等.</p>
+<pre><pre class="playpen"><code class="language-rust">    fn insert(&amp;mut self, data: &amp;str) {
+        if data &lt; &amp;self.payload {
+            match self.left {
+                Some(ref mut n) =&gt; n.insert(data),
+                None =&gt; self.set_left(Self::new(data)),
+            }
+        } else {
+            match self.right {
+                Some(ref mut n) =&gt; n.insert(data),
+                None =&gt; self.set_right(Self::new(data)),
+            }
+        }
+    }
+
+    ...
+    fn main() {
+        let mut root = Node::new(&quot;root&quot;);
+        root.insert(&quot;one&quot;);
+        root.insert(&quot;two&quot;);
+        root.insert(&quot;four&quot;);
+
+        println!(&quot;root {:#?}&quot;, root);
+    }
+</code></pre></pre>
+<p>注意<code>比赛</code>- 如果是的话,我们会提供一个可变的参考<code>选项</code>是<code>一些</code>,并应用<code>插</code>方法. 否则,我们需要创建一个新的<code>节点</code>对于左侧等等. <code>框</code>是一个_聪明_指针;请注意,不需要&quot;拆箱&quot;来呼叫<code>节点</code>方法就可以了!</p>
+<p>这里是输出树:</p>
+<pre><code>root Node {
+    payload: &quot;root&quot;,
+    left: Some(
+        Node {
+            payload: &quot;one&quot;,
+            left: Some(
+                Node {
+                    payload: &quot;four&quot;,
+                    left: None,
+                    right: None
+                }
+            ),
+            right: None
+        }
+    ),
+    right: Some(
+        Node {
+            payload: &quot;two&quot;,
+            left: None,
+            right: None
+        }
+    )
+}
+</code></pre>
+<p>比其他字符串'小于'的字符串放在左侧,否则放在右侧.</p>
+<p>参观时间. 这是_按顺序遍历_- 我们访问左边,在节点上做点什么,然后访问右边.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    fn visit(&amp;self) {
+        if let Some(ref left) = self.left {
+            left.visit();
+        }
+        println!(&quot;'{}'&quot;, self.payload);
+        if let Some(ref right) = self.right {
+            right.visit();
+        }
+    }
+    ...
+    ...
+    root.visit();
+    // 'four'
+    // 'one'
+    // 'root'
+    // 'two'
+#}</code></pre></pre>
+<p>所以我们按顺序访问这些字符串!请注意重新出现<code>ref</code>-<code>如果让</code>使用完全相同的规则<code>比赛</code>.</p>
+<a class="header" href="2-structs-enums-lifetimes.zh.html#a通用结构" id="a通用结构"><h2>通用结构</h2></a>
+<p>考虑前面的二叉树的例子. 这将是_严重刺激_必须为所有可能的有效载荷重写它. 所以这是我们的通用<code>节点</code>与它的类型参数<code>Ť</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+type NodeBox&lt;T&gt; = Option&lt;Box&lt;Node&lt;T&gt;&gt;&gt;;
+
+#[derive(Debug)]
+struct Node&lt;T&gt; {
+    payload: T,
+    left: NodeBox&lt;T&gt;,
+    right: NodeBox&lt;T&gt;
+}
+#}</code></pre></pre>
+<p>该实现显示了语言之间的差异. 有效载荷的基本操作是比较,所以T必须与之相当<code>&lt;</code>即器具<code>PartialOrd</code>. 类型参数必须在. 中声明<code>impl</code>阻止其约束:</p>
+<pre><pre class="playpen"><code class="language-rust">impl &lt;T: PartialOrd&gt; Node&lt;T&gt; {
+    fn new(s: T) -&gt; Node&lt;T&gt; {
+        Node{payload: s, left: None, right: None}
+    }
+
+    fn boxer(node: Node&lt;T&gt;) -&gt; NodeBox&lt;T&gt; {
+        Some(Box::new(node))
+    }
+
+    fn set_left(&amp;mut self, node: Node&lt;T&gt;) {
+        self.left = Self::boxer(node);
+    }
+
+    fn set_right(&amp;mut self, node: Node&lt;T&gt;) {
+        self.right = Self::boxer(node);
+    }
+
+    fn insert(&amp;mut self, data: T) {
+        if data &lt; self.payload {
+            match self.left {
+                Some(ref mut n) =&gt; n.insert(data),
+                None =&gt; self.set_left(Self::new(data)),
+            }
+        } else {
+            match self.right {
+                Some(ref mut n) =&gt; n.insert(data),
+                None =&gt; self.set_right(Self::new(data)),
+            }
+        }
+    }
+}
+
+
+fn main() {
+    let mut root = Node::new(&quot;root&quot;.to_string());
+    root.insert(&quot;one&quot;.to_string());
+    root.insert(&quot;two&quot;.to_string());
+    root.insert(&quot;four&quot;.to_string());
+
+    println!(&quot;root {:#?}&quot;, root);
+}
+</code></pre></pre>
+<p>所以通用结构需要在尖括号中指定类型参数,如C ++. Rust通常足够聪明,可以从上下文中得出这个类型参数 - 它知道它有一个<code>节点&lt;T&gt;</code>,并知道它的<code>插</code>方法已通过<code>Ť</code>. 第一次打电话<code>插</code>钉下来<code>Ť</code>成为<code>串</code>. 如果有任何进一步的电话不一致,它会投诉.</p>
+<p>但是你确实需要适当地限制这种类型!</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="1-basics.zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="3-filesystem.zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="1-basics.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="3-filesystem.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+    </body>
+</html>

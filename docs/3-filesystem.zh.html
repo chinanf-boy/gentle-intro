@@ -1,0 +1,577 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>文件系统和进程 - A Gentle Introduction to Rust</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Introduction to the Rust language, standard library and ecosystem">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="_FontAwesome/css/font-awesome.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+
+    </head>
+    <body class="light">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html" class="active"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">A Gentle Introduction to Rust</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="3-filesystem.zh.html#a文件系统和进程" id="a文件系统和进程"><h1>文件系统和进程</h1></a>
+<a class="header" href="3-filesystem.zh.html#a再看看reading-files" id="a再看看reading-files"><h2>再看看Reading Files</h2></a>
+<p>在第1部分的末尾,我展示了如何将整个文件读入字符串. 自然,这并不总是一个好主意,所以这里是如何逐行读取文件.</p>
+<p><code>FS ::文件</code>器物<code>IO ::阅读</code>,这是任何可读性的特征. 这个特质定义了一个<code>读</code>方法将填补一部分<code>u8</code>与字节 - 这是唯一的_需要_特质的方法,你会得到一些_提供_免费的方法,很像<code>迭代器</code>. 您可以使用<code>read_to_end</code>用可读的内容填充字节向量,并且<code>read_to_string</code>填充一个字符串 - 必须是UTF-8编码.</p>
+<p>这是一个'原始'阅读,没有缓冲. 对于缓冲阅读有<code>IO ::的BufRead</code>给我们的特质<code>read_line</code>和a<code>线</code>迭代器. <code>IO :: BufReader</code>将提供执行<code>IO ::的BufRead</code>对于_任何_可读.</p>
+<p><code>FS ::文件</code> _也_器物<code>IO ::写</code>.</p>
+<p>确保所有这些特征可见的最简单方法是<code>使用std :: io :: prelude :: *</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+use std::fs::File;
+use std::io;
+use std::io::prelude::*;
+
+fn read_all_lines(filename: &amp;str) -&gt; io::Result&lt;()&gt; {
+    let file = File::open(&amp;filename)?;
+
+    let reader = io::BufReader::new(file);
+
+    for line in reader.lines() {
+        let line = line?;
+        println!(&quot;{}&quot;, line);
+    }
+    Ok(())
+}
+#}</code></pre></pre>
+<p>该<code>让line = line?</code>可能看起来有点奇怪. 该<code>线</code>迭代器返回的实际上是一个<code>IO ::结果&lt;字符串&gt;</code>我们解开它<code>?</code>. 因为事情_能够_在迭代过程中出现错误 -  I / O错误,吞噬不是UTF-8的字节块,等等.</p>
+<p><code>线</code>作为一个迭代器,可以直接使用一个文件读入一个字符串向量<code>搜集</code>,或者用行号打印出行<code>枚举</code>迭代器.</p>
+<p>然而,这并不是读取所有行的最有效方式,因为每行都分配了一个新字符串. 使用效率更高<code>read_line</code>,虽然更尴尬. 请注意,返回的行包含换行符,可以使用该换行符进行移除<code>trim_right</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let mut reader = io::BufReader::new(file);
+    let mut buf = String::new();
+    while reader.read_line(&amp;mut buf)? &gt; 0 {
+        {
+            let line = buf.trim_right();
+            println!(&quot;{}&quot;, line);
+        }
+        buf.clear();
+    }
+#}</code></pre></pre>
+<p>这导致分配少得多,因为_空地_该字符串不释放其分配的内存;一旦字符串有足够的容量,不会再有分配.</p>
+<p>这是我们使用一个块来控制借用的情况之一. <code>线</code>是借来的<code>buf</code>,这个借用必须在我们修改之前完成<code>buf</code>. Rust再一次试图阻止我们做一些愚蠢的事情,那就是访问<code>线</code> _后_我们已经清除了缓冲区.  (借阅检查者有时可能会受到限制,铁锈是由于&quot;非词汇生活时间&quot;,它会分析代码并看到线<code>之后不使用</code>buf.clear () <code>. )</code>这不是很漂亮.</p>
+<p>我不能给你一个适当的迭代器,它返回缓冲区的引用,但我可以给你一些东西容貌_像一个迭代器. _首先定义一个通用结构体;</p>
+<p>类型参数[R<code>是'任何实现Read的类型'.</code>它包含读者和我们要借用的缓冲区. 然后</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// file5.rs
+use std::fs::File;
+use std::io;
+use std::io::prelude::*;
+
+struct Lines&lt;R&gt; {
+    reader: io::BufReader&lt;R&gt;,
+    buf: String
+}
+
+impl &lt;R: Read&gt; Lines&lt;R&gt; {
+    fn new(r: R) -&gt; Lines&lt;R&gt; {
+        Lines{reader: io::BufReader::new(r), buf: String::new()}
+    }
+    ...
+}
+#}</code></pre></pre>
+<p>下一个<code>方法.</code>它返回一个<code>选项</code>- 就像迭代器,当它返回时<code>没有</code>迭代器结束. 返回的类型是a<code>结果</code>因为<code>read_line</code>可能会失败,我们_永远不要丢失错误_. 所以如果失败了,我们把它的错误包括进去<code>一些&lt;结果&gt;</code>. 否则,它可能读取了零字节,这是文件的自然结束 - 不是错误,只是一个<code>没有</code>.</p>
+<p>此时,缓冲区包含附有换行符 (`\ n') 的行. 修剪掉它,然后打包字符串片.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    fn next&lt;'a&gt;(&amp;'a mut self) -&gt; Option&lt;io::Result&lt;&amp;'a str&gt;&gt;{
+        self.buf.clear();
+        match self.reader.read_line(&amp;mut self.buf) {
+            Ok(nbytes) =&gt; if nbytes == 0 {
+                None // no more lines!
+            } else {
+                let line = self.buf.trim_right();
+                Some(Ok(line))
+            },
+            Err(e) =&gt; Some(Err(e))
+        }
+    }
+#}</code></pre></pre>
+<p>现在,请注意生命时间如何工作. 我们需要明确的一生,因为Rust永远不会让我们在不知道他们的一生的情况下发放借来的字符串片. 在这里,我们说这个借来的字符串的生命周期在一生中<code>自</code>.</p>
+<p>而且这个签名与终身不兼容<code>迭代器</code>. 但是如果兼容性很容易出现问题;考虑<code>搜集</code>试图制作这些字符串切片的矢量. 这是不可能的,因为它们都是从同一个可变字符串中借用的! (如果您已阅读_所有_将文件转换为字符串,然后是字符串<code>线</code>迭代器可以返回字符串切片,因为它们都是从中借用的_不同_原始字符串的一部分) .</p>
+<p>由此产生的循环更清晰,文件缓冲对用户是不可见的.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn read_all_lines(filename: &amp;str) -&gt; io::Result&lt;()&gt; {
+    let file = File::open(&amp;filename)?;
+
+    let mut lines = Lines::new(file);
+    while let Some(line) = lines.next() {
+        let line = line?;
+        println!(&quot;{}&quot;, line);
+    }
+
+    Ok(())
+}
+#}</code></pre></pre>
+<p>你甚至可以这样写循环,因为显式匹配可以将字符串切片拉出来:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    while let Some(Ok(line)) = lines.next() {
+        println!(&quot;{}&quot;, line)?;
+    }
+#}</code></pre></pre>
+<p>这很诱人,但你在这里抛出一个可能的错误;每当发生错误时,此循环都会静静地停止. 特别是,它将停止在Rust无法将线路转换为UTF-8的第一个位置. 适合休闲代码,不适合生产代码!</p>
+<a class="header" href="3-filesystem.zh.html#a写入文件" id="a写入文件"><h2>写入文件</h2></a>
+<p>我们遇到了<code>写!</code>宏执行时<code>调试</code>- 它也适用于任何实现的东西<code>写</code>. 所以这是另一种说法<code>打印!</code>:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let mut stdout = io::stdout();
+    ...
+    write!(stdout,&quot;answer is {}\n&quot;, 42).expect(&quot;write failed&quot;);
+#}</code></pre></pre>
+<p>如果有错误_可能_,你必须处理它. 它可能不是很好_容易_但它可能发生. 它通常很好,因为如果你正在做文件I / O你应该在一个上下文中<code>?</code>作品.</p>
+<p>但有一个区别: <code>打印!</code>为每个写入锁定标准输出. 这通常是您想要输出的内容,因为没有锁定多线程程序可能会以有趣的方式混淆输出. 但是,如果你抽出大量文字,那么<code>写!</code>将会变得更快.</p>
+<p>对于我们需要的任意文件<code>写!</code>. 该文件在关闭时关闭<code>出</code>在结束时被丢弃<code>写出</code>,这既方便又重要.</p>
+<pre><pre class="playpen"><code class="language-rust">// file6.rs
+use std::fs::File;
+use std::io;
+use std::io::prelude::*;
+
+fn write_out(f: &amp;str) -&gt; io::Result&lt;()&gt; {
+    let mut out = File::create(f)?;
+    write!(out,&quot;answer is {}\n&quot;, 42)?;
+    Ok(())
+}
+
+fn main() {
+  write_out(&quot;test.txt&quot;).expect(&quot;write failed&quot;);
+}
+</code></pre></pre>
+<p>如果你关心性能,你需要知道Rust文件默认是无缓冲的. 所以每个小的写入请求都会直接进入操作系统,而且这将会明显变慢. 我提到了这一点,因为这种默认设置与其他编程语言不同,并且可能导致令人震惊的发现: Rust可能被脚本语言遗留下来!就像<code>读</code>和<code>IO :: BufReader</code>, 有<code>IO :: BufWriter</code>缓冲任何<code>写</code>.</p>
+<a class="header" href="3-filesystem.zh.html#a文件路径和目录" id="a文件路径和目录"><h2>文件,路径和目录</h2></a>
+<p>这是一个用于在机器上打印货物目录的小程序. 最简单的情况是它是'〜/ .cargo'. 这是一个Unix shell扩展,所以我们使用<code>ENV :: HOME_DIR</code>因为它是跨平台的.  (它可能会失败,但没有主目录的计算机无论如何不会托管Rust工具. )</p>
+<p>然后我们创建一个<a href="https://doc.rust-lang.org/std/ops/trait.Mul.html">PathBuf</a>并使用它的<code>推</code>方法从其构建完整的文件路径_组件_.  (这比用'/','\'或其他任何东西来欺骗要容易得多,取决于系统. )</p>
+<pre><pre class="playpen"><code class="language-rust">// file7.rs
+use std::env;
+use std::path::PathBuf;
+
+fn main() {
+    let home = env::home_dir().expect(&quot;no home!&quot;);
+    let mut path = PathBuf::new();
+    path.push(home);
+    path.push(&quot;.cargo&quot;);
+
+    if path.is_dir() {
+        println!(&quot;{}&quot;, path.display());
+    }
+}
+</code></pre></pre>
+<p>一个<code>PathBuf</code>就好像<code>串</code>- 它拥有一组可扩展的角色,但具有专门用于构建路径的方法. 但其大部分功能都来自借用版本<code>路径</code>,这就像<code>&amp;STR</code>. 所以,例如,<code>is_dir</code>是一个<code>路径</code>方法.</p>
+<p>这可能听起来像一种继承形式,但魔法<a href="https://doc.rust-lang.org/book/deref-coercions.html">Deref</a>特质的工作方式不同. 它就像它一样工作<code>字符串/&amp;STR</code>- 参考<code>PathBuf</code>可_裹挟_成为参考<code>路径</code>.  ('Coerce'是一个很强的词,但这确实是Rust为你做转换的少数几个地方之一. )</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn foo(p: &amp;Path) {...}
+...
+let path = PathBuf::from(home);
+foo(&amp;path);
+#}</code></pre></pre>
+<p><code>PathBuf</code>与...有亲密的关系<code>OsString</code>,它代表我们直接从系统获得的字符串.  (有一个相应的<code>OsString /&amp;OsStr</code>关系. )</p>
+<p>这样的字符串不是_保证_可以表示为UTF-8!现实生活是一个<a href="https://news.ycombinator.com/item?id=10519932">复杂的事情</a>,特别是看到'他们为什么这么辛苦'的答案. 总而言之,首先有几年的ASCII传统编码,以及其他语言的多种特殊编码. 其次,人类语言很复杂. 例如'noël'是_五_Unicode代码点!</p>
+<p>确实,现代操作系统文件名的大部分时间都是Unicode (Unix方面的UTF-8,Windows方面的UTF-16) ,除非它们不是. Rust必须严格处理这种可能性. 例如,<code>路径</code>有一个方法<code>as_os_str</code>它返回一个<code>&amp;OsStr</code>,但是<code>to_str</code>方法返回一个<code>选项&lt;&amp;STR&gt;</code>. 并不总是可能!</p>
+<p>人们在这一点上遇到了麻烦,因为他们已经过分依赖'串'和'性格'作为唯一必要的抽象. 正如爱因斯坦所说,编程语言必须尽可能简单,但并不简单. 系统语言_需求_一个<code>字符串/&amp;STR</code>区别 (拥有与借用: 这也非常方便) ,如果它希望在Unicode字符串上标准化,那么它需要另一种类型来处理无效Unicode的文本 - 因此<code>OsString /&amp;OsStr</code>. 请注意,这些类型没有任何有趣的类似字符串的方法,这正是因为我们不知道编码.</p>
+<p>但是,人们习惯于像处理字符串一样处理文件名,这就是Rust使用文件路径更容易操作的原因<code>PathBuf</code>方法.</p>
+<p>您可以<code>流行的</code>连续去除路径组件. 这里我们从程序的当前目录开始:</p>
+<pre><pre class="playpen"><code class="language-rust">// file8.rs
+use std::env;
+
+fn main() {
+    let mut path = env::current_dir().expect(&quot;can't access current dir&quot;);
+    loop {
+        println!(&quot;{}&quot;, path.display());
+        if ! path.pop() {
+            break;
+        }
+    }
+}
+// /home/steve/rust/gentle-intro/code
+// /home/steve/rust/gentle-intro
+// /home/steve/rust
+// /home/steve
+// /home
+// /
+</code></pre></pre>
+<p>这是一个有用的变化. 我有一个搜索配置文件的程序,其规则是它可能出现在当前目录的任何子目录中. 所以我创建<code>/home/steve/rust/config.txt</code>并启动此程序<code>/家庭/史蒂夫/防锈/温柔的开场/码</code>:</p>
+<pre><pre class="playpen"><code class="language-rust">// file9.rs
+use std::env;
+
+fn main() {
+    let mut path = env::current_dir().expect(&quot;can't access current dir&quot;);
+    loop {
+        path.push(&quot;config.txt&quot;);
+        if path.is_file() {
+            println!(&quot;gotcha {}&quot;, path.display());
+            break;
+        } else {
+            path.pop();
+        }
+        if ! path.pop() {
+            break;
+        }
+    }
+}
+// gotcha /home/steve/rust/config.txt
+</code></pre></pre>
+<p>这几乎是如此<strong>混帐</strong>当它想知道当前的回购是什么时会起作用.</p>
+<p>有关文件的详细信息 (其大小,类型等) 被称为它的_元数据_. 与往常一样,可能存在错误 - 不仅仅是&quot;找不到&quot;,而且如果我们没有权限读取此文件.</p>
+<pre><pre class="playpen"><code class="language-rust">// file10.rs
+use std::env;
+use std::path::Path;
+
+fn main() {
+    let file = env::args().skip(1).next().unwrap_or(&quot;file10.rs&quot;.to_string());
+    let path = Path::new(&amp;file);
+    match path.metadata() {
+        Ok(data) =&gt; {
+            println!(&quot;type {:?}&quot;, data.file_type());
+            println!(&quot;len {}&quot;, data.len());
+            println!(&quot;perm {:?}&quot;, data.permissions());
+            println!(&quot;modified {:?}&quot;, data.modified());
+        },
+        Err(e) =&gt; println!(&quot;error {:?}&quot;, e)
+    }
+}
+// type FileType(FileType { mode: 33204 })
+// len 488
+// perm Permissions(FilePermissions { mode: 436 })
+// modified Ok(SystemTime { tv_sec: 1483866529, tv_nsec: 600495644 })
+</code></pre></pre>
+<p>文件的长度 (以字节为单位) 和修改时间很容易解释.  (注意我们可能无法获得这个时间!) 文件类型有方法<code>is_dir</code>,<code>is_file</code>和<code>is_symlink</code>.</p>
+<p><code>权限</code>是一个有趣的. Rust努力成为跨平台的,所以这是'最低公分母'的例子. 一般来说,你可以查询的只是文件是否只读 - '权限'概念在Unix中被扩展,并为用户/群组/其他编码读/写/可执行文件.</p>
+<p>但是,如果您对Windows不感兴趣,那么引入特定于平台的特征将至少为我们提供权限模式位.  (像往常一样,一个特征只有在它可见时才会触发. ) 然后,将该程序应用到它自己的可执行文件中:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+use std::os::unix::fs::PermissionsExt;
+...
+println!(&quot;perm {:o}&quot;,data.permissions().mode());
+// perm 755
+#}</code></pre></pre>
+<p>(注意&quot;{: o}&quot;用于打印_八进制_)</p>
+<p>(Windows上的文件是否可执行取决于其扩展名. 可执行文件的扩展名可以在PATHEXT<code>环境变量 - '.exe','. bat'等等) .</code>的std :: FS</p>
+<p><code>包含许多用于处理文件的有用功能,例如复制或移动文件,制作符号链接和创建目录.</code>要查找目录的内容,</p>
+<p>的std :: FS :: read_dir<code>提供了一个迭代器.</code>以下是扩展名为&quot;.rs&quot;且大小大于1024字节的所有文件: 明显</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn dump_dir(dir: &amp;str) -&gt; io::Result&lt;()&gt; {
+    for entry in fs::read_dir(dir)? {
+        let entry = entry?;
+        let data = entry.metadata()?;
+        let path = entry.path();
+        if data.is_file() {
+            if let Some(ex) = path.extension() {
+                if ex == &quot;rs&quot; &amp;&amp; data.len() &gt; 1024 {
+                    println!(&quot;{} length {}&quot;, path.display(),data.len());
+                }
+            }
+        }
+    }
+    Ok(())
+}
+// ./enum4.rs length 2401
+// ./struct7.rs length 1151
+// ./sexpr.rs length 7483
+// ./struct6.rs length 1359
+// ./new-sexpr.rs length 7719
+#}</code></pre></pre>
+<p>read_dir<code>可能会失败 (通常是'找不到'或'没有权限') ,但是获取每个新条目可能会失败 (这就像是</code>线<code>迭代器遍历缓冲的阅读器的内容) .</code>另外,我们可能无法获取与条目对应的元数据. 一个文件可能没有扩展名,所以我们也必须检查. 为什么不只是一个遍历路径的迭代器?</p>
+<p>在Unix上这是这样的<code>执行opendir</code>系统调用起作用,但在Windows上,您无法在不获取元数据的情况下迭代目录的内容. 所以这是一个相当优雅的妥协方案,它允许跨平台的代码尽可能高效.</p>
+<p>在这一点上你可以原谅感觉'错误疲劳'. 但请注意_错误总是存在_- 这不是Rust正在发明新的. 它只是在努力让你无法忽视它们. 任何操作系统调用都可能失败.</p>
+<p>Java和Python等语言引发异常;像Go和Lua这样的语言返回两个值,其中第一个是结果,第二个是错误: 像Rust一样,它被认为是库函数引发错误的不良方式. 所以有很多错误检查和函数的早期返回.</p>
+<p>Rust使用<code>结果</code>因为它不是 - 或者: 你不能同时得到结果和错误. 问号运算符使处理错误更加清晰.</p>
+<a class="header" href="3-filesystem.zh.html#a流程" id="a流程"><h2>流程</h2></a>
+<p>一个基本的需求是程序运行程序,或者_启动过程_. 你的程序可以_卵_尽可能多的儿童进程,顾名思义他们与父母有特殊的关系.</p>
+<p>运行程序很简单,使用<code>命令</code>struct,它构建传递给程序的参数:</p>
+<pre><pre class="playpen"><code class="language-rust">use std::process::Command;
+
+fn main() {
+    let status = Command::new(&quot;rustc&quot;)
+        .arg(&quot;-V&quot;)
+        .status()
+        .expect(&quot;no rustc?&quot;);
+
+    println!(&quot;cool {} code {}&quot;, status.success(), status.code().unwrap());
+}
+// rustc 1.15.0-nightly (8f02c429a 2016-12-15)
+// cool true code 0
+</code></pre></pre>
+<p>所以<code>新</code>收到该程序的名称 (它将被查找<code>路径</code>如果不是绝对文件名) ,<code>arg</code>增加了一个新的论点,并且<code>状态</code>导致它运行. 这返回一个<code>结果</code>,这是<code>好</code>如果程序实际运行,包含一个<code>退出状态</code>. 在这种情况下,程序成功,并返回退出码0摅<code>是因为如果程序被信号杀死了,我们不能总是得到代码) .</code>如果我们改变了</p>
+<p>-V<code>至</code>-v<code>(一个容易的错误)</code>rustc<code>失败:</code>所以有三种可能性:</p>
+<pre><code>error: no input filename given
+
+cool false code 101
+</code></pre>
+<p>程序不存在,很糟糕,或者我们不允许运行它</p>
+<ul>
+<li>程序运行,但没有成功 - 非零退出代码</li>
+<li>程序运行,零退出代码.</li>
+<li>成功!默认情况下,程序的标准输出和标准错误流将发送到终端.</li>
+</ul>
+<p>我们经常对捕获这种输出非常感兴趣,所以就是这样</p>
+<p>产量<code>方法.</code>与...一样</p>
+<pre><pre class="playpen"><code class="language-rust">// process2.rs
+use std::process::Command;
+
+fn main() {
+    let output = Command::new(&quot;rustc&quot;)
+        .arg(&quot;-V&quot;)
+        .output()
+        .expect(&quot;no rustc?&quot;);
+
+    if output.status.success() {
+        println!(&quot;ok!&quot;);
+    }
+    println!(&quot;len stdout {} stderr {}&quot;, output.stdout.len(), output.stderr.len());
+}
+// ok!
+// len stdout 44 stderr 0
+</code></pre></pre>
+<p>状态<code>我们的程序会阻塞,直到子进程结束,我们返回三件事情 - 状态 (如以前) ,标准输出的内容和标准错误的内容.</code>捕获的输出很简单</p>
+<p>VEC &lt;U8&gt;<code>- 只是字节.</code>回想一下,我们不能保证我们从操作系统收到的数据是正确编码的UTF-8字符串. _事实上,我们不能保证它甚至_是一个字符串 - 程序可能会返回任意二进制数据.</p>
+<p>如果我们确信输出是UTF-8,那么<code>字符串:: from_utf8</code>将转换这些向量或字节 - 它返回一个<code>结果</code>因为这种转换可能不会成功. 一个更马虎的功能是<code>字符串:: from_utf8_lossy</code>这将很好地进行转换并在无效的Unicode标记insert处插入失败.</p>
+<p>这是一个使用shell运行程序的有用函数. 这使用通常的shell机制将标准错误连接到标准输出. 在Windows上shell的名字是不同的,但是除此之外的东西可以按预期工作.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn shell(cmd: &amp;str) -&gt; (String,bool) {
+    let cmd = format!(&quot;{} 2&gt;&amp;1&quot;,cmd);
+    let shell = if cfg!(windows) {&quot;cmd.exe&quot;} else {&quot;/bin/sh&quot;};
+    let flag = if cfg!(windows) {&quot;/c&quot;} else {&quot;-c&quot;};
+    let output = Command::new(shell)
+        .arg(flag)
+        .arg(&amp;cmd)
+        .output()
+        .expect(&quot;no shell?&quot;);
+    (
+        String::from_utf8_lossy(&amp;output.stdout).trim_right().to_string(),
+        output.status.success()
+    )
+}
+
+
+fn shell_success(cmd: &amp;str) -&gt; Option&lt;String&gt; {
+    let (output,success) = shell(cmd);
+    if success {Some(output)} else {None}
+}
+#}</code></pre></pre>
+<p>如果你说的话,我正在修整右边的任何空格<code>外壳 (&quot;哪个rustc&quot;)</code>您将获得没有任何额外换行的路径.</p>
+<p>您可以控制由启动的程序的执行<code>处理</code>通过指定它将运行的目录使用<code>current_dir</code>方法和它所使用的环境变量<code>env</code>.</p>
+<p>到目前为止,我们的程序只是等待子进程完成. 如果你使用<code>卵</code>方法,我们立即返回,并且必须明确地等待它完成 - 或者在此期间去做其他事情!这个例子还显示了如何同时抑制标准错误和标准错误:</p>
+<pre><pre class="playpen"><code class="language-rust">// process5.rs
+use std::process::{Command,Stdio};
+
+fn main() {
+    let mut child = Command::new(&quot;rustc&quot;)
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .spawn()
+        .expect(&quot;no rustc?&quot;);
+
+    let res = child.wait();
+    println!(&quot;res {:?}&quot;, res);
+}
+</code></pre></pre>
+<p>默认情况下,子项&quot;继承&quot;父项的标准输入和输出. 在这种情况下,我们将孩子的输出手柄重定向到&quot;无处&quot;. 这相当于说<code>&gt; / dev / null 2&gt; / dev / null</code>在Unix shell中.</p>
+<p>现在,可以使用shell来完成这些事情 (<code>sh</code>要么<code>cmd</code>) 在Rust. 但通过这种方式,您可以完全程序化地控制流程创建.</p>
+<p>例如,如果我们有<code>.stdout (STDIO ::管道 () )</code>那么孩子的标准输出被重定向到管道. 然后<code>child.stdout</code>是你可以用来直接读取输出的东西 (即implements<code>读</code>) . 同样,你可以使用<code>.stdout (STDIO ::管道 () )</code>方法,以便您可以写入<code>child.stdin</code>.</p>
+<p>但如果我们使用了<code>wait_with_output</code>代替<code>等待</code>那么它返回一个<code>结果&lt;输出&gt;</code>并将孩子的输出记录下来<code>标准输出</code>那个领域<code>产量</code>作为一个<code>VEC &lt;U8&gt;</code>就像以前一样.</p>
+<p>该<code>儿童</code>结构也给你一个明确的<code>杀</code>方法.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="2-structs-enums-lifetimes.zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="4-modules.zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="2-structs-enums-lifetimes.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="4-modules.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+    </body>
+</html>

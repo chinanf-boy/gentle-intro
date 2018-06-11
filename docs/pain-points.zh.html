@@ -1,0 +1,482 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>痛点 - A Gentle Introduction to Rust</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Introduction to the Rust language, standard library and ecosystem">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="_FontAwesome/css/font-awesome.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+
+    </head>
+    <body class="light">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html" class="active"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">A Gentle Introduction to Rust</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="pain-points.zh.html#a痛点" id="a痛点"><h2>痛点</h2></a>
+<p>可以说Rust是一门比大多数&quot;主流&quot;语言更难学的语言. 有特殊的人不觉得这么难,但要注意'特殊'的严格意义 - 他们是_例外_. 许多人开始挣扎,然后成功. 最初的困难不能预测后来的能力!</p>
+<p>我们都来自某个地方,在编程语言的情况下,这意味着以前暴露于主流语言,如Python之类的&quot;动态&quot;语言或C ++之类的&quot;静态&quot;语言之一. 无论哪种方式,Rust都有很大的不同,需要精神改造. 有经验的聪明人加入进来,对他们的聪明不立即获得回报感到失望;自我价值较低的人认为自己不够&quot;聪明&quot;.</p>
+<p>对于那些具有动态语言经验的人 (我将包括Java) ,所有内容都是引用,并且所有引用默认都是可变的. 和垃圾收集_不_使编写内存安全的程序更容易. 以内存使用和可预测性为代价,JVM进展非常迅速. 通常这种成本被认为是值得的 - 旧的新想法认为程序员的生产力比计算机的性能更重要.</p>
+<p>但是世界上大多数电脑 - 处理汽车节气门控制等真正重要的事情 - 并不具备便宜笔记本电脑所拥有的大量资源,而且他们需要响应_即时的_. 同样,基础软件基础架构需要正确,稳健和快速 (旧的工程三位一体) . 这大部分都是在C和C ++中完成的,这本质上是不安全的_总成本_这个不安全的东西是在这里看的东西. 也许你更快地把节目敲在一起,但是_然后_真正的发展开始.</p>
+<p>系统语言无法承担垃圾回收,因为它们是所有东西都依赖的基础. 他们让你可以自由地浪费资源,只要你认为合适.</p>
+<p>如果没有垃圾回收,则内存必须以其他方式进行管理. 手动内存管理 - 我抓住内存,使用它,并明确地将其退回 - 很难找到正确的内容. 您可以在几周内学会足够的C语言以提高工作效率和危险性 - 但要成为一名安全的C语言程序员需要花费数年时间,检查每种可能的错误情况.</p>
+<p>Rust像现代C ++一样管理内存 - 随着对象被破坏,内存被回收. 你可以在堆上分配内存<code>框</code>,但只要该函数在函数结束时'超出范围',内存就会被回收. 所以有这样的事情<code>新</code>但没有像<code>删除</code>. 你创建一个<code>文件</code>最后,文件句柄 (一个宝贵的资源) 被关闭. 在Rust中,这被称为_落下_.</p>
+<p>你需要共享资源 - 复制一切都是非常低效的 - 这就是事情变得有趣的地方. C ++也有引用,尽管Rust引用更像C指针 - 你需要说<code>* R</code>要提及价值,你需要说<code>&amp;</code>传递一个值作为参考.</p>
+<p>锈的_借用检查器_确保在原始值被销毁后参考不可能存在.</p>
+<a class="header" href="pain-points.zh.html#a类型推断" id="a类型推断"><h2>类型推断</h2></a>
+<p>&quot;静态&quot;和&quot;动态&quot;之间的区别不是一切. 与大多数事情一样,还有更多维度在发挥. C是静态类型的 (每个变量在编译时都有一个类型) ,但是类型很弱 (例如,<code>无效*</code>可以指向_什么_) ;Python是动态类型的 (类型在值中,而不是变量) ,但是是强类型的. Java是静态/非常强大的 (反射就像方便/危险的逃逸阀) ,Rust是静态/强大的,没有运行时反射.</p>
+<p>Java因需要所有的类型而出名_键入_在麻木的细节中,Rust喜欢_推断_类型. 这通常是一个好主意,但这确实意味着你有时需要计算出实际类型. 你会看见<code>让n = 100</code>并想知道 - 这是什么样的整数?默认情况下,它会是<code>i32</code>- 一个四字节有符号整数. 现在大家都同意C的未指定整数类型 (比如<code>int</code>和<code>长</code>) 是一个坏主意;最好是明确的. 你可以随时拼出类型,如<code>让n: u32 = 100</code>或者让文字强制类型,如<code>让n = 100u32</code>. 但是类型推断比这更进一步!如果你声明<code>让n = 100</code>然后全部<code>rustc</code>知道这一点<code>ñ</code>一定是_一些_整数类型. 如果你然后通过<code>ñ</code>到函数期望a<code>u64</code>那么这一定是这种类型的<code>ñ</code>!</p>
+<p>之后,你尝试通过<code>ñ</code>以期望的功能<code>u32</code>. <code>rustc</code>不会让你这样做,因为<code>ñ</code>已被束缚到<code>u64</code>和它_将不会_采取简单的方法,并为您转换该整数. 这是强有力的打字行动 - 没有任何一点转换和促销活动让你的生活更流畅,直到整数溢出突然咬住你的屁股. 你必须明确地通过<code>ñ</code>如<code>像u32一样</code>- 一个Rust类型. 幸好,<code>rustc</code>善于以&quot;可行&quot;的方式打破坏消息 - 也就是说,您可以按照编译器的意见来解决问题.</p>
+<p>所以,Rust代码可以非常明确的类型:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let mut v = Vec::new();
+// v is deduced to have type Vec&lt;i32&gt;
+v.push(10);
+v.push(20);
+v.push(&quot;hello&quot;) &lt;--- just can't do this, man!
+#}</code></pre></pre>
+<p>不能将字符串放入整数向量是一个功能,而不是一个错误. 动态打字的灵活性也是一个诅咒.</p>
+<p>(如果你_做_需要将整数和字符串放入同一个向量,然后Rust<code>枚举</code>类型是安全地使用它的方法. )</p>
+<p>有时你需要至少给一个类型_暗示_. <code>搜集</code>是一个梦幻般的迭代器方法,但它需要一个提示. 说我有一个迭代器返回<code>烧焦</code>. 然后<code>搜集</code>可以摆动两种方式:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// a vector of char ['h','e','l','l','o']
+let v: Vec&lt;_&gt; = &quot;hello&quot;.chars().collect();
+// a string &quot;doy&quot;
+let m: String = &quot;dolly&quot;.chars().filter(|&amp;c| c != 'l').collect();
+#}</code></pre></pre>
+<p>当对某个变量的类型感到不确定时,总会有这种技巧,这种力量<code>rustc</code>在错误消息中显示实际类型名称:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let x: () = var;
+#}</code></pre></pre>
+<p><code>rustc</code>可能会选择特定类型. 这里我们想把不同的引用放入一个向量中<code>和调试</code>但需要明确声明类型.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+use std::fmt::Debug;
+
+let answer = 42;
+let message = &quot;hello&quot;;
+let float = 2.7212;
+
+let display: Vec&lt;&amp;Debug&gt; = vec![&amp;message, &amp;answer, &amp;float];
+
+for d in display {
+    println!(&quot;got {:?}&quot;, d);
+}
+#}</code></pre></pre>
+<a class="header" href="pain-points.zh.html#a可变参考" id="a可变参考"><h2>可变参考</h2></a>
+<p>规则是: 一次只有一个可变引用. 原因在于追踪可变性很难发生_到处都是_. 在小笨蛋程序中不明显,但在大型代码库中可能会变得糟糕.</p>
+<p>进一步的限制是,当有可变引用出现时,你不能拥有不可变引用. 否则,任何有这些引用的人都不能保证他们不会改变. C ++也有不可变的引用 (例如<code>常量字符串&amp;</code>) 但是_不_给你这个保证,有人不能保留一个<code>串&amp;</code>参考并在背后修改它.</p>
+<p>如果您习惯于每个参考都是可变的语言,这是一个挑战!不安全的&quot;放松&quot;语言取决于人们了解他们自己的计划并高高兴兴地决定不做坏事. 但是大型项目是由不止一个人编写的,并且超出了单个人详细理解的能力.</p>
+<p>该_刺激性_事情是,借用检查器并不像它那样聪明.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let mut m = HashMap::new();
+m.insert(&quot;one&quot;, 1);
+m.insert(&quot;two&quot;, 2);
+
+if let Some(r) = m.get_mut(&quot;one&quot;) { // &lt;-- mutable borrow of m
+    *r = 10;
+} else {
+    m.insert(&quot;one&quot;, 1); // can't borrow mutably again!
+}
+#}</code></pre></pre>
+<p>显然这不是_真_违反规则,因为如果我们得到了<code>没有</code>我们实际上并没有从地图上借用任何东西.</p>
+<p>有各种丑陋的解决方法:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let mut found = false;
+if let Some(r) = m.get_mut(&quot;one&quot;) {
+    *r = 10;
+    found = true;
+}
+if ! found {
+    m.insert(&quot;one&quot;, 1);
+}
+#}</code></pre></pre>
+<p>这很糟糕,但它起作用,因为令人烦恼的借款保留在第一个if语句中.</p>
+<p>这里更好的方法是使用<code>HashMap中</code>的<a href="https://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html">入门API</a>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+use std::collections::hash_map::Entry;
+
+match m.entry(&quot;one&quot;) {
+    Entry::Occupied(e) =&gt; {
+        *e.into_mut() = 10;
+    },
+    Entry::Vacant(e) =&gt; {
+        e.insert(1);
+    }
+};
+#}</code></pre></pre>
+<p>借阅检查器在获得更少的挫败感时_非词汇生活时间_今年某个时候到达.</p>
+<p>借用检查器_不_了解一些重要的案例,但是. 如果你有一个结构,字段可以独立借用. 所以作文是你的朋友;一个大结构体应该包含更小的结构体,它们有自己的方法. 定义大结构体上的所有可变方法将导致无法修改内容的情况,即使这些方法可能只涉及一个字段.</p>
+<p>对于可变数据,有一些独立处理数据部分的特殊方法. 例如,如果你有一个可变片,那么<code>split_at_mut</code>将它分成两个可变片. 这是完全安全的,因为Rust知道切片不重叠.</p>
+<a class="header" href="pain-points.zh.html#a参考文献和生命时间" id="a参考文献和生命时间"><h2>参考文献和生命时间</h2></a>
+<p>锈不能允许一个参考超过价值的情况. 否则,我们会有一个&quot;悬挂参考&quot;,它指的是一个死亡值 - 一个段错误是不可避免的.</p>
+<p><code>rustc</code>往往可以对功能的生命周期做出合理的假设:</p>
+<pre><pre class="playpen"><code class="language-rust">fn pair(s: &amp;str, ch: char) -&gt; (&amp;str, &amp;str) {
+    if let Some(idx) = s.find(ch) {
+        (&amp;s[0..idx], &amp;s[idx+1..])
+    } else {
+        (s, &quot;&quot;)
+    }
+}
+fn main() {
+    let p = pair(&quot;hello:dolly&quot;, ':');
+    println!(&quot;{:?}&quot;, p);
+}
+// (&quot;hello&quot;, &quot;dolly&quot;)
+</code></pre></pre>
+<p>这是非常安全的,因为我们处理了未找到分隔符的情况. <code>rustc</code>在这里假定元组中的两个字符串都是从作为参数传递给函数的字符串中借用的.</p>
+<p>明确地说,函数定义如下所示:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn pair&lt;'a&gt;(s: &amp;'a str, ch: char) -&gt; (&amp;'a str, &amp;'a str) {...}
+#}</code></pre></pre>
+<p>符号表示输出字符串存在_至少与之一样长_作为输入字符串. 这并不是说生命是一样的,我们可以在任何时候放弃它们,只是因为它们无法活力<code>小号</code>.</p>
+<p>所以,<code>rustc</code>使常见案例更漂亮_终身豁免_.</p>
+<p>现在,如果收到该功能_二_字符串,那么您需要明确地进行生命周期注释来告诉Rust哪个输出字符串是从哪个输入字符串中借用的.</p>
+<p>当一个结构借用一个引用时,你总是需要一个明确的生命周期:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+struct Container&lt;'a&gt; {
+    s: &amp;'a str
+}
+#}</code></pre></pre>
+<p>这再次坚持结构不能超过参考. 对于结构和函数,生命周期都需要在中声明<code>&lt;&gt;</code>像一个类型参数.</p>
+<p>关闭是非常方便和强大的功能 -  Rust迭代器的很多强大功能都来自它们. 但是如果你存储它们,你必须指定一个生命周期. 这是因为基本上闭包是一个可以调用的生成结构,并且默认情况下是借用它的环境. 在这里<code>线性</code>闭包有不可改变的引用<code>米</code>和<code>c</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let m = 2.0;
+let c = 0.5;
+
+let linear = |x| m*x + c;
+let sc = |x| m*x.cos()
+...
+#}</code></pre></pre>
+<p>都<code>线性</code>和<code>sc</code>实行<code>Fn (x: f64) →f64</code>但他们是_不_同样的动物 - 他们有不同的类型和大小!所以要存储它们,你必须做出一个<code>Box &lt;Fn (x: f64) - &gt; f64 +'a&gt;</code>.</p>
+<p>非常烦人,如果你习惯了JavaScript或Lua的流畅关闭,但C ++与Rust类似,并且需要<code>的std ::功能</code>存储不同的关闭,对虚拟呼叫采取一点点惩罚.</p>
+<a class="header" href="pain-points.zh.html#a字符串" id="a字符串"><h2>字符串</h2></a>
+<p>在开始时,通常会对Rust字符串感到恼火. 有不同的方式来创建它们,并且它们都感觉冗长:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let s1 = &quot;hello&quot;.to_string();
+let s2 = String::from(&quot;dolly&quot;);
+#}</code></pre></pre>
+<p>不是&quot;你好&quot;_已经_一个字符串?好吧,在某种程度上. <code>串</code>是一个_拥有的_字符串,分配在堆上;字符串文字&quot;hello&quot;是类型的<code>&amp;STR</code> (&quot;字符串片&quot;) ,并可能被烘焙到可执行文件 (&quot;静态&quot;) 或借用<code>串</code>. 系统语言需要这种区别 - 考虑一个微型微控制器,它有一点RAM和更多的ROM. 文字字符串将被存储在ROM中 (&quot;只读&quot;) ,这既便宜又消耗更少的功率.</p>
+<p>但是 (你可能会说) 在C ++中它非常简单:</p>
+<pre><code class="language-C">std::string s = &quot;hello&quot;;
+</code></pre>
+<p>其中较短的是,但隐藏了字符串对象的隐式创建. 因此,Rust喜欢明确分配内存<code>to_string</code>. 另一方面,借用一个C ++字符串需要<code>c_str</code>,而C字符串很蠢.</p>
+<p>幸运的是,Rust的情况更好 -_一旦_你接受这两个<code>串</code>和<code>&amp;STR</code>是必要的. 的方法<code>串</code>主要是为了改变字符串,就像<code>推</code>添加一个字符 (在引擎盖下它非常像<code>VEC &lt;U8&gt;</code>) . 但是所有的方法<code>&amp;STR</code>也可用. 同样的<code>Deref</code>机制,a<code>串</code>可以通过<code>&amp;STR</code>到一个功能 - 这就是为什么你很少看到<code>&amp;串</code>在函数定义中.</p>
+<p>有很多方法可以转换<code>&amp;STR</code>至<code>串</code>,对应于各种特征. Rust需要这些特征来一般地处理类型. 作为一个经验法则,任何实现<code>显示</code>也知道<code>to_string</code>, 喜欢<code>42.to_string ()</code>.</p>
+<p>一些运营商可能不会按照直觉行事:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let s1 = &quot;hello&quot;.to_string();
+    let s2 = s1.clone();
+    assert!(s1 == s2);  // cool
+    assert!(s1 == &quot;hello&quot;); // fine
+    assert!(s1 == &amp;s2); // WTF?
+#}</code></pre></pre>
+<p>记得,<code>串</code>和<code>&amp;串</code>是不同的类型,和<code>==</code>没有为该组合定义. 这可能会让一个习惯于引用的C ++人与数值几乎可以互换. 此外,<code>&amp;S2</code>不_神奇_成为一个<code>&amp;STR</code>, 那是一个_deref强制_这只在分配给a时才会发生<code>&amp;STR</code>变量或参数.  (明确的<code>s2.as_str ()</code>会工作. )</p>
+<p>但是,这更真正值得一个WTF:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let s3 = s1 + s2;  // &lt;--- no can do
+#}</code></pre></pre>
+<p>你不能连接两个<code>串</code>值,但可以连接一个<code>串</code>与<code>&amp;STR</code>. 此外,您不能连接一个<code>&amp;STR</code>与<code>串</code>. 所以大多数人不会使用<code>+</code>并使用<code>格式!</code>宏,这很方便,但效率不高.</p>
+<p>有些字符串操作可用,但工作方式不同. 例如,语言通常有一个<code>分裂</code>将字符串分解为字符串数组的方法. Rust字符串的这个方法返回一个_迭代器_,你可以_然后_收集成矢量.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let parts: Vec&lt;_&gt; = s.split(',').collect();
+#}</code></pre></pre>
+<p>如果你急于获取矢量,这有点笨拙. 但是你可以对零件进行操作_无_分配一个矢量!例如,分割中最大的字符串的长度?</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let max = s.split(',').map(|s| s.len()).max().unwrap();
+#}</code></pre></pre>
+<p>(该<code>摅</code>是因为空的迭代器没有最大值,我们必须覆盖这种情况. )</p>
+<p>该<code>搜集</code>方法返回一个<code>VEC &lt;&amp;STR&gt;</code>,其中的部分是从原始字符串中借用的 - 我们只需要为引用分配空间. 在C ++中没有像这样的方法,但直到最近才需要单独分配每个子字符串.  (C ++ 17有<code>的std :: string_view</code>其行为像一个Rust字符串切片. )</p>
+<a class="header" href="pain-points.zh.html#a关于分号的说明" id="a关于分号的说明"><h2>关于分号的说明</h2></a>
+<p>分号是_不_可选的,但通常在与C相同的地方被排除,例如,后<code>{}</code>块. 之后他们也不需要<code>枚举</code>要么<code>结构</code> (这是一个C特性. ) 但是,如果该块必须有一个_值_,那么分号将被丢弃:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let msg = if ok {&quot;ok&quot;} else {&quot;error&quot;};
+#}</code></pre></pre>
+<p>请注意,在此之后必须有一个分号<code>让</code>声明!</p>
+<p>如果在这些字符串之后有分号,那么返回的值就是<code>()</code> (喜欢<code>没有</code>要么<code>空虚</code>) . 定义函数时常见错误:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn sqr(x: f64) -&gt; f64 {
+    x * x;
+}
+#}</code></pre></pre>
+<p><code>rustc</code>在这种情况下会给你一个明确的错误.</p>
+<a class="header" href="pain-points.zh.html#a特定于c-的问题" id="a特定于c-的问题"><h2>特定于C ++的问题</h2></a>
+<a class="header" href="pain-points.zh.html#a锈值语义是不同的" id="a锈值语义是不同的"><h3>锈值语义是不同的</h3></a>
+<p>在C ++中,可以定义类似于原语的类型并复制它们自己. 另外,可以定义移动构造函数来指定如何将值移出临时上下文.</p>
+<p>在Rust里,原始人的行为和预期一样,但是<code>复制</code>trait只能在集合类型 (结构,元组或枚举) 本身只包含可复制类型的情况下定义. 任意类型可能有<code>克隆</code>,但你必须打电话给<code>克隆</code>方法的值. Rust要求任何分配都是明确的,不要隐藏在复制构造函数或赋值运算符中.</p>
+<p>所以,复制和移动总是被定义为只是移动位而不能被覆盖.</p>
+<p>如果<code>s1</code>是非的<code>复制</code>值类型,然后<code>s2 = s1;</code>导致移动发生,而这_消耗_ <code>s1</code>!所以,当你真的想要一个副本,使用<code>克隆</code>.</p>
+<p>借用通常比复制要好,但是你必须遵循借用规则. 幸运的是,借款_是_一个可覆盖的行为. 例如,<code>串</code>可以借用<code>&amp;STR</code>,并共享所有不可变的方法<code>&amp;STR</code>. <em>字符串切片_与类似的C ++&quot;借用&quot;操作相比,这是非常强大的功能,它将提取一个<code>const char *</code>运用<code>c_str</code>. <code>&amp;STR</code>由一个指向一些拥有的字节 (或字符串文字) 和一个指针组成_尺寸</em>. 这导致了一些非常有效的内存模式. 你可以有一个<code>VEC &lt;&amp;STR&gt;</code>所有的字符串都是从一些底层字符串中借用的 - 只需要分配矢量空间:</p>
+<p>例如,按空格拆分:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn split_whitespace(s: &amp;str) -&gt; Vec&lt;&amp;str&gt; {
+    s.split_whitespace().collect()
+}
+#}</code></pre></pre>
+<p>同样,一个C ++<code>s.substr (0,2)</code>调用将始终复制字符串,但切片只会借用: <code>&amp;S [0..2]</code>.</p>
+<p>之间有一个等价的关系<code>VEC &lt;T&gt;</code>和<code>&amp;[T]</code>.</p>
+<a class="header" href="pain-points.zh.html#a共享引用" id="a共享引用"><h3>共享引用</h3></a>
+<p>Rust有_聪明的指针_像C ++  - 例如,相当于<code>的std ::的unique_ptr</code>是<code>框</code>. 没有必要<code>删除</code>,因为任何内存或其他资源将在盒子超出范围时被回收 (Rust非常包含RAII) .</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let mut answer = Box::new(&quot;hello&quot;.to_string());
+*answer = &quot;world&quot;.to_string();
+answer.push('!');
+println!(&quot;{} {}&quot;, answer, answer.len());
+#}</code></pre></pre>
+<p>人们发现<code>to_string</code>起初有点刺激,但事实确实如此_明确的_.</p>
+<p>注意显式的dererefence<code>*</code>,但智能指针上的方法不需要任何特殊符号 (我们不这么说<code>(*答案) .push ( '!')</code>)</p>
+<p>显然,只有在原始内容明确定义的所有者的情况下,借款才有效. 在许多设计中,这是不可能的.</p>
+<p>在C ++中,这是在哪里<code>的std :: shared_ptr的</code>用来;复制仅涉及修改公用数据的引用计数. 但这不是没有成本的:</p>
+<ul>
+<li>即使数据是只读的,不断修改引用计数也会导致缓存失效</li>
+<li><code>的std :: shared_ptr的</code>被设计成线程安全的并且也承载锁定开销</li>
+</ul>
+<p>在铁锈,<code>的std :: RC: RC</code>也像使用引用计数的共享智能指针一样工作. 但是,它仅适用于不可变引用!如果你想要一个线程安全的变体,请使用<code>的std ::同步::弧</code> ('Atomic Rc') . 所以Rust在提供两种变体方面有些尴尬,但你可以避免非线程操作的锁定开销.</p>
+<p>这些必须是不可变的参考,因为这是Rust内存模型的基础. 但是,有一张退出卡: <code>的std ::电池:: RefCell</code>. 如果您将共享引用定义为<code>RC &lt;RefCell &lt;T &gt;&gt;</code>那么你可以可变地借用它的<code>borrow_mut</code>方法. 这适用Rust的借款规则_动态_- 例如任何尝试打电话<code>borrow_mut</code>当借款已经发生会引起恐慌.</p>
+<p>这仍然是_安全_. 恐慌会发生_之前_任何内存都被不当地触动!像例外情况一样,他们展开调用堆栈. 所以对于这样一个结构化的过程来说这是一个不幸的词 - 这是一个有序的撤退而不是恐慌的撤退.</p>
+<p>完整的<code>RC &lt;RefCell &lt;T &gt;&gt;</code>类型笨拙,但应用程序代码并不令人不快. Rust (再次) 倾向于明确表示.</p>
+<p>如果你想线程安全地访问共享状态,那么<code>弧&lt;T&gt;</code>是唯一的_安全_要走的路. 如果你需要可变权限,那么<code>弧&lt;互斥&lt;T &gt;&gt;</code>相当于<code>RC &lt;RefCell &lt;T &gt;&gt;</code>. <code>互斥</code>与通常定义的方式有点不同: 它是一个值的容器. 你得到一个_锁_在价值上,然后可以修改它.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let answer = Arc::new(Mutex::new(10));
+
+// in another thread
+..
+{
+  let mut answer_ref = answer.lock().unwrap();
+  *answer_ref = 42;
+}
+#}</code></pre></pre>
+<p>为什么<code>摅</code>?如果前面的持有线程恐慌,那么这个<code>锁</code>失败.  (这是文档中的一个地方<code>摅</code>被认为是合理的事情,因为事情显然已经严重错误. 恐慌总是可以在线索中发现. )</p>
+<p>重要的是 (像往常一样使用互斥锁) 这个排他锁尽可能少地保留下来. 所以它们在一个有限的范围内发生是很常见的 - 然后当可变参考超出范围时锁定结束.</p>
+<p>与C ++中显然更简单的情况 (&quot;use shared_ptr dude&quot;) ,这看起来很尴尬,但现在任何修改共享状态变得明显,而且_互斥<code>锁定模式强制螺纹安全.</code>像所有内容一样,使用共享引用</p>
+<p>警告<a href="https://news.ycombinator.com/item?id=11698784">. </a>迭代器</p>
+<a class="header" href="pain-points.zh.html#c-中的迭代器非常非正式地定义" id="c-中的迭代器非常非正式地定义"><h3>C ++中的迭代器非常非正式地定义;</h3></a>
+<p>他们涉及智能指针,通常从头开始c.begin () <code>并以...结束</code>c.end () <code>.</code>迭代器上的操作然后作为独立的模板函数来实现,如<code>的std :: find_if</code>.</p>
+<p>Rust迭代器由.de定义<code>迭代器</code>特征;<code>下一个</code>返回一个<code>选项</code>和什么时候<code>选项</code>是<code>没有</code>我们结束了.</p>
+<p>最常见的操作是现在的方法. 这是等价的<code>find_if</code>. 它返回一个<code>选项</code> (没有发现的情况是<code>没有</code>) 和这里<code>如果让</code>语句可以方便地提取non-<code>没有</code>案件:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let arr = [10, 2, 30, 5];
+if let Some(res) = arr.find(|x| x == 2) {
+    // res is 2
+}
+#}</code></pre></pre>
+<a class="header" href="pain-points.zh.html#a不安全和链接列表" id="a不安全和链接列表"><h3>不安全和链接列表</h3></a>
+<p>Rust stdlib的某些部分是使用实现的并不是什么秘密<code>不安全</code>. 这并不妨碍借款检查员的保守方法. 请记住,&quot;不安全&quot;具有特殊意义 -  Rust在编译时无法完全验证的操作. 从Rust的角度来看,C ++始终处于不安全的模式!所以如果一个大的应用程序需要几十行不安全的代码,那很好,因为这几行代码可以被人仔细检查. 人类不善于检查100Kloc +的代码.</p>
+<p>我提到这一点,因为似乎有一种模式: 一个有经验的C ++人试图实现链表或树结构,并且感到沮丧. 那么,一个双链表_是_可能在安全的铁锈,与<code>Rc</code>参考前进,和<code>弱</code>引用回去. 但是标准库在使用...指针方面获得了更多的性能.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="nom-intro.zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="nom-intro.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+    </body>
+</html>

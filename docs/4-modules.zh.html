@@ -1,0 +1,630 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>模块和货物 - A Gentle Introduction to Rust</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Introduction to the Rust language, standard library and ecosystem">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="_FontAwesome/css/font-awesome.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+
+    </head>
+    <body class="light">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html" class="active"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">A Gentle Introduction to Rust</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="4-modules.zh.html#a模块和货物" id="a模块和货物"><h1>模块和货物</h1></a>
+<a class="header" href="4-modules.zh.html#a模块" id="a模块"><h2>模块</h2></a>
+<p>随着程序变得越来越大,有必要将它们分散到多个文件中,并将函数和类型放在不同的位置_命名空间_. 这两种解决方案都是Rust解决方案_模块_.</p>
+<p>C做的是第一个,而不是第二个,所以你最终会遇到类似的可怕名字<code>primitive_display_set_width</code>等等. 实际的文件名可以任意命名.</p>
+<p>Rust在全名看起来像<code>原始::显示:: set_width</code>,之后说<code>使用primitive :: display</code>你可以把它称为<code>显示:: set_width</code>. 你甚至可以说<code>使用primitive :: display :: set_width</code>然后只是说<code>set_width</code>,但这并不是一个好主意. <code>rustc</code>不会混淆,但是_您_稍后可能会感到困惑. 但为了这个工作,文件名必须遵循一些简单的规则.</p>
+<p>一个新的关键字<code>mod</code>用于将模块定义为可以写入Rust类型或函数的块:</p>
+<pre><pre class="playpen"><code class="language-rust">mod foo {
+    #[derive(Debug)]
+    struct Foo {
+        s: &amp;'static str
+    }
+}
+
+fn main() {
+    let f = foo::Foo{s: &quot;hello&quot;};
+    println!(&quot;{:?}&quot;, f);
+}
+</code></pre></pre>
+<p>但它仍然不太正确 - 我们得到'struct Foo是私人的'. 为了解决这个问题,我们需要<code>酒馆</code>要导出的关键字<code>富</code>. 然后错误更改为'结构foo :: Foo的字段是私人的',所以放<code>酒馆</code>前场<code>小号</code>出口<code>富::小号</code>. 然后事情就会奏效.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    pub struct Foo {
+        pub s: &amp;'static str
+    }
+#}</code></pre></pre>
+<p>需要一个明确的<code>酒馆</code>意味着你必须_选择_哪些项目要通过模块公开. 从模块导出的一组函数和类型称为它的_接口_.</p>
+<p>隐藏结构的内部通常会更好,并且只允许通过方法访问:</p>
+<pre><pre class="playpen"><code class="language-rust">mod foo {
+    #[derive(Debug)]
+    pub struct Foo {
+        s: &amp;'static str
+    }
+
+    impl Foo {
+        pub fn new(s: &amp;'static str) -&gt; Foo {
+            Foo{s: s}
+        }
+    }
+}
+
+fn main() {
+    let f = foo::Foo::new(&quot;hello&quot;);
+    println!(&quot;{:?}&quot;, f);
+}
+</code></pre></pre>
+<p>为什么隐藏实施是一件好事?因为这意味着您可以在不中断界面的情况下稍后进行更改,否则模块的消费者不会太依赖其细节. 大规模编程的大敌是代码纠结的倾向,因此理解一段代码是不可能的.</p>
+<p>在一个完美的世界里,一个模块做一件事,做得好,并保持自己的秘密.</p>
+<p>何时不要隐藏?正如Stroustrup所说,当接口_是_执行,就像<code>struct Point {x: f32,y: f32}</code>.</p>
+<p>_中_一个模块,所有项目对所有其他项目都可见. 这是一个舒适的地方,每个人都可以成为朋友,知道彼此的私密细节.</p>
+<p>每个人都可以根据自己的喜好,将程序分成不同的文件. 我开始对500条线路感到不舒服,但我们都同意超过2000条线路正在推动它.</p>
+<p>那么如何将这个程序分解成单独的文件呢?</p>
+<p>我们把这个<code>foo</code>代码到<code>foo.rs</code>:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// foo.rs
+#[derive(Debug)]
+pub struct Foo {
+    s: &amp;'static str
+}
+
+impl Foo {
+    pub fn new(s: &amp;'static str) -&gt; Foo {
+        Foo{s: s}
+    }
+}
+#}</code></pre></pre>
+<p>并使用一个<code>mod foo</code>声明_无_主程序中的一个块:</p>
+<pre><pre class="playpen"><code class="language-rust">// mod3.rs
+mod foo;
+
+fn main() {
+    let f = foo::Foo::new(&quot;hello&quot;);
+    println!(&quot;{:?}&quot;, f);
+}
+</code></pre></pre>
+<p>现在<code>rustc mod3.rs</code>会引发<code>foo.rs</code>也要编译. 没有必要用makefiles搞笑!</p>
+<p>编译器也会看<code>的modname / mod.rs</code>,所以这将工作,如果我创建一个目录<code>嘘</code>包含一个文件<code>mod.rs</code>:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// boo/mod.rs
+pub fn answer()-&gt;u32 {
+    42
+}
+#}</code></pre></pre>
+<p>现在主程序可以将两个模块作为单独的文件使用:</p>
+<pre><code>// mod3.rs
+mod foo;
+mod boo;
+
+fn main() {
+    let f = foo::Foo::new(&quot;hello&quot;);
+    let res = boo::answer();
+    println!(&quot;{:?} {}&quot;, f,res);
+}
+</code></pre>
+<p>到目前为止,还有<code>mod3.rs</code>,含有<code>主要</code>,一个模块<code>foo.rs</code>和一个目录<code>嘘</code>含<code>mod.rs</code>. 通常的惯例是包含的文件<code>主要</code>只是叫<code>main.rs</code>.</p>
+<p>为什么有两种方法可以做同样的事情?因为<code>BOO / mod.rs</code>可以参考其中定义的其他模块<code>嘘</code>,更新<code>BOO / mod.rs</code>并添加一个新模块 - 注意这是明确导出的.  (没有<code>酒馆</code>,<code>酒吧</code>只能在里面看到<code>嘘</code>模块) .</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// boo/mod.rs
+pub fn answer()-&gt;u32 {
+    42
+}
+
+pub mod bar {
+    pub fn question() -&gt; &amp;'static str {
+        &quot;the meaning of everything&quot;
+    }
+}
+#}</code></pre></pre>
+<p>然后我们有与答案相对应的问题 (<code>酒吧</code>模块在里面<code>嘘</code>) :</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let q = boo::bar::question();
+#}</code></pre></pre>
+<p>该模块块可以被拉出<code>BOO / bar.rs</code>:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// boo/bar.rs
+pub fn question() -&gt; &amp;'static str {
+    &quot;the meaning of everything&quot;
+}
+#}</code></pre></pre>
+<p>和<code>BOO / mod.rs</code>变为:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// boo/mod.rs
+pub fn answer()-&gt;u32 {
+    42
+}
+
+pub mod bar;
+#}</code></pre></pre>
+<p>总之,模块是关于组织和可见性的,这可能涉及或不涉及单独的文件.</p>
+<p>请注意<code>使用</code>与导入无关,只是指定模块名称的可见性. 例如:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+{
+    use boo::bar;
+    let q = bar::question();
+    ...
+}
+{
+    use boo::bar::question();
+    let q = question();
+    ...
+}
+#}</code></pre></pre>
+<p>重要的一点是没有_单独编译_这里. 主程序及其模块文件将每次重新编译. 尽管如此,较大的程序需要花费相当长的时间<code>rustc</code>在渐进式编译中越来越好.</p>
+<a class="header" href="4-modules.zh.html#a包装箱" id="a包装箱"><h2>包装箱</h2></a>
+<p>Rust的&quot;编译单位&quot;是_箱_,它是一个可执行文件或一个库.</p>
+<p>要分别编译上一节中的文件,请先构建<code>foo.rs</code>作为锈_静态库_箱:</p>
+<pre><code>src$ rustc foo.rs --crate-type=lib
+src$ ls -l libfoo.rlib
+-rw-rw-r-- 1 steve steve 7888 Jan  5 13:35 libfoo.rlib
+</code></pre>
+<p>我们现在可以_链接_这到我们的主要程序中:</p>
+<pre><code>src$ rustc mod4.rs --extern foo=libfoo.rlib
+</code></pre>
+<p>但主要程序现在必须像这样,在那里<code>extern</code>名称与链接时使用的名称相同. 有一个隐含的顶级模块<code>foo</code>与图书馆箱子相关联:</p>
+<pre><code>// mod4.rs
+extern crate foo;
+
+fn main() {
+    let f = foo::Foo::new(&quot;hello&quot;);
+    println!(&quot;{:?}&quot;, f);
+}
+</code></pre>
+<p>人们开始吟唱'货物!货物!'让我来证明这个构建Rust的低级视图. 我是'Know Thy Toolchain'的忠实信徒,当我们看着使用Cargo管理项目时,这会减少你需要学习的新魔法数量.</p>
+<p>模块是基本的语言功能,可用于货运项目之外.</p>
+<pre><code>src$ ls -lh mod4
+-rwxrwxr-x 1 steve steve 3,4M Jan  5 13:39 mod4
+</code></pre>
+<p>现在该理解为什么Rust的二进制文件如此之大: 这很胖!_有一个_批量在该可执行文件中的调试信息.</p>
+<p>这不是一件坏事,如果你想使用一个调试器,并且当你的程序发生混乱时实际上需要有意义的回溯.</p>
+<pre><code>src$ strip mod4
+src$ ls -lh mod4
+-rwxrwxr-x 1 steve steve 300K Jan  5 13:49 mod4
+</code></pre>
+<p>那么让我们去除这些调试信息并查看: _对于如此简单的事情,仍感觉有点大,但是这个程序链接_静态针对Rust标准库. 这是一件好事,因为您可以将此可执行文件交给任何具有正确操作系统的人 - 他们不需要&quot;Rust运行时&quot;. <code>(和</code>rustup甚至可以让你为其他操作系统和平台进行交叉编译. )</p>
+<p>我们可以动态链接到Rust运行时并获得真正的小exes:</p>
+<pre><code>src$ rustc -C prefer-dynamic mod4.rs --extern foo=libfoo.rlib
+src$ ls -lh mod4
+-rwxrwxr-x 1 steve steve 14K Jan  5 13:53 mod4
+src$ ldd mod4
+    linux-vdso.so.1 =&gt;  (0x00007fffa8746000)
+    libstd-b4054fae3db32020.so =&gt; not found
+    libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f3cd47aa000)
+    /lib64/ld-linux-x86-64.so.2 (0x00007f3cd4d72000)
+</code></pre>
+<p>这'找不到'是因为<code>rustup</code>不会全局安装动态库. 至少在Unix上我们可以破解我们的快乐方式 (是的,我知道最好的解决方案是符号链接) . Rust没有</p>
+<pre><code>src$ export LD_LIBRARY_PATH=~/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib
+src$ ./mod4
+Foo { s: &quot;hello&quot; }
+</code></pre>
+<p>哲学上_动态链接的问题,与Go一样. _只是当每6周有一个稳定版本时,不得不重新编译所有内容. 如果你有一个适合你的稳定版本,那么很酷. 随着Rust的稳定版本越来越多地被OS包管理器交付,动态链接将变得更加流行. 货物</p>
+<a class="header" href="4-modules.zh.html#a与java或python相比rust标准库不是很大" id="a与java或python相比rust标准库不是很大"><h2>与Java或Python相比,Rust标准库不是很大,</h2></a>
+<p>虽然功能比C或C ++更强大,但主要依赖于操作系统提供的库.</p>
+<p>但访问社区提供的库很简单<a href="https://crates.io">crates.io</a>运用<strong>货物</strong>. Cargo将查找正确的版本并为您下载源代码,并确保下载其他所需的箱子.</p>
+<p>我们来创建一个需要阅读JSON的简单程序. 这种数据格式的使用非常广泛,但是对于包含在标准库中的数据格式太专业了. 所以我们初始化一个Cargo项目,使用'--bin',因为默认是创建一个库项目.</p>
+<pre><code>test$ cargo init --bin test-json
+     Created binary (application) project
+test$ cd test-json
+test$ cat Cargo.toml
+[package]
+name = &quot;test-json&quot;
+version = &quot;0.1.0&quot;
+authors = [&quot;Your Name &lt;you@example.org&gt;&quot;]
+
+[dependencies]
+</code></pre>
+<p>使项目依赖于<a href="http://json.rs/doc/json/">JSON箱子</a>,编辑'Cargo.toml'文件,如下所示:</p>
+<pre><code>[dependencies]
+json=&quot;0.11.4&quot;
+</code></pre>
+<p>然后用Cargo进行第一次构建:</p>
+<pre><code>test-json$ cargo build
+    Updating registry `https://github.com/rust-lang/crates.io-index`
+ Downloading json v0.11.4
+   Compiling json v0.11.4
+   Compiling test-json v0.1.0 (file:///home/steve/c/rust/test/test-json)
+    Finished debug [unoptimized + debuginfo] target(s) in 1.75 secs
+</code></pre>
+<p>这个项目的主文件已经被创建 - 它是'src'目录中的'main.rs'. 它开始时只是一个'你好世界'的应用程序,所以让我们编辑它是一个适当的测试程序.</p>
+<p>请注意非常方便的'原始'字符串字面值 - 否则我们需要转义那些双引号并以丑为结尾:</p>
+<pre><pre class="playpen"><code class="language-rust">// test-json/src/main.rs
+extern crate json;
+
+fn main() {
+    let doc = json::parse(r#&quot;
+    {
+        &quot;code&quot;: 200,
+        &quot;success&quot;: true,
+        &quot;payload&quot;: {
+            &quot;features&quot;: [
+                &quot;awesome&quot;,
+                &quot;easyAPI&quot;,
+                &quot;lowLearningCurve&quot;
+            ]
+        }
+    }
+    &quot;#).expect(&quot;parse failed&quot;);
+
+    println!(&quot;debug {:?}&quot;, doc);
+    println!(&quot;display {}&quot;, doc);
+}
+</code></pre></pre>
+<p>您现在只能编译和运行此项目<code>main.rs</code>已经改变.</p>
+<pre><code>test-json$ cargo run
+   Compiling test-json v0.1.0 (file:///home/steve/c/rust/test/test-json)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.21 secs
+     Running `target/debug/test-json`
+debug Object(Object { store: [(&quot;code&quot;, Number(Number { category: 1, exponent: 0, mantissa: 200 }),
+ 0, 1), (&quot;success&quot;, Boolean(true), 0, 2), (&quot;payload&quot;, Object(Object { store: [(&quot;features&quot;,
+ Array([Short(&quot;awesome&quot;), Short(&quot;easyAPI&quot;), Short(&quot;lowLearningCurve&quot;)]), 0, 0)] }), 0, 0)] })
+display {&quot;code&quot;:200,&quot;success&quot;:true,&quot;payload&quot;:{&quot;features&quot;:[&quot;awesome&quot;,&quot;easyAPI&quot;,&quot;lowLearningCurve&quot;]}}
+</code></pre>
+<p>调试输出显示了JSON文档的一些内部细节,但使用了一个普通的&quot;{}&quot;<code>显示</code>特质,从解析的文档重新生成JSON.</p>
+<p>我们来探索一下JSON API. 如果我们无法提取数值,这将毫无用处. 该<code>as_TYPE</code>方法返回<code>选项&lt;类型&gt;</code>因为我们无法确定该字段是否存在或是否属于正确类型.  (见<a href="http://json.rs/doc/json/enum.JsonValue.html">文档JsonValue</a>)</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let code = doc[&quot;code&quot;].as_u32().unwrap_or(0);
+    let success = doc[&quot;success&quot;].as_bool().unwrap_or(false);
+
+    assert_eq!(code, 200);
+    assert_eq!(success, true);
+
+    let features = &amp;doc[&quot;payload&quot;][&quot;features&quot;];
+    for v in features.members() {
+        println!(&quot;{}&quot;, v.as_str().unwrap()); // MIGHT explode
+    }
+    // awesome
+    // easyAPI
+    // lowLearningCurve
+#}</code></pre></pre>
+<p><code>特征</code>这里是一个参考<code>JsonValue</code>- 它必须是一个参考,因为否则我们会试图移动一个_值_脱离JSON文档. 这里我们知道它是一个数组,所以<code>成员 ()</code>将返回一个非空的迭代器<code>&amp;JsonValue</code>.</p>
+<p>如果&quot;有效载荷&quot;对象没有&quot;功能&quot;键,该怎么办?然后<code>特征</code>将被设置为<code>空值</code>. 不会有爆炸. 这种便利表达了JSON的自由形式,任何东西的本质. 如果结构不匹配,您应该检查收到的任何文档的结构并创建自己的错误.</p>
+<p>您可以修改这些结构. 如果我们有<code>让mut doc</code>那么这会做你所期望的:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let features = &amp;mut doc[&quot;payload&quot;][&quot;features&quot;];
+    features.push(&quot;cargo!&quot;).expect(&quot;couldn't push&quot;);
+#}</code></pre></pre>
+<p>该<code>推</code>将失败,如果<code>特征</code>不是一个数组,因此它返回<code>结果&lt; () &gt;</code>.</p>
+<p>这是一个非常漂亮的使用宏来生成_JSON文字_:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let data = object!{
+        &quot;name&quot;    =&gt; &quot;John Doe&quot;,
+        &quot;age&quot;     =&gt; 30,
+        &quot;numbers&quot; =&gt; array![10,53,553]
+    };
+    assert_eq!(
+        data.dump(),
+        r#&quot;{&quot;name&quot;:&quot;John Doe&quot;,&quot;age&quot;:30,&quot;numbers&quot;:[10,53,553]}&quot;#
+    );
+#}</code></pre></pre>
+<p>为了这个工作,你需要显式地从JSON箱导入宏:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+#[macro_use]
+extern crate json;
+#}</code></pre></pre>
+<p>由于JSON的无定形,动态类型性质和Rust的结构化,静态性质之间的不匹配,使用这个箱子有一个缺点.  (自述明确提到'摩擦') 所以如果你_没有_想要将JSON映射到Rust数据结构,您最终会做很多检查,因为您不能认为接收到的结构与您的结构相匹配!为此,更好的解决方案是<a href="https://github.com/serde-rs/json">serde_json</a>你在哪里_连载_Rust数据结构转换为JSON和_反序列化_JSON进入Rust.</p>
+<p>为此,请创建另一个货物二进制项目<code>货物新--bin测试 - serde-json</code>,进入<code>测试SERDE,JSON</code>目录和编辑<code>Cargo.toml</code>. 像这样编辑它:</p>
+<pre><code>[dependencies]
+serde=&quot;0.9&quot;
+serde_derive=&quot;0.9&quot;
+serde_json=&quot;0.9&quot;
+</code></pre>
+<p>并编辑<code>SRC / main.rs</code>是这样的:</p>
+<pre><pre class="playpen"><code class="language-rust">#[macro_use]
+extern crate serde_derive;
+extern crate serde_json;
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Person {
+    name: String,
+    age: u8,
+    address: Address,
+    phones: Vec&lt;String&gt;,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Address {
+    street: String,
+    city: String,
+}
+
+fn main() {
+    let data = r#&quot; {
+     &quot;name&quot;: &quot;John Doe&quot;, &quot;age&quot;: 43,
+     &quot;address&quot;: {&quot;street&quot;: &quot;main&quot;, &quot;city&quot;:&quot;Downtown&quot;},
+     &quot;phones&quot;:[&quot;27726550023&quot;]
+    } &quot;#;
+    let p: Person = serde_json::from_str(data).expect(&quot;deserialize error&quot;);
+    println!(&quot;Please call {} at the number {}&quot;, p.name, p.phones[0]);
+
+    println!(&quot;{:#?}&quot;,p);
+}
+</code></pre></pre>
+<p>你已经看到了<code>派生</code>属性之前,但是<code>serde_derive</code>箱子定义_自定义派生_为特别<code>连载</code>和<code>反序列化</code>特征. 结果显示生成的Rust结构体:</p>
+<pre><code>Please call John Doe at the number 27726550023
+Person {
+    name: &quot;John Doe&quot;,
+    age: 43,
+    address: Address {
+        street: &quot;main&quot;,
+        city: &quot;Downtown&quot;
+    },
+    phones: [
+        &quot;27726550023&quot;
+    ]
+}
+</code></pre>
+<p>现在,如果你使用了<code>json</code>那么你需要几百行自定义转换代码,主要是错误处理. 单调乏味,容易搞砸,而不是你想要付出努力的地方.</p>
+<p>如果你从外部来源处理结构良好的JSON (如果需要,可以重新映射字段名称) ,这显然是最好的解决方案,并为Rust程序通过网络与其他程序共享数据提供了一个强大的方法 (因为一切都能理解JSON这些天) . 关于很酷的事情<code>serde</code> (用于SERialization DEserialization) 是也支持其他文件格式,例如<code>toml</code>,这是货运中常用的配置友好格式. 因此,您的程序可以将.toml文件读入结构中,并将这些结构编写为.json.</p>
+<p>序列化是一项重要的技术,Java和Go存在类似的解决方案 - 但有很大的不同. 在这些语言中,数据的结构可以在这里找到_运行_运用_反射_,但在这种情况下,序列化代码是在_编译时间_- 更高效!</p>
+<p>Cargo被认为是Rust生态系统的一大优势,因为它为我们做了很多工作. 否则,我们不得不从Github下载这些库,构建为静态库箱,并将它们与程序链接. 这对于C ++项目来说是很痛苦的,如果货运不存在的话,对于Rust项目来说,这几乎是痛苦的. C ++在它的痛苦中有点独特,所以我们应该将它与其他语言的包管理器进行比较. npm (用于JavaScript) 和pip (用于Python) 为您管理依赖关系和下载,但分发故事更难,因为程序的用户需要安装NodeJS或Python. 但Rust程序与它们的依赖关系是静态链接的,所以它们可以在没有外部依赖的情况下再次发给你的好友.</p>
+<a class="header" href="4-modules.zh.html#a更多宝石" id="a更多宝石"><h2>更多宝石</h2></a>
+<p>处理除简单文本以外的任何内容时,正则表达式使您的生活变得更加轻松. 这些通常适用于大多数语言,我将在这里假定对正则表示法有基本的了解. 使用<a href="https://github.com/rust-lang/regex">正则表达式</a>把&quot;regex =&quot;0.2.1&quot;'放在&quot;[依赖]&quot;在您的Cargo.toml.</p>
+<p>我们将再次使用&quot;原始字符串&quot;,以便反斜杠不必转义. 在英语中,这个正则表达式&quot;完全匹配两个数字,字符': ',然后是任意数字. 捕获两组数字&quot;: 成功的产出实际上有三个</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+extern crate regex;
+use regex::Regex;
+
+let re = Regex::new(r&quot;(\d{2}):(\d+)&quot;).unwrap();
+println!(&quot;{:?}&quot;, re.captures(&quot;  10:230&quot;));
+println!(&quot;{:?}&quot;, re.captures(&quot;[22:2]&quot;));
+println!(&quot;{:?}&quot;, re.captures(&quot;10:x23&quot;));
+// Some(Captures({0: Some(&quot;10:230&quot;), 1: Some(&quot;10&quot;), 2: Some(&quot;230&quot;)}))
+// Some(Captures({0: Some(&quot;22:2&quot;), 1: Some(&quot;22&quot;), 2: Some(&quot;2&quot;)}))
+// None
+#}</code></pre></pre>
+<p>捕获_- 整场比赛,和两组数字. _这些正则表达式不是锚定_默认情况下如此_正则表达式**将追捕第一场比赛,跳过任何不匹配的东西. ** (如果你遗漏了' () ',它只会给我们整场比赛. )</p>
+<p>这是可能的_名称_那些捕捉,并且将正则表达式分散在多行,甚至包括注释!编译正则表达式可能会失败 (第一个_期望_) 或者匹配可能失败 (第二个_期望_) . 在这里,我们可以使用结果作为关联数组并查找按名称捕获.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let re = Regex::new(r&quot;(?x)
+(?P&lt;year&gt;\d{4})  # the year
+-
+(?P&lt;month&gt;\d{2}) # the month
+-
+(?P&lt;day&gt;\d{2})   # the day
+&quot;).expect(&quot;bad regex&quot;);
+let caps = re.captures(&quot;2010-03-14&quot;).expect(&quot;match failed&quot;);
+
+assert_eq!(&quot;2010&quot;, &amp;caps[&quot;year&quot;]);
+assert_eq!(&quot;03&quot;, &amp;caps[&quot;month&quot;]);
+assert_eq!(&quot;14&quot;, &amp;caps[&quot;day&quot;]);
+#}</code></pre></pre>
+<p>正则表达式可以分解符合模式的字符串,但不会检查它们是否有意义. 也就是说,你可以指定和匹配_句法_的ISO风格的日期,但_语义_他们可能是无稽之谈,比如&quot;2014-24-52&quot;.</p>
+<p>为此,您需要专门的日期时间处理,由其提供<a href="https://github.com/lifthrasiir/rust-chrono">计时</a>. 你需要在做日期时决定一个时区:</p>
+<pre><pre class="playpen"><code class="language-rust">extern crate chrono;
+use chrono::*;
+
+fn main() {
+    let date = Local.ymd(2010,3,14);
+    println!(&quot;date was {}&quot;, date);
+}
+// date was 2010-03-14+02:00
+</code></pre></pre>
+<p>但是,这不推荐,因为喂它不好的日期会导致恐慌! (尝试一个假日期来看看这个. ) 你需要的方法是ymd_opt<code>返回</code>LocalResult &lt;日期&gt;<code>您还可以直接解析日期时间,无论是以标准UTC格式还是使用自定义</code></p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let date = Local.ymd_opt(2010,3,14);
+    println!(&quot;date was {:?}&quot;, date);
+    // date was Single(2010-03-14+02:00)
+
+    let date = Local.ymd_opt(2014,24,52);
+    println!(&quot;date was {:?}&quot;, date);
+    // date was None
+#}</code></pre></pre>
+<p>格式<a href="https://lifthrasiir.github.io/rust-chrono/chrono/format/strftime/index.html#specifiers">. </a>这些自我相同的格式允许您按照您想要的格式打印日期. 我特别强调了这两个有用的箱子,因为它们将成为大多数其他语言的标准库的一部分.</p>
+<p>事实上,这些箱子的胚胎形态曾经是Rust stdlib的一部分,但被切开了. _这是一个蓄意的决定: Rust团队非常重视stdlib的稳定性,所以一旦他们在不稳定的夜间版本中进行孵化,只有beta和stable才能保持稳定. 对于需要实验和改进的图书馆来说,他们保持独立并且能够跟踪货物会更好. 出于所有实际目的,这两个箱子是_标准 - 它们不会消失,并且可能会在某个时候折回到stdlib中.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="3-filesystem.zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="5-stdlib-containers.zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="3-filesystem.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="5-stdlib-containers.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+    </body>
+</html>

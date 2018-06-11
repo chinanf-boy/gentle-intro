@@ -1,0 +1,601 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>用nom解析 - A Gentle Introduction to Rust</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Introduction to the Rust language, standard library and ecosystem">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="_FontAwesome/css/font-awesome.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+
+    </head>
+    <body class="light">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html" class="active"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">A Gentle Introduction to Rust</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="nom-intro.zh.html#a用名词解析文本" id="a用名词解析文本"><h2>用名词解析文本</h2></a>
+<p><a href="https://github.com/Geal/nom">喃</a>,<a href="https://docs.rs/nom"> (在这里记录) </a>是Rust的解析器库,它非常值得初次投资.</p>
+<p>如果你必须解析一个已知的数据格式,比如CSV或者JSON,那么最好使用一个专门的类库<a href="https://github.com/BurntSushi/rust-csv">Rust CSV</a>或者讨论的JSON库<a href="4-modules.html#cargo">第4节</a>.</p>
+<p>同样,对于配置文件使用专用的解析器<a href="https://docs.rs/rust-ini/0.10.0/ini/">ini</a>要么<a href="http://alexcrichton.com/toml-rs/toml/index.html">toml</a>.  (最后一个特别酷,因为它与Serde框架结合在一起,就像我们看到的一样<a href="https://docs.rs/serde_json">serde_json</a>.</p>
+<p>但是如果文本不规则,或者某种格式化,那么你需要扫描那些文本而不写很多乏味的字符串处理代码. 建议的去往往是<a href="https://github.com/rust-lang/regex">正则表达式</a>,但充分参与时,正则表达式可能令人沮丧地不透明. Nom提供了一种解析文本的方法,它可以通过组合更简单的解析器来构建. 例如,正则表达式有其局限性<a href="http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags">使用正则表达式来解析HTML</a>但是你_可以_使用Nom解析HTML. 如果你有兴趣编写自己的编程语言,Nom是一个很好的地方,你可以从这条艰难的道路开始,默默无闻.</p>
+<p>有一些用于学习Nom的优秀教程,但我想从hello-world级开始建立一些初步的熟悉性. 您需要了解的基本知识 - 首先,Nom一直是宏,其次,Nom倾向于使用字节片,而不是字符串. 首先意味着你必须特别小心才能获得Nom表达式,因为错误信息不会很友善. 第二种意思是Nom可以用于_任何_数据格式,而不仅仅是文本. 人们使用Nom解码二进制协议和文件头. 它也可以在UTF-8以外的编码中使用&quot;文本&quot;.</p>
+<p>Nom的最新版本与字符串切片一起工作良好,但您需要使用以其结尾的宏<code>_s</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">#[macro_use]
+extern crate nom;
+
+named!(get_greeting&lt;&amp;str,&amp;str&gt;,
+    tag_s!(&quot;hi&quot;)
+);
+
+fn main() {
+    let res = get_greeting(&quot;hi there&quot;);
+    println!(&quot;{:?}&quot;,res);
+}
+// Done(&quot; there&quot;, &quot;hi&quot;)
+</code></pre></pre>
+<p>该<code>命名!</code>宏创建一些输入类型的函数 (<code>&amp;[U8]</code>默认情况下) 并将第二个类型返回到尖括号中. <code>tag_s!</code>匹配字符流中的文字字符串,其值是表示该文字的字符串片段.  (如果你想与之合作<code>&amp;[U8]</code>然后使用<code>标签!</code>宏) . 我们称之为定义的解析器</p>
+<p>get_greeting<code>与</code>&amp;STR<code>并找回一个</code>IResult<a href="http://rust.unhandledexpression.com/nom/enum.IResult.html">. </a>事实上,我们恢复了匹配值. 看看&quot;there&quot; - 这是匹配后剩下的字符串切片.</p>
+<p>我们想忽略空白.</p>
+<p>通过只是包装的标签!<code>在</code>WS!<code>我们可以在空格,制表符或换行符的任何位置匹配&quot;hi&quot;:</code>结果就像之前的&quot;hi&quot;,剩下的字符串是&quot;there&quot;!</p>
+<pre><pre class="playpen"><code class="language-rust">named!(get_greeting&lt;&amp;str,&amp;str&gt;,
+    ws!(tag_s!(&quot;hi&quot;))
+);
+
+fn main() {
+    let res = get_greeting(&quot;hi there&quot;);
+    println!(&quot;{:?}&quot;,res);
+}
+// Done(&quot;there&quot;, &quot;hi&quot;)
+</code></pre></pre>
+<p>空格已被跳过. &quot;嗨&quot;很好地匹配,尽管这还不是很有用.</p>
+<p>让我们匹配或_&quot;嗨&quot;或&quot;再见&quot;. _该<code>ALT!</code>宏 (&quot;备用&quot;) 采用分隔符表达式分隔<code>|</code>并匹配_任何_其中. 请注意,您可以在这里使用空格来使解析器函数更易于阅读:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+named!(get_greeting&lt;&amp;str&gt;,
+    ws!(alt!(tag_s!(&quot;hi&quot;) | tag_s!(&quot;bye&quot;)))
+);
+println!(&quot;{:?}&quot;, get_greeting(&quot; hi &quot;));
+println!(&quot;{:?}&quot;, get_greeting(&quot; bye &quot;));
+println!(&quot;{:?}&quot;, get_greeting(&quot;  hola &quot;));
+// Done(&quot;&quot;, &quot;hi&quot;)
+// Done(&quot;&quot;, &quot;bye&quot;)
+// Error(Alt)
+#}</code></pre></pre>
+<p>最后一场比赛失败了,因为没有其他选择匹配&quot;hola&quot;.</p>
+<p>显然我们需要了解这一点<code>IResult</code>键入更进一步,但首先让我们比较这与正则表达式的解决方案:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let greetings = Regex::new(r&quot;\s*(hi|bye)\s*&quot;).expect(&quot;bad regex&quot;);
+    let caps = greetings.captures(&quot; hi &quot;).expect(&quot;match failed&quot;);
+    println!(&quot;{:?}&quot;,caps);
+// Captures({0: Some(&quot; hi &quot;), 1: Some(&quot;hi&quot;)})
+#}</code></pre></pre>
+<p>正则表达式肯定更多_紧凑_!我们需要将' () '放在由'|'分隔的两种可能性中_所以我们会_捕获问候,没有别的. 第一个结果是整个字符串,第二个是匹配的捕获. <code>('|'是正则表达式中的所谓'交替'操作符,这是该动机的动机</code>ALT!宏语法. )</p>
+<p>但这是一个非常简单的正则表达式,它们很快就会变得复杂. 作为一种文字迷你语言,你必须逃避重要的人物如<code>*</code>和<code>(</code>. 如果我想匹配&quot; (hi) &quot;或&quot; (再见) &quot;,则正则表达式变为&quot;\ s&quot;_ ( (喜|再见) ) \ S_&quot;但是Nom解析器只是变成了<code>alt! (tag_s! (&quot; (hi) &quot;) | tag_s! (&quot; (bye) &quot;) )</code>.</p>
+<p>这也是一个重量级的依赖. 在这款相当微弱的i5笔记本电脑上,Nom的例子大约需要0.55秒的时间进行编译,这并不比&quot;Hello world&quot;多得多. 但正则表达式的例子大约需要0.90s. Nom示例的剥离版本生成可执行文件约为0.3Mb (与静态链接的Rust程序一样小) ,而正则表达式为0.8Mb.</p>
+<a class="header" href="nom-intro.zh.html#a一个nom解析器返回" id="a一个nom解析器返回"><h2>一个Nom解析器返回</h2></a>
+<p><a href="http://rust.unhandledexpression.com/nom/enum.IResult.html">IResult</a>与标准有一个有趣的区别<code>结果</code>类型 - 有三种可能性:</p>
+<ul>
+<li><code>完成</code>- 成功 - 您将得到结果和剩余的字节</li>
+<li><code>错误</code>- 未能解析 - 你得到一个错误</li>
+<li><code>不完全</code>- 需要更多数据</li>
+</ul>
+<p>我们可以写一个通用的<code>倾倒</code>函数处理可以调试打印的任何返回值. 这也说明了<code>导致</code>方法返回一个常规<code>结果</code>- 这可能是您将用于大多数情况的方法,因为它返回返回值或错误.</p>
+<pre><pre class="playpen"><code class="language-rust">#[macro_use]
+extern crate nom;
+use nom::IResult;
+use std::str::from_utf8;
+use std::fmt::Debug;
+
+fn dump&lt;T: Debug&gt;(res: IResult&lt;&amp;str,T&gt;) {
+    match res {
+      IResult::Done(rest, value) =&gt; {println!(&quot;Done {:?} {:?}&quot;,rest,value)},
+      IResult::Error(err) =&gt; {println!(&quot;Err {:?}&quot;,err)},
+      IResult::Incomplete(needed) =&gt; {println!(&quot;Needed {:?}&quot;,needed)}
+    }
+}
+
+
+fn main() {
+    named!(get_greeting&lt;&amp;str,&amp;str&gt;,
+        ws!(
+            alt!( tag_s!(&quot;hi&quot;) | tag_s!(&quot;bye&quot;))
+        )
+    );
+
+    dump(get_greeting(&quot; hi &quot;));
+    dump(get_greeting(&quot; bye hi&quot;));
+    dump(get_greeting(&quot;  hola &quot;));
+
+    println!(&quot;result {:?}&quot;, get_greeting(&quot; bye  &quot;).to_result());
+}
+// Done Ok(&quot;&quot;) &quot;hi&quot;
+// Done Ok(&quot;hi&quot;) &quot;bye&quot;
+// Err Alt
+// result Ok(&quot;bye&quot;)
+</code></pre></pre>
+<p>解析器返回任何未解析的文本,并且能够指示它们没有足够的输入字符来决定,对于流解析非常有用. 但通常<code>导致</code>是你的朋友.</p>
+<a class="header" href="nom-intro.zh.html#a合并解析器" id="a合并解析器"><h2>合并解析器</h2></a>
+<p>让我们继续问候示例,并设想问候语包含&quot;嗨&quot;或&quot;再见&quot;,再加上一个名字. <code>NOM ::阿尔法</code>匹配一系列字母字符. 该<code>对!</code>宏将收集匹配两个解析器作为元组的结果:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    named!(full_greeting&lt;&amp;str,(&amp;str,&amp;str)&gt;,
+        pair!(
+            get_greeting,
+            nom::alpha
+        )
+    );
+
+    println!(&quot;result {:?}&quot;, full_greeting(&quot; hi Bob  &quot;).to_result());
+// result Ok((&quot;hi&quot;, &quot;Bob&quot;))
+#}</code></pre></pre>
+<p>现在,进一步想象欢迎会有点害羞或不知道任何人的名字: 让我们使名字可选. 自然,元组的第二个值变成了<code>选项</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    named!(full_greeting&lt;&amp;str, (&amp;str,Option&lt;&amp;str&gt;)&gt;,
+        pair!(
+            get_greeting,
+            opt!(nom::alpha)
+        )
+    );
+
+    println!(&quot;result {:?}&quot;, full_greeting(&quot; hi Bob  &quot;).to_result());
+    println!(&quot;result {:?}&quot;, full_greeting(&quot; bye ?&quot;).to_result());
+// result Ok((&quot;hi&quot;, Some(&quot;Bob&quot;)))
+// result Ok((&quot;bye&quot;, None))
+#}</code></pre></pre>
+<p>请注意,将现有的问候语解析器与分析器合并起来很简单,然后很容易使该名称成为可选项.</p>
+<p>这是Nom的强大力量,这也是它被称为&quot;解析器组合库&quot;的原因. 您可以从更简单的解析器构建复杂的解析器,您可以单独测试它们.  (在这一点上,等价的正则表达式开始看起来像一个Perl程序: 正则表达式不能很好地结合. ) 但是,我们还没有回家并且干燥!<code>full_greeting (&quot;再见&quot;)</code>将会失败<code>不完全</code>错误. Nom知道&quot;再见&quot;后面可能会有一个名字,并希望我们给它更多的数据. 这是怎么一个_流_解析器需要工作,所以你可以按块填充文件块,但是在这里我们需要告诉Nom输入已完成.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    named!(full_greeting&lt;&amp;str,(&amp;str,Option&lt;&amp;str&gt;)&gt;,
+        pair!(
+            get_greeting,
+            opt!(complete!(nom::alpha))
+        )
+    );
+
+    println!(&quot;result {:?}&quot;, full_greeting(&quot; bye &quot;).to_result());
+// result Ok((&quot;bye&quot;, None))
+#}</code></pre></pre>
+<a class="header" href="nom-intro.zh.html#a分析数字" id="a分析数字"><h2>分析数字</h2></a>
+<p>Nom提供了一个功能<code>数字</code>它与一系列数字相匹配. 所以我们使用<code>地图!</code>,将字符串转换为整数,并返回完整的<code>结果</code>类型.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+use nom::digit;
+use std::str::FromStr;
+use std::num::ParseIntError;
+
+named!(int8 &lt;&amp;str, Result&lt;i8,ParseIntError&gt;&gt;,
+    map!(digit, FromStr::from_str)
+);
+
+named!(int32 &lt;&amp;str, Result&lt;i32,ParseIntError&gt;&gt;,
+    map!(digit, FromStr::from_str)
+);
+
+println!(&quot;{:?}&quot;, int8(&quot;120&quot;));
+println!(&quot;{:?}&quot;, int8(&quot;1200&quot;));
+println!(&quot;{:?}&quot;, int8(&quot;x120&quot;));
+println!(&quot;{:?}&quot;, int32(&quot;1202&quot;));
+
+// Done(&quot;&quot;, Ok(120))
+// Done(&quot;&quot;, Err(ParseIntError { kind: Overflow }))
+// Error(Digit)
+// Done(&quot;&quot;, Ok(1202))
+#}</code></pre></pre>
+<p>所以我们得到的是一个解析器<code>IResult</code>包含转换<code>结果</code>- 当然,在这里失败的方式不止一种. 请注意,我们的转换函数的主体具有完全相同的代码;实际转换取决于函数的返回类型.</p>
+<p>整数可能有一个标志. 我们可以将整数作为一对来捕获,其中第一个值可能是一个符号,第二个值可能是后面的任何数字.</p>
+<p>考虑:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+named!(signed_digits&lt;&amp;str, (Option&lt;&amp;str&gt;,&amp;str)&gt;,
+    pair!(
+        opt!(alt!(tag_s!(&quot;+&quot;) | tag_s!(&quot;-&quot;))),  // maybe sign?
+        digit
+    )
+);
+
+println!(&quot;signed {:?}&quot;, signed_digits(&quot;4&quot;));
+println!(&quot;signed {:?}&quot;, signed_digits(&quot;+12&quot;));
+// signed Done(&quot;&quot;, (None, &quot;4&quot;))
+// signed Done(&quot;&quot;, (Some(&quot;+&quot;), &quot;12&quot;))
+#}</code></pre></pre>
+<p>当我们对中间结果不感兴趣时​​,只需要所有的匹配输入<code>认识!</code>是你需要的.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+named!(maybe_signed_digits&lt;&amp;str,&amp;str&gt;,
+    recognize!(signed_digits)
+);
+
+println!(&quot;signed {:?}&quot;, maybe_signed_digits(&quot;+12&quot;));
+// signed Done(&quot;&quot;, &quot;+12&quot;)
+#}</code></pre></pre>
+<p>使用这种技术,我们可以识别浮点数. 我们再次映射到所有这些匹配的字节片的字符串片. <code>元组!</code>是泛化的<code>对!</code>,尽管我们对这里生成的元组不感兴趣. <code>完成!</code>是需要解决我们与不完整的问候时使用的相同问题 - &quot;12&quot;是没有可选浮点部分的有效数字.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+named!(floating_point&lt;&amp;str,&amp;str&gt;,
+    recognize!(
+        tuple!(
+            maybe_signed_digits,
+            opt!(complete!(pair!(
+                tag_s!(&quot;.&quot;),
+                digit
+            ))),
+            opt!(complete!(pair!(
+                alt!(tag_s!(&quot;e&quot;) | tag_s!(&quot;E&quot;)),
+                maybe_signed_digits
+            )))
+        )
+    )
+);
+#}</code></pre></pre>
+<p>通过定义一个小助手宏,我们得到了一些通过测试. 如果测试通过<code>浮点</code>匹配它给出的所有字符串.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+macro_rules! nom_eq {
+    ($p:expr,$e:expr) =&gt; (
+        assert_eq!($p($e).to_result().unwrap(), $e)
+    )
+}
+
+nom_eq!(floating_point, &quot;+2343&quot;);
+nom_eq!(floating_point, &quot;-2343&quot;);
+nom_eq!(floating_point, &quot;2343&quot;);
+nom_eq!(floating_point, &quot;2343.23&quot;);
+nom_eq!(floating_point, &quot;2e20&quot;);
+nom_eq!(floating_point, &quot;2.0e-6&quot;);
+#}</code></pre></pre>
+<p>(虽然有时候宏感觉到a_小_肮脏,让你的测试很漂亮是件好事. ) 然后我们可以解析和转换浮点数.</p>
+<p>在这里,我会告诫大家,并抛弃错误: 请注意,如何逐步构建复杂的解析器,并首先单独测试每个部分.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    named!(float64&lt;f64&gt;,
+        map_res!(floating_point, FromStr::from_str)
+    );
+#}</code></pre></pre>
+<p>这是解析器组合器对正则表达式的强大优势. 这是分而治之的经典编程策略. 通过多个匹配进行操作</p>
+<a class="header" href="nom-intro.zh.html#a我们见面了" id="a我们见面了"><h2>我们见面了</h2></a>
+<p>对!<code>和</code>元组!<code>它将固定数量的匹配捕获为Rust元组.</code>还有</p>
+<p>many0<code>和</code>many1<code>- 他们都捕获无限数量的匹配作为向量.</code>不同的是,第一个可能会捕获&quot;零或多个&quot;,第二个&quot;一个或多个&quot; (如正则表达式之间的差异<code>*</code>与<code>+</code>) 所以<code>many1! (WS! (float64) )</code>会解析&quot;1 2 3&quot;<code>VEC![1.0,2.0,3.0]</code>,但会在空字符串上失败.</p>
+<p><code>fold_many0</code>是一个_减少_操作. 使用二元运算符将匹配值组合为单个值. 例如,这就是Rust人以前如何对迭代器进行求和<code>和</code>加入;这个折叠从一个初始值 (这里是零) 开始_累加器_并保持使用该累加器的值<code>+</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let res = [1,2,3].iter().fold(0,|acc,v| acc + v);
+    println!(&quot;{}&quot;,res);
+    // 6
+#}</code></pre></pre>
+<p>以下是Nom等价物:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    named!(fold_sum&lt;&amp;str,f64&gt;,
+        fold_many1!(
+            ws!(float64),
+            0.0,
+            |acc, v| acc + v
+        )
+    );
+
+    println!(&quot;fold {}&quot;, fold_sum(&quot;1 2 3&quot;).to_result().unwrap());
+    //fold 6
+#}</code></pre></pre>
+<p>到目前为止,我们必须捕获每个表达式,或者只是抓住所有匹配的字节<code>认识!</code>:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    named!(pointf&lt;(f64,&amp;[u8],f64)&gt;,
+        tuple!(
+            float64,
+            tag_s!(&quot;,&quot;),
+            float64
+        )
+    );
+
+    println!(&quot;got {:?}&quot;, nom_res!(pointf,&quot;20,52.2&quot;).unwrap());
+ //got (20, &quot;,&quot;, 52.2)
+#}</code></pre></pre>
+<p>对于更复杂的表达式,捕获所有解析器的结果会导致相当不整洁的类型!我们可以做得更好.</p>
+<p><code>do_parse!</code>让你只提取你感兴趣的值&gt;&gt;<code>- 感兴趣的匹配是形式</code>名称: 解析器<code>.</code>最后,在圆括号中有一个代码块. 我们对该标签的值不感兴趣 (它只能是逗号) ,但我们将两个浮点值分配给用于构建结构的临时值.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    #[derive(Debug)]
+    struct Point {
+        x: f64,
+        y: f64
+    }
+
+    named!(pointf&lt;Point&gt;,
+        do_parse!(
+            first: float64 &gt;&gt;
+            tag_s!(&quot;,&quot;) &gt;&gt;
+            second: float64
+            &gt;&gt;
+            (Point{x: first, y: second})
+        )
+    );
+
+    println!(&quot;got {:?}&quot;, nom_res!(pointf,&quot;20,52.2&quot;).unwrap());
+// got Point { x: 20, y: 52.2 }
+#}</code></pre></pre>
+<p>最后的代码可以是任何Rust表达式. 解析算术表达式</p>
+<a class="header" href="nom-intro.zh.html#a随着必要的背景建立我们可以做简单的算术表达式" id="a随着必要的背景建立我们可以做简单的算术表达式"><h2>随着必要的背景建立,我们可以做简单的算术表达式.</h2></a>
+<p>这是真正无法用正则表达式完成的一个很好的例子. 这个想法是从下往上建立表达式.</p>
+<p>表达式由...组成条款_,这是增加或减少. <em>术语由...组成因素</em>,它们相乘或分开. _而且 (现在) 因素只是浮点数字: 这更准确地表达了我们的定义 - 一个表达式至少包含一个术语,然后包含零个或多个正 - 负项.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    named!(factor&lt;f64&gt;,
+        ws!(float64)
+    );
+
+    named!(term&lt;&amp;str,f64&gt;, do_parse!(
+        init: factor &gt;&gt;
+        res: fold_many0!(
+            tuple!(
+                alt!(tag_s!(&quot;*&quot;) | tag_s!(&quot;/&quot;)),
+                factor
+            ),
+            init,
+            |acc, v:(_,f64)| {
+                if v.0 == &quot;*&quot; {acc * v.1} else {acc / v.1}
+            }
+        )
+        &gt;&gt; (res)
+    ));
+
+    named!(expr&lt;&amp;str,f64&gt;, do_parse!(
+        init: term &gt;&gt;
+        res: fold_many0!(
+            tuple!(
+                alt!(tag_s!(&quot;+&quot;) | tag_s!(&quot;-&quot;)),
+                term
+            ),
+            init,
+            |acc, v:(_,f64)| {
+                if v.0 == &quot;+&quot; {acc + v.1} else {acc - v.1}
+            }
+        )
+        &gt;&gt; (res)
+    ));
+#}</code></pre></pre>
+<p>我们不收集它们,但是折_他们使用适当的操作员. _ (这是Rust不能很好地处理表达式类型的情况之一,所以我们需要一个类型提示. ) 这样做会建立正确的_运算符优先级_-<code>*</code>总是赢得胜利<code>+</code>等等.</p>
+<p>我们在这里需要浮点断言,并且<a href="http://brendanzab.github.io/approx/approx/index.html">有一个箱子</a>.</p>
+<p>将'approx ='0.1.1'行添加到您的Cargo.toml中,然后离开我们:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+#[macro_use]
+extern crate approx;
+...
+    assert_relative_eq!(fold_sum(&quot;1 2 3&quot;).to_result().unwrap(), 6.0);
+#}</code></pre></pre>
+<p>我们来定义一个方便的小测试宏. <code>字符串化!</code>将表达式转换为我们可以输入的字符串文字<code>expr</code>然后将结果与Rust如何评估结果进行比较.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    macro_rules! expr_eq {
+        ($e:expr) =&gt; (assert_relative_eq!(
+            expr(stringify!($e).to_result().unwrap(),
+            $e)
+        )
+    }
+
+    expr_eq!(2.3);
+    expr_eq!(2.0 + 3.0 - 4.0);
+    expr_eq!(2.0*3.0 - 4.0);
+#}</code></pre></pre>
+<p>这非常酷 - 只需几行即可获得表达式评估器!但它变得更好. 我们增加了一个数字的替代方案<code>因子</code>解析器 - 包含在括号内的表达式:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    named!(factor&lt;&amp;str,f64&gt;,
+        alt!(
+            ws!(float64) |
+            ws!(delimited!( tag_s!(&quot;(&quot;), expr, tag_s!(&quot;)&quot;) ))
+        )
+    );
+
+    expr_eq!(2.2*(1.1 + 4.5)/3.4);
+    expr_eq!((1.0 + 2.0)*(3.0 + 4.0*(5.0 + 6.0)));
+#}</code></pre></pre>
+<p>凉爽的是现在定义了表达式_递归_在表达方面!</p>
+<p>特别的魔力<code>分隔!</code>是括号可以嵌套 -  Nom确保括号匹配.</p>
+<p>我们现在已经超越了正则表达式的能力,0.5Mb的被剥离可执行文件仍然是&quot;hello world&quot;正则表达式程序的一半.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="object-orientation.zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="pain-points.zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="object-orientation.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="pain-points.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+    </body>
+</html>

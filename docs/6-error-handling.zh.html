@@ -1,0 +1,542 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>错误处理 - A Gentle Introduction to Rust</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Introduction to the Rust language, standard library and ecosystem">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="_FontAwesome/css/font-awesome.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+
+    </head>
+    <body class="light">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html" class="active"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">A Gentle Introduction to Rust</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="6-error-handling.zh.html#a错误处理" id="a错误处理"><h1>错误处理</h1></a>
+<a class="header" href="6-error-handling.zh.html#a基本的错误处理" id="a基本的错误处理"><h2>基本的错误处理</h2></a>
+<p>如果你不能使用问号操作符来实现快乐,那么在生锈中的错误处理可能很笨拙,我们需要返回一个<code>结果</code>它可以接受任何错误. 所有错误都会实现这个特性<code>的std ::错误::错误</code>, 所以_任何_错误可以转换成一个<code>框&lt;错误&gt;</code>.</p>
+<p>说我们需要处理_都_从转换字符串到数字的I / O错误和错误:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// box-error.rs
+use std::fs::File;
+use std::io::prelude::*;
+use std::error::Error;
+
+fn run(file: &amp;str) -&gt; Result&lt;i32,Box&lt;Error&gt;&gt; {
+    let mut file = File::open(file)?;
+    let mut contents = String::new();
+    file.read_to_string(&amp;mut contents)?;
+    Ok(contents.trim().parse()?)
+}
+#}</code></pre></pre>
+<p>所以这是I / O错误的两个问号 (无法打开文件,或无法读取为字符串) 以及转换错误的一个问号. 最后,我们将结果包装在内<code>好</code>.rust可以从返回类型中得出结论<code>解析</code>应该转换为<code>i32</code>.</p>
+<p>很容易为此创建一个快捷方式<code>结果</code>类型:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+type BoxResult&lt;T&gt; = Result&lt;T,Box&lt;Error&gt;&gt;;
+#}</code></pre></pre>
+<p>但是,我们的程序将具有特定于应用程序的错误条件,并且Sowe需要创建我们自己的错误类型. 基本要求很简单:</p>
+<ul>
+<li>可以实施<code>调试</code></li>
+<li>必须执行<code>显示</code></li>
+<li>必须执行<code>错误</code></li>
+</ul>
+<p>否则,你的错误可以做到它喜欢的东西.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// error1.rs
+use std::error::Error;
+use std::fmt;
+
+#[derive(Debug)]
+struct MyError {
+    details: String
+}
+
+impl MyError {
+    fn new(msg: &amp;str) -&gt; MyError {
+        MyError{details: msg.to_string()}
+    }
+}
+
+impl fmt::Display for MyError {
+    fn fmt(&amp;self, f: &amp;mut fmt::Formatter) -&gt; fmt::Result {
+        write!(f,&quot;{}&quot;,self.details)
+    }
+}
+
+impl Error for MyError {
+    fn description(&amp;self) -&gt; &amp;str {
+        &amp;self.details
+    }
+}
+
+// a test function that returns our error result
+fn raises_my_error(yes: bool) -&gt; Result&lt;(),MyError&gt; {
+    if yes {
+        Err(MyError::new(&quot;borked&quot;))
+    } else {
+        Ok(())
+    }
+}
+#}</code></pre></pre>
+<p>打字<code>结果&lt;t时,myerror&gt;</code>变得单调乏味,许多防锈模块定义它们自己的模块<code>结果</code>- 例如<code>IO ::结果&lt;T&gt;</code>是简短的<code>结果&lt;t时,IO ::误差&gt;</code>.</p>
+<p>在下一个例子中,当一个字符串不能被解析为一个浮点数时,我们需要处理特定的错误.</p>
+<p>现在这样<code>?</code>工作寻找从错误的转换_表达_到必须的错误_回_. 并且这个转换由表达<code>从</code>特征. <code>框&lt;错误&gt;</code>像它一样工作,因为它实现<code>从</code>为所有类型实施<code>错误</code>.</p>
+<p>此时您可以继续使用便捷的别名<code>BoxResult</code>并且赶上所有事情;会有我们的错误转化为<code>框&lt;错误&gt;</code>这对小型应用程序来说是一个很好的选择. 但我想显示其他错误可以明确地与我们的错误类型合作.</p>
+<p><code>ParseFloatError</code>器物<code>错误</code>所以<code>描述 ()</code>被定义为.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+use std::num::ParseFloatError;
+
+impl From&lt;ParseFloatError&gt; for MyError {
+    fn from(err: ParseFloatError) -&gt; Self {
+        MyError::new(err.description())
+    }
+}
+
+// and test!
+fn parse_f64(s: &amp;str, yes: bool) -&gt; Result&lt;f64,MyError&gt; {
+    raises_my_error(yes)?;
+    let x: f64 = s.parse()?;
+    Ok(x)
+}
+#}</code></pre></pre>
+<p>首先<code>?</code>是好的 (一种类型总是转换为自己的<code>从</code>) 和第二个<code>?</code>将转换<code>ParseFloatError</code>至<code>MyError</code>.</p>
+<p>结果如下:</p>
+<pre><pre class="playpen"><code class="language-rust">fn main() {
+    println!(&quot; {:?}&quot;, parse_f64(&quot;42&quot;,false));
+    println!(&quot; {:?}&quot;, parse_f64(&quot;42&quot;,true));
+    println!(&quot; {:?}&quot;, parse_f64(&quot;?42&quot;,false));
+}
+//  Ok(42)
+//  Err(MyError { details: &quot;borked&quot; })
+//  Err(MyError { details: &quot;invalid float literal&quot; })
+</code></pre></pre>
+<p>不要太复杂,虽然有点啰嗦. 该繁琐的一点是有towrite<code>从</code>所有其他错误类型都需要进行转换<code>MyError</code>- 或者你只是依靠<code>框&lt;错误&gt;</code>. 新手会因为多种方式在铁锈中做同样的事情而感到困惑;总是有另一种方法去剥离鳄梨 (或者如果你感觉嗜血,那么就去皮肤上) . 灵活性的代价有很多选择. 200行程序的错误处理可以比大型应用程序简单得多. 如果您想将您的宝贵物品作为货物箱打包,那么错误处理就变得至关重要.</p>
+<p>目前,问号运算符仅适用于<code>结果</code>,不<code>选项</code>,这是一个功能,而不是一个限制. <code>选项</code>有一个<code>ok_or_else</code>它将自己转换成一个<code>结果</code>例如,说我们有一个<code>HashMap中</code>并且如果没有定义键则必须失败:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let val = map.get(&quot;my_key&quot;).ok_or_else(|| MyError::new(&quot;my_key not defined&quot;))?;
+#}</code></pre></pre>
+<p>现在这里返回的错误是完全清楚的! (该表单使用闭包,因此只有在查找失败时才会创建错误值. )</p>
+<a class="header" href="6-error-handling.zh.html#a简单错误的简单错误" id="a简单错误的简单错误"><h2>简单错误的简单错误</h2></a>
+<p>该<a href="https://docs.rs/simple-error/0.1.9/simple_error/">简单的错误</a>crate为你提供基于字符串的基本错误类型,正如我们在这里定义的那样,以及一些方便的宏. 就像任何错误一样,它可以正常工作<code>框&lt;错误&gt;</code>:</p>
+<pre><pre class="playpen"><code class="language-rust">#[macro_use]
+extern crate simple_error;
+
+use std::error::Error;
+
+type BoxResult&lt;T&gt; = Result&lt;T,Box&lt;Error&gt;&gt;;
+
+fn run(s: &amp;str) -&gt; BoxResult&lt;i32&gt; {
+    if s.len() == 0 {
+        bail!(&quot;empty string&quot;);
+    }
+    Ok(s.trim().parse()?)
+}
+
+fn main() {
+    println!(&quot;{:?}&quot;, run(&quot;23&quot;));
+    println!(&quot;{:?}&quot;, run(&quot;2x&quot;));
+    println!(&quot;{:?}&quot;, run(&quot;&quot;));
+}
+// Ok(23)
+// Err(ParseIntError { kind: InvalidDigit })
+// Err(StringError(&quot;empty string&quot;))
+</code></pre></pre>
+<p><code>保释! (S)</code>扩展到<code>返回simpleerror :: new (s) .into () ;</code>- 尽早返回转换_成_接收类型.</p>
+<p>你需要使用<code>BoxResult</code>用于混合<code>SimpleError</code>键入其他错误,因为我们无法执行<code>从</code>因为它的特点和类型都来自其他箱子.</p>
+<a class="header" href="6-error-handling.zh.html#a严重错误的错误链" id="a严重错误的错误链"><h2>严重错误的错误链</h2></a>
+<p>对于非平凡的应用程序有一个看点<a href="http://brson.github.io/2016/11/30/starting-with-error-chain">error_chain</a>crate.a小宏魔法可以去锈很长的路...</p>
+<p>创建一个二进制包<code>货物新--bin测试错误链</code>并改变到这个目录. 编辑<code>Cargo.toml</code>并添加<code>错误链=&quot;0.8.1&quot;</code>到最后.</p>
+<p>什么<strong>错误链</strong>为你做的是创建我们手动执行错误类型所需的所有定义;创建一个结构体,并实现必要的特性: <code>显示</code>,<code>调试</code>和<code>错误</code>它也是默认的实现<code>从</code>所以字符串可以转换成错误.</p>
+<p>我们的第一<code>SRC / main.rs</code>文件看起来像这样. 所有的主要程序都是通话<code>跑</code>,打印出错误,并用非零退出代码结束程序. 宏<code>error_chain</code>生成所需的所有定义<code>错误</code>模块 - 在一个更大的程序中,你会把它放在它自己的文件中. 我们需要把所有东西都放进去<code>错误</code>回到全局范围,因为我们的代码将需要生成生成的特征. 默认情况下,会有一个<code>错误</code>结构和a<code>结果</code>用thaterror定义.</p>
+<p>这里我们也要求<code>从</code>要这样做<code>的std :: IO ::错误</code>将使用转换为我的错误类型<code>foreign_links</code>:</p>
+<pre><pre class="playpen"><code class="language-rust">#[macro_use]
+extern crate error_chain;
+
+mod errors {
+    error_chain!{
+        foreign_links {
+            Io(::std::io::Error);
+        }
+    }
+}
+use errors::*;
+
+fn run() -&gt; Result&lt;()&gt; {
+    use std::fs::File;
+
+    File::open(&quot;file&quot;)?;
+
+    Ok(())
+}
+
+
+fn main() {
+    if let Err(e) = run() {
+        println!(&quot;error: {}&quot;, e);
+
+        std::process::exit(1);
+    }
+}
+// error: No such file or directory (os error 2)
+</code></pre></pre>
+<p>'foreign_links'让我们的生活更轻松,因为问号操作员现在知道如何转换<code>的std :: IO ::错误</code>进入我们的<code>错误::错误</code>.  (在引擎盖下,宏正在创建一个<code>从&lt;性病:: IO ::误差&gt;</code>转换,正如前面所述. )</p>
+<p>所有的行动都发生在<code>跑</code>;让我们打印出作为第一个程序参数给出的文件的前10行. 有可能也可能不会有这样的论点,这不一定是错误的. 这里我们要转换一个<code>选项&lt;字符串&gt;</code>变成一个<code>结果&lt;字符串&gt;</code>. 那里有两个<code>选项</code>做这种转换的方法,我选择了最简单的一种. 我们的<code>错误</code>类型的工具<code>从</code>对于<code>&amp;STR</code>,所以用一个简单的文本信息就很容易发生错误.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn run() -&gt; Result&lt;()&gt; {
+    use std::env::args;
+    use std::fs::File;
+    use std::io::BufReader;
+    use std::io::prelude::*;
+
+    let file = args().skip(1).next()
+        .ok_or(Error::from(&quot;provide a file&quot;))?;
+
+    let f = File::open(&amp;file)?;
+    let mut l = 0;
+    for line in BufReader::new(f).lines() {
+        let line = line?;
+        println!(&quot;{}&quot;, line);
+        l += 1;
+        if l == 10 {
+            break;
+        }
+    }
+
+    Ok(())
+}
+#}</code></pre></pre>
+<p>(再次) 有一个有用的小宏<code>保释!</code>为'抛出'错误. 替代方案<code>ok_or</code>方法可能是:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let file = match args().skip(1).next() {
+        Some(s) =&gt; s,
+        None =&gt; bail!(&quot;provide a file&quot;)
+    };
+#}</code></pre></pre>
+<p>喜欢<code>?</code>它做了一个_提前回报_.</p>
+<p>返回的错误包含一个枚举<code>ErrorKind</code>,这使我们能够区分各种各样的错误. 总是有一个变体<code>味精</code> (当你说<code>错误::从 (STR)</code>) 和<code>foreign_links</code>已宣布<code>Io</code>它包装I / O错误:</p>
+<pre><pre class="playpen"><code class="language-rust">fn main() {
+    if let Err(e) = run() {
+        match e.kind() {
+            &amp;ErrorKind::Msg(ref s) =&gt; println!(&quot;msg {}&quot;,s),
+            &amp;ErrorKind::Io(ref s) =&gt; println!(&quot;io {}&quot;,s),
+        }
+        std::process::exit(1);
+    }
+}
+// $ cargo run
+// msg provide a file
+// $ cargo run foo
+// io No such file or directory (os error 2)
+</code></pre></pre>
+<p>添加新的错误很简单. 添加一个<code>错误</code>部分<code>error_chain!</code>宏:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    error_chain!{
+        foreign_links {
+            Io(::std::io::Error);
+        }
+
+        errors {
+            NoArgument(t: String) {
+                display(&quot;no argument provided: '{}'&quot;, t)
+            }
+        }
+
+    }
+#}</code></pre></pre>
+<p>这定义了如何<code>显示</code>适用于这种新的错误. 现在我们可以更具体地处理'无争论'的错误,喂养<code>errorkind :: noargument</code>一个<code>串</code>值:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let file = args().skip(1).next()
+        .ok_or(ErrorKind::NoArgument(&quot;filename needed&quot;.to_string()))?;
+#}</code></pre></pre>
+<p>现在有一个额外的<code>ErrorKind</code>您必须匹配的变体:</p>
+<pre><pre class="playpen"><code class="language-rust">fn main() {
+    if let Err(e) = run() {
+        println!(&quot;error {}&quot;,e);
+        match e.kind() {
+            &amp;ErrorKind::Msg(ref s) =&gt; println!(&quot;msg {}&quot;, s),
+            &amp;ErrorKind::Io(ref s) =&gt; println!(&quot;io {}&quot;, s),
+            &amp;ErrorKind::NoArgument(ref s) =&gt; println!(&quot;no argument {:?}&quot;, s),
+        }
+        std::process::exit(1);
+    }
+}
+// cargo run
+// error no argument provided: 'filename needed'
+// no argument &quot;filename needed&quot;
+</code></pre></pre>
+<p>一般来说,尽可能使错误尽可能具有特定的意义,_尤其_如果这是一个库函数!这种match-on-kind技术几乎相当于传统的异常处理,您可以在a中匹配异常类型<code>抓住</code>要么<code>除</code>块.</p>
+<p>综上所述,<strong>错误链</strong>创建一个类型<code>错误</code>为你定义<code>导致&lt;T&gt;</code>成为<code>的std ::结果::结果&lt;t时,误差&gt;</code>. <code>错误</code>包含一个枚举<code>ErrorKind</code>并且默认情况下有一个变体<code>味精</code>用于从字符串创建的错误. 你用来定义外部错误<code>foreign_links</code>这有两件事. 首先,它创建一个新的<code>ErrorKind</code>变种. 其次,它定义了<code>从</code>在这些外部错误,所以他们可以转换为无辜的. 新的错误变体可以很容易地添加. 许多恼人的样板代码被淘汰.</p>
+<a class="header" href="6-error-handling.zh.html#a链接错误" id="a链接错误"><h2>链接错误</h2></a>
+<p>但这个箱子提供的非常酷的东西是_错误链接_.</p>
+<p>作为一个_库用户_,当一个方法只是'抛出'一个通用的I / O错误时,这是​​令人烦恼的. 好吧,它不能打开一个文件,很好,但是什么文件?基本上,这个信息对我有什么用处?</p>
+<p><code>error_chain</code>不_错误链接_这有助于解决过度通用错误的问题. 当wetry打开文件时,我们可以懒洋洋地依靠转换<code>IO ::错误</code>运用<code>?</code>, 要么_链_错误.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// non-specific error
+let f = File::open(&amp;file)?;
+
+// a specific chained error
+let f = File::open(&amp;file).chain_err(|| &quot;unable to read the damn file&quot;)?;
+#}</code></pre></pre>
+<p>这里是该程序的新版本_没有_导入'外国'错误,只是默认值:</p>
+<pre><pre class="playpen"><code class="language-rust">#[macro_use]
+extern crate error_chain;
+
+mod errors {
+    error_chain!{
+    }
+
+}
+use errors::*;
+
+fn run() -&gt; Result&lt;()&gt; {
+    use std::env::args;
+    use std::fs::File;
+    use std::io::BufReader;
+    use std::io::prelude::*;
+
+    let file = args().skip(1).next()
+        .ok_or(Error::from(&quot;filename needed&quot;))?;
+
+    ///////// chain explicitly! ///////////
+    let f = File::open(&amp;file).chain_err(|| &quot;unable to read the damn file&quot;)?;
+
+    let mut l = 0;
+    for line in BufReader::new(f).lines() {
+        let line = line.chain_err(|| &quot;cannot read a line&quot;)?;
+        println!(&quot;{}&quot;, line);
+        l += 1;
+        if l == 10 {
+            break;
+        }
+    }
+
+    Ok(())
+}
+
+
+fn main() {
+    if let Err(e) = run() {
+        println!(&quot;error {}&quot;, e);
+
+        /////// look at the chain of errors... ///////
+        for e in e.iter().skip(1) {
+            println!(&quot;caused by: {}&quot;, e);
+        }
+
+        std::process::exit(1);
+    }
+}
+// $ cargo run foo
+// error unable to read the damn file
+// caused by: No such file or directory (os error 2)
+</code></pre></pre>
+<p>所以<code>chain_err</code>方法接受原始错误,并创建一个包含原始错误的新错误 - 这可以无限期地继续. 预计关闭将返回任何可能的值_转换_进入错误.</p>
+<p>生锈的宏可以明显地为您节省大量的打字工作. <code>错误链</code>甚至提供了一个取代整个主程序的捷径:</p>
+<pre><pre class="playpen"><code class="language-rust">quick_main!(run);
+</code></pre></pre>
+<p>(<code>跑</code>无论如何,所有的行动都是在那里进行的. )</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="5-stdlib-containers.zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="7-shared-and-networking.zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="5-stdlib-containers.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="7-shared-and-networking.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+    </body>
+</html>

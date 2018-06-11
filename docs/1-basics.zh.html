@@ -1,0 +1,1126 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>基本 - A Gentle Introduction to Rust</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Introduction to the Rust language, standard library and ecosystem">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="_FontAwesome/css/font-awesome.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+
+    </head>
+    <body class="light">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html" class="active"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">A Gentle Introduction to Rust</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="1-basics.zh.html#a基本" id="a基本"><h1>基本</h1></a>
+<a class="header" href="1-basics.zh.html#a你好世界" id="a你好世界"><h2>你好,世界!</h2></a>
+<p>自从编写第一个C版本以来,&quot;hello world&quot;的最初目的是测试编译器并运行一个实际的程序.</p>
+<pre><pre class="playpen"><code class="language-rust">// hello.rs
+fn main() {
+    println!(&quot;Hello, World!&quot;);
+}
+</code></pre></pre>
+<pre><code>$ rustc hello.rs
+$ ./hello
+Hello, World!
+</code></pre>
+<p>Rust是一种带分号的花括号语言,C ++风格的评论和a<code>主要</code>功能 - 迄今为止,非常熟悉. 感叹号表明这是一个_宏_呼叫. 对于C ++程序员来说,这可能是一个关闭,因为它们使用了非常愚蠢的C宏 - 但我可以确保这些宏能够更强大和更理智.</p>
+<p>对于其他任何人来说,它可能是&quot;很棒,现在我必须记得何时该说砰!&quot;. 但是,编译器非常有用;如果你忽略了那个惊叹号,你会得到:</p>
+<pre><code>error[E0425]: unresolved name `println`
+ --&gt; hello2.rs:2:5
+  |
+2 |     println(&quot;Hello, World!&quot;);
+  |     ^^^^^^^ did you mean the macro `println!`?
+</code></pre>
+<p>学习一门语言意味着要熟悉它的错误. 试着看看编译器是一个严格但友好的帮手而不是电脑_叫喊_在你身上,因为你在开始时会看到很多红墨水. 对于编程人员来说,你的程序比在实际的人类面前炸毁要好得多.</p>
+<p>下一步是介绍一个_变量_:</p>
+<pre><pre class="playpen"><code class="language-rust">// let1.rs
+fn main() {
+    let answer = 42;
+    println!(&quot;Hello {}&quot;, answer);
+}
+</code></pre></pre>
+<p>拼写错误是_编_错误,而不是类似Python或JavaScript等动态语言的运行时错误. 这将为您节省很多压力!如果我写了'answr'而不是'answer',编译器实际上是_不错_关于它:</p>
+<pre><code>4 |     println!(&quot;Hello {}&quot;, answr);
+  |                         ^^^^^ did you mean `answer`?
+</code></pre>
+<p>该<code>调用println!</code>宏需要一个<a href="https://doc.rust-lang.org/std/fmt/index.html">格式字符串</a>和一些价值观;它与Python 3使用的格式非常相似.</p>
+<p>另一个非常有用的宏是<code>ASSERT_EQ!</code>. 这是在Rust中进行测试的主力;您_断言_两件事必须相等,如果不是,<em>恐慌</em>.</p>
+<pre><pre class="playpen"><code class="language-rust">// let2.rs
+fn main() {
+    let answer = 42;
+    assert_eq!(answer,42);
+}
+</code></pre></pre>
+<p>这不会产生任何输出.</p>
+<pre><code>thread 'main' panicked at
+'assertion failed: `(left == right)` (left: `42`, right: `40`)',
+let2.rs:4
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+</code></pre>
+<p>但改变42 - 40:_运行时错误_在生锈.</p>
+<a class="header" href="1-basics.zh.html#a循环和得" id="a循环和得"><h2>循环和得</h2></a>
+<p>有什么有趣的可以做不止一次:</p>
+<pre><pre class="playpen"><code class="language-rust">// for1.rs
+fn main() {
+    for i in 0..5 {
+        println!(&quot;Hello {}&quot;, i);
+    }
+}
+</code></pre></pre>
+<p>的_范围_不包容,所以呢<code>我</code>从0到4. _这是方便alanguage中_诸如数组从0.</p>
+<p>和有趣的事情要做_有条件地_:</p>
+<pre><pre class="playpen"><code class="language-rust">// for2.rs
+fn main() {
+    for i in 0..5 {
+        if i % 2 == 0 {
+            println!(&quot;even {}&quot;, i);
+        } else {
+            println!(&quot;odd {}&quot;, i);
+        }
+    }
+}
+</code></pre></pre>
+<pre><code>even 0
+odd 1
+even 2
+odd 3
+even 4
+</code></pre>
+<p><code>我% 2</code>如果2可以分为是零<code>我</code>清晰地;_锈使用c风格的运营商. _有_必须_绕着街区使用花括号.</p>
+<p>这个做了同样的事情,写在一个更有趣的方式:</p>
+<pre><pre class="playpen"><code class="language-rust">// for3.rs
+fn main() {
+    for i in 0..5 {
+        let even_odd = if i % 2 == 0 {&quot;even&quot;} else {&quot;odd&quot;};
+        println!(&quot;{} {}&quot;, even_odd, i);
+    }
+}
+</code></pre></pre>
+<p>传统上,编程语言_声明_ (喜欢<code>如果</code>) 和_表达式_ (喜欢<code>1 + I</code>) . 在鲁斯特里,几乎所有的东西都有价值并且可以表达. 严重丑陋的C'三元操作符'<code>i%2 == 0?&quot;偶&quot;: &quot;奇&quot;</code>不需要.</p>
+<p>请注意,这些块中没有任何分号.</p>
+<a class="header" href="1-basics.zh.html#a添加事物" id="a添加事物"><h2>添加事物</h2></a>
+<p>计算机非常擅长算术. 这是第一次尝试添加从0到4的所有数字:</p>
+<pre><pre class="playpen"><code class="language-rust">// add1.rs
+fn main() {
+    let sum = 0;
+    for i in 0..5 {
+        sum += i;
+    }
+    println!(&quot;sum is {}&quot;, sum);
+}
+</code></pre></pre>
+<p>但它没有编译:</p>
+<pre><code>error[E0384]: re-assignment of immutable variable `sum`
+ --&gt; add1.rs:5:9
+3 |     let sum = 0;
+  |         --- first assignment to `sum`
+4 |     for i in 0..5 {
+5 |         sum += i;
+  |         ^^^^^^^^ re-assignment of immutable variable
+</code></pre>
+<p>&quot;不可变&quot;?一个变量不能_变化_?<code>让</code>默认变量只能在声明时赋值. 添加魔术字<code>mut</code> (_请_makethis变量可变) 的诀窍:</p>
+<pre><pre class="playpen"><code class="language-rust">// add2.rs
+fn main() {
+    let mut sum = 0;
+    for i in 0..5 {
+        sum += i;
+    }
+    println!(&quot;sum is {}&quot;, sum);
+}
+</code></pre></pre>
+<p>当来自其他语言时,这可能令人费解,其中默认情况下变量可以被重写. 什么使得某个&quot;可变&quot;的东西是它在运行时被分配了一个计算值 - 这不是一个_不变_. 这也是这个词在数学中的用法,就像我们说'小n是S中最大的数字'.</p>
+<p>声明变量是有原因的_只读_默认. 在更大的程序中,很难跟踪写入的地方. 所以Rust能够明确地表现出类似于可变性 ('写入能力') 的东西. 语言中有很多聪明,但它试图不隐藏任何东西.</p>
+<p>Rug既是静态类型又是强类型的,它们通常是混淆的,但是考虑C (静态但弱类型) 和Python (动态但强类型) . 在静态类型中,类型在编译时是已知的,而动态类型仅在运行时知道.</p>
+<p>然而,此刻,它感觉像是生锈了. _躲藏_那些类型来自你. 究竟是什么类型?<code>我</code>?编译器可以从0开始,_类型推断_并提出<code>i32</code> (四字节有符号整数) .</p>
+<p>让我们做一个改变<code>零</code>进入之内<code>零</code>. 然后我们得到错误:</p>
+<pre><code>error[E0277]: the trait bound `{float}: std::ops::AddAssign&lt;{integer}&gt;` is not satisfied
+ --&gt; add3.rs:5:9
+  |
+5 |         sum += i;
+  |         ^^^^^^^^ the trait `std::ops::AddAssign&lt;{integer}&gt;` is not implemented for `{float}`
+  |
+</code></pre>
+<p>好了,蜜月结束了: 这意味着什么?每个操作符 (类) <code>+=</code>与A对应_特质_这是一个抽象的接口,必须为每种具体的类型来实现. 稍后我们将详细地处理特性,但是这里您需要知道的是<code>附加赋值</code>实现该特性的名称<code>+=</code>运算符,错误是说浮点数不能实现整数的这个运算符.  (运算符特性的完整列表) <a href="https://doc.rust-lang.org/std/ops/index.html">在这里</a>)</p>
+<p>同样,Rust喜欢显式ℴℴ它不会默默地把那个整数转换成一个浮标.</p>
+<p>我们必须_铸造_这个值显式地一个浮点值.</p>
+<pre><pre class="playpen"><code class="language-rust">// add3.rs
+fn main() {
+    let mut sum = 0.0;
+    for i in 0..5 {
+        sum += i as f64;
+    }
+    println!(&quot;sum is {}&quot;, sum);
+}
+</code></pre></pre>
+<a class="header" href="1-basics.zh.html#a函数类型是明确的" id="a函数类型是明确的"><h2>函数类型是明确的</h2></a>
+<p>_功能_编译器是一个地方不会为你工作类型.</p>
+<p>这实际上是一个深思熟虑的决定,因为语言,像Haskell havesuch强大的类型推断,几乎没有显式的类型名称.</p>
+<pre><pre class="playpen"><code class="language-rust">// fun1.rs
+
+fn sqr(x: f64) -&gt; f64 {
+    return x * x;
+}
+
+fn main() {
+    let res = sqr(2.0);
+    println!(&quot;square is {}&quot;, res);
+}
+</code></pre></pre>
+<p>'sactually好Haskell风格放在函数的显式类型签名.</p>
+<p>这个总是生锈需要. <code>2.0</code>与<code>2</code>然后就会明显错误:</p>
+<pre><code>8 |     let res = sqr(2);
+  |                   ^ expected f64, found integral variable
+  |
+</code></pre>
+<p>你很少会看到函数使用<code>返回</code>声明.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn sqr(x: f64) -&gt; f64 {
+    x * x
+}
+#}</code></pre></pre>
+<p>Moreoften,它会像这样:<code>{ }</code>itslast表达式的值,就像if-as-an-expression.</p>
+<p>因为分号插入半自动生成由人类手指,可以添加ithere并得到以下错误:</p>
+<pre><code>  |
+3 | fn sqr(x: f64) -&gt; f64 {
+  |                       ^ expected f64, found ()
+  |
+  = note: expected type `f64`
+  = note:    found type `()`
+help: consider removing this semicolon:
+ --&gt; fun2.rs:4:8
+  |
+4 |     x * x;
+  |       ^
+</code></pre>
+<p>的<code>()</code>类型是空的类型,没有什么结果,<code>无效</code>零,什么都没有. _一切Rusthas值,但有时它只是没有. _编译器知道这是常见的错误,实际上_该死的不寻常的_这是).</p>
+<p>这种不能回转表达风格的几个例子:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// absolute value of a floating-point number
+fn abs(x: f64) -&gt; f64 {
+    if x &gt; 0.0 {
+        x
+    } else {
+        -x
+    }
+}
+
+// ensure the number always falls in the given range
+fn clamp(x: f64, x1: f64, x2: f64) -&gt; f64 {
+    if x &lt; x1 {
+        x1
+    } else if x &gt; x2 {
+        x2
+    } else {
+        x
+    }
+}
+#}</code></pre></pre>
+<p>它不是错误的使用<code>返回</code>,但没有它,代码就会更干净. 你仍然会使用<code>返回</code>对于_提前回来_从一个函数.</p>
+<p>一些操作可以被优雅地表达_递归_:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn factorial(n: u64) -&gt; u64 {
+    if n == 0 {
+        1
+    } else {
+        n * factorial(n-1)
+    }
+}
+#}</code></pre></pre>
+<p>起初这可能有些奇怪,然后最好用铅笔和纸质材料制作一些例子. 通常不是最多的_高效_然而,这样做的方式.</p>
+<p>值也可以通过_参考_. 一个参考是由创建<code>&amp;</code>和_取消引用_通过<code>*</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">fn by_ref(x: &amp;i32) -&gt; i32{
+    *x + 1
+}
+
+fn main() {
+    let i = 10;
+    let res1 = by_ref(&amp;i);
+    let res2 = by_ref(&amp;41);
+    println!(&quot;{} {}&quot;, res1,res2);
+}
+// 11 42
+</code></pre></pre>
+<p>如果你想要一个函数来修改它的一个参数呢?输入_可变引用_:</p>
+<pre><pre class="playpen"><code class="language-rust">// fun4.rs
+
+fn modifies(x: &amp;mut f64) {
+    *x = 1.0;
+}
+
+fn main() {
+    let mut res = 0.0;
+    modifies(&amp;mut res);
+    println!(&quot;res is {}&quot;, res);
+}
+</code></pre></pre>
+<p>这比C ++更像C ++. 你必须明确地传递参数 (与<code>&amp;</code>) 和明确_提领_同<code>*</code>. 然后投掷<code>穆特</code>因为它不是默认的.  (我一直觉得C++引用太容易错过C相比. )</p>
+<p>基本上,锈是引入一些_摩擦_这里,并不是那么巧妙地推动你直接从函数返回值. 幸运的是,生锈的方式表达了&quot;操作成功,结果就是这样&quot;. <code>MUT</code>不需要那么频繁. 当我们有一个大对象并且不想复制它时,传递引用是很重要的.</p>
+<p>变量样式后的类型适用于<code>让</code>同样,当你真的想改变变量的类型:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let bigint: i64 = 0;
+#}</code></pre></pre>
+<a class="header" href="1-basics.zh.html#a学习在哪里找到绳索" id="a学习在哪里找到绳索"><h2>学习在哪里找到绳索</h2></a>
+<p>现在是开始使用文档的时候了. 这将安装在您的机器上,您可以使用<code>斯塔普博士</code>在浏览器中打开它.</p>
+<p>注意_搜索_在顶部,因为这将是你的朋友;它完全离线运行.</p>
+<p>假设我们想知道数学函数在哪里,所以搜索&quot;COS&quot;. 前两个命中显示它为单精度和双精度浮点数字定义. 它定义在_价值本身_作为一种方法,像这样:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let pi: f64 = 3.1416;
+let x = pi/2.0;
+let cosine = x.cos();
+#}</code></pre></pre>
+<p>结果将是零;我们显然需要一个更权威的PIN!</p>
+<p>(为什么我们需要一个明确的<code>f64</code>类型?因为没有它,常数也可以. <code>f32</code>或<code>f64</code>,这些都是非常不同的. )</p>
+<p>让我引用的例子<code>因为</code>,但写为一个完整的程序(<code>维护!</code>的表弟<code>assert_eq !</code>;</p>
+<pre><pre class="playpen"><code class="language-rust">fn main() {
+    let x = 2.0 * std::f64::consts::PI;
+
+    let abs_difference = (x.cos() - 1.0).abs();
+
+    assert!(abs_difference &lt; 1e-10);
+}
+</code></pre></pre>
+<p><code>表达式必须是真实的):</code>是一口!<code>::</code>意味着同样的在c++中,(通常使用&quot;. <em>在其他语言)ℴℴ这是一个</em>. <code>我们从第二个打击getthis全名搜寻</code>.</p>
+<p>到目前为止,我们的小锈项目一直免费<code>进口</code>和<code>包括</code>东西会慢下来的讨论&quot;Hello World&quot;程序. <code>让我们让这个程序可读性更强</code>声明:</p>
+<pre><pre class="playpen"><code class="language-rust">use std::f64::consts;
+
+fn main() {
+    let x = 2.0 * consts::PI;
+
+    let abs_difference = (x.cos() - 1.0).abs();
+
+    assert!(abs_difference &lt; 1e-10);
+}
+</code></pre></pre>
+<p>为什么不现在我们需要这样做吗?<code>这是因为生锈使很多基本功能可见withoutexplicit</code>语句通过生锈_前奏_.</p>
+<a class="header" href="1-basics.zh.html#a数组和片" id="a数组和片"><h2>数组和片</h2></a>
+<p>所有静态类型的语言都有_阵列_,这些价值包装着鼻子到尾巴的记忆. 数组是_索引_从零开始:</p>
+<pre><pre class="playpen"><code class="language-rust">// array1.rs
+fn main() {
+    let arr = [10, 20, 30, 40];
+    let first = arr[0];
+    println!(&quot;first {}&quot;, first);
+
+    for i in 0..4 {
+        println!(&quot;[{}] = {}&quot;, i,arr[i]);
+    }
+    println!(&quot;length {}&quot;, arr.len());
+}
+</code></pre></pre>
+<p>输出是:</p>
+<pre><code>first 10
+[0] = 10
+[1] = 20
+[2] = 30
+[3] = 40
+length 4
+</code></pre>
+<p>在这种情况下,Rust知道_究竟_阵列有多大,如果你尝试访问<code>ARR [4]</code>这将是一个_编译错误_.</p>
+<p>学习一门新语言往往涉及到_忘却_来自语言的心理习惯已经知道;如果你是一个Pythonista,那么这些括号表示<code>名单</code>. 我们会得到Rust的等同物<code>名单</code>很快,但数组不是你正在寻找的机器人;他们是_大小固定_. 他们可以_易变的_ (如果我们问得好) ,但你不能添加新的元素.</p>
+<p>在Rust中不常使用数组,因为数组的类型包含itssize. 示例中的数组的类型是<code>[I32;4]</code>;类型<code>[10,20]</code>将会<code>[I32;2 ]</code>等等: 他们有_不同类型_.  所以他们是私生子,作为函数论证.</p>
+<p>什么_是_常用的是_片_. 你可以把它们看作是_意见_一个基本的值数组. 它们的行为很像一个数组,_知道他们的尺寸_不像那些危险的动物C指针.</p>
+<p>注意两个重要的事情-如何写一个切片的类型,并且你必须使用<code>&amp;</code>将其传递给函数.</p>
+<pre><pre class="playpen"><code class="language-rust">// array2.rs
+// read as: slice of i32
+fn sum(values: &amp;[i32]) -&gt; i32 {
+    let mut res = 0;
+    for i in 0..values.len() {
+        res += values[i]
+    }
+    res
+}
+
+fn main() {
+    let arr = [10,20,30,40];
+    // look at that &amp;
+    let res = sum(&amp;arr);
+    println!(&quot;sum {}&quot;, res);
+}
+</code></pre></pre>
+<p>忽略代码<code>总和</code>一阵子,看看<code>[I32 ]</code>. Read数组和切片之间的关系类似于C数组和指针之间的关系,除了两个重要的区别ℴℴRebug切片跟踪它们的大小 (如果你尝试访问这个大小之外的WRALIST) ,并且你必须明确地说你想把数组作为一个切片传递. 使用<code>&amp;</code>操作员.</p>
+<p>C程序员发音<code>&amp;</code>作为&quot;地址&quot;,生锈程序员会借用它. 这将是学习生锈的关键词. 借用是编程中常见的模式的名称;每当你通过引用传递 (几乎总是发生在动态语言中) 或在C中传递指针时,任何东西都被原始所有者所拥有.</p>
+<a class="header" href="1-basics.zh.html#a切片切割" id="a切片切割"><h2>切片切割</h2></a>
+<p>不能以通常的方式打印出一个数组. <code>{}</code>但你可以做一个_调试_打印与<code>{:? }</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">// array3.rs
+fn main() {
+    let ints = [1, 2, 3];
+    let floats = [1.1, 2.1, 3.1];
+    let strings = [&quot;hello&quot;, &quot;world&quot;];
+    let ints_ints = [[1, 2], [10, 20]];
+    println!(&quot;ints {:?}&quot;, ints);
+    println!(&quot;floats {:?}&quot;, floats);
+    println!(&quot;strings {:?}&quot;, strings);
+    println!(&quot;ints_ints {:?}&quot;, ints_ints);
+}
+</code></pre></pre>
+<p>这使:</p>
+<pre><code>ints [1, 2, 3]
+floats [1.1, 2.1, 3.1]
+strings [&quot;hello&quot;, &quot;world&quot;]
+ints_ints [[1, 2], [10, 20]]
+</code></pre>
+<p>数组的数组是没问题,但重要的是,containsvalues数组_只有一个类型_. 数组中的值下每个otherin内存,以便安排_高效的访问. _如果你好奇这些变量的实际类型,这是一个有用的技巧.</p>
+<p>刚和一个显式声明一个变量类型,你知道将是错误的:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let var: () = [1.1, 1.2];
+#}</code></pre></pre>
+<p>这是信息错误:</p>
+<pre><code>3 |     let var: () = [1.1, 1.2];
+  |                   ^^^^^^^^^^ expected (), found array of 2 elements
+  |
+  = note: expected type `()`
+  = note:    found type `[{float}; 2]`
+</code></pre>
+<p>(<code>{浮动}</code>意思是&quot;一些浮点类型不完全指定的)</p>
+<p>片给你不同_的观点_的_相同_数组:</p>
+<pre><pre class="playpen"><code class="language-rust">// slice1.rs
+fn main() {
+    let ints = [1, 2, 3, 4, 5];
+    let slice1 = &amp;ints[0..2];
+    let slice2 = &amp;ints[1..];  // open range!
+
+    println!(&quot;ints {:?}&quot;, ints);
+    println!(&quot;slice1 {:?}&quot;, slice1);
+    println!(&quot;slice2 {:?}&quot;, slice2);
+}
+</code></pre></pre>
+<pre><code>ints [1, 2, 3, 4, 5]
+slice1 [1, 2]
+slice2 [2, 3, 4, 5]
+</code></pre>
+<p>这是一个简洁的符号,类似于Python片但是有很大区别:从未有过任何数据的一个副本. 这些片_他们的数据来自theirarrays. _他们有一个非常亲密的关系,数组,和铁锈花很多精力来确保不分解的关系.</p>
+<a class="header" href="1-basics.zh.html#a可选值" id="a可选值"><h2>可选值</h2></a>
+<p>片,就像数组一样,可以_索引_. Rust在编译时知道数组的大小,但只有在运行时才知道分片的大小. 所以<code>S [I]</code>在运行时会引起超出界限的错误_恐慌_. 这实际上并不是你想要发生的事情 - 它可能是安全发射中止与遍布佛罗里达州的非常昂贵卫星的散射片之间的区别. 还有_没有例外_.</p>
+<p>让它沉入水中,因为它是一种冲击. 你不能在某些try-block中包装可怕的可能paniccode,并且&quot;捕获错误&quot; - 至少不是你每天都想使用的方式. 那么Rust如何安全?</p>
+<p>有一种切片方法<code>得到</code>这并不恐慌. 但是它返回了什么?</p>
+<pre><pre class="playpen"><code class="language-rust">// slice2.rs
+fn main() {
+    let ints = [1, 2, 3, 4, 5];
+    let slice = &amp;ints;
+    let first = slice.get(0);
+    let last = slice.get(5);
+
+    println!(&quot;first {:?}&quot;, first);
+    println!(&quot;last {:?}&quot;, last);
+}
+// first Some(1)
+// last None
+</code></pre></pre>
+<p><code>持续</code>失败 (我们忘记了基于零的索引) ,但返回了一个叫做的东西<code>没有</code>. <code>第一</code>很好,但是作为一个价值包装出现<code>一些</code>. 欢迎来到<code>选项</code>类型!它可能是_或_ <code>一些</code>要么<code>没有</code>.</p>
+<p>的<code>选项</code>类型有一些有用的方法:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    println!(&quot;first {} {}&quot;, first.is_some(), first.is_none());
+    println!(&quot;last {} {}&quot;, last.is_some(), last.is_none());
+    println!(&quot;first value {}&quot;, first.unwrap());
+
+// first true false
+// last false true
+// first value 1
+#}</code></pre></pre>
+<p>如果你_打开_ <code>去年</code>,你会得到一个恐慌. <code>但至少你可以叫</code>首先确保ℴℴ例如,如果你有一个不同的默认没有价值:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let maybe_last = slice.get(5);
+    let last = if maybe_last.is_some() {
+        *maybe_last.unwrap()
+    } else {
+        -1
+    };
+#}</code></pre></pre>
+<p>注意<code>*</code>ℴℴ内部的精确类型<code>一些</code>是<code>手机等</code>,这是一个参考. <code>我们需要这回到一个废弃</code>价值.</p>
+<p>冗长的,这是一个快捷方式-<code>unwrap_or</code>将返回的值是如果<code>选项</code>是<code>没有一个</code>. <code>ℴℴ类型必须匹配</code>returnsa参考. <code>所以你必须组成</code>与<code>&amp;-1</code>. 最后再次使用<code>*</code>获得价值<code>i32</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let last = *slice.get(5).unwrap_or(&amp;-1);
+#}</code></pre></pre>
+<p>这很容易错过<code>&amp;</code>,但编译器有你在这里. 如果它是<code>-1</code>,<code>rustc</code>说'预期&amp;{整数},找到整数变量',然后'帮助: 尝试<code>&amp;-1</code>&quot;.</p>
+<p>你可以想到<code>选项</code>作为一个可能包含一个值的框,或者什么也不是 (<code>没有</code>)  (它被称为<code>也许</code>在Haskell) . 它可能包含_任何_有价值的,就是这样_类型参数_. 在这种情况下,完整的类型是<code>选项&lt;&amp;I32&gt;</code>,使用C ++风格的表示法_仿制药_.  打开这个盒子可能会引起爆炸,但不像施罗德林格的猫,我们可以事先知道它是否包含一个值.</p>
+<p>这是非常常见的生锈功能/方法返回这些可能的盒子,所以学习如何<a href="https://doc.rust-lang.org/std/option/enum.Option.html">使用它们</a>舒适地.</p>
+<a class="header" href="1-basics.zh.html#a向量" id="a向量"><h2>向量</h2></a>
+<p>我们将再次返回切片方法,但首先返回向量. 这些是_可重复使用的_数组和行为很像Python<code>表</code>和C++<code>STD: : 载体</code>. 锈病型<code>Vec</code>事实上,不同的是,你可以将额外的值附加到一个向量上,注意它必须声明为可变的.</p>
+<pre><pre class="playpen"><code class="language-rust">// vec1.rs
+fn main() {
+    let mut v = Vec::new();
+    v.push(10);
+    v.push(20);
+    v.push(30);
+
+    let first = v[0];  // will panic if out-of-range
+    let maybe_first = v.get(0);
+
+    println!(&quot;v is {:?}&quot;, v);
+    println!(&quot;first is {}&quot;, first);
+    println!(&quot;maybe_first is {:?}&quot;, maybe_first);
+}
+// v is [10, 20, 30]
+// first is 10
+// maybe_first is Some(10)
+</code></pre></pre>
+<p>一个常见的初学者错误是忘记<code>穆特</code>你会得到一个有用的错误信息:</p>
+<pre><code>3 |     let v = Vec::new();
+  |         - use `mut v` here to make mutable
+4 |     v.push(10);
+  |     ^ cannot borrow mutably
+</code></pre>
+<p>向量和切片之间有非常密切的关系:</p>
+<pre><pre class="playpen"><code class="language-rust">// vec2.rs
+fn dump(arr: &amp;[i32]) {
+    println!(&quot;arr is {:?}&quot;, arr);
+}
+
+fn main() {
+    let mut v = Vec::new();
+    v.push(10);
+    v.push(20);
+    v.push(30);
+
+    dump(&amp;v);
+
+    let slice = &amp;v[1..];
+    println!(&quot;slice is {:?}&quot;, slice);
+}
+</code></pre></pre>
+<p>那么小,那么重要的借用算子<code>&amp;</code>是_强迫_向量进入ASLICE. 它是完全有意义的,因为向量也在监视数组的值,数组的分配也不同. <em>动态地</em>.</p>
+<p>如果你来自一种动态的语言,那么现在是时候开始讨论了. 在系统语言中,程序存储器有两种: 堆栈和堆. 在堆栈上分配数据非常简单,但是堆栈是有限的;通常是按兆字节的顺序. 堆可以是千兆字节,但是分配相对昂贵,并且这样的内存必须是_释放_后来. 在所谓的'管理'的语言 (如java,而且所谓的脚本语言) 这些细节都隐藏在你的thatconvenient市政公用称_垃圾收集器_. 一旦系统确定数据不再引用的其他数据,它回到poolof可用内存.</p>
+<p>第一个C程序我写在DOS(PC)拿出整个电脑.</p>
+<p>Unix系统总是表现得更好,只有过程diedwith_. _为什么这个比生锈(或去)计划恐慌吗?_因为最初的问题发生的时候会发生恐慌,不是当programhas变得无可救药的困惑和吃你所有的作业. _恐慌是</p>
+<p>解除_正如例外. _所有分配的对象是下降,生成一个回溯.</p>
+<p>现在_. _(妈妈的类比是她想打扫你的房间,当你在adelicate阶段新情人). _这些嵌入式系统需要应对的事情_回到向量:当修改或创建一个向量,它从堆中分配,成为了</p>
+<p>老板_的内存. _切片_内存从向量中. <em>当向量或死亡</em>,它让记忆. _迭代器</p>
+<a class="header" href="1-basics.zh.html#a我们到目前为止没有提及的关键部分生锈难题ℴℴ迭代器" id="a我们到目前为止没有提及的关键部分生锈难题ℴℴ迭代器"><h2>我们到目前为止没有提及的关键部分生锈难题ℴℴ迭代器.</h2></a>
+<p>for循环在使用迭代器范围是(<code>其实是类似于thePython 3</code>范围<code>功能).</code>迭代器很容易定义非正式.</p>
+<p>这是一个&quot;对象&quot;<code>下一个</code>方法返回一个<code>选项</code>. 只要这个价值不是<code>没有</code>,我们一直在打电话<code>下一个</code>:</p>
+<pre><pre class="playpen"><code class="language-rust">// iter1.rs
+fn main() {
+    let mut iter = 0..3;
+    assert_eq!(iter.next(), Some(0));
+    assert_eq!(iter.next(), Some(1));
+    assert_eq!(iter.next(), Some(2));
+    assert_eq!(iter.next(), None);
+}
+</code></pre></pre>
+<p>而这正是什么<code>对于var iter {}</code>确实.</p>
+<p>这似乎是定义for循环的低效方式,但是<code>rustc</code>在发布模式中会进行疯狂的assoptimizations,并且它会和a一样快<code>而</code>循环.</p>
+<p>这是对数组进行迭代的第一次尝试:</p>
+<pre><pre class="playpen"><code class="language-rust">// iter2.rs
+fn main() {
+    let arr = [10, 20, 30];
+    for i in arr {
+        println!(&quot;{}&quot;, i);
+    }
+}
+</code></pre></pre>
+<p>失败,但有帮助:</p>
+<pre><code>4 |     for i in arr {
+  |     ^ the trait `std::iter::Iterator` is not implemented for `[{integer}; 3]`
+  |
+  = note: `[{integer}; 3]` is not an iterator; maybe try calling
+   `.iter()` or a similar method
+  = note: required by `std::iter::IntoIterator::into_iter`
+</code></pre>
+<p>以下<code>rustc</code>的建议,下面的程序按预期工作.</p>
+<pre><pre class="playpen"><code class="language-rust">// iter3.rs
+fn main() {
+    let arr = [10, 20, 30];
+    for i in arr.iter() {
+        println!(&quot;{}&quot;, i);
+    }
+
+    // slices will be converted implicitly to iterators...
+    let slice = &amp;arr;
+    for i in slice {
+        println!(&quot;{}&quot;, i);
+    }
+}
+</code></pre></pre>
+<p>实际上,迭代数组或切片这种方式使用起来效率更高<code>我在0..slice.len () {}</code>因为Rust不必痴迷于检查每个索引操作.</p>
+<p>我们之前有一个总结一系列整数的例子. 它涉及一个<code>mut</code>变量和循环. 这是_惯用的_,亲做平分的方式:</p>
+<pre><pre class="playpen"><code class="language-rust">// sum1.rs
+fn main() {
+    let sum: i32  = (0..5).sum();
+    println!(&quot;sum was {}&quot;, sum);
+
+    let sum: i64 = [10, 20, 30].iter().sum();
+    println!(&quot;sum was {}&quot;, sum);
+}
+</code></pre></pre>
+<p>请注意,这是其中一个需要明确说明的情况. _类型_对于变量,因为否则生锈没有足够的信息. 这里我们用两个不同的整数做和,没有问题.  (如果用尽所有的名字来创建一个新的同名变量也是没有问题的. )</p>
+<p>在这样的背景下,更多的<a href="https://doc.rust-lang.org/std/primitive.slice.html">切片法</a>将更有意义.  (另一个文档提示;在每个文档页的右边有一个'[-]单击该按钮以折叠方法列表. 然后你可以扩展任何看起来很有趣的细节. 任何看起来怪异的东西,现在就忽略它.</p>
+<p>这个<code>窗户</code>方法提供了一个迭代器的重叠值窗口.</p>
+<pre><pre class="playpen"><code class="language-rust">// slice4.rs
+fn main() {
+    let ints = [1, 2, 3, 4, 5];
+    let slice = &amp;ints;
+
+    for s in slice.windows(2) {
+        println!(&quot;window {:?}&quot;, s);
+    }
+}
+// window [1, 2]
+// window [2, 3]
+// window [3, 4]
+// window [4, 5]
+</code></pre></pre>
+<p>或<code>块</code>:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    for s in slice.chunks(2) {
+        println!(&quot;chunks {:?}&quot;, s);
+    }
+// chunks [1, 2]
+// chunks [3, 4]
+// chunks [5]
+#}</code></pre></pre>
+<a class="header" href="1-basics.zh.html#a更多关于向量ⅆ" id="a更多关于向量ⅆ"><h2>更多关于向量ⅆ</h2></a>
+<p>有一个有用的小宏<code>VEC!</code>用于初始化向量. 注意你可以_去除_向量结束时的值<code>流行音乐</code>和_延伸_一个使用任何兼容迭代器的向量.</p>
+<pre><pre class="playpen"><code class="language-rust">// vec3.rs
+fn main() {
+    let mut v1 = vec![10, 20, 30, 40];
+    v1.pop();
+
+    let mut v2 = Vec::new();
+    v2.push(10);
+    v2.push(20);
+    v2.push(30);
+
+    assert_eq!(v1, v2);
+
+    v2.extend(0..2);
+    assert_eq!(v2, &amp;[10, 20, 30, 0, 1]);
+}
+</code></pre></pre>
+<p>向量相互比较,以值为单位.</p>
+<p>可以将值插入到任意位置的向量中. <code>插入</code>并移除<code>去除</code>.</p>
+<p>这不是有效的推动和出现由于价值观必须搬到腾出空间,所以对bigvectors小心这些操作. <em>能力</em>. <code>如果你</code>一个向量,它的大小为零,但它仍然保留着古老的能力. <code>所以给它注入</code>等只有requiresreallocation规模变大时比能力.</p>
+<p>向量可以排序,然后可以删除重复的ℴℴ这些操作in-placeon向量. <code>(如果你想先复制,使用</code>).</p>
+<pre><pre class="playpen"><code class="language-rust">// vec4.rs
+fn main() {
+    let mut v1 = vec![1, 10, 5, 1, 2, 11, 2, 40];
+    v1.sort();
+    v1.dedup();
+    assert_eq!(v1, &amp;[1, 2, 5, 10, 11, 40]);
+}
+</code></pre></pre>
+<a class="header" href="1-basics.zh.html#a字符串" id="a字符串"><h2>字符串</h2></a>
+<p>字符串在生锈比其他语言更涉及;<code>的</code>类型,如<code>Vec</code>动态分配,resizeable. <code>(这就像c++</code>但不像Java和Python的不可改变的字符串). <em>但程序可能包含很多</em>(比如&quot;你好&quot;)和一个系统的语言应该能够storethese静态执行本身. _在嵌入式微指令,这可能意味着puttingthem廉价罗,而不是昂贵的RAM(对于低功耗设备,RAM的功耗也贵了. )_一个</p>
+<p>所以&quot;hello&quot;不是的类型<code>字符串</code>. <code>它的类型是</code>(发音&quot;串片&quot;). <code>就像之间的区别</code>和<code>的std :: string</code>在C ++中,除外<code>&amp;STR</code>更聪明得多. 事实上,<code>&amp;STR</code>和<code>串</code>像对待一样,彼此之间有着非常类似的关系<code>&amp;[T]</code>至<code>VEC &lt;T&gt;</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">// string1.rs
+fn dump(s: &amp;str) {
+    println!(&quot;str '{}'&quot;, s);
+}
+
+fn main() {
+    let text = &quot;hello dolly&quot;;  // the string slice
+    let s = text.to_string();  // it's now an allocated string
+
+    dump(text);
+    dump(&amp;s);
+}
+</code></pre></pre>
+<p>再次,借用运营商可以强制<code>串</code>成<code>&amp;STR</code>, 就像<code>VEC &lt;T&gt;</code>可能会被强迫进入<code>&amp;[T]</code>.</p>
+<p>在引擎盖下,<code>串</code>基本上是<code>VEC &lt;U8&gt;</code>和<code>&amp;STR</code>是<code>[U8]</code>但是那些字节_必须_表示有效的UTF-8文本.</p>
+<p>就像一个向量,你可以<code>推</code>一个人物和<code>流行音乐</code>一结束<code>弦</code>:</p>
+<pre><pre class="playpen"><code class="language-rust">// string5.rs
+fn main() {
+    let mut s = String::new();
+    // initially empty!
+    s.push('H');
+    s.push_str(&quot;ello&quot;);
+    s.push(' ');
+    s += &quot;World!&quot;; // short for `push_str`
+    // remove the last char
+    s.pop();
+
+    assert_eq!(s, &quot;Hello World&quot;);
+}
+</code></pre></pre>
+<p>可以将许多类型转换为字符串. <code>托弦</code> (如果可以用&quot;{}&quot;显示它们,那么它们可以被转换) . <code>格式!</code>宏是使用相同的格式字符串来构建更复杂的字符串的一种非常有用的方法. <code>打印!</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">// string6.rs
+fn array_to_str(arr: &amp;[i32]) -&gt; String {
+    let mut res = '['.to_string();
+    for v in arr {
+        res += &amp;v.to_string();
+        res.push(',');
+    }
+    res.pop();
+    res.push(']');
+    res
+}
+
+fn main() {
+    let arr = array_to_str(&amp;[10, 20, 30]);
+    let res = format!(&quot;hello {}&quot;, arr);
+
+    assert_eq!(res, &quot;hello [10,20,30]&quot;);
+}
+</code></pre></pre>
+<p>注意<code>&amp;</code>在前面<code>V.ToStruts ()</code>-在字符串条上定义运算符,而不是<code>弦</code>因此,它需要一点说服力来匹配.</p>
+<p>用于切片的符号也与字符串一起工作:</p>
+<pre><pre class="playpen"><code class="language-rust">// string2.rs
+fn main() {
+    let text = &quot;static&quot;;
+    let string = &quot;dynamic&quot;.to_string();
+
+    let text_s = &amp;text[1..];
+    let string_s = &amp;string[2..4];
+
+    println!(&quot;slices {:?} {:?}&quot;, text_s, string_s);
+}
+// slices &quot;tatic&quot; &quot;na&quot;
+</code></pre></pre>
+<p>但是,你不能索引字符串!这是因为它们使用一个真正的编码UTF-8,其中&quot;字符&quot;可能是字节数.</p>
+<pre><pre class="playpen"><code class="language-rust">// string3.rs
+fn main() {
+    let multilingual = &quot;Hi! ¡Hola! привет!&quot;;
+    for ch in multilingual.chars() {
+        print!(&quot;'{}' &quot;, ch);
+    }
+    println!(&quot;&quot;);
+    println!(&quot;len {}&quot;, multilingual.len());
+    println!(&quot;count {}&quot;, multilingual.chars().count());
+
+    let maybe = multilingual.find('п');
+    if maybe.is_some() {
+        let hi = &amp;multilingual[maybe.unwrap()..];
+        println!(&quot;Russian hi {}&quot;, hi);
+    }
+}
+// 'H' 'i' '!' ' ' '¡' 'H' 'o' 'l' 'a' '!' ' ' 'п' 'р' 'и' 'в' 'е' 'т' '!'
+// len 25
+// count 18
+// Russian hi привет!
+</code></pre></pre>
+<p>现在,让它沉进去ℴℴ有25个字节,但是只有18个字符!但是,如果你使用类似的方法<code>找到</code>,你会得到一个有效的索引(如果发现)和thenany切片会没事的.</p>
+<p>(生锈<code>字符</code>类型是一个4字节的Unicode代码点. _字符串是_arraysof识字课!)</p>
+<p>字符串分割可能爆炸像向量索引,因为它使用字节偏移量.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let s = &quot;¡&quot;;
+    println!(&quot;{}&quot;, &amp;s[0..1]); &lt;-- bad, first byte of a multibyte character
+#}</code></pre></pre>
+<p>在本例中,字符串包含两个字节,所以试图拿出第一个字节是一个Unicode错误. <code>因此要小心只使用有效的抵消来自字符串部分字符串的方法.</code>方法返回一个_迭代器_,然后选择如何处理它.</p>
+<p><code>一个常见needis创建一个向量分裂的子字符串.</code>很一般,所以需要一些线索_什么_这是收集ℴℴhencethe显式类型.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let text = &quot;the red fox and the lazy dog&quot;;
+    let words: Vec&lt;&amp;str&gt; = text.split_whitespace().collect();
+    // [&quot;the&quot;, &quot;red&quot;, &quot;fox&quot;, &quot;and&quot;, &quot;the&quot;, &quot;lazy&quot;, &quot;dog&quot;]
+#}</code></pre></pre>
+<p>你也可以这样说,通过迭代器进入<code>扩展</code>方法:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let mut words = Vec::new();
+    words.extend(text.split_whitespace());
+#}</code></pre></pre>
+<p>在大多数语言中,我们必须让这些_单独分配字符串_每个片,而这里的向量是借款从原始字符串.</p>
+<p>我们分配的空间保持片. <code>收集</code>needsa线索(我们可能想要一个向量的识字课,说):</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let stripped: String = text.chars()
+        .filter(|ch| ! ch.is_whitespace()).collect();
+    // theredfoxandthelazydog
+#}</code></pre></pre>
+<p>的<code>过滤器</code>方法接受一个_关闭_,这是锈 - 说forlambdas或匿名功能. 这里的参数类型从上下文中是清楚的,所以显式规则是放松的.</p>
+<p>是的,你可以这样做,作为一个字符的显式循环,将返回的片段推送到一个可变的向量中,但是这个更短,读得很好 (_什么时候_你当然习惯了) ,同样快. 它不是_罪_然而,使用循环,我鼓励你也写这个版本.</p>
+<a class="header" href="1-basics.zh.html#a插曲-获取命令行参数" id="a插曲-获取命令行参数"><h2>插曲: 获取命令行参数</h2></a>
+<p>到目前为止,我们的节目都生活在对外界的无知之中;现在是时候给他们提供数据.</p>
+<p><code>的std :: ENV :: ARGS</code>是你如何访问命令行参数;它返回一个迭代器作为字符串的参数,包括程序名.</p>
+<pre><pre class="playpen"><code class="language-rust">// args0.rs
+fn main() {
+    for arg in std::env::args() {
+        println!(&quot;'{}'&quot;, arg);
+    }
+}
+</code></pre></pre>
+<pre><code>src$ rustc args0.rs
+src$ ./args0 42 'hello dolly' frodo
+'./args0'
+'42'
+'hello dolly'
+'frodo'
+</code></pre>
+<p>返回a会更好吗?<code>Vec</code>?这很容易使用<code>搜集</code>使用迭代器来创建该向量<code>跳跃</code>方法移过节目名称.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let args: Vec&lt;String&gt; = std::env::args().skip(1).collect();
+    if args.len() &gt; 0 { // we have args!
+        ...
+    }
+#}</code></pre></pre>
+<p>这很好;几乎所有的语言都会这样做.</p>
+<p>阅读单个参数 (连同解析整数值一起) 的更多Rust-y方法:</p>
+<pre><pre class="playpen"><code class="language-rust">// args1.rs
+use std::env;
+
+fn main() {
+    let first = env::args().nth(1).expect(&quot;please supply an argument&quot;);
+    let n: i32 = first.parse().expect(&quot;not an integer!&quot;);
+    // do your magic
+}
+</code></pre></pre>
+<p><code>第n (1)</code>为您提供迭代器的第二个值,以及<code>期望</code>就像一个<code>摅</code>带有可读的信息.</p>
+<p>将字符串转换为数字很简单,但您需要指定值的类型 - 还有什么可以<code>解析</code>知道?</p>
+<p>这个程序可能会恐慌,这对于笨拙的测试程序来说很好. 但是,不要因为这种便利的习惯而难以忍受.</p>
+<a class="header" href="1-basics.zh.html#a匹配" id="a匹配"><h2>匹配</h2></a>
+<p>代码在<code>斯特林3.RS</code>我们提取俄语问候语的方式并不是通常所写的. 进入_比赛_:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    match multilingual.find('п') {
+        Some(idx) =&gt; {
+            let hi = &amp;multilingual[idx..];
+            println!(&quot;Russian hi {}&quot;, hi);
+        },
+        None =&gt; println!(&quot;couldn't find the greeting, Товарищ&quot;)
+    };
+#}</code></pre></pre>
+<p><code>比赛</code>包括几个_模式_用一个匹配值跟随胖箭头,用逗号分隔. 它方便地从<code>选择权</code>把它束缚起来<code>idx</code>.  你_必须_指定所有的可能性,所以我们必须处理<code>没有</code>.</p>
+<p>一旦你习惯了 (我的意思是,把它打满几遍) ,感觉比自然的更自然. <code>伊斯梅尔</code>检查需要一个额外的存储<code>选择权</code>.</p>
+<p>但是如果你对这里的失败不感兴趣,那么<code>如果让</code>是你的朋友:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    if let Some(idx) = multilingual.find('п') {
+        println!(&quot;Russian hi {}&quot;, &amp;multilingual[idx..]);
+    }
+#}</code></pre></pre>
+<p>这是方便的,如果你想做一场比赛,是_只有_对一个可能的结果感兴趣.</p>
+<p><code>匹配</code>也可以像一个C<code>开关</code>声明中,像其他铁锈constructscan返回值:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let text = match n {
+        0 =&gt; &quot;zero&quot;,
+        1 =&gt; &quot;one&quot;,
+        2 =&gt; &quot;two&quot;,
+        _ =&gt; &quot;many&quot;,
+    };
+#}</code></pre></pre>
+<p>的<code>_</code>就像C<code>默认的</code>ℴℴ这是一个备用情况. <code>如果你不提供一个</code>会认为这是一个错误.</p>
+<p>(在c++中最好的期望是一个警告,获利很多关于各自的语言). <code>匹配</code>语句也可以匹配范围. _请注意,这些范围_点和包容的范围,所以,第一个条件将匹配3.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+    let text = match n {
+        0...3 =&gt; &quot;small&quot;,
+        4...6 =&gt; &quot;medium&quot;,
+        _ =&gt; &quot;large&quot;,
+     };
+#}</code></pre></pre>
+<a class="header" href="1-basics.zh.html#a读取文件" id="a读取文件"><h2>读取文件</h2></a>
+<p>下一步是向世界展示我们的程序_阅读文件_.</p>
+<p>回想一下,<code>预计</code>就像<code>打开</code>但给了一个自定义的错误消息.</p>
+<pre><pre class="playpen"><code class="language-rust">// file1.rs
+use std::env;
+use std::fs::File;
+use std::io::Read;
+
+fn main() {
+    let first = env::args().nth(1).expect(&quot;please supply a filename&quot;);
+
+    let mut file = File::open(&amp;first).expect(&quot;can't open the file&quot;);
+
+    let mut text = String::new();
+    file.read_to_string(&amp;mut text).expect(&quot;can't read the file&quot;);
+
+    println!(&quot;file had {} bytes&quot;, text.len());
+
+}
+</code></pre></pre>
+<pre><code>src$ file1 file1.rs
+file had 366 bytes
+src$ ./file1 frodo.txt
+thread 'main' panicked at 'can't open the file: Error { repr: Os { code: 2, message: &quot;No such file or directory&quot; } }', ../src/libcore/result.rs:837
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+src$ file1 file1
+thread 'main' panicked at 'can't read the file: Error { repr: Custom(Custom { kind: InvalidData, error: StringError(&quot;stream did not contain valid UTF-8&quot;) }) }', ../src/libcore/result.rs:837
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+</code></pre>
+<p>在这里我们aregoing扔掉一些错误:<code>开放</code>可以失败,因为该文件不存在或者我们不允许读它,然后呢<code>read_to_string</code>可能会失败,因为该文件不包含有效的UTF-8.  (这是足够的,你可以使用<code>read_to_end</code>并将其内容放入bytesinstead的矢量中. ) 对于不太大的文件,以一g reading的方式读取它们是有用和直接的.</p>
+<p>如果你知道其他语言的文件处理的任何事情,你可能会怀疑文件是什么_关闭_. 如果我们正在写这个文件,那么不关闭它可能导致数据丢失. 但是当函数结束时,这里的文件被关闭,而<code>文件</code>变量是_下降_.</p>
+<p>这种&quot;抛出错误&quot;的做法是习惯太过分了. 你不想将这些代码放入函数中,因为它知道它可以很容易地使整个程序崩溃. 所以现在我们必须谈论到底是什么<code>文件::打开</code>returns.If<code>选项</code>是一个值,可能包含或不包含任何内容<code>结果</code>是一个可能包含某些内容或错误的值. 他们都明白<code>摅</code> (和它的表弟<code>期望</code>) 但它们完全不同. <code>结果</code>由...定义_二_键入参数,为<code>好</code>价值和<code>呃</code>价值. <code>结果</code>盒子有两个隔间,一个标签<code>好啊</code>而另一个<code>厄尔</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">fn good_or_bad(good: bool) -&gt; Result&lt;i32,String&gt; {
+    if good {
+        Ok(42)
+    } else {
+        Err(&quot;bad&quot;.to_string())
+    }
+}
+
+fn main() {
+    println!(&quot;{:?}&quot;,good_or_bad(true));
+    //Ok(42)
+    println!(&quot;{:?}&quot;,good_or_bad(false));
+    //Err(&quot;bad&quot;)
+
+    match good_or_bad(true) {
+        Ok(n) =&gt; println!(&quot;Cool, I got {}&quot;,n),
+        Err(e) =&gt; println!(&quot;Huh, I just got {}&quot;,e)
+    }
+    // Cool, I got 42
+
+}
+</code></pre></pre>
+<p>(实际的&quot;错误&quot;类型是任意的,很多人使用字符串,直到它们对生锈错误类型感到满意) . 这是一种方便的方法. _任何一个_返回一个值_或_另一个.</p>
+<p>该版本的文件读取功能不会崩溃. 它返回一个<code>结果</code>这就是_呼叫者_谁必须决定如何处理这个错误.</p>
+<pre><pre class="playpen"><code class="language-rust">// file2.rs
+use std::env;
+use std::fs::File;
+use std::io::Read;
+use std::io;
+
+fn read_to_string(filename: &amp;str) -&gt; Result&lt;String,io::Error&gt; {
+    let mut file = match File::open(&amp;filename) {
+        Ok(f) =&gt; f,
+        Err(e) =&gt; return Err(e),
+    };
+    let mut text = String::new();
+    match file.read_to_string(&amp;mut text) {
+        Ok(_) =&gt; Ok(text),
+        Err(e) =&gt; Err(e),
+    }
+}
+
+fn main() {
+    let file = env::args().nth(1).expect(&quot;please supply a filename&quot;);
+
+    let text = read_to_string(&amp;file).expect(&quot;bad file man!&quot;);
+
+    println!(&quot;file had {} bytes&quot;, text.len());
+}
+</code></pre></pre>
+<p>第一次比赛安全地提取价值<code>好啊</code>这就成了比赛的价值所在. 如果是<code>厄尔</code>它返回错误,重新包装为<code>厄尔</code>.</p>
+<p>第二个匹配返回字符串,封装为<code>好啊</code>,否则 (再次) 错误. 中的实际价值<code>好啊</code>是不重要的,所以我们点燃<code>γ</code>.</p>
+<p>这不是那么漂亮;_当大多数的错误处理函数,然后是愉快路径丢失. _往往会有这样的问题,有很多ofexplicit早期的回报,或者只是</p>
+<p>幸运的是,有一个捷径.</p>
+<p>的<code>std::io</code>模块定义了一个类型别名<code>io::结果&lt; T &gt;</code>这是画出来一样吗<code>结果误差&lt; T,io::&gt;</code>和容易类型.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn read_to_string(filename: &amp;str) -&gt; io::Result&lt;String&gt; {
+    let mut file = File::open(&amp;filename)?;
+    let mut text = String::new();
+    file.read_to_string(&amp;mut text)?;
+    Ok(text)
+}
+#}</code></pre></pre>
+<p>那<code>吗?</code>运营商也几乎完全匹配<code>文件:打开</code>,如果结果是一个错误,那么它将立即返回错误. <code>否则,它将返回</code>结果.</p>
+<p>最后,我们仍然需要结束字符串作为结果. <code>吗?</code>是一个很酷的东西就成了稳定. <code>你仍能看到宏</code>用于旧代码:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+fn read_to_string(filename: &amp;str) -&gt; io::Result&lt;String&gt; {
+    let mut file = try!(File::open(&amp;filename));
+    let mut text = String::new();
+    try!(file.read_to_string(&amp;mut text));
+    Ok(text)
+}
+#}</code></pre></pre>
+<p>总之,可以写绝对安全生锈,不丑,withoutneeding例外.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="readme.zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="2-structs-enums-lifetimes.zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="readme.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="2-structs-enums-lifetimes.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+    </body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>介绍 - A Gentle Introduction to Rust</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Introduction to the Rust language, standard library and ecosystem">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="_FontAwesome/css/font-awesome.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+
+    </head>
+    <body class="light">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li class="affix"><a href="readme.zh.html" class="active">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">A Gentle Introduction to Rust</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="readme.zh.html#a温和地介绍生锈" id="a温和地介绍生锈"><h1>温和地介绍生锈</h1></a>
+<p><img src="PPrustS.png" alt="Rust" /></p>
+<p><a href="http://leftoversalad.com/c/015_programmingpeople/">感谢大卫马里诺</a></p>
+<a class="header" href="readme.zh.html#a为什么学习一种新的编程语言" id="a为什么学习一种新的编程语言"><h2>为什么学习一种新的编程语言?</h2></a>
+<p>本教程的目标是带您到一个可以读取和写入生锈的地方,充分了解在线提供的优质学习资源,特别是<a href="https://doc.rust-lang.org/stable/book/">这本书</a>这是一个机会_先试后买_,并且要充分感受到语言的力量想要更深入.</p>
+<p>正如爱因斯坦可能会说的那样,&quot;尽可能温和,但没有温和. &quot;这里有很多新东西要学习,而且不同的是需要重新安排你的心理家具. 通过'温柔'我的意思是这些特征实际上是用实例来表示的;当我们遇到困难时,我希望了解铁锈如何解决这些问题. 在解决方案有意义之前理解问题非常重要. 用绚丽的语言说,我们要去一个加拿大的山地国家,我会在路上指出一些有趣的岩层,只有几个地质讲座. 会有一些上坡,但这种看法会令人鼓舞;社区是异常愉快和高兴的帮助<a href="https://users.rust-lang.org/">防锈用户论坛</a>和一个活跃的<a href="https://www.reddit.com/r/rust/">版 (Subreddit) </a>这是非常适度的温和<a href="https://www.rust-lang.org/en-US/faq.html">常问问题</a>如果你有特定的问题,这是一个很好的资源.</p>
+<p>首先,为什么要学习一门新的编程语言?这是时间和精力的投资,需要一些理由. 即使你没有立即用这种语言找到一份很酷的工作,它也会延伸你的心理肌肉,并使你成为程序员. 这似乎是一种糟糕的投资回报,但是如果你不学习一些东西_真正的_新的所有时间,那么你会停滞不前,并且要有十年的经验,一遍又一遍地做同样的事情.</p>
+<a class="header" href="readme.zh.html#a生锈的地方" id="a生锈的地方"><h2>生锈的地方</h2></a>
+<p>铁锈是一种静态和强类型的系统编程语言. _静态_意味着所有类型在编译时都是已知的,_非常_意味着这些类型的设计使得编写不正确的程序变得更加困难. 成功的汇编意味着你比牛仔语言更好地保证正确性. _系统_意味着通过完全控制内存使用来生成最佳机器码. 所以这些用途非常硬: 操作系统,设备驱动程序和甚至可能没有操作系统的嵌入式系统. 然而,编写普通的应用程序代码实际上也是一种非常愉快的语言.</p>
+<p>与c和c ++的最大区别在于生锈_安全默认_;所有内存访问都会被检查. 不可能因意外而损坏存储器.</p>
+<p>生锈背后的统一原则是:</p>
+<ul>
+<li>严格执行_安全借贷_数据的</li>
+<li>函数,方法和闭包来操作数据</li>
+<li>元组,结构和枚举来聚合数据</li>
+<li>模式匹配来选择和解构数据</li>
+<li>特征来定义_行为_数据</li>
+</ul>
+<p>通过cargobut有一个快速增长的可用图书馆生态系统,我们将通过学习使用标准图书馆来关注语言的核心原则. 我的建议是写_很多小节目_,所以学习使用<code>rustc</code>直接是核心技能. 当我在thistutorial中做示例时,我定义了一个叫做的小脚本<code>rrun</code>它编译并运行结果:</p>
+<pre><code>rustc $1.rs &amp;&amp; ./$1
+</code></pre>
+<a class="header" href="readme.zh.html#a配置" id="a配置"><h2>配置</h2></a>
+<p>本教程假设您已在本地安装防锈. 幸运的是,这是<a href="https://www.rust-lang.org/en-US/downloads.html">非常简单</a>.</p>
+<pre><code>$ curl https://sh.rustup.rs -sSf | sh
+$ rustup component add rust-docs
+</code></pre>
+<p>我会建议获取默认的稳定版本;稍后可以轻松下载不稳定版本并在两者之间切换.</p>
+<p>这得到了编译器,货物包管理器,API文档和铁锈书. 千里之行始于一步,而这第一步是无痛的.</p>
+<p><code>rustup</code>是您用来管理防锈安装的命令. 当一个新的稳定版本出现时,你只需说<code>锈蚀更新</code>升级. <code>锈蚀文件</code>将在您的浏览器中打开离线文档.</p>
+<p>你可能已经拥有了你喜欢的编辑器<a href="https://areweideyet.com/">基本的防锈支持</a>很好. 我建议你先从基本的语法高亮开始,随着程序变大,开始工作.</p>
+<p>我个人很喜欢<a href="https://www.geany.org/Download/Releases">Geany</a>这是为数不多的具有防锈支持的编辑器之一;它特别易于使用,因为它可以通过软件包管理器获得,但在其他平台上可以正常工作.</p>
+<p>最主要的是知道如何编辑,编译和运行防火程序. 你学会用你的程序进行编程_手指_;自己键入代码,并学习使用编辑器有效地重新排列事情.</p>
+<p>泽德肖的<a href="https://learnpythonthehardway.org/book/intro.html">忠告</a>关于在Python中学习编程仍然很好,不管语言如何. 他说学会编程就像学习乐器 - 秘诀是练习和坚持. 瑜伽和柔道武术也有很好的建议,比如太极拳,感受紧张,但不要过度紧张. 你不是在这里建立哑巴肌肉.</p>
+<p>我想感谢那些为我带来坏英语或坏锈的许多贡献者,并且感谢大卫马力诺对他的铁锈表现的冷静表达,他是一位友善但硬派的无瑕骑士,闪耀着盔甲.</p>
+<p>steve donovan©2017-2018 mit许可证版本0.4.0</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+                            <a rel="next" href="1-basics.zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+                    <a href="1-basics.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+    </body>
+</html>
