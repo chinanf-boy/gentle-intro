@@ -3461,97 +3461,76 @@ fn main(){
 <p>事实上,这些 crate 的胚胎形态曾经是 Rust stdlib 的一部分,但被切开了. 这是一个蓄意的决定: Rust团队非常重视 stdlib 的稳定性,所以一旦他们在不稳定的夜间版本中进行孵化,只有 beta 和 stable 才能保持稳定. 对于需要实验和改进的 库 来说,他们保持独立并且能够跟踪 Cargo 会更好. 出于所有实际目的,这两个 crate 是 <em>标准</em> 它们不会消失,并且可能会在某个时候折回到stdlib 中.</p>
 <a class="header" href="print.html#a标准库容器" id="a标准库容器"><h1>标准库容器</h1></a>
 <a class="header" href="print.html#a阅读文档" id="a阅读文档"><h2>阅读文档</h2></a>
-<p>在本节中,我将简要介绍Rust标准库的一些常见部分. 文档非常好,但有一点背景和一些例子总是有用的.</p>
-<p>最初,阅读Rust文档可能很具挑战性,所以我会经历<code>Vec</code>举个例子. 一个有用的提示是勾选'[-]'框来折叠文档.  (如果使用下载标准库源代码<code>锈蚀组分添加防锈剂</code>一个 '[src]'链接将出现在此旁边. ) 这可以让您全面了解所有可用的方法.</p>
-<p>首先要注意的是_并非所有可能的方法_被定义<code>Vec</code>本身. 它们是 (大部分) 可改变矢量的方法,例如<code>推</code>. 有些方法仅适用于类型匹配某些约束的向量. 例如,你只能打电话<code>去重</code> (删除重复项) ,如果这个类型确实是可以相互比较的东西. 有多个<code>impl</code>定义的块<code>Vec</code>针对不同类型的约束.</p>
-<p>然后是非常特殊的关系<code>VEC &lt;T&gt;</code>和<code>&amp;[T]</code>. 任何在切片上工作的方法也可以直接在矢量上工作,而不必明确地使用<code>as_slice</code>方法. 这种关系表达为<code>DEREF &lt;目标= [T]&gt;</code>. 当你通过引用预计会发生切片的东西来传递一个向量时,这也会起作用 - 这是类型之间自动转换的少数几个地方之一. 所以像切片方法<code>第一</code>,它可能 - 返回对第一个元素的引用,或者<code>持续</code>,也为向量工作. 许多方法与相应的字符串方法类似,所以就是这样<code>split_at</code>为了在索引处获得一对切片,<code>以. . 开始</code>检查矢量是否以值序列开始,并且<code>包含</code>检查矢量是否包含特定值.</p>
-<p>没有<code>搜索</code>方法来查找特定值的索引,但这里有一条经验法则: 如果在容器上找不到方法,请在迭代器上查找一个方法:</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-    let v = vec![10,20,30,40,50];
+<p>在本节中,我将简要介绍 Rust 标准库的一些常见部分. 文档非常好,但有一点讲解和一些例子总是有用的.</p>
+<p>最初,阅读 Rust 文档可能很具挑战性,所以我会经历<code>Vec</code>举个例子. 一个有用的提示是勾选'[-]'框来折叠文档.(如果使用下载标准库源代码<code>rustup component add rust-src</code> 一个 '[src]'链接将出现在此旁边.)这可以让您全面了解所有可用的方法.</p>
+<p>首先要注意的是 <em>并非所有可能的方法</em> 被定义<code>Vec</code>本身. 它们是(大部分) 可改变 vec 的方法,例如<code>push</code>. 有些方法仅适用于类型匹配某些约束的 Vec.例如,你只能打电话<code>dedup</code>(删除重复项) ,如果这个类型确实是可以相互比较的东西. 有多个<code>impl</code>定义的块<code>Vec</code>针对不同类型的约束.</p>
+<p>然后是非常特殊的关系<code>Vec&lt;T&gt;</code>和<code>&amp;[T]</code>. 任何在 切片 上工作的方法也可以直接在 vec 上工作,而不必明确地使用<code>as_slice</code>方法. 这种关系表达为<code>Deref&lt;Target=[T]&gt;</code>. 当你通过引用预计会发生 切片 的东西来传递一个 Vec 时,这也会起作用 - 这是类型之间自动转换的少数几个地方之一. 所以像 切片 方法<code>first</code>,它可能 - 返回对第一个元素的引用,或者<code>last</code>,也为 Vec 工作. 许多方法与相应的字符串方法类似,所以就是这样<code>split_at</code>为了在索引处获得一对 切片 ,<code>starts_with</code>检查 vec 是否以值序列开始,并且<code>contains</code>检查 vec 是否包含特定值.</p>
+<p>没有<code>search</code>方法来查找特定值的索引,但这里有一条经验法则: 如果在容器上找不到方法,请在 迭代器 上查找一个方法:</p>
+<pre><code class="language-Rust">    let v = vec![10,20,30,40,50];
     assert_eq!(v.iter().position(|&amp;i| i == 30).unwrap(), 2);
-#}</code></pre></pre>
-<p>(该<code>&amp;</code>是因为这是一个迭代器_引用_- 或者你可以说<code>*我== 30</code>为了比较) .</p>
-<p>同样,没有<code>地图</code>对矢量的方法,因为<code>国际热核实验堆 () . 地图 (......) . 收集 ()</code>也会做这项工作. Rust不喜欢不必要地分配 - 通常你不需要这样的结果<code>地图</code>作为实际分配的向量.</p>
-<p>所以我建议你熟悉所有的迭代器方法,因为它们对编写好的Rust代码至关重要,而不必一直写出循环. 与往常一样,编写小程序来探索迭代器方法,而不是在更复杂的程序中与它们搏斗.</p>
-<p>该<code>VEC &lt;T&gt;</code>和<code>&amp;[T]</code>方法之后是共同的特征: 向量知道如何进行自己的调试显示 (但只有在元素实现时才是如此) <code>调试</code>) . 同样,如果它们的元素是可克隆的,它们是可克隆的. 他们执行<code>下降</code>当矢量最终死亡时发生这种情况;内存被释放,并且所有元素也被丢弃.</p>
-<p>该<code>延伸</code>特征意味着来自迭代器的值可以被添加到一个没有循环的向量中:</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-v.extend([60,70,80].iter());
+</code></pre>
+<p>(该<code>&amp;</code>是因为这是一个 迭代器  _引用 _- 或者你可以说<code>*i== 30</code>为了比较).</p>
+<p>同样,没有<code>map</code>对 vec 的方法,因为<code>iter().map(...).collect()</code>也会做这项工作.  Rust 不喜欢不必要地分配 - 通常你不需要这样的结果<code>map</code>作为实际分配的 Vec.</p>
+<p>所以我建议你熟悉所有的 迭代器 方法,因为它们对编写好的 Rust 代码至关重要,而不必一直写出循环. 与往常一样,编写小程序来探索 迭代器 方法,而不是在更复杂的程序中与它们搏斗.</p>
+<p>该<code>Vec&lt;T&gt;</code>和<code>&amp;[T]</code>方法之后是共同的 trait :  Vec 知道如何进行自己的调试显示(但只有在元素实现时才是如此) <code>Debug</code>).同样,如果它们的元素是可克隆的,它们是可克隆的. 他们执行<code>Drop</code>当 vec 最终死亡时发生这种情况;内存被释放,并且所有元素也被丢弃.</p>
+<p>该<code>Extend</code> trait 意味着来自 迭代器 的值可以被添加到一个没有循环的 Vec 中:</p>
+<pre><code class="language-Rust">v.extend([60,70,80].iter());
 let mut strings = vec![&quot;hello&quot;.to_string(), &quot;dolly&quot;.to_string()];
 strings.extend([&quot;you&quot;,&quot;are&quot;,&quot;fine&quot;].iter().map(|s| s.to_string()));
-#}</code></pre></pre>
-<p>还有<code>FromIterator</code>,它可以让矢量_建_来自迭代器.  (迭代器<code>搜集</code>方法倾向于此) .</p>
-<p>任何容器都需要可迭代. 回想一下有<a href="2-structs-enums-lifetimes.html#the-three-kinds-of-iterators">三种迭代器</a></p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-for x in v {...} // returns T, consumes v
+</code></pre>
+<p>还有<code>FromIterator</code>,它可以让 vec <em>初始化{constructed}</em> 来自 迭代器 .(迭代器  <code>collect</code>方法倾向于此).</p>
+<p>任何容器都需要可迭代. 回想一下有<a href="2-structs-enums-lifetimes.html#the-three-kinds-of-iterators">三种 迭代器 </a></p>
+<pre><code class="language-Rust">for x in v {...} // returns T, consumes v
 for x in &amp;v {...} // returns &amp;T
 for x in &amp;mut v {...} // returns &amp;mut T
-#}</code></pre></pre>
-<p>该<code>对于</code>声明依赖于<code>IntoIterator</code>特质,实际上有三种实现.</p>
-<p>然后是索引,由...控制<code>指数</code> (从矢量中读取) 和<code>IndexMut</code> (修改一个向量) . 有很多可能性,因为还有分片索引,就像<code>v [0..2]</code>,返回这些返回片,以及平原<code>v [0]</code>它返回对第一个元素的引用.</p>
-<p>这里有一些实现<code>从</code>特征. 例如<code>VEC ::从 ( &quot;你好&quot; .to_string () )</code>会给你一个字符串底层字节的向量<code>VEC &lt;U8&gt;</code>. 现在,已经有一种方法<code>into_bytes</code>上<code>串</code>,为什么冗余?有多种方式来做同样的事情似乎令人困惑. 但是这是必要的,因为显式特征使泛型方法成为可能.</p>
-<p>有时候Rust类型系统的局限性会让事情变得笨拙. 这里的一个例子是如何<code>PartialEq</code>是_分别_定义为最大尺寸为32的阵列! (这会变得更好. ) 这可以方便地将向量与数组进行比较,但要注意大小限制.</p>
-<p>还有<a href="http://xion.io/post/code/rust-iter-patterns.html">隐藏的宝石</a>深埋在文档中. 正如Karol Kuczmarski所说: &quot;因为说实话: 没有人滚动那么远&quot;. 如何处理迭代器中的错误?假设你映射了一些可能失败并返回的操作<code>结果</code>,然后想要收集结果:</p>
-<pre><pre class="playpen"><code class="language-rust">fn main() {
-    let nums = [&quot;5&quot;,&quot;52&quot;,&quot;65&quot;];
+</code></pre>
+<p>该<code>for</code>声明依赖于<code>IntoIterator</code>特质,实际上有三种实现.</p>
+<p>然后是索引,由<code>Index</code>控制(从 vec 中读取) 和<code>IndexMut</code>(修改一个 Vec). 有很多可能性,因为还有分片索引,就像<code>v[0..2]</code>,返回这些返回片,以及平原<code>v[0]</code>它返回对第一个元素的引用.</p>
+<p>这里有一些实现<code>From</code> trait.例如<code>Vec::from(&quot;hello&quot;.to_string())</code>会给你一个字符串底层字节的 Vec <code>Vec&lt;u8&gt;</code>. 现在,已经有一种方法<code>into_bytes</code>在<code>String</code>上,为什么冗余?有多种方式来做同样的事情似乎令人困惑. 但是这是必要的,因为显式 trait 使泛型方法成为可能.</p>
+<p>有时候 Rust 类型系统的局限性会让事情变得笨拙. 这里的一个例子是如何<code>PartialEq</code>是 <em>分别</em> 定义为最大尺寸为32的阵列!(这会变得更好.)这可以方便地将 Vec 与数组进行比较,但要注意大小限制.</p>
+<p>还有[隐藏的宝石](http://xion.io/post/code/ Rust -iter-patterns.html)深埋在文档中. 正如 Karol Kuczmarski 所说: &quot;因为说实话: 没有人滚动那么远&quot;. 如何处理 迭代器 中的错误? 假设你映射了一些可能失败并返回的操作<code>Result</code>,然后想要收集结果:</p>
+<pre><code class="language-Rust">fn main() {
+    let nums =[&quot;5&quot;,&quot;52&quot;,&quot;65&quot;];
     let iter = nums.iter().map(|s| s.parse::&lt;i32&gt;());
     let converted: Vec&lt;_&gt; = iter.collect();
     println!(&quot;{:?}&quot;,converted);
 }
 //[Ok(5), Ok(52), Ok(65)]
-</code></pre></pre>
-<p>很公平,但现在你必须小心地解开这些错误!但是,如果你要求矢量的话,Rust已经知道如何做正确的事情_载_在一个<code>结果</code>- 也就是说,无论是矢量还是错误:</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-    let converted: Result&lt;Vec&lt;_&gt;,_&gt; = iter.collect();
+</code></pre>
+<p>很公平,但现在你必须小心地解开这些错误! 但是,如果你要求 vec 的话, Rust 已经知道如何做正确的事情 <em>包括</em> 在一个<code>Result</code>- 也就是说,无论是 vec 还是错误:</p>
+<pre><code class="language-Rust">    let converted: Result&lt;Vec&lt;_&gt;,_&gt; = iter.collect();
 //Ok([5, 52, 65])
-#}</code></pre></pre>
-<p>如果转换错误?然后你会得到<code>呃</code>遇到第一个错误. 这是非常灵活的一个很好的例子<code>搜集</code>是.  (这里的符号可能会吓人 -<code>VEC &lt;_&gt;</code>意味着&quot;这是一个向量,为我制定出实际的类型<code>和</code>结果&lt;VEC &lt;<em>&gt;</em>&gt;还要求Rust计算错误类型. )</p>
-<p>所以有一个_批量_文档中的详细信息. 但它肯定比C ++文档所说的更清晰<code>的std ::矢量</code></p>
+</code></pre>
+<p>如果转换错误?然后你会得到<code>Err</code>遇到第一个错误. 这是非常灵活的一个很好的例子 <code>collect</code>是.(这里的符号可能会吓人 -<code>Vec&lt;_&gt;</code>意味着&quot;这是一个 Vec ,为我制定出实际的类型<code>和</code>Result&lt;vec&lt;<em>&gt;</em>&gt;还要求 Rust 计算错误类型.)</p>
+<p>所以有一个 <em>批量{lot}</em> 文档中的详细信息. 但它肯定比C ++文档所说的更清晰<code>的std::vec</code></p>
 <blockquote>
 <p>对元素施加的要求取决于对容器执行的实际操作. 一般来说,要求元素类型是完整类型并且符合Erasable的要求,但是许多成员函数会施加更严格的要求.</p>
 </blockquote>
-<p>用C ++,你是独立的. 鲁斯特的清晰度一开始令人望而生畏,但当你学习阅读约束条件时,你将确切地知道任何特定的方法<code>Vec</code>需要.</p>
-<p>我建议你使用源代码<code>锈蚀组分添加防锈剂</code>,因为标准库源代码非常易读,并且方法实现通常不如方法声明那么可怕.</p>
-<a class="header" href="print.html#a地图" id="a地图"><h2>地图</h2></a>
-<p><em>地图</em> (有时叫_关联数组_要么_http://stardict.sourceforge.net/Dictionaries.php下载_) 让你查看与a相关的值_键_. 这不是一个真正的花式概念,可以用一系列元组来完成:</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-    let entries = [(&quot;one&quot;,&quot;eins&quot;),(&quot;two&quot;,&quot;zwei&quot;),(&quot;three&quot;,&quot;drei&quot;)];
+<p>用C ++,你是独立的. rust 的清晰度一开始令人望而生畏,但当你学习阅读约束条件时,你将确切地知道任何特定的方法<code>Vec</code>需要.</p>
+<p>我建议你使用源代码<code>rustup component add rust-src</code>,因为标准库源代码非常易读,并且方法实现通常不如方法声明那么可怕.</p>
+<a class="header" href="print.html#maps" id="maps"><h2>Maps</h2></a>
+<p><em>Maps</em>(有时叫 <em>关联数组</em> 要么 <em>dicts{字典}</em> ); 让你查看与一个相关的值 <em>key{key}</em>. 这不是一个真正的花式概念,可以用一系列元组来完成:</p>
+<pre><code class="language-Rust">    let entries =[(&quot;one&quot;,&quot;eins&quot;),(&quot;two&quot;,&quot;zwei&quot;),(&quot;three&quot;,&quot;drei&quot;)];
 
     if let Some(val) = entries.iter().find(|t| t.0 == &quot;two&quot;) {
         assert_eq!(val.1,&quot;zwei&quot;);
     }
-#}</code></pre></pre>
-<p>这对于小地图来说很好,只需要为键定义相等,但搜索需要线性时间 - 与地图大小成比例.</p>
-<p>一个<code>HashMap中</code>有一个更好_批量_要搜索的键/值对的列表:</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-use std::collections::HashMap;
+</code></pre>
+<p>这对于小 map 来说很好,只需要为key定义相等,但搜索需要线性时间 - 与 map 大小成比例.</p>
+<p>一个<code>HashMap</code>有一个更好 <em>批量{lot}</em> 要搜索的 key/值 对的列表:</p>
+<pre><code class="language-Rust">use std::collections::HashMap;
 
 let mut map = HashMap::new();
 map.insert(&quot;one&quot;,&quot;eins&quot;);
 map.insert(&quot;two&quot;,&quot;zwei&quot;);
 map.insert(&quot;three&quot;,&quot;drei&quot;);
 
-assert_eq! (map.contains_key(&quot;two&quot;), true);
-assert_eq! (map.get(&quot;two&quot;), Some(&amp;&quot;zwei&quot;));
-#}</code></pre></pre>
-<p><code>与&quot;ZWEI&quot;</code>?这是因为<code>得到</code>返回一个_参考_到价值,而不是价值本身. 这里的值类型是<code>&amp;STR</code>,所以我们得到一个<code>&amp;&amp;海峡</code>. 一般来说它_具有_作为参考,因为我们不能_移动_一种超出其拥有类型的价值.</p>
-<p><code>get_mut</code>就好像<code>得到</code>但返回一个可能的可变参考. 这里我们有一个从字符串到整数的映射,并希望更新键'two'的值:</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-let mut map = HashMap::new();
+assert_eq!(map.contains_key(&quot;two&quot;), true);
+assert_eq!(map.get(&quot;two&quot;), Some(&amp;&quot;zwei&quot;));
+</code></pre>
+<p><code>&amp;&quot;zwei&quot;</code>?这是因为<code>get</code>返回一个 <em>引用</em> 到价值,而不是价值本身. 这里的值类型是<code>&amp;str</code>,所以我们得到一个<code>&amp;&amp;str</code>. 一般来说它 <em>具有</em> 作为引用,因为我们不能 <em>移动{move}</em> 一种超出其拥有类型的价值.</p>
+<p><code>get_mut</code>就好像<code>get</code>但返回一个可能的可变引用. 这里我们有一个从字符串到整数的映射,并希望更新key'two'的值:</p>
+<pre><code class="language-Rust">let mut map = HashMap::new();
 map.insert(&quot;one&quot;,1);
 map.insert(&quot;two&quot;,2);
 map.insert(&quot;three&quot;,3);
@@ -3566,14 +3545,11 @@ println!(&quot;before {}&quot;, map.get(&quot;two&quot;).unwrap());
 println!(&quot;after {}&quot;, map.get(&quot;two&quot;).unwrap());
 // before 2
 // after 20
-#}</code></pre></pre>
-<p>请注意,获取可写入的引用发生在它自己的块中 - 否则,我们将有一个可变的借位持续到结束,然后Rust不会允许您从<code>地图</code>再次与<code>map.get ( &quot;二&quot;)</code>;它不能允许任何可读的引用,同时已经有一个可写参考的范围.  (如果是这样,它不能保证那些可读的引用将保持有效. ) 所以解决方案是确保可变借用不会持续很长时间.</p>
-<p>这不是最优雅的API,但我们不能抛弃任何可能的错误. Python会抛出一个异常,而C ++只会创建一个默认值.  (这很方便,但偷偷摸摸;容易忘记的价格a_map [ &quot;2&quot;]<code>总是返回一个整数是我们不能区分零和'未找到'之间的区别,</code>加_一个额外的条目被创建!) _没有人只是打电话</p>
-<p>摅<code>,例子中除外.</code>但是,您看到的大多数Rust代码都由一些独立的示例组成!比赛发生的可能性更大: 我们可以遍历键/值对,但不是以任何特定的顺序.</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-if let Some(v) = map.get(&quot;two&quot;) {
+</code></pre>
+<p>请注意,获取可写入的引用发生在它自己的块中 - 否则,我们将有一个可变的借位持续到结束,然后 Rust 不会允许您从<code>map</code>再次借与<code>map.get(&quot;two&quot;)</code>;它不能允许任何可读的引用,同时已经有一个可写引用的范围.(如果是这样,它不能保证那些可读的引用将保持有效.)所以解决方案是确保可变借用不会持续很长时间.</p>
+<p>这不是最优雅的API,但我们不能抛弃任何可能的错误. Python会抛出一个异常,而C ++只会创建一个默认值.(这很方便,但偷偷摸摸;容易忘记的价格a_map[ &quot;two&quot;]`总是返回一个整数是我们不能区分 zero 和 '未找到' 之间的区别, <em>加</em> 一个额外的条目被创建!)</p>
+<p>没有人只是运行 <code>unwrap</code>, 除了例子中除外. 但是,您看到的大多数 Rust 代码都由一些独立的示例组成!比赛发生的可能性更大: 我们可以遍历key/值对,但不是以任何特定的顺序.</p>
+<pre><code class="language-Rust">if let Some(v) = map.get(&quot;two&quot;) {
     let res = v + 1;
     assert_eq!(res, 3);
 }
@@ -3582,57 +3558,43 @@ match map.get_mut(&quot;two&quot;) {
     Some(mref) =&gt; *mref = 20,
     None =&gt; panic!(&quot;_now_ we can panic!&quot;)
 }
-#}</code></pre></pre>
+</code></pre>
 <p>也有</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-for (k,v) in map.iter() {
+<pre><code class="language-Rust">for(k,v) in map.iter() {
     println!(&quot;key {} value {}&quot;, k,v);
 }
 // key one value eins
 // key three value drei
 // key two value zwei
-#}</code></pre></pre>
-<p>按键<code>和</code>值<code>方法分别通过键和值返回迭代器,这使得创建值的向量变得容易.</code>示例: 计算单词</p>
-<a class="header" href="print.html#a与文本有关的一个有趣的事情是计数字频率" id="a与文本有关的一个有趣的事情是计数字频率"><h2>与文本有关的一个有趣的事情是计数字频率.</h2></a>
-<p>将文本分解为单词很简单split_whitespace<code>,但是我们真的要尊重标点符号.</code>所以这些词应该被定义为只包含字母字符. 这些词也需要作为小写字母进行比较. 在地图上做一个可变的查找很简单,但是处理查找失败的情况有点尴尬.</p>
-<p>幸运的是,有一种更新地图值的方式:</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-let mut map = HashMap::new();
+</code></pre>
+<p>按<code>key</code>和<code>值</code>方法分别通过key和值返回 迭代器 ,这使得创建值的 Vec 变得容易.</p>
+<a class="header" href="print.html#a示例-计算单词" id="a示例-计算单词"><h2>示例: 计算单词</h2></a>
+<p>与文本有关的一个有趣的事情是计数字频率.</p>
+<p>将文本分解为单词很简单<code>split_whitespace</code>,但是我们真的要尊重标点符号.  所以这些词应该被定义为只包含字母字符. 这些词也需要作为小写字母进行比较. 在 map 上做一个可变的查找很简单,但是处理查找失败的情况有点尴尬.</p>
+<p>幸运的是,有一种更新 map 值的方式:</p>
+<pre><code class="language-Rust">let mut map = HashMap::new();
 
 for s in text.split(|c: char| ! c.is_alphabetic()) {
     let word = s.to_lowercase();
     let mut count = map.entry(word).or_insert(0);
     *count += 1;
 }
-#}</code></pre></pre>
-<p>如果没有对应于某个单词的现有计数,那么让我们为该单词和单词创建一个包含零的新条目_插_它进入地图. 它正是C ++映射所做的,除非它明确地完成并且没有偷偷摸摸.</p>
-<p>这段代码中只有一个显式类型,这就是<code>烧焦</code>因为弦的怪癖而需要<code>模式</code>使用的特质<code>分裂</code>. 但我们可以推断出关键类型是<code>串</code>值类型是<code>i32</code>.</p>
-<p>运用<a href="http://www.gutenberg.org/cache/epub/1661/pg1661.txt">福尔摩斯历险记</a>来自古腾堡计划,我们可以更彻底地进行测试. 唯一字词的总数 (<code>map.len ()</code>) 是8071.</p>
-<p>如何找到最常见的二十个单词?首先,将映射转换为 (键,值) 元组的向量.  (因为我们使用了,所以这消耗了地图<code>into_iter</code>. )</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-let mut entries: Vec&lt;_&gt; = map.into_iter().collect();
-#}</code></pre></pre>
-<p>接下来我们可以按降序排列. <code>排序方式</code>期待的结果<code>cmp</code>方法来自于<code>奥德</code>特征,它是由整型值类型实现的:</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-    entries.sort_by(|a,b| b.1.cmp(&amp;a.1));
-#}</code></pre></pre>
+</code></pre>
+<p>如果没有对应于某个单词的现有计数,那么让我们为该单词和单词创建一个包含零和 <em>插{insert}</em> 它进入 map.它正是C ++映射所做的,除非它明确地完成并且没有偷偷摸摸.</p>
+<p>这段代码中只有一个显式类型,这就是<code>char</code>因为弦的怪癖而需要<code>模式{Pattern}</code>使用的特质<code>split</code>. 但我们可以推断出 key 类型是<code>String</code>和 value 类型是<code>i32</code>.</p>
+<p>运用<a href="http://www.gutenberg.org/cache/epub/1661/pg1661.txt">福尔摩斯历险记</a>来自古腾堡计划,我们可以更彻底地进行测试. 唯一字词的总数(<code>map.len()</code>) 是8071.</p>
+<p>如何找到最常见的二十个单词?首先,将映射转换为(key, value) 元组的 Vec .(因为我们使用了,所以这消耗了 map <code>into_iter</code>.)</p>
+<pre><code class="language-Rust">let mut entries: Vec&lt;_&gt; = map.into_iter().collect();
+</code></pre>
+<p>接下来我们可以按降序排列. <code>sort_by</code>期待的结果<code>cmp</code>方法来自于<code>Ord</code> trait ,它是由整型值类型实现的:</p>
+<pre><code class="language-Rust">    entries.sort_by(|a,b| b.1.cmp(&amp;a.1));
+</code></pre>
 <p>最后打印出前20个条目:</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-    for e in entries.iter().take(20) {
+<pre><code class="language-Rust">    for e in entries.iter().take(20) {
         println!(&quot;{} {}&quot;, e.0, e.1);
     }
-#}</code></pre></pre>
-<p>(好吧,你_可以_只是循环<code>0..20</code>并在这里给这个向量编制索引 - 这没有错,只是有点不经意 - 而且对于大型迭代来说可能更昂贵. )</p>
+</code></pre>
+<p>(好吧,你 <em>可以</em> 只是循环<code>0..20</code>并在这里给这个 Vec 编制索引 - 这没有错,只是有点不经意 - 而且对于大型迭代来说可能更昂贵.)</p>
 <pre><code> 38765
 the 5810
 and 3088
@@ -3654,11 +3616,11 @@ with 877
 as 863
 had 830
 </code></pre>
-<p>有点惊喜 - 那个空话是什么?这是因为<code>分裂</code>适用于单字符分隔符,因此任何标点符号或额外空格都会导致新的分割.</p>
-<a class="header" href="print.html#a集" id="a集"><h2>集</h2></a>
-<p>集合是地图,您只关心关键字,而不关联任何关联的值. 所以<code>插</code>只需要一个值,然后使用<code>包含</code>用于测试一个值是否在一个集合中.</p>
-<p>像所有容器一样,您可以创建一个<code>HashSet的</code>来自迭代器. 这正是什么<code>搜集</code>确实,一旦你给了它必要的类型提示.</p>
-<pre><pre class="playpen"><code class="language-rust">// set1.rs
+<p>有点惊喜 - 那个空的文本是什么?这是因为<code>split</code>适用于单字符分隔符,因此任何标点符号或额外空格都会导致新的分割.</p>
+<a class="header" href="print.html#sets" id="sets"><h2>Sets</h2></a>
+<p>Sets 是 map ,您只关心关key字,而不关联任何关联的值. 所以<code>inserts</code>只需要一个值,然后使用<code>contains</code>用于测试一个值是否在一个集合中.</p>
+<p>像所有容器一样,您可以创建一个<code>HashSet</code>来自 迭代器.这正是什么 <code>collect</code>确实,一旦你给了它必要的类型提示.</p>
+<pre><code class="language-Rust">// set1.rs
 use std::collections::HashSet;
 
 fn make_set(words: &amp;str) -&gt; HashSet&lt;&amp;str&gt; {
@@ -3671,32 +3633,26 @@ fn main() {
     println!(&quot;{:?}&quot;, fruit);
 }
 // {&quot;orange&quot;, &quot;pear&quot;, &quot;apple&quot;}
-</code></pre></pre>
-<p>注意 (如预期的那样) 重复插入同一个键不起作用,并且集合中值的顺序并不重要.</p>
+</code></pre>
+<p>注意(如预期的那样) 重复插入同一个key不起作用,并且集合中值的顺序并不重要.</p>
 <p>没有通常的操作,它们不会被设置:</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-let fruit = make_set(&quot;apple orange pear&quot;);
+<pre><code class="language-Rust">let fruit = make_set(&quot;apple orange pear&quot;);
 let colours = make_set(&quot;brown purple orange yellow&quot;);
 
 for c in fruit.intersection(&amp;colours) {
     println!(&quot;{:?}&quot;,c);
 }
 // &quot;orange&quot;
-#}</code></pre></pre>
-<p>他们都创建迭代器,并且可以使用<code>搜集</code>使这些成为集合.</p>
-<p>这是一个快捷方式,就像我们为矢量定义的那样:</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-use std::hash::Hash;
+</code></pre>
+<p>他们都创建 迭代器 ,并且可以使用 <code>collect</code>使这些成为集合.</p>
+<p>这是一个快捷方式,就像我们为 vec 定义的那样:</p>
+<pre><code class="language-Rust">use std::hash::Hash;
 
 trait ToSet&lt;T&gt; {
     fn to_set(self) -&gt; HashSet&lt;T&gt;;
 }
 
-impl &lt;T,I&gt; ToSet&lt;T&gt; for I
+impl&lt;T,I&gt; ToSet&lt;T&gt; for I
 where T: Eq + Hash, I: Iterator&lt;Item=T&gt; {
 
     fn to_set(self) -&gt; HashSet&lt;T&gt; {
@@ -3707,36 +3663,27 @@ where T: Eq + Hash, I: Iterator&lt;Item=T&gt; {
 ...
 
 let intersect = fruit.intersection(&amp;colours).to_set();
-#}</code></pre></pre>
-<p>就像所有的Rust泛型一样,你需要限制类型 - 这只能用于理解平等的类型 (<code>公式</code>) 并且为其存在&quot;散列函数&quot; (<code>哈希</code>) . 请记住,没有_类型_叫<code>迭代器</code>,所以<code>一世</code>代表任何类型_器物_ <code>迭代器</code>.</p>
-<p>这种在标准库类型上实现我们自己的方法的技术似乎有点过于强大,但是同样存在规则. 我们只能为自己的特质做到这一点. 如果结构和特征来自同一个箱子 (特别是stdlib) ,那么这种实现将不被允许. 通过这种方式,您可以避免造成混乱.</p>
-<p>在祝贺自己如此聪明,方便的捷径之前,您应该意识到后果. 如果<code>make_set</code>是这样写的,所以这些是拥有字符串的集合,然后是实际类型<code>相交</code>可能会惊喜:</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-fn make_set(words: &amp;str) -&gt; HashSet&lt;String&gt; {
+</code></pre>
+<p>就像所有的 Rust 泛型一样,你需要限制类型 - 这只能用于理解平等的类型(<code>Eq</code>) 并且为其存在&quot;散列函数&quot;(<code>Hash</code>).请记住,没有 <em>类型</em> 叫<code>迭代器</code>,所以<code>I</code>代表任何类型 <em>impl</em> <code>迭代器</code>.</p>
+<p>这种在标准库类型上实现我们自己的方法的技术似乎有点过于强大,但是同样存在规则. 我们只能为自己的特质做到这一点. 如果结构和 trait 来自同一个箱子(特别是 stdlib ) ,那么这种实现将不被允许. 通过这种方式,您可以避免造成混乱.</p>
+<p>在祝贺自己如此聪明,方便的捷径之前,您应该意识到后果. 如果<code>make_set</code>是这样写的,所以这些是拥有字符串的集合,然后是实际类型<code>相交{intersect}</code>可能会惊喜:</p>
+<pre><code class="language-Rust">fn make_set(words: &amp;str) -&gt; HashSet&lt;String&gt; {
     words.split_whitespace().map(|s| s.to_string()).collect()
 }
 ...
 // intersect is HashSet&lt;&amp;String&gt;!
 let intersect = fruit.intersection(&amp;colours).to_set();
-#}</code></pre></pre>
-<p>除此之外,Rust不会突然开始复制拥有的字符串. <code>相交</code>包含单个<code>&amp;串</code>借来的<code>水果</code>. 我可以向你保证,当你开始修补生命时,这会给你带来麻烦!更好的解决方案是使用迭代器的<code>克隆</code>方法来创建交集的所有字符串副本.</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-// intersect is HashSet&lt;String&gt; - much better
+</code></pre>
+<p>除此之外, Rust 不会突然开始复制拥有的字符串. <code>相交</code>contains单个<code>&amp;String</code>借来<code>fruit</code>. 我可以向你保证,当你开始修补生命时,这会给你带来麻烦!更好的解决方案是使用 迭代器 <code>clone</code>方法来创建交集的所有字符串副本.</p>
+<pre><code class="language-Rust">// intersect is HashSet&lt;String&gt; - much better
 let intersect = fruit.intersection(&amp;colours).cloned().to_set();
-#}</code></pre></pre>
-<p>一个更强大的定义<code>设置</code>可能<code>self.cloned () . 收集 ()</code>,我邀请您试用.</p>
+</code></pre>
+<p>一个更强大的定义<code>to_set</code>可能<code>self.cloned().collect()</code>,我邀请您试用.</p>
 <a class="header" href="print.html#a示例-交互式命令处理" id="a示例-交互式命令处理"><h2>示例: 交互式命令处理</h2></a>
 <p>与程序进行交互式会话通常很有用. 每行都被读入并分成单词;该命令在第一个单词上查找,其余单词作为参数传递给该命令.</p>
-<p>自然实现是从命令名到闭包的映射. 但是,我们如何存储关闭,因为它们都会有不同的大小?拳击他们将他们复制到堆上:</p>
+<p>自然实现是从命令名到闭包的映射. 但是,我们如何存储关闭,因为它们都会有不同的大小? 拳击他们将他们复制到堆上:</p>
 <p>这是第一次尝试:</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-    let mut v = Vec::new();
+<pre><code class="language-Rust">    let mut v = Vec::new();
     v.push(Box::new(|x| x * x));
     v.push(Box::new(|x| x / 2.0));
 
@@ -3744,33 +3691,27 @@ let intersect = fruit.intersection(&amp;colours).cloned().to_set();
         let res = f(1.0);
         println!(&quot;res {}&quot;, res);
     }
-#}</code></pre></pre>
+</code></pre>
 <p>我们在第二次推动时遇到了非常明显的错误:</p>
 <pre><code>  = note: expected type `[closure@closure4.rs:4:21: 4:28]`
   = note:    found type `[closure@closure4.rs:5:21: 5:28]`
 note: no two closures, even if identical, have the same type
 </code></pre>
-<p><code>rustc</code>推导出了一个过于具体的类型,所以有必要强制该向量具有该类型_盒装特质类型_在事情刚刚开始之前:</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-    let mut v: Vec&lt;Box&lt;Fn(f64)-&gt;f64&gt;&gt; = Vec::new();
-#}</code></pre></pre>
-<p>我们现在可以使用相同的技巧,并将这些盒装封口保存在一个<code>HashMap中</code>. 我们仍然需要警惕终身,因为关闭可以从他们的环境中借用.</p>
+<p><code>rustc</code>导出了一个过于具体的类型,所以有必要强制该 Vec 具有该类型 <em>盒装 trait 类型</em> 在事情刚刚开始之前:</p>
+<pre><code class="language-Rust">    let mut v: Vec&lt;Box&lt;Fn(f64)-&gt;f64&gt;&gt; = Vec::new();
+</code></pre>
+<p>我们现在可以使用相同的技巧,并将这些盒装封口保存在一个<code>HashMap</code>. 我们仍然需要警惕终身,因为关闭可以从他们的环境中借用.</p>
 <p>作为第一个制作它们很诱人<code>FnMut</code>- 也就是说,他们可以修改任何捕获的变量. 但是我们会有不止一个命令,每个命令都有自己的闭包,所以你不能随意借用相同的变量.</p>
-<p>所以关闭通过了_可变参考_作为一个参数,加上一段字符串切片 (<code>&amp;[&amp;STR]</code>) 代表命令参数. 他们会返回一些<code>结果</code>- 我们会用<code>串</code>首先是错误.</p>
+<p>所以关闭通过了_可变引用_作为一个参数,加上一段字符串 切片(<code>&amp;[&amp;str]</code>) 代表命令参数. 他们会返回一些<code>Result</code>- 我们会用<code>String</code>首先是错误.</p>
 <p><code>D</code>是数据类型,可以是任何大小的数据.</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-type CliResult = Result&lt;String,String&gt;;
+<pre><code class="language-Rust">type CliResult = Result&lt;String,String&gt;;
 
 struct Cli&lt;'a,D&gt; {
     data: D,
     callbacks: HashMap&lt;String, Box&lt;Fn(&amp;mut D,&amp;[&amp;str])-&gt;CliResult + 'a&gt;&gt;
 }
 
-impl &lt;'a,D: Sized&gt; Cli&lt;'a,D&gt; {
+impl&lt;'a,D: Sized&gt; Cli&lt;'a,D&gt; {
     fn new(data: D) -&gt; Cli&lt;'a,D&gt; {
         Cli{data: data, callbacks: HashMap::new()}
     }
@@ -3779,13 +3720,10 @@ impl &lt;'a,D: Sized&gt; Cli&lt;'a,D&gt; {
     where F: Fn(&amp;mut D, &amp;[&amp;str])-&gt;CliResult + 'a {
         self.callbacks.insert(name.to_string(),Box::new(callback));
     }
-#}</code></pre></pre>
-<p><code>cmd</code>传递一个名称和任何与我们的签名相匹配的封闭,这个签名被装箱并输入到地图中. <code>Fn</code>意味着我们的关闭借用他们的环境,但不能修改它. 它是声明比实际实现更可怕的通用方法之一!忘记明确的生命是一个常见的错误 -  Rust不会让我们忘记这些封闭只限于他们的环境!</p>
+</code></pre>
+<p><code>cmd</code>传递一个名称和任何与我们的签名相匹配的封闭,这个签名被装箱并输入到 map 中. <code>Fn</code>意味着我们的关闭借用他们的环境,但不能修改它. 它是声明比实际实现更可怕的通用方法之一!忘记明确的生命是一个常见的错误 -   Rust 不会让我们忘记这些封闭只限于他们的环境!</p>
 <p>现在阅读和运行命令:</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-    fn process(&amp;mut self,line: &amp;str) -&gt; CliResult {
+<pre><code class="language-Rust">    fn process(&amp;mut self,line: &amp;str) -&gt; CliResult {
         let parts: Vec&lt;_&gt; = line.split_whitespace().collect();
         if parts.len() == 0 {
             return Ok(&quot;&quot;.to_string());
@@ -3808,22 +3746,19 @@ impl &lt;'a,D: Sized&gt; Cli&lt;'a,D&gt; {
             buff.clear();
         }
     }
-#}</code></pre></pre>
-<p>这是非常简单明了的 - 将行分成单词作为矢量,查找地图中的第一个单词,并用存储的可变数据和其余单词调用闭包. 空行会被忽略,不会被视为错误.</p>
-<p>接下来,让我们定义一些帮助函数,使我们的闭包更容易返回正确和不正确的结果. 有一个_小_有点聪明在继续;它们是通用函数,适用于任何可以转换为的类型<code>串</code>.</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-fn ok&lt;T: ToString&gt;(s: T) -&gt; CliResult {
+</code></pre>
+<p>这是非常简单明了的 - 将行分成单词作为 vec ,查找 map 中的第一个单词,并用存储的可变数据和其余单词调用闭包. 空行会被忽略,不会被视为错误.</p>
+<p>接下来,让我们定义一些帮助函数,使我们的闭包更容易返回正确和不正确的结果. 有一个 有点 <em>小</em> 聪明在继续;它们是通用函数,适用于任何可以转换为的类型<code>String</code>.</p>
+<pre><code class="language-Rust">fn ok&lt;T: ToString&gt;(s: T) -&gt; CliResult {
     Ok(s.to_string())
 }
 
 fn err&lt;T: ToString&gt;(s: T) -&gt; CliResult {
     Err(s.to_string())
 }
-#}</code></pre></pre>
-<p>最后,主程序. 看看如何<code>OK (答案)</code>作品 - 因为整数知道如何将自己转换为字符串!</p>
-<pre><pre class="playpen"><code class="language-rust">use std::error::Error;
+</code></pre>
+<p>最后,主程序. 看看如何<code>OK(答案)</code>作品 - 因为整数知道如何将自己转换为字符串!</p>
+<pre><code class="language-Rust">use std::error::Error;
 
 fn main() {
     println!(&quot;Welcome to the Interactive Prompt! &quot;);
@@ -3850,28 +3785,28 @@ fn main() {
 
     cli.go();
 }
-</code></pre></pre>
-<p>这里的错误处理有点笨拙,我们稍后会看到如何在这种情况下使用问号运算符. 基本上,特定的错误<code>的std :: NUM :: ParseIntError</code>实现这个特点<code>的std ::错误::错误</code>,我们必须把它带入使用范围<code>描述</code>方法 - 铁锈不让特征运作,除非它们是可见的.</p>
+</code></pre>
+<p>这里的错误处理有点笨拙,我们稍后会看到如何在这种情况下使用问号运算符. 基本上,特定的错误<code>std::num::ParseIntError</code>实现这个特点 <code>std::error::Error</code>,我们必须把它带入使用范围<code>描述</code>方法 - 铁锈不让 trait 运作,除非它们是可见的.</p>
 <p>在行动中:</p>
 <pre><code>Welcome to the Interactive Prompt!
 go 32
-got [&quot;32&quot;]
+got[&quot;32&quot;]
 Ok(&quot;32&quot;)
 show
 Ok(&quot;32&quot;)
 goop one two three
 Err(&quot;no such command&quot;)
 go 42 one two three
-got [&quot;42&quot;, &quot;one&quot;, &quot;two&quot;, &quot;three&quot;]
+got[&quot;42&quot;, &quot;one&quot;, &quot;two&quot;, &quot;three&quot;]
 Ok(&quot;42&quot;)
 go boo!
 Err(&quot;invalid digit found in string&quot;)
 </code></pre>
-<p>以下是一些明显的改进,供您尝试. 首先,如果我们给<code>cmd</code>第三个参数是帮助行,然后我们可以存储这些帮助行并自动执行&quot;帮助&quot;命令. 其次,有一些命令编辑和历史是_非常_方便,所以使用<a href="https://crates.io/crates/rustyline">rustyline</a>从货物箱.</p>
+<p>以下是一些明显的改进,供您尝试. 首先,如果我们给<code>cmd</code>第三个参数是帮助行,然后我们可以存储这些帮助行并自动执行&quot;帮助&quot;命令. 其次,有一些命令编辑和历史是 <em>非常</em> 方便,所以使用[ Rust yline](https://crates.io/crates/ Rust yline)从Cargo的库中.</p>
 <a class="header" href="print.html#a错误处理" id="a错误处理"><h1>错误处理</h1></a>
 <a class="header" href="print.html#a基本的错误处理" id="a基本的错误处理"><h2>基本的错误处理</h2></a>
-<p>如果你不能使用问号操作符来实现快乐,那么在生锈中的错误处理可能很笨拙,我们需要返回一个<code>结果</code>它可以接受任何错误. 所有错误都会实现这个特性<code>的std ::错误::错误</code>, 所以_任何_错误可以转换成一个<code>框&lt;错误&gt;</code>.</p>
-<p>说我们需要处理_都_从转换字符串到数字的I / O错误和错误:</p>
+<p>如果你不能使用问号操作符来实现快乐,那么在生锈中的错误处理可能很笨拙,我们需要返回一个<code>Result</code>它可以接受任何错误. 所有错误都会实现这个 trait <code>std::error::error</code>, 所以 <em>任何</em> 错误可以转换成一个<code>Box&lt;Error&gt;</code>.</p>
+<p>说我们 <em>都</em> 需要处理 I/O 错误和从转换String到数字的错误:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -3887,18 +3822,18 @@ fn run(file: &amp;str) -&gt; Result&lt;i32,Box&lt;Error&gt;&gt; {
     Ok(contents.trim().parse()?)
 }
 #}</code></pre></pre>
-<p>所以这是I / O错误的两个问号 (无法打开文件,或无法读取为字符串) 以及转换错误的一个问号. 最后,我们将结果包装在内<code>好</code>.rust可以从返回类型中得出结论<code>解析</code>应该转换为<code>i32</code>.</p>
-<p>很容易为此创建一个快捷方式<code>结果</code>类型:</p>
+<p>所以这是I/O错误的两个问号 (无法打开文件,或无法读取为String) 以及转换错误的一个问号. 最后,我们将结果包装在内<code>Ok</code>.rust可以从返回类型中得出结论<code>parse</code>应该转换为<code>i32</code>.</p>
+<p>很容易为此创建一个快捷方式<code>Result</code>类型:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
 type BoxResult&lt;T&gt; = Result&lt;T,Box&lt;Error&gt;&gt;;
 #}</code></pre></pre>
-<p>但是,我们的程序将具有特定于应用程序的错误条件,并且Sowe需要创建我们自己的错误类型. 基本要求很简单:</p>
+<p>但是,我们的程序将具有特定于应用程序的错误条件,并且需要创建我们自己的错误类型. 基本要求很简单:</p>
 <ul>
-<li>可以实施<code>调试</code></li>
-<li>必须执行<code>显示</code></li>
-<li>必须执行<code>错误</code></li>
+<li>可以 impl <code>Debug</code></li>
+<li>必须 impl <code>Display</code></li>
+<li>必须 impl <code>Error</code></li>
 </ul>
 <p>否则,你的错误可以做到它喜欢的东西.</p>
 <pre><pre class="playpen"><code class="language-rust">
@@ -3940,11 +3875,11 @@ fn raises_my_error(yes: bool) -&gt; Result&lt;(),MyError&gt; {
     }
 }
 #}</code></pre></pre>
-<p>打字<code>结果&lt;t时,myerror&gt;</code>变得单调乏味,许多防锈模块定义它们自己的模块<code>结果</code>- 例如<code>IO ::结果&lt;T&gt;</code>是简短的<code>结果&lt;t时,IO ::误差&gt;</code>.</p>
-<p>在下一个例子中,当一个字符串不能被解析为一个浮点数时,我们需要处理特定的错误.</p>
-<p>现在这样<code>?</code>工作寻找从错误的转换_表达_到必须的错误_回_. 并且这个转换由表达<code>从</code>特征. <code>框&lt;错误&gt;</code>像它一样工作,因为它实现<code>从</code>为所有类型实施<code>错误</code>.</p>
-<p>此时您可以继续使用便捷的别名<code>BoxResult</code>并且赶上所有事情;会有我们的错误转化为<code>框&lt;错误&gt;</code>这对小型应用程序来说是一个很好的选择. 但我想显示其他错误可以明确地与我们的错误类型合作.</p>
-<p><code>ParseFloatError</code>器物<code>错误</code>所以<code>描述 ()</code>被定义为.</p>
+<p>打字<code>Result&lt;T,MyError&gt;</code>变得单调乏味,许多防锈模块定义它们自己的模块<code>Result</code>- 例如<code>IO::Result&lt;T&gt;</code>是简短的<code>Result&lt;T,io::Error&gt;</code>.</p>
+<p>在下一个例子中,当一个String不能被解析为一个浮点数时,我们需要处理特定的错误.</p>
+<p>现在这样<code>?</code>工作寻找从错误的转换 <em>表达</em> 到必须的错误 <em>返回</em>. 并且这个转换由表达<code>From</code> trait. <code>Box&lt;Error&gt;</code>像它一样工作,因为它实现<code>From</code>为所有类型实施<code>Error</code>.</p>
+<p>此时您可以继续使用便捷的别名<code>BoxResult</code>并且赶上所有事情;会有我们的错误转化为<code>Box&lt;Error&gt;</code>这对小型应用程序来说是一个很好的选择. 但我想显示其他错误可以明确地与我们的错误类型合作.</p>
+<p><code>ParseFloatError</code> impl <code>Error</code>, 所以<code>description()</code>被定义为.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -3963,7 +3898,7 @@ fn parse_f64(s: &amp;str, yes: bool) -&gt; Result&lt;f64,MyError&gt; {
     Ok(x)
 }
 #}</code></pre></pre>
-<p>首先<code>?</code>是好的 (一种类型总是转换为自己的<code>从</code>) 和第二个<code>?</code>将转换<code>ParseFloatError</code>至<code>MyError</code>.</p>
+<p>首先<code>?</code>是好的 (一种类型总是转换为自己的<code>From</code>) 和第二个<code>?</code>将转换<code>ParseFloatError</code>至<code>MyError</code>.</p>
 <p>结果如下:</p>
 <pre><pre class="playpen"><code class="language-rust">fn main() {
     println!(&quot; {:?}&quot;, parse_f64(&quot;42&quot;,false));
@@ -3974,16 +3909,16 @@ fn parse_f64(s: &amp;str, yes: bool) -&gt; Result&lt;f64,MyError&gt; {
 //  Err(MyError { details: &quot;borked&quot; })
 //  Err(MyError { details: &quot;invalid float literal&quot; })
 </code></pre></pre>
-<p>不要太复杂,虽然有点啰嗦. 该繁琐的一点是有towrite<code>从</code>所有其他错误类型都需要进行转换<code>MyError</code>- 或者你只是依靠<code>框&lt;错误&gt;</code>. 新手会因为多种方式在铁锈中做同样的事情而感到困惑;总是有另一种方法去剥离鳄梨 (或者如果你感觉嗜血,那么就去皮肤上) . 灵活性的代价有很多选择. 200行程序的错误处理可以比大型应用程序简单得多. 如果您想将您的宝贵物品作为货物箱打包,那么错误处理就变得至关重要.</p>
-<p>目前,问号运算符仅适用于<code>结果</code>,不<code>选项</code>,这是一个功能,而不是一个限制. <code>选项</code>有一个<code>ok_or_else</code>它将自己转换成一个<code>结果</code>例如,说我们有一个<code>HashMap中</code>并且如果没有定义键则必须失败:</p>
+<p>不要太复杂,虽然有点啰嗦. 该繁琐的一点是不得不写<code>From</code>所有其他错误类型都需要进行转换<code>MyError</code>- 或者你只是依靠<code>Box&lt;Error&gt;</code>. 新手会因为多种方式在 rust 中做同样的事情而感到困惑;总是有另一种方法去剥离鳄梨 (或者如果你感觉嗜血,那么就去皮肤上) . 灵活性的代价有很多选择. 200行程序的错误处理可以比大型应用程序简单得多. 如果您想将您的宝贵物品作为 Cargo 打包,那么错误处理就变得至关重要.</p>
+<p>目前,问号运算符仅适用于<code>Result</code>,不<code>Option</code>,这是一个功能,而不是一个限制. <code>Option</code>有一个<code>ok_or_else</code>它将自己转换成一个<code>Result</code>例如,说我们有一个<code>HashMap</code>并且如果没有定义键则必须失败:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
     let val = map.get(&quot;my_key&quot;).ok_or_else(|| MyError::new(&quot;my_key not defined&quot;))?;
 #}</code></pre></pre>
 <p>现在这里返回的错误是完全清楚的! (该表单使用闭包,因此只有在查找失败时才会创建错误值. )</p>
-<a class="header" href="print.html#a简单错误的简单错误" id="a简单错误的简单错误"><h2>简单错误的简单错误</h2></a>
-<p>该<a href="https://docs.rs/simple-error/0.1.9/simple_error/">简单的错误</a>crate为你提供基于字符串的基本错误类型,正如我们在这里定义的那样,以及一些方便的宏. 就像任何错误一样,它可以正常工作<code>框&lt;错误&gt;</code>:</p>
+<a class="header" href="print.html#simeple-error的简单错误" id="simeple-error的简单错误"><h2>simeple-error的简单错误</h2></a>
+<p>该<a href="https://docs.rs/simple-error/0.1.9/simple_error/">simple-error</a>crate为你提供基于String的基本错误类型,正如我们在这里定义的那样,以及一些方便的宏. 就像任何错误一样,<code>Box&lt;Error&gt;</code>也可以正常工作:</p>
 <pre><pre class="playpen"><code class="language-rust">#[macro_use]
 extern crate simple_error;
 
@@ -4007,14 +3942,15 @@ fn main() {
 // Err(ParseIntError { kind: InvalidDigit })
 // Err(StringError(&quot;empty string&quot;))
 </code></pre></pre>
-<p><code>保释! (S)</code>扩展到<code>返回simpleerror :: new (s) .into () ;</code>- 尽早返回转换_成_接收类型.</p>
-<p>你需要使用<code>BoxResult</code>用于混合<code>SimpleError</code>键入其他错误,因为我们无法执行<code>从</code>因为它的特点和类型都来自其他箱子.</p>
-<a class="header" href="print.html#a严重错误的错误链" id="a严重错误的错误链"><h2>严重错误的错误链</h2></a>
-<p>对于非平凡的应用程序有一个看点<a href="http://brson.github.io/2016/11/30/starting-with-error-chain">error_chain</a>crate.a小宏魔法可以去锈很长的路...</p>
-<p>创建一个二进制包<code>货物新--bin测试错误链</code>并改变到这个目录. 编辑<code>Cargo.toml</code>并添加<code>错误链=&quot;0.8.1&quot;</code>到最后.</p>
-<p>什么<strong>错误链</strong>为你做的是创建我们手动执行错误类型所需的所有定义;创建一个结构体,并实现必要的特性: <code>显示</code>,<code>调试</code>和<code>错误</code>它也是默认的实现<code>从</code>所以字符串可以转换成错误.</p>
-<p>我们的第一<code>SRC / main.rs</code>文件看起来像这样. 所有的主要程序都是通话<code>跑</code>,打印出错误,并用非零退出代码结束程序. 宏<code>error_chain</code>生成所需的所有定义<code>错误</code>模块 - 在一个更大的程序中,你会把它放在它自己的文件中. 我们需要把所有东西都放进去<code>错误</code>回到全局范围,因为我们的代码将需要生成生成的特征. 默认情况下,会有一个<code>错误</code>结构和a<code>结果</code>用thaterror定义.</p>
-<p>这里我们也要求<code>从</code>要这样做<code>的std :: IO ::错误</code>将使用转换为我的错误类型<code>foreign_links</code>:</p>
+<p><code>bail!(s)</code>扩展到<code>return SimpleError::new(s).into();</code>- 尽早返回转换 <em>成</em> 接收类型.</p>
+<p>你需要使用<code>BoxResult</code>用于混合<code>SimpleError</code>键入其他错误,因为我们无法执行<code>From</code>, 因为它的特点和类型都来自其他箱子.</p>
+<a class="header" href="print.html#a严重错误的error-chain" id="a严重错误的error-chain"><h2>严重错误的error-chain</h2></a>
+<p>对于非平凡的应用程序有一个看点<a href="http://brson.github.io/2016/11/30/starting-with-error-chain">error_chain</a>crate.</p>
+<p>rust 的一个小宏魔法漫长路</p>
+<p>创建一个二进制包<code>cargo new --bin test-error-chain</code>并到这个目录. 编辑<code>Cargo.toml</code>并添加<code>error-chain=&quot;0.8.1&quot;</code>到最后.</p>
+<p><strong>error-chain</strong> 为你做的是什么, 创建我们所需的所有定义的手动执行错误类型;创建一个结构体,并实现必要的 trait : <code>Display</code>,<code>Debug</code>和<code>Error</code>它也是默认的 impl <code>From</code> , 所以String可以转换成错误.</p>
+<p>我们的<code>src/main.rs</code>文件看起来像这样. 所有的主要程序都是运行<code>run</code>,打印出错误,并用非零退出代码结束程序. 宏<code>error_chain</code>生成所需的所有定义<code>Error</code>模块 - 在一个更大的程序中,你会把它放在它自己的文件中. 我们需要把所有东西都放进去<code>Error</code>回到全局范围,因为我们的代码将需要生成生成的 trait. 默认情况下,会有一个<code>Error</code>结构和一个<code>Result</code>用这个错误定义.</p>
+<p>这里我们也要求<code>From</code>要这样做<code>std::io::Error</code>将使用转换为我的错误类型<code>foreign_links</code>:</p>
 <pre><pre class="playpen"><code class="language-rust">#[macro_use]
 extern crate error_chain;
 
@@ -4045,8 +3981,8 @@ fn main() {
 }
 // error: No such file or directory (os error 2)
 </code></pre></pre>
-<p>'foreign_links'让我们的生活更轻松,因为问号操作员现在知道如何转换<code>的std :: IO ::错误</code>进入我们的<code>错误::错误</code>.  (在引擎盖下,宏正在创建一个<code>从&lt;性病:: IO ::误差&gt;</code>转换,正如前面所述. )</p>
-<p>所有的行动都发生在<code>跑</code>;让我们打印出作为第一个程序参数给出的文件的前10行. 有可能也可能不会有这样的论点,这不一定是错误的. 这里我们要转换一个<code>选项&lt;字符串&gt;</code>变成一个<code>结果&lt;字符串&gt;</code>. 那里有两个<code>选项</code>做这种转换的方法,我选择了最简单的一种. 我们的<code>错误</code>类型的工具<code>从</code>对于<code>&amp;STR</code>,所以用一个简单的文本信息就很容易发生错误.</p>
+<p>'foreign_links'让我们的生活更轻松,因为问号操作员现在知道如何转换<code>std::io::Error</code>进入我们的<code>error::Error</code>.  (在引擎盖下,宏正在创建一个<code>From&lt;std::io::Error&gt;</code>转换,正如前面所述. )</p>
+<p>所有的行动都发生在<code>run</code>;让我们打印出作为第一个程序参数给出的文件的前10行. 有可能也可能不会有这样的论点,这不一定是错误的. 这里我们要转换一个<code>Option&lt;String&gt;</code>变成一个<code>Result&lt;String&gt;</code>. 那里有两个<code>Option</code>做这种转换的方法,我选择了最简单的一种. 我们的<code>Error</code>类型的工具<code>From</code>对于<code>&amp;str</code>,所以用一个简单的文本信息就很容易发生错误.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -4073,7 +4009,7 @@ fn run() -&gt; Result&lt;()&gt; {
     Ok(())
 }
 #}</code></pre></pre>
-<p>(再次) 有一个有用的小宏<code>保释!</code>为'抛出'错误. 替代方案<code>ok_or</code>方法可能是:</p>
+<p>(再次) 有一个有用的小宏<code>bail!</code>为'抛出'错误. 替代方案<code>ok_or</code>方法可能是:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -4082,8 +4018,8 @@ fn run() -&gt; Result&lt;()&gt; {
         None =&gt; bail!(&quot;provide a file&quot;)
     };
 #}</code></pre></pre>
-<p>喜欢<code>?</code>它做了一个_提前回报_.</p>
-<p>返回的错误包含一个枚举<code>ErrorKind</code>,这使我们能够区分各种各样的错误. 总是有一个变体<code>味精</code> (当你说<code>错误::从 (STR)</code>) 和<code>foreign_links</code>已宣布<code>Io</code>它包装I / O错误:</p>
+<p>喜欢<code>?</code>它做了一个 <em>提前返回</em>.</p>
+<p>返回的错误包含一个枚举<code>ErrorKind</code>,这使我们能够区分各种各样的错误. 总是有一个变体<code>Msg</code> (当你说<code>Error::from(str)</code>) 和<code>foreign_links</code>已宣布<code>Io</code>它包装 I/O 错误:</p>
 <pre><pre class="playpen"><code class="language-rust">fn main() {
     if let Err(e) = run() {
         match e.kind() {
@@ -4098,7 +4034,7 @@ fn run() -&gt; Result&lt;()&gt; {
 // $ cargo run foo
 // io No such file or directory (os error 2)
 </code></pre></pre>
-<p>添加新的错误很简单. 添加一个<code>错误</code>部分<code>error_chain!</code>宏:</p>
+<p>添加新的错误很简单. 添加一个<code>Error</code>部分<code>error_chain!</code>宏:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -4115,7 +4051,7 @@ fn run() -&gt; Result&lt;()&gt; {
 
     }
 #}</code></pre></pre>
-<p>这定义了如何<code>显示</code>适用于这种新的错误. 现在我们可以更具体地处理'无争论'的错误,喂养<code>errorkind :: noargument</code>一个<code>串</code>值:</p>
+<p>这定义了如何<code>Display</code>适用于这种新的错误. 现在我们可以更具体地处理'no argument'的错误,喂养<code>ErrorKind::NoArgument</code>一个<code>String</code>值:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -4138,12 +4074,12 @@ fn run() -&gt; Result&lt;()&gt; {
 // error no argument provided: 'filename needed'
 // no argument &quot;filename needed&quot;
 </code></pre></pre>
-<p>一般来说,尽可能使错误尽可能具有特定的意义,_尤其_如果这是一个库函数!这种match-on-kind技术几乎相当于传统的异常处理,您可以在a中匹配异常类型<code>抓住</code>要么<code>除</code>块.</p>
-<p>综上所述,<strong>错误链</strong>创建一个类型<code>错误</code>为你定义<code>导致&lt;T&gt;</code>成为<code>的std ::结果::结果&lt;t时,误差&gt;</code>. <code>错误</code>包含一个枚举<code>ErrorKind</code>并且默认情况下有一个变体<code>味精</code>用于从字符串创建的错误. 你用来定义外部错误<code>foreign_links</code>这有两件事. 首先,它创建一个新的<code>ErrorKind</code>变种. 其次,它定义了<code>从</code>在这些外部错误,所以他们可以转换为无辜的. 新的错误变体可以很容易地添加. 许多恼人的样板代码被淘汰.</p>
+<p>一般来说,尽可能使错误尽可能具有特定的意义,<em>尤其</em> 如果这是一个库函数!这种 match-on-kind 技术几乎相当于传统的异常处理,您可以匹配异常类型在<code>catch</code>要么<code>except</code>块.</p>
+<p>综上所述,<strong>error-chain</strong>创建一个类型<code>Error</code>, 和为你定义<code>Result&lt;T&gt;</code>成为<code>std::result::Result&lt;T,Error&gt;</code>. <code>Error</code>包含一个枚举<code>ErrorKind</code>并且默认情况下有一个变体<code>Msg</code>用于从String创建的错误. 你用来定义外部错误<code>foreign_links</code>这有两件事. 首先,它创建一个新的<code>ErrorKind</code>变种. 其次,它定义了<code>From</code>在这些外部错误,所以他们可以转换为无辜的. 新的错误变体可以很容易地添加. 许多恼人的样板代码被淘汰.</p>
 <a class="header" href="print.html#a链接错误" id="a链接错误"><h2>链接错误</h2></a>
-<p>但这个箱子提供的非常酷的东西是_错误链接_.</p>
-<p>作为一个_库用户_,当一个方法只是'抛出'一个通用的I / O错误时,这是​​令人烦恼的. 好吧,它不能打开一个文件,很好,但是什么文件?基本上,这个信息对我有什么用处?</p>
-<p><code>error_chain</code>不_错误链接_这有助于解决过度通用错误的问题. 当wetry打开文件时,我们可以懒洋洋地依靠转换<code>IO ::错误</code>运用<code>?</code>, 要么_链_错误.</p>
+<p>但这个 箱子{crate} 提供的非常酷的东西是 <em>error-chainning</em>.</p>
+<p>作为一个 <em>库用户</em> ,当一个方法只是'抛出'一个通用的I/O错误时,这是​​令人烦恼的. 好吧,它不能打开一个文件,很好,但是什么文件?基本上,这个信息对我有什么用处?</p>
+<p><code>error_chain</code>作为 <em>error-chainning</em> 这有助于解决过度通用错误的问题. 当我们尝试打开文件时,我们可以懒洋洋地依靠转<code>io::Error</code>而用<code>?</code>, 要么 <em>链{chain}</em> 错误.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -4153,7 +4089,7 @@ let f = File::open(&amp;file)?;
 // a specific chained error
 let f = File::open(&amp;file).chain_err(|| &quot;unable to read the damn file&quot;)?;
 #}</code></pre></pre>
-<p>这里是该程序的新版本_没有_导入'外国'错误,只是默认值:</p>
+<p>这里是该程序的新版本 <em>没有</em> 导入'foreign'错误,只是默认值:</p>
 <pre><pre class="playpen"><code class="language-rust">#[macro_use]
 extern crate error_chain;
 
@@ -4206,14 +4142,14 @@ fn main() {
 // error unable to read the damn file
 // caused by: No such file or directory (os error 2)
 </code></pre></pre>
-<p>所以<code>chain_err</code>方法接受原始错误,并创建一个包含原始错误的新错误 - 这可以无限期地继续. 预计关闭将返回任何可能的值_转换_进入错误.</p>
-<p>生锈的宏可以明显地为您节省大量的打字工作. <code>错误链</code>甚至提供了一个取代整个主程序的捷径:</p>
+<p>所以<code>chain_err</code>方法接受原始错误,并创建一个包含原始错误的新错误 - 这可以无限期地继续. 预计关闭将返回任何可能的值 <em>转换</em> 进入错误.</p>
+<p>Rust 宏可以明显地为您节省大量的打字工作. <code>error-chain</code>甚至提供了一个取代整个主程序的捷径:</p>
 <pre><pre class="playpen"><code class="language-rust">quick_main!(run);
 </code></pre></pre>
-<p>(<code>跑</code>无论如何,所有的行动都是在那里进行的. )</p>
+<p>(<code>run</code>无论如何,所有的行动都是在那里进行的. )</p>
 <a class="header" href="print.html#a线程网络和共享" id="a线程网络和共享"><h1>线程,网络和共享</h1></a>
 <a class="header" href="print.html#a改变不变" id="a改变不变"><h2>改变不变</h2></a>
-<p>如果你感觉猪头 (如我) ,你想知道是否_曾经_可能避开借用检查器的限制.</p>
+<p>如果你感觉猪头 (如我) ,你想知道是否 <em>有过</em> 可能避开借用检查器的限制.</p>
 <p>考虑下面的小程序,它编译和运行没有问题.</p>
 <pre><pre class="playpen"><code class="language-rust">// cell.rs
 use std::cell::Cell;
@@ -4228,10 +4164,10 @@ fn main() {
     assert_eq!(answer.get(), 77);
 }
 </code></pre></pre>
-<p>答案已经改变了 - 但还是_变量_ <code>回答</code>是不可变的!</p>
-<p>这显然是非常安全的,因为单元格内的值只能通过访问<code>组</code>和<code>得到</code>. 这是通过的盛大名称_内部可变性_. 通常被称为_遗传可变性_: 如果我有一个结构值<code>v</code>,那么我只能写字段<code>v.a</code>如果<code>v</code>本身是可写的. <code>细胞</code>价值观放宽了这个规则,因为我们可以改变其中包含的价值<code>组</code>即使细胞本身不可变.</p>
-<p>然而,<code>细胞</code>只适用于<code>复制</code>类型 (例如派生的原始类型和用户类型) <code>复制</code>特征) .</p>
-<p>对于其他值,我们必须得到一个可以工作的参考,可变或不可变. 这是什么<code>RefCell</code>规定 - 您明确要求参考包含的值:</p>
+<p>答案已经改变了 - 但还是 <em>变量</em> <code>回答</code>是不可变的!</p>
+<p>这显然是非常安全的,因为单元格内的值只能通过访问<code>set</code>和<code>get</code>. 这是通过的盛大名称 <em>内部可变性</em>. 通常被称为 <em>遗传可变性</em>: 如果我有一个结构值<code>v</code>,如果<code>v</code>本身是可写的, 那么我只能写字段<code>v.a</code>. <code>Cell</code>价值观放宽了这个规则,因为我们可以改变其中包含的价值<code>set</code>即使细胞本身不可变.</p>
+<p>然而,<code>Cell</code>只适用于<code>Copy</code>类型 (例如派生的原始类型和用户类型<code>Copy</code>特征) .</p>
+<p>对于其他值,我们必须得到一个可以工作的引用,可变或不可变. 这是什么<code>RefCell</code>规定 - 您明确要求引用包含的值:</p>
 <pre><pre class="playpen"><code class="language-rust">// refcell.rs
 use std::cell::RefCell;
 
@@ -4246,8 +4182,8 @@ fn main() {
     assert_eq!(*greeting.borrow(), &quot;hola&quot;);
 }
 </code></pre></pre>
-<p>再次,<code>欢迎</code>没有被宣布为可变!</p>
-<p>明确的解除引用操作符<code>*</code>可能在Rust中有点混乱,因为通常你不需要它 - 例如<code>greeting.borrow () . LEN ()</code>因为方法调用会隐含地解除引用,所以很好. 但是你_做_需要<code>*</code>拉出底层<code>&amp;串</code>从<code>greeting.borrow ()</code>或者<code>&amp;mut字符串</code>从<code>greeting.borrow_mut ()</code>.</p>
+<p>再次,<code>greeting</code>没有被宣布为可变!</p>
+<p>明确的解除引用操作符<code>*</code>可能在Rust中有点混乱,因为通常你不需要它 - 例如<code>greeting.borrow().len()</code>因为方法调用会隐含地解除引用,所以很好. 但是你需要 <em>确实</em> <code>*</code>拉出底层 - <code>&amp;String</code>从<code>greeting.borrow()</code>或者<code>&amp;mut String</code>从<code>greeting.borrow_mut()</code>.</p>
 <p>用一个<code>RefCell</code>并不总是安全的,因为从这些方法返回的任何引用必须遵循通常的规则.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -4255,15 +4191,15 @@ fn main() {
     let mut gr = greeting.borrow_mut(); // gr is a mutable borrow
     *gr = &quot;hola&quot;.to_string();
 
-    assert_eq!(*greeting.borrow(), &quot;hola&quot;); // &lt;== we blow up here!
+    assert_eq!(*greeting.borrow(), &quot;hola&quot;); //&lt;== we blow up here!
 ....
 thread 'main' panicked at 'already mutably borrowed: BorrowError'
 #}</code></pre></pre>
-<p>如果你已经可以借用,你不能永久借钱!除了 - 这很重要 - 违反规则的事情发生在_运行_. 解决方案 (一如既往) 是尽可能地限制可变借入的范围 - 在这种情况下,您可以在此处放置前两行的块,以便可变参考<code>gr</code>在我们再次借用之前下降.</p>
-<p>所以,这不是一个你没有理由使用的功能,因为你会的_不_得到一个编译时错误. 这些类型提供_动态借款_在通常的规则使某些事情不可能的情况下.</p>
+<p>你不能永久借, 如果你已经可以借用 - 这很重要 - 违反规则的事情发生在 <em>运行时</em>. 解决方案 (一如既往) 是尽可能地限制可变借入的范围 - 在这种情况下,您可以在此处放置前两行<code>区域块{}</code>,以便可变引用<code>gr</code>在我们再次借用之前下降.</p>
+<p>所以,这不是一个你没有理由使用的功能,因为你 <em>不</em> 会得到一个编译时错误. 这些类型提供 <em>动态借用</em> 在通常的规则使某些事情不可能的情况下.</p>
 <a class="header" href="print.html#a共享引用" id="a共享引用"><h2>共享引用</h2></a>
-<p>到目前为止,价值与其借用引用之间的关系在编译时已经清楚并且已知. 价值是所有者,并且引用不能超过它. 但许多案例根本不适合这种整洁的模式. 例如,假设我们有一个<code>播放机</code>结构和a<code>角色</code>结构. 一个<code>播放机</code>保持引用的向量<code>角色</code>对象. 这些价值观之间并没有一个整齐的一对一关系,并且说服了对方<code>rustc</code>合作变得讨厌.</p>
-<p><code>Rc</code>作品像<code>框</code>- 堆内存被分配并且值被移动到它. 如果你克隆一个<code>框</code>它会分配一个值的完整克隆副本. 但克隆一个<code>Rc</code>是便宜的,因为每次你克隆它只是更新一个_引用计数_到了_相同的数据_. 这是一种古老且非常流行的内存管理策略,例如用于iOS / MacOS上的Objective C运行时.  (在现代C ++中,它是用<code>的std :: shared_ptr的</code>. )</p>
+<p>到目前为止,价值与其借用引用之间的关系在编译时已经清楚并且已知. 价值是所有者,并且引用不能超过它. 但许多案例根本不适合这种整洁的模式. 例如,假设我们有一个<code>播放机{Player}</code>结构和一个<code>Role{Role}</code>结构. 一个<code>播放机{Player}</code>保持引用的向量<code>Role{Role}</code>对象. 这些价值观之间并没有一个整齐的一对一关系,并且说服<code>rustc</code>合作变得讨厌.</p>
+<p><code>Rc</code>工作上像<code>Box</code>- 堆内存被分配并且值被移动到它. 如果你克隆一个<code>Box</code>它会分配一个值的完整克隆副本. 但克隆一个<code>Rc</code>是便宜的,因为每次你克隆它只是更新一个 <em>引用计数</em> 到了 <em>相同的数据</em>. 这是一种古老且非常 流{stream}  行的内存管理策略,例如用于 iOS / MacOS上的 Objective C 运行时.  (在现代C ++中,它是用<code>std::shared_ptr</code>. )</p>
 <p>当一个<code>Rc</code>被丢弃时,引用计数递减. 当该计数变为零时,拥有的值将被丢弃并释放内存.</p>
 <pre><pre class="playpen"><code class="language-rust">// rc1.rs
 use std::rc::Rc;
@@ -4276,9 +4212,9 @@ fn main() {
     println!(&quot;len {}, {}&quot;, rs1.len(), rs2.len());
 } // both rs1 and rs2 drop, string dies.
 </code></pre></pre>
-<p>您可以根据自己的喜好制作尽可能多的参考文献,以获得最初的价值 - 是的_动态借款_再次. 您不必仔细追踪价值之间的关系<code>Ť</code>及其参考资料<code>&amp;T</code>. 有一些运行时间成本,所以它不是_第一_你选择的解决方案,但它使分享的模式成为可能,这将会使借用检查器变得不合适. 注意<code>Rc</code>为您提供不可变的共享引用,因为否则这会破坏借用的基本规则之一. 一只豹在不停止成为豹的情况下不能改变其斑点.</p>
-<p>在a的情况下<code>播放机</code>,它现在可以保持它的角色<code>VEC &lt;RC &lt;角色&gt;&gt;</code>并且事情很好 - 我们可以添加或删除角色,但不能_更改_他们在创作之后.</p>
-<p>但是,如果每个都是<code>播放机</code>需要保持对a的引用_球队_作为一个向量<code>播放机</code>参考?然后一切都变得不可变,因为所有的东西<code>播放机</code>值需要被存储为<code>Rc</code>!这是地方<code>RefCell</code>变得必要. 团队可能被定义为<code>VEC &lt;RC &lt;RefCell &lt;玩家&gt;&gt;&gt;</code>. 现在可以更改一个<code>播放机</code>价值使用<code>borrow_mut</code>,_提供_没有人'检查出'一个参考<code>播放机</code>与此同时. 例如,假设我们有一条规则,即如果某位球员发生了某种特殊情况,那么他们的所有球队都会变得更强大:</p>
+<p>您可以根据自己的喜好制作尽可能多的引用文献,以获得最初的价值 - 这会再次 <em>动态借用</em> . 您不必仔细追踪价值之间的关系<code>T</code>及其引用资料<code>&amp;T</code>. 有一些运行时间成本,所以它不是 <em>第一</em> 你选择的解决方案,但它使分享的模式成为可能,这将会使借用检查器变得不合适. 注意<code>Rc</code>为您提供不可变的共享引用,因为否则这会破坏借用的基本规则之一. 一只豹在不停止成为豹的情况下不能改变其斑点.</p>
+<p>在<code>播放机{Player}</code>的情况下,它现在可以保持它的<code>Vec&lt;Rc&lt;Role&gt;&gt;</code>并且工作很好 - 我们可以添加或删除Role,但不能在创作之后 <em>更改</em> 他们.</p>
+<p>但是,如果每个都是<code>播放机{Player}</code>需要保持对 <em>球队</em> 引用作为一个向量<code>播放机{Player}</code>引用? 然后一切都变得不可变,因为所有的东西<code>播放机{Player}</code>值需要被存储为<code>Rc</code>! 这是地方<code>RefCell</code>变得必要. 团队可能被定义为<code>Vec&lt;Rc&lt;RefCell&lt;Player&gt;&gt;&gt;</code>. 现在可以更改一个<code>播放机{Player}</code>价值使用<code>borrow_mut</code>,与此同时没有人 <em>提供</em> '检查出'一个引用<code>播放机{Player}</code>. 例如,假设我们有一条规则,即如果某位球员发生了某种特殊情况,那么他们的所有球队都会变得更强大:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -4286,16 +4222,16 @@ fn main() {
         p.borrow_mut().make_stronger();
     }
 #}</code></pre></pre>
-<p>所以应用程序代码不是太糟糕,但类型签名会有点吓人. 你总是可以用一个简化它们<code>类型</code>别名:</p>
+<p>所以应用程序代码不是太糟糕,但类型签名会有点吓人. 你总是可以用一个简化它们<code>type</code>别名:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
 type PlayerRef = Rc&lt;RefCell&lt;Player&gt;&gt;;
 #}</code></pre></pre>
 <a class="header" href="print.html#a多线程" id="a多线程"><h2>多线程</h2></a>
-<p>在过去的二十年中,从原始处理速度转向具有多核的CPU. 因此,充分利用现代计算机的唯一方法是保持所有这些内核的繁忙. 正如我们所看到的那样,在后台产生子进程当然是可能的<code>命令</code>但仍然存在一个同步问题: 我们不确切地知道这些孩子何时完成而不等待他们.</p>
-<p>还有其他原因需要分开_执行线程_, 当然. 例如,您无法锁定整个流程,只能等待阻止I / O.</p>
-<p>产卵线程在Rust中很简单 - 喂食<code>卵</code>一个在后台执行的闭包.</p>
+<p>在过去的二十年中,从原始处理速度转向具有多核的CPU. 因此,充分利用现代计算机的唯一方法是保持所有这些内核的繁忙. 正如我们所看到的那样,当然是可能的在后台运行子进程<code>命令</code>但仍然存在一个sync问题: 我们不确切地知道这些孩子何时完成而不等待他们.</p>
+<p>还有其他原因需要分开 <em>执行线程</em>, 当然. 例如,您无法锁定整个 流{stream}  程,只能等待阻止 I / O.</p>
+<p>分出子线程在Rust中很简单 - 喂食<code>spawn</code>一个在后台执行的闭包.</p>
 <pre><pre class="playpen"><code class="language-rust">// thread1.rs
 use std::thread;
 use std::time;
@@ -4312,7 +4248,7 @@ fn main() {
 // hello
 // dolly
 </code></pre></pre>
-<p>显然,只是&quot;稍等一下&quot;并不是一个非常严格的解决方案!打电话最好<code>加入</code>在返回的对象上 - 然后主线程等待生成的线程完成.</p>
+<p>显然,只是&quot;稍等一下&quot;并不是一个非常严格的解决方案! 运行工作最好<code>join</code>在返回的对象上 - 然后主线程等待生成的线程完成.</p>
 <pre><pre class="playpen"><code class="language-rust">// thread2.rs
 use std::thread;
 
@@ -4335,7 +4271,7 @@ fn main() {
     });
     println!(&quot;wait {:?}&quot;, t.join());
 #}</code></pre></pre>
-<p>我们如预期般惊慌失措,但只有恐慌线程死亡!我们仍然设法打印出来的错误信息<code>加入</code>. 所以是的,恐慌并不总是致命的,但线程相对昂贵,所以这不应被视为处理恐慌的常规方式.</p>
+<p>我们如预期般惊慌失措,但只有恐慌线程死亡!我们仍然设法打印出来的错误信息<code>join</code>. 所以是的,恐慌并不总是致命的,但线程相对昂贵,所以这不应被视为处理恐慌的常规方式.</p>
 <pre><code>hello
 thread '&lt;unnamed&gt;' panicked at 'I give up!', thread2.rs:7
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
@@ -4366,9 +4302,9 @@ fn main() {
 // hello 1
 </code></pre></pre>
 <p>Rust坚持我们处理连接失败的情况 - 即该线程发生恐慌.  (当发生这种情况时,你通常不会退出主程序,只记下错误,重试等)</p>
-<p>没有特定的线程执行顺序 (该程序为不同的运行提供不同的顺序) ,这是关键 - 它们确实是_独立的执行线程_. 多线程很简单;什么是困难的_并发_- 管理和同步多个执行线程.</p>
+<p>没有特定的线程执行顺序 (该程序为不同的运行提供不同的顺序) ,这是关键 - 它们确实是 <em>独立的执行线程</em>. 多线程很简单;什么是困难的 <em>并发</em>- 管理和sync多个执行线程.</p>
 <a class="header" href="print.html#a线程不会借用" id="a线程不会借用"><h2>线程不会借用</h2></a>
-<p>线程闭包有可能捕获值,但是可以通过_移动_,而不是_借款_!</p>
+<p>线程闭包有可能捕获值,但是可以通过 <em>移动</em>,而不是 <em>借用</em>!</p>
 <pre><pre class="playpen"><code class="language-rust">// thread3.rs
 use std::thread;
 
@@ -4392,8 +4328,8 @@ fn main() {
 help: to force the closure to take ownership of `name` (and any other referenced variables), use the `move` keyword, as shown:
   |     let t = thread::spawn(move || {
 </code></pre>
-<p>这很公平!想象一下,从一个函数产生这个线程 - 它将在函数调用完成后存在<code>名称</code>被丢弃. 所以补充<code>移动</code>解决了我们的问题.</p>
-<p>但这是一个_移动_,所以<code>名称</code>可能只会出现在一个线程中!我想强调一下_是_可能分享参考,但他们需要有<code>静态的</code>一生:</p>
+<p>这很公平! 想象一下,从一个函数产生这个线程 - 它将在函数调用完成后存在<code>name</code>被丢弃. 所以补充<code>move</code>解决了我们的问题.</p>
+<p>但这是一个 <em>移动</em> ,所以<code>name</code>可能只会出现在一个线程中!我想强调一下 <em>是</em> 可能分享引用,但他们需要有<code>静态{static}</code>生命周期:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -4405,10 +4341,10 @@ let t2 = thread::spawn(move || {
     println!(&quot;goodbye {}&quot;, name);
 });
 #}</code></pre></pre>
-<p><code>名称</code>在整个项目期间存在<code>静态的</code>) ,所以<code>rustc</code>对封闭永不过时感到满意<code>名称</code>. 但是,大多数有趣的参考文献没有<code>静态的</code>寿命!</p>
-<p>线程无法共享相同的环境 -  by_设计_在铁锈. 特别是,他们不能共享常规引用,因为关闭会移动捕获的变量.</p>
-<p><em>共享参考_但很好,因为他们的生命是'只要需要' - 但你不能使用<code>Rc</code>为了这. 这是因为<code>Rc</code>不是_线程安全</em>- 它针对非线程情况进行了优化. 幸运的是,这是一个编译错误使用<code>Rc</code>这里;编译器一直在看你的背部.</p>
-<p>对于线程,你需要<code>的std ::同步::弧</code>- '弧'代表'原子参考计数'. 也就是说,它保证了引用计数将在一个逻辑操作中被修改. 为了保证这一点,它必须确保操作被锁定,以便只有当前线程才能访问. <code>克隆</code>但实际上制作副本的成本仍然要低得多.</p>
+<p><code>name</code>在整个项目期间存在（<code>静态{static}</code>) ,所以<code>rustc</code>对封闭永不过时感到满意<code>name</code>. 但是,大多数有趣的引用文献没有<code>静态{static}</code>寿命!</p>
+<p>线程无法共享相同的环境 -  by <em>设计</em> 在Rust. 特别是,他们不能共享常规引用,因为关闭会移动捕获的变量.</p>
+<p><em>共享引用</em> 但很好,因为他们的生命是'与需要一样长' - 但你不能为了这而使用<code>Rc</code>. 这是因为<code>Rc</code>不是 <em>线程安全</em>- 它针对非线程情况进行了优化. 幸运的是,这是一个编译错误使用<code>Rc</code>这里;编译器一直在看你的背部.</p>
+<p>对于线程,你需要<code>std::sync::Arc</code>- 'Arc'代表'原子引用计数'. 也就是说,它保证了引用计数将在一个逻辑操作中被修改. 为了保证这一点,它必须确保操作被锁定,以便只有当前线程才能访问. <code>clone</code>比实际上制作副本的成本仍然要低得多</p>
 <pre><pre class="playpen"><code class="language-rust">// thread5.rs
 use std::thread;
 use std::sync::Arc;
@@ -4438,10 +4374,10 @@ fn main() {
     }
 }
 </code></pre></pre>
-<p>我故意创建了一个包装类型<code>串</code>这里 ('新类型') 自从我们的<code>MyString的</code>不执行<code>克隆</code>. 但是_共享参考_可以克隆!</p>
-<p>共享参考<code>名称</code>通过使用新的引用传递给每个新线程<code>克隆</code>并将其移入封口. 这有点冗长,但这是一种安全模式. 恰恰因为问题如此不可预测,安全在并发中很重要. 一个程序可能在你的机器上运行良好,但偶尔会在服务器上崩溃,通常在周末. 更糟糕的是,这些问题的症状不容易诊断.</p>
+<p>我故意创建了一个包装类型<code>String</code>这里 ('新类型') 自从我们<code>MyString</code>不执行<code>clone</code>. 但是 <em>共享引用</em> 可以克隆!</p>
+<p>共享引用<code>name</code>通过使用新的引用传递给每个新线程<code>clone</code>并将其移入封口. 这有点冗长,但这是一种安全模式. 恰恰因为问题如此不可预测,安全在并发中很重要. 一个程序可能在你的机器上运行良好,但偶尔会在服务器上崩溃,通常在周末. 更糟糕的是,这些问题的症状不容易诊断.</p>
 <a class="header" href="print.html#a通道" id="a通道"><h2>通道</h2></a>
-<p>有线程间发送数据的方法. 这是在Rust使用_渠道_. <code>的std ::同步:: MPSC ::信道 ()</code>返回由...组成的元组_接收器_频道和_寄件人_渠道. 每个线程都通过发件人的副本<code>克隆</code>,和电话<code>发送</code>. 同时主线程调用<code>的recv</code>在接收器上.</p>
+<p>有线程间发送数据的方法. 这是在Rust使用 <em>渠道</em>. <code>std::sync::mpsc::channel()</code>返回由 <em>接收器{receiver}</em> 频道和 <em>寄件人{sender}</em> 渠道组成的元组. 每个线程都通过发件人的副本<code>clone</code>,和运行<code>发送{send}</code>. 同时主线程调用<code>recv</code>在接收器上.</p>
 <p>'MPSC'代表'Multiple Producer Single Consumer'. 我们创建了多个试图发送到频道的线程,并且主线程&quot;消耗&quot;了频道.</p>
 <pre><pre class="playpen"><code class="language-rust">// thread9.rs
 use std::thread;
@@ -4469,10 +4405,10 @@ fn main() {
 // got Ok(&quot;hello 4&quot;)
 // got Ok(&quot;hello 2&quot;)
 </code></pre></pre>
-<p>由于线程在结束执行之前发送响应,因此无需在此加入,但显然这可能随时发生. <code>的recv</code>将阻塞,并且如果发送者通道断开连接,将返回错误. <code>recv_timeout</code>只会在给定的时间段内阻塞,并且可能还会返回超时错误.</p>
-<p><code>发送</code>从不阻塞,这很有用,因为线程可以在不等待接收器处理的情况下推出数据. 另外,通道被缓冲,所以可以发生多个发送操作,这将按顺序接收.</p>
-<p>但是,不阻止意味着<code>好</code>并不意味着'已成功发送消息'!</p>
-<p>一个<code>sync_channel</code> <em>不_阻止发送. 如果参数为零,则发送阻塞直到recv发生. 线程必须满足或_会合</em> (根据声音原则,法语中大多数声音听起来更好. )</p>
+<p>由于线程在结束执行之前发送响应,因此无需 <code>join</code> 在此,但显然这可能随时发生. <code>recv</code>将阻塞,并且如果发送者通道断开连接,将返回错误. <code>recv_timeout</code>只会在给定的时间段内阻塞,并且可能还会返回超时错误.</p>
+<p><code>发送{send}</code>从不阻塞,这很有用,因为线程可以在不等待接收器处理的情况下推出数据. 另外,通道被缓冲,所以可以发生多个发送操作,这将按顺序接收.</p>
+<p>但是,不阻止意味着<code>好{Ok}</code>并不意味着'已成功发送消息'!</p>
+<p>一个<code>sync_channel</code> <em>不</em> 阻止发送. 如果参数为零,则发送阻塞直到recv发生. 线程必须满足或 <em>会合{rendezvous}</em> (根据声音原则,法语中大多数声音听起来更好. )</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -4490,12 +4426,12 @@ fn main() {
     }
     t1.join().unwrap();
 #}</code></pre></pre>
-<p>通过调用,我们可以很容易地导致错误<code>的recv</code>当没有相应的时候<code>发送</code>例如通过循环<code>因为我在0..4</code>. 线程结束,并且<code>tx</code>滴,然后<code>的recv</code>将失败. 这也会发生,如果线程恐慌,导致其堆栈解开,丢弃任何值.</p>
-<p>如果<code>sync_channel</code>是用一个非零参数创建的<code>ñ</code>,那么它的行为就像一个最大尺寸为的队列<code>ñ</code>-<code>发送</code>只会在尝试添加多个时才会阻止<code>ñ</code>值到队列.</p>
+<p>通过调用,我们可以很容易地导致错误<code>recv</code>当没有相应的时候<code>发送{send}</code>例如通过循环<code>for i in 0..4</code>. 线程结束,并且<code>tx</code>被扔掉,然后<code>recv</code>将失败. 这也会发生,如果线程恐慌,导致其堆栈解开,丢弃任何值.</p>
+<p>如果<code>sync_channel</code>是用一个非零参数创建<code>n</code>,那么它的行为就像一个最大尺寸为<code>n</code>的队列-<code>发送{send}</code>只会在尝试超过时才会阻止<code>n</code>值到队列.</p>
 <p>频道是强类型的 - 在这里频道有类型<code>i32</code>- 但类型推理使得这种隐含的. 如果您需要传递不同类型的数据,那么枚举是表达这一点的好方法.</p>
-<a class="header" href="print.html#a同步" id="a同步"><h2>同步</h2></a>
-<p>我们来看看_同步_. <code>加入</code>是非常基本的,只是等到一个特定的线程完成. 一个<code>sync_channel</code>同步两个线程 - 在最后一个例子中,衍生线程和主线程完全锁定在一起.</p>
-<p>屏障同步是线程必须等到的检查点_所有_他们已经达到了这一点. 然后他们可以像以前一样继续前进. 屏障是由我们想要等待的线程数创建的. 和以前一样,我们使用use<code>弧</code>与所有主题共享障碍.</p>
+<a class="header" href="print.html#synchronization" id="synchronization"><h2>Synchronization</h2></a>
+<p>我们来看看 <em>Synchronization</em>. <code>加入{join}</code>是非常基本的,只是等到一个特定的线程完成. 一个<code>sync_channel</code>同步两个线程 - 在最后一个例子中,衍生线程和主线程完全锁定在一起.</p>
+<p>Barrier - sync是线程必须等到的 <em>所有</em> 检查点 - 他们已经达到了这一点. 然后他们可以像以前一样继续前进. 屏障是由我们想要等待的线程数创建的. 和以前一样,我们使用use<code>Arc</code>与所有主题共享 Barrier.</p>
 <pre><pre class="playpen"><code class="language-rust">// thread7.rs
 use std::thread;
 use std::sync::Arc;
@@ -4531,10 +4467,10 @@ fn main() {
 // after wait 0
 // after wait 1
 </code></pre></pre>
-<p>线程做他们半随机的事情,全部满足,然后继续. 它就像一种可恢复的<code>加入</code>当您需要将工作片段分散到不同的线程并且想要在所有片断完成时采取一些行动时有用.</p>
+<p>线程做他们半随机的事情,全部满足,然后继续. 它就像一种可恢复<code>加入{join}</code>当您需要将工作片段分散到不同的线程, 并且想要在所有线程完成时采取一些行动时有用.</p>
 <a class="header" href="print.html#a共享状态" id="a共享状态"><h2>共享状态</h2></a>
-<p>线程怎么样_修改_共享状态?</p>
-<p>回想一下<code>RC &lt;RefCell &lt;T &gt;&gt;</code>战略_动态_在共享引用上做一个可变的借用. 线程相当于<code>RefCell</code>是<code>互斥</code>- 你可以通过调用来获得可变参考<code>锁</code>. 虽然存在此引用,但其他线程无法访问它. <code>互斥</code>代表'相互排斥' - 我们锁定了一段代码,以便只有一个线程可以访问它,然后解锁它. 你拿到了锁<code>锁</code>方法,并在参考被删除时解锁.</p>
+<p>线程怎么样 <em>修改</em> 共享状态?</p>
+<p>回想一下<code>RC&lt;RefCell&lt;T&gt;&gt;</code>功能是 <em>动态</em> 在共享引用上做一个可变的借用. 线程相当于<code>RefCell</code>是<code>互斥{Mutex}</code>- 你可以通过调用来获得可变引用<code>锁</code>. 虽然存在此引用,但其他线程无法访问它. <code>互斥{Mutex}</code>代表'相互排斥' - 我们锁定了一段代码,以便只有一个线程可以访问它,然后解锁它. 你拿到了锁<code>锁</code>方法,并在引用被删除时解锁.</p>
 <pre><pre class="playpen"><code class="language-rust">// thread9.rs
 use std::thread;
 use std::sync::Arc;
@@ -4556,8 +4492,8 @@ fn main() {
 
 }
 </code></pre></pre>
-<p>这不像使用那样简单<code>RefCell</code>因为如果另一个线程在锁定时发生恐慌,那么请求互斥锁就可能失败.  (在这种情况下,文档实际上建议只是退出线程<code>摅</code>因为事情严重错了!)</p>
-<p>把这个可变的借用保持尽可能短是更重要的,因为只要互斥锁被锁定,其他的线程_受阻_. 这不是昂贵的计算的地方!所以通常这样的代码会像这样使用:</p>
+<p>这不像使用那样简单<code>RefCell</code>因为如果另一个线程在锁定时发生恐慌,那么请求互斥锁就可能失败.  (在这种情况下,文档实际上建议只是退出线程<code>unwrap</code>因为事情严重错了!)</p>
+<p>把这个可变的借用保持尽可能短是更重要的,因为只要互斥锁被锁定,其他的线程 <em>受阻</em>. 这不是昂贵的计算的地方!所以通常这样的代码会像这样使用:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -4570,7 +4506,7 @@ fn main() {
 //... continue with the thread
 #}</code></pre></pre>
 <a class="header" href="print.html#a更高级别的操作" id="a更高级别的操作"><h2>更高级别的操作</h2></a>
-<p>最好找到更高级的线程化方法,而不是自己管理同步. 一个例子是当你需要平行做事并收集结果时. 一个非常酷的箱子是<a href="https://docs.rs/pipeliner/0.1.1/pipeliner/">流水线化</a>它有一个非常直接的API. 这是'你好,世界!'<code>- 一个迭代器给我们输入,我们执行到</code>ñ</p>
+<p>最好找到更高级的线程化方法,而不是自己管理sync. 一个例子是当你需要平行做事并收集结果时. 一个非常酷的箱子是<a href="https://docs.rs/pipeliner/0.1.1/pipeliner/"> 流{stream}  水线化</a>它有一个非常直接的API. 这是'你好,世界!'<code>- 一个迭代器给我们输入,我们执行到</code>n`并行操作的值.</p>
 <pre><pre class="playpen"><code class="language-rust">extern crate pipeliner;
 use pipeliner::Pipeline;
 
@@ -4590,9 +4526,9 @@ fn main() {
 // result: 10
 // result: 4
 </code></pre></pre>
-<p>并行操作的值.</p>
-<p>这当然是一个愚蠢的例子,因为该操作的计算起来非常便宜,但显示了并行运行代码的容易程度. 这是更有用的东西. _并行执行网络操作非常有用,因为它们可能需要时间,并且您不希望等待它们_所有</p>
-<p>在开始工作之前完成. 这个例子非常粗糙 (相信我,有更好的方法可以做到这一点) ,但这里我们要关注这个原则. <code>我们重用这个</code>贝壳<code>函数定义在第4节中调用</code>平</p>
+<p>这当然是一个愚蠢的例子,因为该操作的计算起来非常便宜,但显示了并行运行代码的容易程度.</p>
+<p>这是更有用的东西. 并行执行网络操作非常有用,因为它们可能需要时间,并且您不希望等待它们 <em>所有</em> 在开始工作之前完成.</p>
+<p>这个例子非常粗糙 (相信我,有更好的方法可以做到这一点) ,但这里我们要关注这个原则. 我们重用这个<code>shell</code>函数定义在第4节中调用<code>ping</code>在一系列IP4地址上.</p>
 <pre><pre class="playpen"><code class="language-rust">extern crate pipeliner;
 use pipeliner::Pipeline;
 
@@ -4623,7 +4559,7 @@ fn main() {
 
 }
 </code></pre></pre>
-<p>在一系列IP4地址上.</p>
+<p>我的家庭网络上的结果如下所示:</p>
 <pre><code>got: PING 192.168.0.1 (192.168.0.1) 56(84) bytes of data.
 64 bytes from 192.168.0.1: icmp_seq=1 ttl=64 time=43.2 ms
 
@@ -4646,9 +4582,9 @@ got: PING 192.168.0.5 (192.168.0.5) 56(84) bytes of data.
 64 bytes from 192.168.0.5: icmp_seq=1 ttl=64 time=207 ms
 ...
 </code></pre>
-<p>我的家庭网络上的结果如下所示: 在前半秒内,活动地址会非常快速地通过,然后等待负面结果进入. 否则,我们会等待一分钟的好时间!您现在可以继续从输出中删除ping时间等事情,尽管这只能在Linux上运行. <code>平</code>是普遍的,但确切的输出格式对于每个平台都是不同的. 为了做得更好,我们需要使用跨平台的Rust网络API,所以让我们进入网络.</p>
+<p>在前半秒内,活动地址会非常快速地通过,然后等待负面结果进入. 否则,我们会等待一分钟!您现在可以继续从输出中删除ping时间等事情,尽管这只能在Linux上运行. <code>ping</code>是普遍的,但确切的输出格式对于每个平台都是不同的. 为了做得更好,我们需要使用跨平台的Rust网络API,所以让我们进入网络.</p>
 <a class="header" href="print.html#a解决地址问题的更好方法" id="a解决地址问题的更好方法"><h2>解决地址问题的更好方法</h2></a>
-<p>如果你_只是_想要可用性和不详细的ping统计信息<code>的std ::网:: ToSocketAddrs</code>特质将为你做任何DNS解析:</p>
+<p>如果你 <em>只是</em> 想要可用性和不详细的ping统计信息<code>std::net::ToSocketAddrs</code> trait 将为你做任何DNS解析:</p>
 <pre><pre class="playpen"><code class="language-rust">use std::net::*;
 
 fn main() {
@@ -4660,7 +4596,7 @@ fn main() {
 // got V6([2c0f:fb50:4002:803::200e]:80)
 </code></pre></pre>
 <p>它是一个迭代器,因为通常有多个接口与一个域相关联 - 同时有Google的IPV4和IPV6接口.</p>
-<p>所以,我们天真地使用这种方法来重写流水线示例. 大多数网络协议都使用地址和端口:</p>
+<p>所以,我们天真地使用这种方法来重写 流{stream}  水线示例. 大多数网络协议都使用地址和端口:</p>
 <pre><pre class="playpen"><code class="language-rust">extern crate pipeliner;
 use pipeliner::Pipeline;
 
@@ -4682,7 +4618,7 @@ fn main() {
 // ....
 </code></pre></pre>
 <p>这比ping示例快得多,因为它只是检查IP地址是否有效 - 如果我们为它提供了一个实际域名列表,DNS查找可能需要一些时间,因此并行性的重要性.</p>
-<p>令人惊讶的是,它只是工作. 标准库中的所有内容实现的事实<code>调试</code>非常适合勘探和调试. 迭代器正在返回<code>结果</code> (因此<code>好</code>) 和在那<code>结果</code>是一个<code>IntoIter</code>变成一个<code>SocketAddr</code>这是一个带有ipv4或ipv6地址的枚举. 为什么<code>IntoIter</code>?由于套接字可能有多个地址 (例如,ipv4和ipv6) . 至少对于我们这个简单的例子来说,这也起到了令人惊讶的作用.</p>
+<p>令人惊讶的是,它只是工作. 标准库中的所有内容实现的事实<code>Debug</code>非常适合勘探和调试. 迭代器正在返回<code>Result</code> (因此<code>Ok</code>) 和在那<code>Result</code>是一个<code>IntoIter</code>变成一个<code>SocketAddr</code>这是一个带有ipv4或ipv6地址的枚举. 为什么<code>IntoIter</code>?由于套接字可能有多个地址 (例如,ipv4和ipv6) .</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -4695,13 +4631,14 @@ fn main() {
 // got: V4(192.168.0.39:0)
 // got: V4(192.168.0.3:0)
 #}</code></pre></pre>
-<p>首先摅<code>摆脱了</code>结果<code>,然后我们明确地将第一个值从迭代器中取出.</code>该结果<code>当我们给出一个无意义的地址时 (比如没有端口的地址名称) ,通常会变得很糟糕.</code>TCP客户端服务器</p>
-<a class="header" href="print.html#rust为最常用的网络协议tcp提供了一个直接的界面" id="rust为最常用的网络协议tcp提供了一个直接的界面"><h2>Rust为最常用的网络协议TCP提供了一个直接的界面.</h2></a>
-<p>它具有很强的抗错能力,是我们网络世界的基础 -包_的数据被发送和接收,并带有确认. _相比之下,UDP将数据包发送到野外而没有得到确认 - 有一个笑话是&quot;我可以告诉你一个关于UDP的笑话,但你可能得不到它. &quot; (关于网络的笑话只对&quot;有趣&quot;这个词的特殊含义有趣)</p>
-<p>但是,错误处理是_非常_对于网络来说很重要,因为任何事情都可能发生,并且最终会.</p>
-<p>TCP作为客户端/服务器模型工作;服务器监听一个地址和一个特定的地址_网络端口_,并且客户端连接到该服务器. 建立连接后,客户端和服务器可以与套接字进行通信.</p>
-<p><code>TcpStream ::连接</code>需要任何可以转换成一个<code>SocketAddr</code>,特别是我们一直使用的纯色琴弦.</p>
-<p>Rust中的一个简单的TCP客户端很容易 -  a<code>TcpStream</code>结构是可读和可写的. 像往常一样,我们必须带来<code>读</code>,<code>写</code>和别的<code>的std :: IO</code>特质纳入范围:</p>
+<p>至少对于我们这个简单的例子来说,这也起到了令人惊讶的作用. 首先 <code>unwarp</code>摆脱了<code>Result</code>,然后我们明确地将第一个值从迭代器中取出. <code>Result</code>当我们给出一个无意义的地址时 (比如没有端口的地址名称) ,通常会变得很糟糕.</p>
+<a class="header" href="print.html#tcp客户端服务器" id="tcp客户端服务器"><h2>TCP客户端服务器</h2></a>
+<p>Rust为最常用的网络协议TCP提供了一个直接的界面.</p>
+<p>它具有很强的抗错能力,是我们网络世界的基础 - <em>包</em> 的数据被发送和接收,并带有确认. 相比之下,UDP将数据包发送到野外而没有得到确认 - 有一个笑话是&quot;我可以告诉你一个关于UDP的笑话,但你可能得不到它. &quot; (关于网络的笑话只对&quot;有趣&quot;这个词的特殊含义有趣)</p>
+<p>但是,错误处理是对于网络来说很 <em>非常</em> 重要,因为任何事情都可能发生,并且最终会.</p>
+<p>TCP作为客户端/服务器模型工作;服务器监听一个地址和一个特定的地址 <em>网络端口</em>,并且客户端连接到该服务器. 建立连接后,客户端和服务器可以与套接字进行通信.</p>
+<p><code>TcpStream::connect</code>需要任何可以转换成一个<code>SocketAddr</code>,特别是我们一直使用的纯 string.</p>
+<p>Rust中的一个简单的TCP客户端很容易 -  一个<code>TcpStream</code>结构是可读和可写的. 像往常一样,我们必须带来<code>Read</code>,<code>Write</code>和其他<code>std::io</code> tarit 纳入范围:</p>
 <pre><pre class="playpen"><code class="language-rust">// client.rs
 use std::net::TcpStream;
 use std::io::prelude::*;
@@ -4734,10 +4671,10 @@ fn main() {
     }
 }
 </code></pre></pre>
-<p>这里我随机选择了一个更无端口的端口号,但是<a href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers">大多数港口</a>被赋予一些含义.</p>
-<p>请注意,双方必须就协议达成一致意见 - 客户希望它能够向流写入文本,并且服务器期望从流中读取文本. 如果他们不玩同一个游戏,那么情况就会发生在一方被阻塞的情况下,等待从未到来的字节.</p>
-<p>检查错误非常重要 - 网络I / O可能因多种原因失败,并且在本地文件系统上可能出现一次蓝色月亮的错误可能会定期发生. 有人可以通过网线传输,另一方可能会崩溃,等等. 这个小服务器不是很健壮,因为它会在第一次读取错误时崩溃.</p>
-<p>这是一个更坚实的服务器,可以在不失败的情况下处理错误. 它还具体读取一个_线_从流,这是使用完成<code>IO :: BufReader</code>创造一个<code>IO ::的BufRead</code>我们可以打电话给他们<code>read_line</code>.</p>
+<p>这里我随机选择了一个无用端口的端口号,但是<a href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers">大多数港口</a>被赋予一些含义.</p>
+<p>请注意,双方必须就协议达成一致意见 - 客户希望它能够向 流{stream}  写入文本,并且服务器期望从 流{stream}  中读取文本. 如果他们不玩同一个游戏,那么情况就会发生在一方被阻塞的情况下,等待从未到来的字节.</p>
+<p>检查错误非常重要 - 网络 I / O 可能因多种原因失败,并且在本地文件系统上可能出现一次 蓝色月亮 的错误可能会定期发生. 有人可以通过网线传输,另一方可能会崩溃,等等. 这个小服务器不是很健壮,因为它会在第一次读取错误时崩溃.</p>
+<p>这是一个更坚实的服务器,可以在不失败的情况下处理错误. 它还具体读取一个 <em>线{line}</em> 从 流{stream}  ,这是使用了<code>IO::BufReader</code>创造一个<code>IO::BufRead</code>, 这叫做<code>read_line</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">// server2.rs
 use std::net::{TcpListener, TcpStream};
 use std::io::prelude::*;
@@ -4770,7 +4707,7 @@ fn main() {
 </code></pre></pre>
 <p><code>read_line</code>可能会失败<code>handle_connection</code>,但由此产生的错误是安全处理的.</p>
 <p>像这样的单向通信当然是有用的 - 例如. 通过网络提供的一组服务,希望在一个中心位置将他们的状态报告集中在一起. 但期望有礼貌的回复是合理的,即使只是'好'!</p>
-<p>一个简单的例子是一个基本的'回声'服务器. 客户端将一些以换行符结尾的文本写入服务器,并使用换行符接收相同的文本 - 流是可读写的.</p>
+<p>一个简单的例子是一个基本的'echo'服务器. 客户端将一些以换行符结尾的文本写入服务器,并使用换行符接收相同的文本 -  流{stream}  是可读写的.</p>
 <pre><pre class="playpen"><code class="language-rust">// client_echo.rs
 use std::io::prelude::*;
 use std::net::TcpStream;
@@ -4800,7 +4737,7 @@ fn handle_connection(stream: TcpStream) -&gt; io::Result&lt;()&gt;{
     Ok(())
 }
 #}</code></pre></pre>
-<p>这是一个简单的双向套接字通信的常见问题;我们想要读取一行,因此需要将可读流提供给<code>BufReader</code>- 但它_消耗_溪流!所以我们必须克隆这个流,创建一个引用相同底层套接字的新结构. 然后我们有幸福.</p>
+<p>这是一个简单的双向套接字通信的常见问题;我们想要读取一行,因此需要将可读 流{stream}  提供给<code>BufReader</code>- 但它 <em>消耗</em> 流{stream}  !所以我们必须克隆这个 流{stream}  ,创建一个引用相同底层套接字的新结构. 然后我们有幸福.</p>
 <a class="header" href="print.html#a面向对象的rust每个人都来自某个地方以前的编程语言以特定的方式实现了面向对象编程-oop-的可能性很大" id="a面向对象的rust每个人都来自某个地方以前的编程语言以特定的方式实现了面向对象编程-oop-的可能性很大"><h2>面向对象的Rust每个人都来自某个地方,以前的编程语言以特定的方式实现了面向对象编程 (OOP) 的可能性很大:</h2></a>
 <p>'班'作为工厂生成对象</p>
 <ul>

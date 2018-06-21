@@ -135,8 +135,8 @@
                     <main>
                         <a class="header" href="6-error-handling.zh.html#a错误处理" id="a错误处理"><h1>错误处理</h1></a>
 <a class="header" href="6-error-handling.zh.html#a基本的错误处理" id="a基本的错误处理"><h2>基本的错误处理</h2></a>
-<p>如果你不能使用问号操作符来实现快乐,那么在生锈中的错误处理可能很笨拙,我们需要返回一个<code>结果</code>它可以接受任何错误. 所有错误都会实现这个特性<code>的std ::错误::错误</code>, 所以_任何_错误可以转换成一个<code>框&lt;错误&gt;</code>.</p>
-<p>说我们需要处理_都_从转换字符串到数字的I / O错误和错误:</p>
+<p>如果你不能使用问号操作符来实现快乐,那么在生锈中的错误处理可能很笨拙,我们需要返回一个<code>Result</code>它可以接受任何错误. 所有错误都会实现这个 trait <code>std::error::error</code>, 所以 <em>任何</em> 错误可以转换成一个<code>Box&lt;Error&gt;</code>.</p>
+<p>说我们 <em>都</em> 需要处理 I/O 错误和从转换String到数字的错误:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -152,18 +152,18 @@ fn run(file: &amp;str) -&gt; Result&lt;i32,Box&lt;Error&gt;&gt; {
     Ok(contents.trim().parse()?)
 }
 #}</code></pre></pre>
-<p>所以这是I / O错误的两个问号 (无法打开文件,或无法读取为字符串) 以及转换错误的一个问号. 最后,我们将结果包装在内<code>好</code>.rust可以从返回类型中得出结论<code>解析</code>应该转换为<code>i32</code>.</p>
-<p>很容易为此创建一个快捷方式<code>结果</code>类型:</p>
+<p>所以这是I/O错误的两个问号 (无法打开文件,或无法读取为String) 以及转换错误的一个问号. 最后,我们将结果包装在内<code>Ok</code>.rust可以从返回类型中得出结论<code>parse</code>应该转换为<code>i32</code>.</p>
+<p>很容易为此创建一个快捷方式<code>Result</code>类型:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
 type BoxResult&lt;T&gt; = Result&lt;T,Box&lt;Error&gt;&gt;;
 #}</code></pre></pre>
-<p>但是,我们的程序将具有特定于应用程序的错误条件,并且Sowe需要创建我们自己的错误类型. 基本要求很简单:</p>
+<p>但是,我们的程序将具有特定于应用程序的错误条件,并且需要创建我们自己的错误类型. 基本要求很简单:</p>
 <ul>
-<li>可以实施<code>调试</code></li>
-<li>必须执行<code>显示</code></li>
-<li>必须执行<code>错误</code></li>
+<li>可以 impl <code>Debug</code></li>
+<li>必须 impl <code>Display</code></li>
+<li>必须 impl <code>Error</code></li>
 </ul>
 <p>否则,你的错误可以做到它喜欢的东西.</p>
 <pre><pre class="playpen"><code class="language-rust">
@@ -205,11 +205,11 @@ fn raises_my_error(yes: bool) -&gt; Result&lt;(),MyError&gt; {
     }
 }
 #}</code></pre></pre>
-<p>打字<code>结果&lt;t时,myerror&gt;</code>变得单调乏味,许多防锈模块定义它们自己的模块<code>结果</code>- 例如<code>IO ::结果&lt;T&gt;</code>是简短的<code>结果&lt;t时,IO ::误差&gt;</code>.</p>
-<p>在下一个例子中,当一个字符串不能被解析为一个浮点数时,我们需要处理特定的错误.</p>
-<p>现在这样<code>?</code>工作寻找从错误的转换_表达_到必须的错误_回_. 并且这个转换由表达<code>从</code>特征. <code>框&lt;错误&gt;</code>像它一样工作,因为它实现<code>从</code>为所有类型实施<code>错误</code>.</p>
-<p>此时您可以继续使用便捷的别名<code>BoxResult</code>并且赶上所有事情;会有我们的错误转化为<code>框&lt;错误&gt;</code>这对小型应用程序来说是一个很好的选择. 但我想显示其他错误可以明确地与我们的错误类型合作.</p>
-<p><code>ParseFloatError</code>器物<code>错误</code>所以<code>描述 ()</code>被定义为.</p>
+<p>打字<code>Result&lt;T,MyError&gt;</code>变得单调乏味,许多防锈模块定义它们自己的模块<code>Result</code>- 例如<code>IO::Result&lt;T&gt;</code>是简短的<code>Result&lt;T,io::Error&gt;</code>.</p>
+<p>在下一个例子中,当一个String不能被解析为一个浮点数时,我们需要处理特定的错误.</p>
+<p>现在这样<code>?</code>工作寻找从错误的转换 <em>表达</em> 到必须的错误 <em>返回</em>. 并且这个转换由表达<code>From</code> trait. <code>Box&lt;Error&gt;</code>像它一样工作,因为它实现<code>From</code>为所有类型实施<code>Error</code>.</p>
+<p>此时您可以继续使用便捷的别名<code>BoxResult</code>并且赶上所有事情;会有我们的错误转化为<code>Box&lt;Error&gt;</code>这对小型应用程序来说是一个很好的选择. 但我想显示其他错误可以明确地与我们的错误类型合作.</p>
+<p><code>ParseFloatError</code> impl <code>Error</code>, 所以<code>description()</code>被定义为.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -228,7 +228,7 @@ fn parse_f64(s: &amp;str, yes: bool) -&gt; Result&lt;f64,MyError&gt; {
     Ok(x)
 }
 #}</code></pre></pre>
-<p>首先<code>?</code>是好的 (一种类型总是转换为自己的<code>从</code>) 和第二个<code>?</code>将转换<code>ParseFloatError</code>至<code>MyError</code>.</p>
+<p>首先<code>?</code>是好的 (一种类型总是转换为自己的<code>From</code>) 和第二个<code>?</code>将转换<code>ParseFloatError</code>至<code>MyError</code>.</p>
 <p>结果如下:</p>
 <pre><pre class="playpen"><code class="language-rust">fn main() {
     println!(&quot; {:?}&quot;, parse_f64(&quot;42&quot;,false));
@@ -239,16 +239,16 @@ fn parse_f64(s: &amp;str, yes: bool) -&gt; Result&lt;f64,MyError&gt; {
 //  Err(MyError { details: &quot;borked&quot; })
 //  Err(MyError { details: &quot;invalid float literal&quot; })
 </code></pre></pre>
-<p>不要太复杂,虽然有点啰嗦. 该繁琐的一点是有towrite<code>从</code>所有其他错误类型都需要进行转换<code>MyError</code>- 或者你只是依靠<code>框&lt;错误&gt;</code>. 新手会因为多种方式在铁锈中做同样的事情而感到困惑;总是有另一种方法去剥离鳄梨 (或者如果你感觉嗜血,那么就去皮肤上) . 灵活性的代价有很多选择. 200行程序的错误处理可以比大型应用程序简单得多. 如果您想将您的宝贵物品作为货物箱打包,那么错误处理就变得至关重要.</p>
-<p>目前,问号运算符仅适用于<code>结果</code>,不<code>选项</code>,这是一个功能,而不是一个限制. <code>选项</code>有一个<code>ok_or_else</code>它将自己转换成一个<code>结果</code>例如,说我们有一个<code>HashMap中</code>并且如果没有定义键则必须失败:</p>
+<p>不要太复杂,虽然有点啰嗦. 该繁琐的一点是不得不写<code>From</code>所有其他错误类型都需要进行转换<code>MyError</code>- 或者你只是依靠<code>Box&lt;Error&gt;</code>. 新手会因为多种方式在 rust 中做同样的事情而感到困惑;总是有另一种方法去剥离鳄梨 (或者如果你感觉嗜血,那么就去皮肤上) . 灵活性的代价有很多选择. 200行程序的错误处理可以比大型应用程序简单得多. 如果您想将您的宝贵物品作为 Cargo 打包,那么错误处理就变得至关重要.</p>
+<p>目前,问号运算符仅适用于<code>Result</code>,不<code>Option</code>,这是一个功能,而不是一个限制. <code>Option</code>有一个<code>ok_or_else</code>它将自己转换成一个<code>Result</code>例如,说我们有一个<code>HashMap</code>并且如果没有定义键则必须失败:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
     let val = map.get(&quot;my_key&quot;).ok_or_else(|| MyError::new(&quot;my_key not defined&quot;))?;
 #}</code></pre></pre>
 <p>现在这里返回的错误是完全清楚的! (该表单使用闭包,因此只有在查找失败时才会创建错误值. )</p>
-<a class="header" href="6-error-handling.zh.html#a简单错误的简单错误" id="a简单错误的简单错误"><h2>简单错误的简单错误</h2></a>
-<p>该<a href="https://docs.rs/simple-error/0.1.9/simple_error/">简单的错误</a>crate为你提供基于字符串的基本错误类型,正如我们在这里定义的那样,以及一些方便的宏. 就像任何错误一样,它可以正常工作<code>框&lt;错误&gt;</code>:</p>
+<a class="header" href="6-error-handling.zh.html#simeple-error的简单错误" id="simeple-error的简单错误"><h2>simeple-error的简单错误</h2></a>
+<p>该<a href="https://docs.rs/simple-error/0.1.9/simple_error/">simple-error</a>crate为你提供基于String的基本错误类型,正如我们在这里定义的那样,以及一些方便的宏. 就像任何错误一样,<code>Box&lt;Error&gt;</code>也可以正常工作:</p>
 <pre><pre class="playpen"><code class="language-rust">#[macro_use]
 extern crate simple_error;
 
@@ -272,14 +272,15 @@ fn main() {
 // Err(ParseIntError { kind: InvalidDigit })
 // Err(StringError(&quot;empty string&quot;))
 </code></pre></pre>
-<p><code>保释! (S)</code>扩展到<code>返回simpleerror :: new (s) .into () ;</code>- 尽早返回转换_成_接收类型.</p>
-<p>你需要使用<code>BoxResult</code>用于混合<code>SimpleError</code>键入其他错误,因为我们无法执行<code>从</code>因为它的特点和类型都来自其他箱子.</p>
-<a class="header" href="6-error-handling.zh.html#a严重错误的错误链" id="a严重错误的错误链"><h2>严重错误的错误链</h2></a>
-<p>对于非平凡的应用程序有一个看点<a href="http://brson.github.io/2016/11/30/starting-with-error-chain">error_chain</a>crate.a小宏魔法可以去锈很长的路...</p>
-<p>创建一个二进制包<code>货物新--bin测试错误链</code>并改变到这个目录. 编辑<code>Cargo.toml</code>并添加<code>错误链=&quot;0.8.1&quot;</code>到最后.</p>
-<p>什么<strong>错误链</strong>为你做的是创建我们手动执行错误类型所需的所有定义;创建一个结构体,并实现必要的特性: <code>显示</code>,<code>调试</code>和<code>错误</code>它也是默认的实现<code>从</code>所以字符串可以转换成错误.</p>
-<p>我们的第一<code>SRC / main.rs</code>文件看起来像这样. 所有的主要程序都是通话<code>跑</code>,打印出错误,并用非零退出代码结束程序. 宏<code>error_chain</code>生成所需的所有定义<code>错误</code>模块 - 在一个更大的程序中,你会把它放在它自己的文件中. 我们需要把所有东西都放进去<code>错误</code>回到全局范围,因为我们的代码将需要生成生成的特征. 默认情况下,会有一个<code>错误</code>结构和a<code>结果</code>用thaterror定义.</p>
-<p>这里我们也要求<code>从</code>要这样做<code>的std :: IO ::错误</code>将使用转换为我的错误类型<code>foreign_links</code>:</p>
+<p><code>bail!(s)</code>扩展到<code>return SimpleError::new(s).into();</code>- 尽早返回转换 <em>成</em> 接收类型.</p>
+<p>你需要使用<code>BoxResult</code>用于混合<code>SimpleError</code>键入其他错误,因为我们无法执行<code>From</code>, 因为它的特点和类型都来自其他箱子.</p>
+<a class="header" href="6-error-handling.zh.html#a严重错误的error-chain" id="a严重错误的error-chain"><h2>严重错误的error-chain</h2></a>
+<p>对于非平凡的应用程序有一个看点<a href="http://brson.github.io/2016/11/30/starting-with-error-chain">error_chain</a>crate.</p>
+<p>rust 的一个小宏魔法漫长路</p>
+<p>创建一个二进制包<code>cargo new --bin test-error-chain</code>并到这个目录. 编辑<code>Cargo.toml</code>并添加<code>error-chain=&quot;0.8.1&quot;</code>到最后.</p>
+<p><strong>error-chain</strong> 为你做的是什么, 创建我们所需的所有定义的手动执行错误类型;创建一个结构体,并实现必要的 trait : <code>Display</code>,<code>Debug</code>和<code>Error</code>它也是默认的 impl <code>From</code> , 所以String可以转换成错误.</p>
+<p>我们的<code>src/main.rs</code>文件看起来像这样. 所有的主要程序都是运行<code>run</code>,打印出错误,并用非零退出代码结束程序. 宏<code>error_chain</code>生成所需的所有定义<code>Error</code>模块 - 在一个更大的程序中,你会把它放在它自己的文件中. 我们需要把所有东西都放进去<code>Error</code>回到全局范围,因为我们的代码将需要生成生成的 trait. 默认情况下,会有一个<code>Error</code>结构和一个<code>Result</code>用这个错误定义.</p>
+<p>这里我们也要求<code>From</code>要这样做<code>std::io::Error</code>将使用转换为我的错误类型<code>foreign_links</code>:</p>
 <pre><pre class="playpen"><code class="language-rust">#[macro_use]
 extern crate error_chain;
 
@@ -310,8 +311,8 @@ fn main() {
 }
 // error: No such file or directory (os error 2)
 </code></pre></pre>
-<p>'foreign_links'让我们的生活更轻松,因为问号操作员现在知道如何转换<code>的std :: IO ::错误</code>进入我们的<code>错误::错误</code>.  (在引擎盖下,宏正在创建一个<code>从&lt;性病:: IO ::误差&gt;</code>转换,正如前面所述. )</p>
-<p>所有的行动都发生在<code>跑</code>;让我们打印出作为第一个程序参数给出的文件的前10行. 有可能也可能不会有这样的论点,这不一定是错误的. 这里我们要转换一个<code>选项&lt;字符串&gt;</code>变成一个<code>结果&lt;字符串&gt;</code>. 那里有两个<code>选项</code>做这种转换的方法,我选择了最简单的一种. 我们的<code>错误</code>类型的工具<code>从</code>对于<code>&amp;STR</code>,所以用一个简单的文本信息就很容易发生错误.</p>
+<p>'foreign_links'让我们的生活更轻松,因为问号操作员现在知道如何转换<code>std::io::Error</code>进入我们的<code>error::Error</code>.  (在引擎盖下,宏正在创建一个<code>From&lt;std::io::Error&gt;</code>转换,正如前面所述. )</p>
+<p>所有的行动都发生在<code>run</code>;让我们打印出作为第一个程序参数给出的文件的前10行. 有可能也可能不会有这样的论点,这不一定是错误的. 这里我们要转换一个<code>Option&lt;String&gt;</code>变成一个<code>Result&lt;String&gt;</code>. 那里有两个<code>Option</code>做这种转换的方法,我选择了最简单的一种. 我们的<code>Error</code>类型的工具<code>From</code>对于<code>&amp;str</code>,所以用一个简单的文本信息就很容易发生错误.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -338,7 +339,7 @@ fn run() -&gt; Result&lt;()&gt; {
     Ok(())
 }
 #}</code></pre></pre>
-<p>(再次) 有一个有用的小宏<code>保释!</code>为'抛出'错误. 替代方案<code>ok_or</code>方法可能是:</p>
+<p>(再次) 有一个有用的小宏<code>bail!</code>为'抛出'错误. 替代方案<code>ok_or</code>方法可能是:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -347,8 +348,8 @@ fn run() -&gt; Result&lt;()&gt; {
         None =&gt; bail!(&quot;provide a file&quot;)
     };
 #}</code></pre></pre>
-<p>喜欢<code>?</code>它做了一个_提前回报_.</p>
-<p>返回的错误包含一个枚举<code>ErrorKind</code>,这使我们能够区分各种各样的错误. 总是有一个变体<code>味精</code> (当你说<code>错误::从 (STR)</code>) 和<code>foreign_links</code>已宣布<code>Io</code>它包装I / O错误:</p>
+<p>喜欢<code>?</code>它做了一个 <em>提前返回</em>.</p>
+<p>返回的错误包含一个枚举<code>ErrorKind</code>,这使我们能够区分各种各样的错误. 总是有一个变体<code>Msg</code> (当你说<code>Error::from(str)</code>) 和<code>foreign_links</code>已宣布<code>Io</code>它包装 I/O 错误:</p>
 <pre><pre class="playpen"><code class="language-rust">fn main() {
     if let Err(e) = run() {
         match e.kind() {
@@ -363,7 +364,7 @@ fn run() -&gt; Result&lt;()&gt; {
 // $ cargo run foo
 // io No such file or directory (os error 2)
 </code></pre></pre>
-<p>添加新的错误很简单. 添加一个<code>错误</code>部分<code>error_chain!</code>宏:</p>
+<p>添加新的错误很简单. 添加一个<code>Error</code>部分<code>error_chain!</code>宏:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -380,7 +381,7 @@ fn run() -&gt; Result&lt;()&gt; {
 
     }
 #}</code></pre></pre>
-<p>这定义了如何<code>显示</code>适用于这种新的错误. 现在我们可以更具体地处理'无争论'的错误,喂养<code>errorkind :: noargument</code>一个<code>串</code>值:</p>
+<p>这定义了如何<code>Display</code>适用于这种新的错误. 现在我们可以更具体地处理'no argument'的错误,喂养<code>ErrorKind::NoArgument</code>一个<code>String</code>值:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -403,12 +404,12 @@ fn run() -&gt; Result&lt;()&gt; {
 // error no argument provided: 'filename needed'
 // no argument &quot;filename needed&quot;
 </code></pre></pre>
-<p>一般来说,尽可能使错误尽可能具有特定的意义,_尤其_如果这是一个库函数!这种match-on-kind技术几乎相当于传统的异常处理,您可以在a中匹配异常类型<code>抓住</code>要么<code>除</code>块.</p>
-<p>综上所述,<strong>错误链</strong>创建一个类型<code>错误</code>为你定义<code>导致&lt;T&gt;</code>成为<code>的std ::结果::结果&lt;t时,误差&gt;</code>. <code>错误</code>包含一个枚举<code>ErrorKind</code>并且默认情况下有一个变体<code>味精</code>用于从字符串创建的错误. 你用来定义外部错误<code>foreign_links</code>这有两件事. 首先,它创建一个新的<code>ErrorKind</code>变种. 其次,它定义了<code>从</code>在这些外部错误,所以他们可以转换为无辜的. 新的错误变体可以很容易地添加. 许多恼人的样板代码被淘汰.</p>
+<p>一般来说,尽可能使错误尽可能具有特定的意义,<em>尤其</em> 如果这是一个库函数!这种 match-on-kind 技术几乎相当于传统的异常处理,您可以匹配异常类型在<code>catch</code>要么<code>except</code>块.</p>
+<p>综上所述,<strong>error-chain</strong>创建一个类型<code>Error</code>, 和为你定义<code>Result&lt;T&gt;</code>成为<code>std::result::Result&lt;T,Error&gt;</code>. <code>Error</code>包含一个枚举<code>ErrorKind</code>并且默认情况下有一个变体<code>Msg</code>用于从String创建的错误. 你用来定义外部错误<code>foreign_links</code>这有两件事. 首先,它创建一个新的<code>ErrorKind</code>变种. 其次,它定义了<code>From</code>在这些外部错误,所以他们可以转换为无辜的. 新的错误变体可以很容易地添加. 许多恼人的样板代码被淘汰.</p>
 <a class="header" href="6-error-handling.zh.html#a链接错误" id="a链接错误"><h2>链接错误</h2></a>
-<p>但这个箱子提供的非常酷的东西是_错误链接_.</p>
-<p>作为一个_库用户_,当一个方法只是'抛出'一个通用的I / O错误时,这是​​令人烦恼的. 好吧,它不能打开一个文件,很好,但是什么文件?基本上,这个信息对我有什么用处?</p>
-<p><code>error_chain</code>不_错误链接_这有助于解决过度通用错误的问题. 当wetry打开文件时,我们可以懒洋洋地依靠转换<code>IO ::错误</code>运用<code>?</code>, 要么_链_错误.</p>
+<p>但这个 箱子{crate} 提供的非常酷的东西是 <em>error-chainning</em>.</p>
+<p>作为一个 <em>库用户</em> ,当一个方法只是'抛出'一个通用的I/O错误时,这是​​令人烦恼的. 好吧,它不能打开一个文件,很好,但是什么文件?基本上,这个信息对我有什么用处?</p>
+<p><code>error_chain</code>作为 <em>error-chainning</em> 这有助于解决过度通用错误的问题. 当我们尝试打开文件时,我们可以懒洋洋地依靠转<code>io::Error</code>而用<code>?</code>, 要么 <em>链{chain}</em> 错误.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -418,7 +419,7 @@ let f = File::open(&amp;file)?;
 // a specific chained error
 let f = File::open(&amp;file).chain_err(|| &quot;unable to read the damn file&quot;)?;
 #}</code></pre></pre>
-<p>这里是该程序的新版本_没有_导入'外国'错误,只是默认值:</p>
+<p>这里是该程序的新版本 <em>没有</em> 导入'foreign'错误,只是默认值:</p>
 <pre><pre class="playpen"><code class="language-rust">#[macro_use]
 extern crate error_chain;
 
@@ -471,11 +472,11 @@ fn main() {
 // error unable to read the damn file
 // caused by: No such file or directory (os error 2)
 </code></pre></pre>
-<p>所以<code>chain_err</code>方法接受原始错误,并创建一个包含原始错误的新错误 - 这可以无限期地继续. 预计关闭将返回任何可能的值_转换_进入错误.</p>
-<p>生锈的宏可以明显地为您节省大量的打字工作. <code>错误链</code>甚至提供了一个取代整个主程序的捷径:</p>
+<p>所以<code>chain_err</code>方法接受原始错误,并创建一个包含原始错误的新错误 - 这可以无限期地继续. 预计关闭将返回任何可能的值 <em>转换</em> 进入错误.</p>
+<p>Rust 宏可以明显地为您节省大量的打字工作. <code>error-chain</code>甚至提供了一个取代整个主程序的捷径:</p>
 <pre><pre class="playpen"><code class="language-rust">quick_main!(run);
 </code></pre></pre>
-<p>(<code>跑</code>无论如何,所有的行动都是在那里进行的. )</p>
+<p>(<code>run</code>无论如何,所有的行动都是在那里进行的. )</p>
 
                     </main>
 
