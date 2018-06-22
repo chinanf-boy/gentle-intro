@@ -54,7 +54,7 @@ mdbook serve
 - [x] [6.错误处理](./src/6-error-handling.zh.md)
 - [x] [7.线程,网络和共享](./src/7-shared-and-networking.zh.md)
 - [x] [8.面向对象编程](./src/object-orientation.zh.md)
-- [ ] [9.用nom解析](./src/nom-intro.zh.md)
+- [x] [9.用nom解析](./src/nom-intro.zh.md)
 - [ ] [10.痛点](./src/pain-points.zh.md)
 
 > // ...

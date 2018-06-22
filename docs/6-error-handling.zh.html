@@ -135,7 +135,7 @@
                     <main>
                         <a class="header" href="6-error-handling.zh.html#a错误处理" id="a错误处理"><h1>错误处理</h1></a>
 <a class="header" href="6-error-handling.zh.html#a基本的错误处理" id="a基本的错误处理"><h2>基本的错误处理</h2></a>
-<p>如果你不能使用问号操作符来实现快乐,那么在生锈中的错误处理可能很笨拙,我们需要返回一个<code>Result</code>它可以接受任何错误. 所有错误都会实现这个 trait <code>std::error::error</code>, 所以 <em>任何</em> 错误可以转换成一个<code>Box&lt;Error&gt;</code>.</p>
+<p>如果你不能使用问号操作符来实现快乐,那么在生锈中的错误处理可能很笨拙,我们需要返回一个<code>Result</code>它可以接受任何错误. 所有错误都会实现这个 trait <code>std::error::Error</code>, 所以 <em>任何</em> 错误可以转换成一个<code>Box&lt;Error&gt;</code>.</p>
 <p>说我们 <em>都</em> 需要处理 I/O 错误和从转换String到数字的错误:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
