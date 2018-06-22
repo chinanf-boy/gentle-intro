@@ -222,10 +222,15 @@ programmer never used `extend` and instead used `implements`. And this is actual
 by Alan Holub. He says:
 
 > I once attended a Java user group meeting where James Gosling (Java's inventor) was the featured
+
 > speaker. During the memorable Q&A session, someone asked him: "If you could do Java over again,
+
 > what would you change?" "I'd leave out classes," he replied. After the laughter died down,
+
 > he explained that the real problem wasn't classes per se, but rather implementation inheritance
+
 > (the extends relationship). Interface inheritance (the implements relationship) is preferable.
+
 > You should avoid implementation inheritance whenever possible
 
 So even in Java, you've probably been overdoing classes!
