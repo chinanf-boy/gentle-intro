@@ -55,11 +55,11 @@ mdbook serve
 - [x] [7.线程,网络和共享](./src/7-shared-and-networking.zh.md)
 - [x] [8.面向对象编程](./src/object-orientation.zh.md)
 - [x] [9.用nom解析](./src/nom-intro.zh.md)
-- [ ] [10.痛点](./src/pain-points.zh.md)
+- [x] [10.痛点](./src/pain-points.zh.md)
 
 > // ...
 
 
 ## 其他
 
-- translate-mds >> https://github.com/chinanf-boy/translate-mds 提供初稿
+- translate-mds >> https://github.com/chinanf-boy/translate-mds 提供翻译初稿
