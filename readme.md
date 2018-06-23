@@ -45,7 +45,7 @@ mdbook serve
 
 > `src/` 下 `所有 *.zh.md` 文件是翻译, 还没校对
 
-
+- [x] [0.介绍](./src/readme.zh.md)
 - [x] [1.基本](./src/1-basics.zh.md)
 - [x] [2.结构,枚举和匹配](./src/2-structs-enums-lifetimes.zh.md)
 - [x] [3.文件系统和进程](./src/3-filesystem.zh.md)
