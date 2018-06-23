@@ -1,9 +1,10 @@
-title = "A Gentle Introduction to Rust"
-description = "Introduction to the Rust language, standard library and ecosystem"
+[book]
+title = "Rust 的绅士介绍"
+description = "Rust语言，标准库和生态系统介绍"
 author = "Steve Donovan"
-
-[build]
-build-dir = "docs"
+translator = "chinanf-boy{yobrave}"
 
 [output.html.playpen]
 editable = true
+editor = "ace"
+
