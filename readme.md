@@ -4,7 +4,33 @@
 
 ## 使用 
 
-用 mdbook  - https://github.com/rust-lang-nursery/mdBook 提供 `md`网页
+翻译书-网址 https://chinanf-boy.github.io/gentle-intro
+
+> 欢迎 `Issue/Pull` ✋
+
+## 校对
+
+> `src/` 下 `所有 *.zh.md` 文件是翻译, 还没校对
+
+- [x] [0.介绍](./src/readme.zh.md)
+- [x] [1.基本](./src/1-basics.zh.md)
+- [x] [2.结构,枚举和匹配](./src/2-structs-enums-lifetimes.zh.md)
+- [x] [3.文件系统和进程](./src/3-filesystem.zh.md)
+- [x] [4.模块和货物](./src/4-modules.zh.md)
+- [x] [5.标准库容器](./src/5-stdlib-containers.zh.md)
+- [x] [6.错误处理](./src/6-error-handling.zh.md)
+- [x] [7.线程,网络和共享](./src/7-shared-and-networking.zh.md)
+- [x] [8.面向对象编程](./src/object-orientation.zh.md)
+- [x] [9.用nom解析](./src/nom-intro.zh.md)
+- [x] [10.痛点](./src/pain-points.zh.md)
+
+> // ...
+
+## dev
+
+### mdbook
+
+用 `mdbook`  - https://github.com/rust-lang-nursery/mdBook 提供 `md`网页
 
 ```
 mdbook serve
@@ -41,25 +67,6 @@ mdbook serve
 </details>
 
 
-## 校对
+## 工具
 
-> `src/` 下 `所有 *.zh.md` 文件是翻译, 还没校对
-
-- [x] [0.介绍](./src/readme.zh.md)
-- [x] [1.基本](./src/1-basics.zh.md)
-- [x] [2.结构,枚举和匹配](./src/2-structs-enums-lifetimes.zh.md)
-- [x] [3.文件系统和进程](./src/3-filesystem.zh.md)
-- [x] [4.模块和货物](./src/4-modules.zh.md)
-- [x] [5.标准库容器](./src/5-stdlib-containers.zh.md)
-- [x] [6.错误处理](./src/6-error-handling.zh.md)
-- [x] [7.线程,网络和共享](./src/7-shared-and-networking.zh.md)
-- [x] [8.面向对象编程](./src/object-orientation.zh.md)
-- [x] [9.用nom解析](./src/nom-intro.zh.md)
-- [x] [10.痛点](./src/pain-points.zh.md)
-
-> // ...
-
-
-## 其他
-
-- translate-mds >> https://github.com/chinanf-boy/translate-mds 提供翻译初稿
+- `translate-mds` >> https://github.com/chinanf-boy/translate-mds 提供翻译初稿
