@@ -1167,7 +1167,7 @@ fn read_to_string(filename: &amp;str) -&gt; io::Result&lt;String&gt; {
 <p>总而言之，可以编写完全安全的Rust，而不是丑陋的
 需要例外。</p>
 <a class="header" href="print.html#a结构structs枚举enums和匹配match" id="a结构structs枚举enums和匹配match"><h1>结构{structs},枚举{enums}和匹配{match}</h1></a>
-<a class="header" href="print.html#rust喜欢-move-它-move-它" id="rust喜欢-move-它-move-它"><h2>Rust喜欢 move 它, move 它</h2></a>
+<a class="header" href="print.html#rust-喜欢-move-它-move-它" id="rust-喜欢-move-它-move-它"><h2>Rust 喜欢 move 它, move 它</h2></a>
 <p>我想稍微回退一下,给你看一些令人惊讶的东西:</p>
 <pre><pre class="playpen"><code class="language-rust">// move1.rs
 fn main() {
@@ -1188,9 +1188,9 @@ fn main() {
   = note: move occurs because `s1` has type `std::string::String`,
   which does not implement the `Copy` trait
 </code></pre>
-<p>Rust与其他语言有不同的行为. 在变量总是<code>引用{references}</code> (如Java或Python) 的语言中,<code>s2</code>成为对引用的字符串对象的又一个引用<code>s1</code>. 在C ++中,<code>s1</code>是一种<code>价值{value}</code>,它是 <em>复制</em> 至<code>s2</code>. 但Rust会改变价值. 它没有看到<code>字符串{strings}</code>是可复制的 (&quot;不实现复制trait&quot;) .</p>
-<p>我们不会看到像数字这样的&quot;原始&quot;类型,因为它们只是数值;他们被允许复制,因为他们便宜复制. 但<code>String</code>已经分配了包含&quot;Hello dolly&quot;的内存,并且复制将涉及分配更多内存并复制<code>字符{char}</code>. Rust不会默默地做到这一点.</p>
-<p>考虑一个<code>String</code>包含&quot;Moby-Dick&quot;的全文. 它不是一个很大的结构,只有文本的内存地址,它的大小以及分配块的大小. 复制这将是昂贵的,因为该内存分配在堆上,副本将需要自己分配的块.</p>
+<p>Rust 与其他语言有不同的行为. 在变量总是<code>引用{references}</code> (如Java或Python) 的语言中,<code>s2</code>成为对引用<code>s1</code>字符串对象的又一个引用. 在 C ++ 中,<code>s1</code>是一种<code>价值{value}</code>,它是 <em>复制</em> 至<code>s2</code>. 但 Rust 会改变价值. 它没有看到<code>字符串{strings}</code>是可复制的 (&quot;没有实现复制trait&quot;) .</p>
+<p>我们不会看到像数字这样的&quot;原始&quot;类型,因为它们只是数值;他们被允许复制,因为他们便宜复制. 但<code>String</code>已经分配了包含&quot;Hello dolly&quot;的内存,并且复制将涉及分配更多内存还要复制<code>字符{char}</code>.  Rust 不会默默地做到这一点.</p>
+<p>考虑一个<code>String</code>包含&quot;Moby-Dick&quot;的全文. 它不是一个很大的结构,只有文本的内存地址,它的大小以及分配块的大小. 复制这将是昂贵的,因为该内存分配在堆上和需要自己的分配区块.</p>
 <pre><code>    String
     | addr | ---------&gt; Call me Ishmael.....
     | size |                    |
@@ -1203,11 +1203,11 @@ fn main() {
     f64
     | 8 bytes |
 </code></pre>
-<p>第二个值是一个字符串切片 (<code>&amp;str</code>) ,它与字符串指向相同的内存,大小 - 只是人的名字. 便宜复制!</p>
+<p>第二个值是一个字符串切片 (<code>&amp;str</code>) ,它与字符串指向相同的内存,大小 - 仅仅只是名字. 便宜复制!</p>
 <p>第三个值是一个<code>f64</code>- 只有8个字节. 它不涉及任何其他内存,所以它的复制一样便宜移动.</p>
-<p><code>复制{Copy}</code>值只能通过它们在内存中的表示来定义,而当Rust拷贝时,它只是在其他地方复制这些字节. 类似地, 一个没有<code>复制{Copy}</code>的<code>价值{value}</code>也是 <em>只能移动{move}</em>. 与C ++不同的是,Rust在复制和移动方面没有聪明之处.</p>
+<p><code>复制{Copy}</code>值只能通过它们在内存中的表示来定义,而当 Rust 拷贝时,它只是在其他地方复制这些字节. 类似地, 一个没有<code>复制{Copy}</code>的<code>价值{value}</code>也是 <em>只能移动{move}</em>. 与 C ++ 不同的是, Rust 在复制和移动方面没有聪明之处.</p>
 <blockquote>
-<p>对 具有引用的值 隐形<code>移动{move}</code>值, 在 rust 是错误的</p>
+<p>对 具有引用的变量 隐形<code>移动{move}</code>变量, 在 rust 是错误的</p>
 </blockquote>
 <p>用函数调用重写将显示完全相同的错误:</p>
 <pre><pre class="playpen"><code class="language-rust">// move2.rs
@@ -1247,12 +1247,12 @@ fn dump(s: &amp;str) {
     println!(&quot;{}&quot;, s);
 }
 #}</code></pre></pre>
-<p>然后两个 <code>dump(&amp;s1)</code> 和 <code>dump(&quot;hello world&quot;)</code> 好好工作.  (这里<code>Deref</code>强制踢进来,Rust会转换<code>&amp;String</code>至<code>&amp;str</code>为你. ) 总而言之,分配 <code>非复制值{non-Copy}</code>将值从一个位置<code>移动{move}</code>到另一个位置.</p>
-<p>否则,<code>锈{rust}</code>将被迫 <em>隐式</em> 做一个<code>副本{copy}</code>,并打破rust本身<code>承诺{promise}</code>-明确分配.</p>
+<p>然后两个 <code>dump(&amp;s1)</code> 和 <code>dump(&quot;hello world&quot;)</code> 好好工作.  (这里就是<code>Deref</code>起的作用, Rust 会为你转换<code>&amp;String</code>至<code>&amp;str</code>. )</p>
+<p>总而言之,分配 <code>非复制{non-Copy}</code>会将 值 从一个位置<code>移动{move}</code>到另一个位置. 否则,<code>锈{rust}</code>将被迫 <em>隐式</em> 做一个<code>副本{copy}</code>,并打破rust本身 <em>明确分配</em> 的<code>承诺{promise}</code>.</p>
 <a class="header" href="print.html#a变量的范围" id="a变量的范围"><h2>变量的范围</h2></a>
-<p>所以,经验法则是更愿意保留对原始数据的<code>引用{&amp;}</code> - 以<code>&quot;借用{borrow}&quot;</code>它.</p>
-<p>但一个引用必须 <em>不</em> 超过<code>老板{owner}</code>!</p>
-<p>首先,Rust是一个 <em>块范围的{block-scoped}</em> 语言. 变量仅在其块的持续时间内存在:</p>
+<p>所以,经验法则是更愿意保留对原始数据的<code>引用{&amp;}</code> - 以此来<code>&quot;借用{borrow}&quot;</code>它.</p>
+<p>但一个引用必须 <em>不能</em> 超过<code>拥有人{owner}</code>!</p>
+<p>首先, Rust 是一个 <em>块范围的{block-scoped}</em> 语言. 变量仅在其块的持续时间内存在:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1268,28 +1268,28 @@ fn dump(s: &amp;str) {
     for i in 0..a {
         let b = &amp;b[1..];
         // original b is no longer visible - it is shadowed.
-        // 原来的b不再可见 - 它是阴影。
+        // 原来的b不再可见 - 它被罩住了。
     }
     // the slice b is dropped
     // i is _not_ visible!
 }
 #}</code></pre></pre>
 <p>循环变量 (如<code>i</code>) 有点不同,它们只在循环块中可见. 创建一个使用相同名称的新变量并不是一个错误 (<code>'shadowing'</code>) ,但它可能会造成混淆.</p>
-<p>当一个变量'超出范围',那么它是 <em>扔掉了{dropped}</em>. 任何使用的内存都会被回收,而其他内存则被回收 <em>资源{resources}</em> 由该变量所拥有的信息将返回给系统 - 例如,丢弃一个<code>文件{File}</code>关闭它. 这是一件好事. 未使用的资源在不需要时立即回收.</p>
-<p>(另一个特定于Rust的问题是变量可能看起来在范围内,但其值已经<code>移动{move}</code>. )</p>
-<p>这里有一个引用, <code>rs1</code>是有价值的, 而<code>tmp</code>它只在其封锁期间存在:</p>
+<p>当一个变量'超出范围',那么它是 <em>扔掉了{dropped}</em>. 任何使用的内存都会被回收,而该变量的其他 <em>资源{resources}</em> 将返回给系统 - 例如,扔掉一个<code>文件{File}</code>就会闭包它. 这是一件好事. 未使用的资源在不需要时立即回收.</p>
+<p>(另一个特定于 Rust 的问题是变量可能看起来在范围内,但其值已经<code>移动{move}</code>. )</p>
+<p>这里有一个引用<code>rs1</code> 到 <code>tmp</code>, 它只在其区块期间<code>{}</code>存在:</p>
 <pre><pre class="playpen"><code class="language-rust">01 // ref1.rs
 02 fn main() {
 03    let s1 = &quot;hello dolly&quot;.to_string();
 04    let mut rs1 = &amp;s1;
 05    {
 06        let tmp = &quot;hello world&quot;.to_string();
-07        rs1 = &amp;tmp;
+07        rs1 = &amp;tmp; // &lt;==
 08    }
 09    println!(&quot;ref {}&quot;, rs1);
 10 }
 </code></pre></pre>
-<p>我们<code>借用{borrow}</code>的价值 <code>s1</code>然后借用的价值<code>tmp</code>. 但<code>tmp</code>在该块之外不存在价值!</p>
+<p>我们<code>借用{borrow}</code>的价值 <code>s1</code>然后借用的价值<code>tmp</code>. 但<code>tmp</code>在该区块之外就被扔掉了!</p>
 <pre><code>error: `tmp` does not live long enough
   --&gt; ref1.rs:8:5
    |
@@ -1301,9 +1301,9 @@ fn dump(s: &amp;str) {
 10 | }
    | - borrowed value needs to live until here
 </code></pre>
-<p>哪里<code>tmp</code>?走了,死了,回到了天空中的大堆: <em>扔掉了{dropeed}</em>. 铁锈在这里拯救你从 <strong>C</strong> 的可怕的'悬挂指针'问题 - 一个指向陈旧数据的引用.</p>
+<p><code>tmp</code>哪里去了? 走了,死了,回到了天空中的大堆: <em>扔掉了{dropeed}</em>. rust 从 <strong>C</strong> 的可怕的'悬挂指针'问题中拯救你 - 一个指向陈旧数据的引用.</p>
 <blockquote>
-<p>在 区块中, <code>rs1</code>-指向-&gt; <code>&amp;tmp</code>, 但在区块结束后, tmp 整个都被 <em>扔掉了{dropped}</em> , 这个时候 <code>rs1</code> 也就指向一个空指针</p>
+<p>在 区块中, <code>rs1</code>-指向-&gt; <code>&amp;tmp</code>, 但在区块结束后, tmp 整个都被 <em>扔掉了{dropped}</em> , 这个时候 <code>rs1</code> 也就指向一个指针 -指向-&gt; 被扔掉地址</p>
 </blockquote>
 <a class="header" href="print.html#a元组" id="a元组"><h2>元组</h2></a>
 <p>从函数返回多个值有时非常有用. 元组是一个方便的解决方案:</p>
@@ -1340,7 +1340,7 @@ assert_eq!(tuple.0, &quot;hello&quot;);
 assert_eq!(tuple.1, 5);
 assert_eq!(tuple.2, 'c');
 #}</code></pre></pre>
-<p>他们出现在一些<code>迭代器{Iterator}</code>方法. <code>枚举{enumerate}</code>就像同名的 ython生成器 一样:</p>
+<p>他们出现在一些<code>迭代器{Iterator}</code>方法. <code>enumerate</code>就像同名的 Python生成器 一样:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1362,7 +1362,7 @@ assert_eq!(tuple.2, 'c');
 #}</code></pre></pre>
 <a class="header" href="print.html#a结构structs" id="a结构structs"><h2>结构{Structs}</h2></a>
 <p>元组很方便,但是在说<code>t.1</code>并且追踪每个部分的含义, 不够直截了当</p>
-<p>rust <em>结构</em> 包含命名 <em>领域{fields}</em> :</p>
+<p>rust <em>结构</em> 包含命名 <em>字段{fields}</em> :</p>
 <pre><pre class="playpen"><code class="language-rust">// struct1.rs
 
 struct Person {
@@ -1378,8 +1378,8 @@ fn main() {
     println!(&quot;person {} {}&quot;, p.first_name,p.last_name);
 }
 </code></pre></pre>
-<p>虽然不应该假定任何特定的内存布局,但是结构体的值将在内存中相邻放置,因为编译器会组织内存以提高效率,而不是大小,并且可能会存在填充.</p>
-<p>初始化这个结构有点笨拙,所以我们想要移动构造一个<code>Person</code>融入其自身的功能. 这个功能可以做成一个 <em>关联功能</em> 的<code>Person</code>把它放进去<code>impl</code>块:</p>
+<p>虽然不应该假定任何特定的内存布局,但是结构体的值将在内存中相邻放置,因为编译器会组织内存,而不是大小来提高效率,并且可能会存在填充.</p>
+<p>初始化这个结构有点笨拙,所以我们想要 移动构造一个<code>Person</code>融入其自身的函数. 通过它放进去<code>impl</code>块, 这个函数可以做成<code>Person</code>的一个 <em>关联函数</em> :</p>
 <pre><pre class="playpen"><code class="language-rust">// struct2.rs
 
 struct Person {
@@ -1403,8 +1403,8 @@ fn main() {
     println!(&quot;person {} {}&quot;, p.first_name,p.last_name);
 }
 </code></pre></pre>
-<p>这个名字没有什么魔力或保留<code>new</code>这里. 请注意,它使用C ++进行访问 - 如使用双冒号的符号<code>::</code>.</p>
-<p>这是一个<code>Person</code> <em>方法</em>,这需要一个_引用自我{reference self}_论据:</p>
+<p>这个名字<code>new</code>没有什么魔力或其他. 请注意,它使用类似 C ++ 进行访问 - 如使用双冒号的符号<code>::</code>.</p>
+<p>下面是个<code>Person</code> <em>方法</em>,需要一个 <em>引用自我{reference self}</em> 参数:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1420,8 +1420,8 @@ impl Person {
     println!(&quot;fullname {}&quot;, p.full_name());
 // fullname John Smith
 #}</code></pre></pre>
-<p>该<code>self</code>明确使用并作为<code>引用</code>传递.  (你可以想到<code>&amp;self</code>作为简称<code>slef: &amp;Person</code>. )</p>
-<p>关键字<code>Self</code>指的是结构类型 - 你可以在脑海中替代<code>Person</code>对于<code>Self</code>这里:</p>
+<p>该<code>self</code>明确使用并作为<code>引用</code>传递.  (你可以想到<code>&amp;self</code>作为简称<code>self: &amp;Person</code>. )</p>
+<p>关键字<code>Self</code>指的是结构类型 - 你可以在脑海中用<code>Person</code>替换<code>Self</code>:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1429,7 +1429,7 @@ impl Person {
         Self::new(&amp;self.first_name,&amp;self.last_name)
     }
 #}</code></pre></pre>
-<p>方法可以允许修改数据, 使用 <em>可变的自我{mutable self}</em> 论据:</p>
+<p>方法可以允许修改数据, 使用 <em>可变的自我{mutable self}</em> 参数:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1449,10 +1449,10 @@ impl Person {
 <p>请注意,之后<code>v.to_tuple()</code>被调用,然后<code>v</code>已经移动并且不再可用.</p>
 <p>总结:</p>
 <ul>
-<li>没有<code>self</code>参数: 您可以将函数与结构关联,如<code>new</code>&quot;构造&quot;.</li>
+<li>没有<code>self</code>参数: 您可以将函数与结构关联,如<code>new</code>&quot;constructor&quot;.</li>
 <li><code>&amp;self</code>参数: 可以使用结构体的值,但不能改变它们</li>
 <li><code>&amp;mut self</code>参数: 可以修改这些值</li>
-<li><code>self</code>参数: 将消耗将移动的值.</li>
+<li><code>self</code>参数: 将消耗和移动的值.</li>
 </ul>
 <p>如果您尝试执行一个调试转储<code>Person</code>,你会得到一个信息错误:</p>
 <pre><code>error[E0277]: the trait bound `Person: std::fmt::Debug` is not satisfied
@@ -1468,7 +1468,7 @@ impl Person {
 <p>编译器提供建议,所以我们放了<code>#[derive(Debug)]</code>在<code>Person</code>前面,现在有明智的输出:</p>
 <pre><code>Person { first_name: &quot;John&quot;, last_name: &quot;Smith&quot; }
 </code></pre>
-<p>该 <em>指示{directive}</em> 使编译器生成一个<code>Debug</code>实施{implementation},这是非常有益的. 对于你的结构来说这是一个很好的习惯,所以它们可以打印出来 (或者用字符串写成<code>format!</code>) .  (这样做 <em>默认</em> 会非常<code>不生锈{un-Rustlike}</code>. ) 这是最后的小程序:</p>
+<p>该 <em>指示{directive}</em> 使编译器生成一个 <code>Debug</code>实施{implementation}, 这是非常有益的. 对于你的结构来说这是一个很好的习惯,所以它们可以打印出来 (或者用字符串写成<code>format!</code>) .  (<em>默认</em> 非常<code>不是生锈{un- Rust like}</code>风格. ) 这是最后的小程序:</p>
 <pre><pre class="playpen"><code class="language-rust">// struct4.rs
 use std::fmt;
 
@@ -1517,7 +1517,7 @@ fn main() {
 // Person { first_name: &quot;Jane&quot;, last_name: &quot;Smith&quot; }
 // (&quot;Jane&quot;, &quot;Smith&quot;)
 </code></pre></pre>
-<a class="header" href="print.html#a寿命lifetimes开始咬人" id="a寿命lifetimes开始咬人"><h2>寿命{Lifetimes}开始咬人</h2></a>
+<a class="header" href="print.html#a生命周期lifetimes开始咬人" id="a生命周期lifetimes开始咬人"><h2>生命周期{Lifetimes}开始咬人</h2></a>
 <p>通常结构体包含值,但通常它们还需要包含<code>引用{&amp;}</code>. 假设我们想在一个结构中放置一个<code>字符串切片{&amp;str}</code>,而不是一个字符串值.</p>
 <pre><pre class="playpen"><code class="language-rust">// life1.rs
 
@@ -1538,10 +1538,10 @@ fn main() {
 5 |     s: &amp;str
   |        ^ expected lifetime parameter
 </code></pre>
-<p>为了理解<code>投诉{complaint}</code>,你必须从Rust的角度看问题.</p>
-<p>如果不知道它的生命周期,它将不允许存储引用. 所有<code>引用{&amp;}</code>都是从某个价值中<code>借用{borrowed}</code>的,而且所有的<code>价值{value}</code>都是有<code>生命{lifetimes}</code>的. 引用的生命周期不能长于该值的生命周期. Rust不能允许这种引用可能突然失效的情况.</p>
-<p>现在,字符串切片, 借用字符串文字 <em>像&quot;hello&quot;或来自</em> <code>String</code>值. 字符串文字在整个程序期间存在,称为&quot;静态{static}&quot;寿命.</p>
-<p>所以这是有效的 - 我们向Rust保证字符串切片总是指向这样的<code>静态{static}</code>字符串:</p>
+<p>为了理解<code>投诉{complaint}</code>,你必须从 Rust 的角度看问题.</p>
+<p>如果不知道它的生命周期,它将不允许存储引用. 所有<code>引用{&amp;}</code>都是从某个价值中<code>借用{borrowed}</code>的,而且所有的<code>价值{value}</code>都是有<code>生命周期{lifetimes}</code>的. 引用的生命周期不能长于该值的生命周期.  Rust 不能允许这种 引用可能突然失效 的情况.</p>
+<p>现在,字符串切片, 借用 <em>字符串文字</em> 像&quot;hello&quot;或来自<code>String</code>值. 字符串文字在整个程序期间存在,称为&quot;静态{static}&quot;生命周期.</p>
+<p>所以这是有效的 - 我们向 Rust 保证字符串切片总是指向这样的<code>静态{static}</code>字符串:</p>
 <pre><pre class="playpen"><code class="language-rust">// life2.rs
 
 #[derive(Debug)]
@@ -1585,9 +1585,9 @@ fn main() {
     println!(&quot;{:?}&quot;, a);
 }
 </code></pre></pre>
-<p><code>生命周期{Lifetimes}</code>通常被称为'a','b'等,但您可以在此称之为'我{me}'.</p>
-<p>在这之后,我们的<code>a</code>结构和<code>s</code>字符串受到严格合同的约束: <code>a</code>借用<code>s</code>,并且不能超越它.</p>
-<p>有了这个结构体定义,我们想写一个函数返回一个<code>一个</code>值:</p>
+<p><code>生命周期{Lifetimes}</code>通常被称为'a','b'等,您也可以写'我{me}'.</p>
+<p>在这之后,我们的<code>a</code>结构和<code>s</code>字符串受到严格合同的约束: <code>a</code>借用<code>s</code>,并且不能超越<code>s</code>.</p>
+<p>有了这个结构体定义,我们想写一个函数返回一个<code>A</code>值:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1596,7 +1596,7 @@ fn makes_a() -&gt; A {
     A { s: &amp;string }
 }
 #}</code></pre></pre>
-<p>但<code>a</code> 需要 lifetime - &quot;预期寿命参数{expected lifetime parameter}&quot;:</p>
+<p>但 <code>A</code> 需要 lifetime - &quot;预期生命周期参数{expected lifetime parameter}&quot;:</p>
 <pre><code>  = help: this function's return type contains a borrowed value,
    but there is no value for it to be borrowed from
   = help: consider giving it a 'static lifetime
@@ -1616,12 +1616,12 @@ fn makes_a() -&gt; A&lt;'static&gt; {
 9 | }
   | - borrowed value only lives until here
 </code></pre>
-<p>这是无法安全工作的,因为<code>string</code>将在函数结束时被删除,并且不会引用<code>string</code>可以超过它.</p>
+<p>这是无法安全工作的,因为<code>string</code>将在函数结束时被删除,并且引用不可以超过<code>string</code>.</p>
 <p>您可以将生命周期参数视为值类型的一部分.</p>
-<p>有时候,结构中包含一个值似乎是个好主意 <em>和</em> 从该价值中借鉴的引用. 这基本上是不可能的,因为结构必须是 <em>活动</em> ,任何移动都将使引用无效. 没有必要这样做 - 例如,如果你的结构有一个字符串字段-string,并且需要提供切片-str,那么它可以保留索引并且有一个方法来生成实际的切片.</p>
+<p>有时候,结构中包含一个值 <em>和</em> 从该值中借用的引用 似乎是个好主意. 这基本上是不可能的,因为结构必须是 <em>可移动的</em> ,任何移动都将使引用无效. 没有必要这样做 - 例如,如果你的结构有一个字符串字段-string,并且需要提供切片-str,那么它可以保留索引并且有一个方法来生成实际的切片.</p>
 <a class="header" href="print.html#a特点traits" id="a特点traits"><h2>特点{Traits}</h2></a>
-<p>请注意Rust不会拼写<code>struct</code> <em>class</em>. 关键字<code>类</code>在其他语言中是如此超载,意味着它有效地关闭了原来的想法.</p>
-<p>让我们这样说吧: Rust结构不能 <em>继承</em> 来自其他结构;他们都是独特的类型. 没有 <em>sub-typing{子}</em> . 他们是愚蠢的数据.</p>
+<p>请注意 Rust 不会拼写<code>struct</code> <em>class</em>. 关键字<code>类</code>在其他语言中是如此超载,意味着它有效地闭包了原来的想法.</p>
+<p>让我们这样说吧:  Rust 结构不能 <em>继承</em> 来自其他结构;他们都是独特的类型. 没有 <em>sub-typing{子}</em> . 他们是愚蠢的数据.</p>
 <p>又怎样 <em>做</em> 一个建立类型之间的关系? 这正是 <em>Traits</em> 进来的时候.</p>
 <p><code>rustc</code>经常谈到<code>实现{implementing} x 特点{trait}</code>所以现在是时候正确地讨论 <em>Traits</em> 了.</p>
 <p>这里有一个定义 <em>Traits</em> 的例子 <em>implementing</em> 它适用于特定类型.</p>
@@ -1655,8 +1655,8 @@ fn main() {
 // show eight-byte float 3.14
 </code></pre></pre>
 <p>它太酷了;我们有 <em>增加了一种新方法</em> 二者皆是<code>i32</code>和<code>f64</code>!</p>
-<p>熟悉Rust就会学习标准库的基本trait (他们倾向于打包) .</p>
-<p><code>调试</code>是非常普遍的. 我们给<code>Person</code>一个方便的默认实现<code>#\[derive(Debug)]</code>,但说我们想要一个<code>Person</code>以全名显示:</p>
+<p>熟悉 Rust 就会学习标准库的基本trait (他们倾向于打包) .</p>
+<p><code>Debug</code>是非常普遍的. 我们给<code>Person</code>一个方便的默认实现<code>#[derive(Debug)]</code>,但说我们想要一个<code>Person</code>以全名显示:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1672,11 +1672,11 @@ impl fmt::Debug for Person {
     // John Smith
 #}</code></pre></pre>
 <p><code>write!</code>是一个非常有用的宏 - 在这里<code>f</code>是实现<code>Write</code>.  (这也适用于<code>File</code>- 甚至是一个<code>String</code>. )</p>
-<p><code>显示{Display}</code>控制如何使用&quot;{}&quot;打印值,并执行就像<code>调试</code>. 作为一个有用的副作用,<code>ToString</code>自动实施-任何实现<code>Display</code>. <code>所以如果我们执行</code>Display<code>对于</code>Person<code>, 然后</code>p.to_string()`也适用.</p>
-<p><code>Clone</code>定义了该方法<code>clone</code>,并且可以简单地用&quot;#&quot;[deriv(Clone)]&quot;如果所有的领域都实施<code>Clone</code>.</p>
+<p><code>显示{Display}</code>控制如何使用&quot;{}&quot;打印值,并执行就像<code>Debug</code>. 作为一个有用的副作用,任何实现<code>Display</code>的,<code>ToString</code>自动实施. - 所以如果我们实现<code>Person</code>的<code>Display</code>, <code>p.to_string()</code>也适用.</p>
+<p><code>Clone</code>定义了该方法<code>clone</code>,并且用&quot;#[deriv(Clone)]&quot;可以简单地定义,如果所有的字段都实施<code>Clone</code>.</p>
 <a class="header" href="print.html#a示例-遍历浮点范围的迭代器" id="a示例-遍历浮点范围的迭代器"><h2>示例: 遍历浮点范围的迭代器</h2></a>
-<p>我们已经遇到范围之前 (<code>0..n</code>) 但它们不适用于浮点值.  (您可以 <em>强制性</em> 这一点,但最终你会得到一个无趣的1.0步. )</p>
-<p>回想一下迭代器的非正式定义;它是一个带有结构体<code>next</code>方法可能会返回<code>Some</code>事情或<code>None</code>. <code>在这个过程中,迭代器本身被修改,它保持迭代的状态 (如next索引等等) . 迭代的数据通常不会改变, (但请参阅</code>VEC::drain`对于修改其数据的有趣的迭代器) .</p>
+<p>我们已经遇到范围之前 (<code>0..n</code>) 但它们不适用于浮点值.  (您可以 <em>强制性</em> 这一点,但最终你会得到一个无趣的1.0. )</p>
+<p>回想一下迭代器的非正式定义;它是一个带有结构体和可能会返回<code>Some</code>事情或<code>None</code>的<code>next</code>方法. 在这个过程中,迭代器本身被修改,它保持迭代的状态 (如 next 索引等等) . 迭代的数据通常不会改变, (但请参阅<code>Vec::drain</code>对于修改其数据的有趣的迭代器) .</p>
 <p>这里是正式的定义: <a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html">迭代器trait</a>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -1687,9 +1687,9 @@ trait Iterator {
     ...
 }
 #}</code></pre></pre>
-<p>我们在这里见面<a href="https://doc.rust-lang.org/stable/book/associated-types.html">关联类型{associated type}</a>的<code>迭代器</code>trait. 这个trait必须适用于任何类型,所以你必须以某种方式指定返回类型. 方法<code>next</code>可以在不使用特定类型的情况下编写 - 而是指那个类型参数<code>Item</code>来自<code>Self</code>.</p>
-<p>迭代器trait<code>f64</code>写入<code>Iterator&lt;Item=f64&gt;</code>,它可以理解为&quot;Iterator的关联类型Item设置为f64&quot;.</p>
-<p>该<code>...</code>指的是 <em>提供的方法</em> 的<code>迭代器</code>. 你只需要定义<code>Item</code>和<code>next</code>,并为您定义提供的方法.</p>
+<p>我们在这里看到了<code>迭代器</code> trait 的<a href="https://doc.rust-lang.org/stable/book/associated-types.html">关联类型{associated type}</a>. 这个 trait 必须适用于任何类型,所以你必须以某种方式指定返回类型. 方法<code>next</code>可以在不使用特定类型的情况下编写 - 而是通过<code>Self</code>引用该类型参数的<code>Item</code>.</p>
+<p><code>f64</code>迭代器 trait 写入<code>Iterator&lt;Item=f64&gt;</code>,它可以理解为&quot;Iterator的关联类型Item设置为f64&quot;.</p>
+<p>该<code>...</code>指的是<code>迭代器</code>的  <em>提供的方法</em> . 你只需要定义<code>Item</code>和<code>next</code>,并为您定义提供的方法.</p>
 <pre><pre class="playpen"><code class="language-rust">// trait3.rs
 
 struct FRange {
@@ -1736,20 +1736,20 @@ fn main() {
 0.8999999999999999
 0.9999999999999999
 </code></pre>
-<p>这是因为0.1不能精确表示为float,所以需要一些格式化帮助. 更换<code>调用println!</code>有了这个</p>
+<p>这是因为0.1不能精确表示为float,所以需要一些格式化帮助. 更换<code>println!</code></p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
 println!(&quot;{:.1} &quot;, x);
 #}</code></pre></pre>
-<p>我们得到更清洁的产出 (这个<a href="https://doc.rust-lang.org/std/fmt/index.html">格式</a>意思是'小数点后一位小数'. ) 所有默认的迭代器方法都可用,所以我们可以将这些值收集到一个<code>向量{Vec}</code>中,映射它们等等.</p>
+<p>我们得到更清洁的产出 (这个<a href="https://doc.rust-lang.org/std/fmt/index.html">格式</a>意思是'小数点后一位小数'. ) 所有默认的迭代器方法都可用,所以我们可以将这些值收集到一个<code>向量{Vec}</code>中,map 来使用它们等等.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
     let v: Vec&lt;f64&gt; = range(0.0, 1.0, 0.1).map(|x| x.sin()).collect();
 #}</code></pre></pre>
 <a class="header" href="print.html#a通用函数" id="a通用函数"><h2>通用函数</h2></a>
-<p>我们需要一个函数来抛出实现的任何值<code>调试</code>. <code>以下是对通用函数的第一次尝试,我们可以在其中传递引用 _任何_ 价值类型.</code>T`是一个类型参数,需要在函数名称后面声明:</p>
+<p>我们需要一个函数来抛出实现的任何值<code>Debug</code>. 以下是对通用函数的第一次尝试,我们可以在其中传递引用 <em>任何</em> 价值类型. <code>T</code>是一个类型参数,需要在函数名称后面声明:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1760,13 +1760,13 @@ fn dump&lt;T&gt; (value: &amp;T) {
 let n = 42;
 dump(&amp;n);
 #}</code></pre></pre>
-<p>但是,Rust显然对这种通用类型一无所知<code>T</code>:</p>
+<p>但是, Rust 显然对这种通用类型一无所知<code>T</code>:</p>
 <pre><code>error[E0277]: the trait bound `T: std::fmt::Debug` is not satisfied
 ...
    = help: the trait `std::fmt::Debug` is not implemented for `T`
    = help: consider adding a `where T: std::fmt::Debug` bound
 </code></pre>
-<p>为了这个工作,Rust需要被告知<code>T</code>确实实施<code>Debug</code>!</p>
+<p>为了这个工作, Rust 需要被告知<code>T</code>确实实施<code>Debug</code>!</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1779,8 +1779,8 @@ let n = 42;
 dump(&amp;n);
 // value is 42
 #}</code></pre></pre>
-<p>Rust通用功能需要 <em>Traits bounds</em> 类型 - 我们在这里说&quot;T是实现Debug的任何类型&quot;. <code>rustc</code>是非常有用的,并且确切地说明需要提供什么界限.</p>
-<p>现在Rust知道这个 <em>trait</em> <code>T</code>,它可以给你敏感的编译器消息:</p>
+<p>Rust 通用函数需要 <em>Traits bounds</em> 类型 - 我们在这里说&quot;T是实现了Debug的任何类型&quot;. <code>rustc</code>是非常有用的,并且确切地说明需要提供什么界限.</p>
+<p>现在 Rust 知道这个 <em>trait</em> <code>T</code>,它可以给你敏感的编译器消息:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1792,8 +1792,8 @@ let foo = Foo{name: &quot;hello&quot;.to_string()};
 
 dump(&amp;foo)
 #}</code></pre></pre>
-<p>而错误是&quot;<em>Traits</em> <code>std::fmt::Debug</code>没有实施<code>Foo</code>&quot;.</p>
-<p>函数在动态语言中已经是泛型的,因为值会带有它们的实际类型,并且类型检查在运行时发生 - 或者惨败. 对于较大的程序,我们确实想在编译时想知道问题!这些语言的程序员不应平静地坐在编译器的错误之中,而必须处理程序运行时才会出现的问题. 墨菲定律意味着这些问题往往会发生在最不方便/灾难性的时刻.</p>
+<p>而错误是&quot;<code>Foo</code> <em>Traits</em>  没有实施 <code>std::fmt::Debug</code>&quot;.</p>
+<p>函数在动态语言中已经是泛型的,因为值会带有它们的实际类型,并且类型检查在运行时发生 - 或者惨败. 对于较大的程序,我们确实想在编译时想知道问题!这些语言的程序员不应平静地坐在编译器的错误之中,而必须处理程序运行时才会出现的问题. 墨菲定律意味着这些问题往往会发生在 最不方便/灾难性 的时刻.</p>
 <p>平方数的操作是通用的: <code>x * x</code>将适用于整数,浮点数和一般用于任何关于乘法运算符的知识<code>*</code>. 但是类型边界是什么?</p>
 <pre><pre class="playpen"><code class="language-rust">// gen1.rs
 
@@ -1806,7 +1806,7 @@ fn main() {
     println!(&quot;res {}&quot;,res);
 }
 </code></pre></pre>
-<p>第一个问题是Rust不知道<code>T</code>可以乘以:</p>
+<p>第一个问题是 Rust 不知道<code>T</code>可以乘以:</p>
 <pre><code>error[E0369]: binary operation `*` cannot be applied to type `T`
  --&gt; gen1.rs:4:5
   |
@@ -1819,7 +1819,7 @@ note: an implementation of `std::ops::Mul` might be missing for `T`
 4 |     x * x
   |     ^
 </code></pre>
-<p>遵循编译器的建议,让我们使用限制该类型参数<a href="https://doc.rust-lang.org/std/ops/trait.Mul.html">那个_Traits_</a>,用于实现乘法运算符<code>*</code>:</p>
+<p>遵循编译器的建议,让我们使用限制该类型参数<a href="https://doc.rust-lang.org/std/ops/trait.Mul.html">这个 Traits</a>,用于实现乘法运算符<code>*</code>:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1838,7 +1838,7 @@ where T: std::ops::Mul {
   = note: expected type `T`
   = note:    found type `&lt;T as std::ops::Mul&gt;::Output`
 </code></pre>
-<p>什么<code>rustc</code>是说这种类型的<code>x * x</code>是关联的类型<code>T::Output</code>,不<code>T</code>. 实际上没有理由的类型<code>x * x</code>与类型相同<code>x</code>,例如,两个向量的点积是一个标量.</p>
+<p>什么<code>rustc</code>是说这种类型的<code>x * x</code>是关联的类型<code>T::Output</code>,而不是<code>T</code>. 实际上没有理由说<code>x * x</code>与<code>x</code>类型相同,例如,两个向量的点积是一个标量.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1867,17 +1867,17 @@ where T: std::ops::Mul + Copy {
     x * x
 }
 #}</code></pre></pre>
-<p>那 (终于) 起作用了. 冷静地倾听编译器经常会让你更接近魔术点,当......事情干净地编译时.</p>
-<p>它 <em>是</em> 在C ++中更简单一点:</p>
+<p>那 (终于) 起作用了. 冷静地倾听编译器经常会让你更接近魔术点,当各种各样的事情干净地编译时.</p>
+<p>确实, 它 <em>是</em> 在 C ++ 中更简单一点:</p>
 <pre><code class="language-cpp">template &lt;typename T&gt;
 T sqr(x: T) {
     return x * x;
 }
 </code></pre>
-<p>但 (说实话) C ++在这里采用牛仔策略. C ++<code>模板{template}</code>错误很不好,因为所有的编译器都知道 (最终) 是某些操作符或方法没有被定义. C ++委员会知道这是一个问题,所以他们正在努力<a href="https://en.wikipedia.org/wiki/Concepts_(C%2B%2B)">概念</a>,这几乎与Rust中的<code>trait约束类型</code>参数非常相似.</p>
-<p>Rust通用函数一开始可能看起来有点压倒性,但是显式意味着只要看看定义,就能确切地知道可以安全地提供哪种值.</p>
-<p>这些函数被调用 <em>单态{monomorphic}</em> ,与...相反 <em>多态{polymorphic}</em>. 函数的主体是为每个唯一类型分别编译的. 通过多态函数,相同的机器代码可以动态地与每种匹配类型一起工作 <em>调度{dispatching}</em> 正确的方法.</p>
-<p><code>Monomorphic</code>生成更快的代码,专用于特定类型,并且通常可以 <em>内联{inlined}</em>. 所以何时<code>sqr(x)</code>被看到,它被有效地取代<code>x * x</code>. 缺点是大的泛型函数会产生大量的代码,对于每一种可能导致的类型 <em>代码膨胀</em>. 与往常一样,有折衷; 有经验的人学会为工作做出正确的选择.</p>
+<p>但 (说实话)  C ++ 在这里采用牛仔策略.  C ++ <code>模板{template}</code>错误很不好,因为所有的编译器都知道 (最终) 是某些操作符或方法没有被定义.  C ++ 委员会知道这是一个问题,所以他们正在努力<a href="https://en.wikipedia.org/wiki/Concepts_(C%2B%2B)">概念</a>,这几乎与 Rust 中的<code>trait约束类型</code>参数非常相似.</p>
+<p>Rust 通用函数一开始可能看起来有点难接受,但是显式意味着只要看看定义,就能确切地知道可以安全地提供哪种值.</p>
+<p>这些函数被调用 <em>单态{monomorphic}</em> ,与 <em>多态{polymorphic}</em> 相反 . 函数的主体是为每个 唯一类型 分别编译的. 通过多态函数,相同的机器代码可以动态地与每种匹配类型一起工作 <em>调度{dispatching}</em> 正确的方法.</p>
+<p><code>Monomorphic</code>生成更快的代码,专用于特定类型,并且通常可以 <em>内联{inlined}</em>. 所以何时<code>sqr(x)</code>被看到,它被有效地取代<code>x * x</code>. 缺点是大的泛型函数会产生大量的代码,对于每一种可能导致的类型 <em>代码膨胀</em>. 与往常一样,总是有折衷的方式; 有经验的人学会为工作做出正确的选择.</p>
 <a class="header" href="print.html#a简单的枚举" id="a简单的枚举"><h2>简单的枚举</h2></a>
 <p><code>枚举{enums}</code>类型具有一些确定的值. 例如,一个方向只有四个可能的值.</p>
 <pre><pre class="playpen"><code class="language-rust">
@@ -1908,11 +1908,11 @@ impl Direction {
     }
 }
 #}</code></pre></pre>
-<p>标点符号很重要. 注意<code>*</code>之前<code>self</code>. 很容易忘记,因为Rust经常会假设它 (我们说过<code>self.first_name</code>,而不是<code>(*self).first_name</code>) . 但是,<code>匹配{matching}</code>是一个更精确的业务. 将它排除在外可能会产生一大堆消息,这些消息可归结为这种类型的不匹配:</p>
+<p>标点符号很重要. 注意<code>self</code>之前的<code>*</code>. 很容易忘记,因为 Rust 经常会假设它 (我们说过<code>self.first_name</code>,而不是<code>(*self).first_name</code>) . 但是,<code>匹配{matching}</code>是一个更精确的业务. 将它排除在外可能会产生一大堆消息,这些消息可归结为这种类型的不匹配:</p>
 <pre><code>   = note: expected type `&amp;Direction`
    = note:    found type `Direction`
 </code></pre>
-<p>这是因为<code>self</code>有类型<code>&amp;Direction</code>,所以我们必须投入<code>*</code>至 <em>deference</em> 方式.</p>
+<p>这是因为<code>self</code>有类型<code>&amp;Direction</code>,所以我们必须投入<code>*</code> <em>deference{取值}</em> .</p>
 <p>像结构一样,枚举可以实现 traits ,也可以实现我们的朋友<code>#[derive(Debug)]</code>可以添加到<code>Direction</code>:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -1920,9 +1920,9 @@ impl Direction {
         println!(&quot;start {:?}&quot;,start);
         // start Left
 #}</code></pre></pre>
-<p>所以<code>as_str</code>方法并不是真的必要,因为我们总是可以从中得到名字<code>Debug</code>.  (但<code>as_str</code>不 <em>不分配{allocate}</em> ,这可能很重要.)</p>
+<p>所以<code>as_str</code>方法并不是真的必要,因为我们总是可以从<code>Debug</code>中得到名字.  (但<code>as_str</code>是 <em>不分配{allocate}</em> ,这可能很重要.)</p>
 <p>你不应该在这里假设任何特定的顺序 - 没有的默许整数&quot;ordinal&quot;值.</p>
-<p>这里有一个方法来定义每个<code>方向</code>值的'后继者'. 非常方便通配符使用 <em>暂时{wildcard}</em> 将枚举名称放入方法上下文中:</p>
+<p>这里有一个方法来定义每个<code>方向</code>值的'后继者'. 非常方便的<em>通配符用法</em>将枚举名称暂时放入方法上下文中：:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1964,9 +1964,9 @@ error[E0369]: binary operation `==` cannot be applied to type `Direction`
 note: an implementation of `std::cmp::PartialEq` might be missing for `Direction`
   --&gt; enum1.rs:42:5
 </code></pre>
-<p>解决办法就是说<code>\#\[派生(Debug,PartialEq)]</code>在前面<code>enum Direction</code>. `这是一个重要的观点 -  Rust用户定义的类型开始新鲜和朴素.</p>
-<p>你通过实施共同的特点给他们合理的默认行为. 这也适用于结构 - 如果你要求Rust得出 <em>derive</em> <code>PartialEq</code>对于一个结构体来说,它会做出明智的事情,假设所有的领域都实现它并建立一个比较. 如果不是这样,或者你想重新定义平等,那么你可以自由明确定义<code>PartialEq</code>.</p>
-<p>Rust也有'C风格的枚举':</p>
+<p>解决办法就是加上<code>#[derive(Debug,PartialEq)]</code>在<code>enum Direction</code>前面. 这是一个重要的观点 -   Rust 用户定义的类型一开始就是这么新鲜和朴素.</p>
+<p>你通过 impl 共同的特点给他们合理的默认行为. 这也适用于结构 - 如果你要求 Rust 得出 <em>derive</em> <code>PartialEq</code>对于一个结构体来说,它会做出明智的事情,假设所有的字段都实现它并建立一个比较. 如果不是这样,或者你想重新定义平等,那么你可以自由明确定义<code>PartialEq</code>.</p>
+<p>Rust 也有'C 风格的枚举':</p>
 <pre><pre class="playpen"><code class="language-rust">// enum2.rs
 
 enum Speed {
@@ -1992,10 +1992,10 @@ enum Difficulty {
     Hard   // is 3
 }
 #}</code></pre></pre>
-<p>顺便说一下,'名字'太模糊了,就像一直在说'thingy'. 这里的合适名词是 <em>变种</em> -<code>速度</code>有变种<code>慢</code>,<code>中</code>和<code>快速</code>.</p>
-<p>这些枚举 <em>做</em> 有一个自然的顺序,但你必须很好地问. 放置后<code>#[derive(PartialEq,PartialOrd)]</code>在前面<code>枚举速度</code>,那确实如此<code>Speed::Fast&gt;Speed::Slow</code>和<code>Speed::Medium!=Speed::Slow</code>.</p>
-<a class="header" href="print.html#a以其全部荣耀枚举" id="a以其全部荣耀枚举"><h2>以其全部荣耀枚举</h2></a>
-<p>完全形式的rust 类似于类固醇上的 C 联盟,就像法拉利相比,菲亚特Uno. 考虑以类型安全的方式存储不同值的问题.</p>
+<p>顺便说一下,'名字'太模糊了,就像一直在说'thingy'. 这里的合适名词是 <em>变种{variant}</em> -<code>速度-Speed</code>有变种<code>慢-Slow</code>,<code>中-Medium</code>和<code>快速-Fast</code>.</p>
+<p>这些枚举 <em>就</em> 有一个自然的顺序,但你必须很好地问. 在<code>enum Speed</code>前面放置<code>#[derive(PartialEq,PartialOrd)]</code>,那确实如此<code>Speed::Fast &gt; Speed::Slow</code>和<code>Speed::Medium != Speed::Slow</code>.</p>
+<a class="header" href="print.html#a枚举赌上全部荣耀" id="a枚举赌上全部荣耀"><h2>枚举赌上全部荣耀</h2></a>
+<p>完全形式的rust 类似于类固醇上的 C 联盟,就像 菲亚特Uno 与 法拉利 相比,. 考虑以 类型安全的方式 存储不同值的问题.</p>
 <pre><pre class="playpen"><code class="language-rust">// enum3.rs
 
 #[derive(Debug)]
@@ -2015,8 +2015,8 @@ fn main() {
 }
 // n Number(2.3) s Str(&quot;hello&quot;) b Bool(true)
 </code></pre></pre>
-<p>同样,这个枚举只能包含 <em>一个</em> 这些价值观;其大小将是最大变体的大小.</p>
-<p>到目前为止,并不是真正的超级跑车,虽然枚举知道如何打印出来是很酷的. 但他们也知道如何 <em>哪一种</em> 它们包含的价值,和 <em>那</em> 是超级<code>match</code>:</p>
+<p>同样,这个枚举只能包含 <em>一个</em> 这些价值;其大小将是 最大变体 的大小.</p>
+<p>到目前为止,并不是真正的超级跑车,虽然枚举知道如何打印出来是很酷的. 但他们也知道如何 <em>哪一种</em> 它们包含的价值,和 <em>还有</em> <code>match</code>的超级力量:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2036,7 +2036,7 @@ eat_and_dump(b);
 //string is 'hello'
 //boolean is true
 #}</code></pre></pre>
-<p>(那就是这样<code>Option</code>和<code>Result</code>是 - 枚举.)</p>
+<p>(这就是<code>Option</code>和<code>Result</code> - 枚举.)</p>
 <p>我们喜欢这个<code>eat_and_dump</code>函数,但我们希望将该值作为引用传递,因为当前发生了<code>移动{move}</code>并且该值被'吃掉'了:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -2059,9 +2059,8 @@ error[E0507]: cannot move out of borrowed content
 14 |     Str(s) =&gt; println!(&quot;string is '{}'&quot;,s),
    |         - hint: to prevent move, use `ref s` or `ref mut s`
 #}</code></pre></pre>
-<p>借用引用资料你无法做到. Rust不会让你 <em>提取</em> 包含在原始值中的字符串. 它没有抱怨<code>Number</code>因为它很高兴复制<code>f64</code>,但是<code>String</code>不执行<code>Copy</code>.</p>
-<p>我之前提到过</p>
-<p><code>match</code>挑剔精确 <em>类型;</em> 在这里,我们按照提示进行操作;</p>
+<p>借用引用, 你无法做到.  Rust 不会让你 <em>提取</em> 包含在原始值中的字符串. 它没有抱怨<code>Number</code>因为它很高兴复制<code>f64</code>,但是<code>String</code>不执行<code>Copy</code>.</p>
+<p>我之前提到过<code>match</code>挑剔于精确 <em>类型;</em> 在这里,我们按照提示进行操作;</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2078,10 +2077,10 @@ fn dump(v: &amp;Value) {
     dump(&amp;s);
     // string is 'hello'
 #}</code></pre></pre>
-<p>现在我们只是借用对包含字符串的引用. 在我们继续前进之前,充满了成功的Rust编辑的欣快感,让我们暂停一下. <code>rustc</code>在生成足够上下文以供人类使用的错误方面非常优秀 <em>修正</em> 错误不一定 <em>理解</em> 错误.</p>
-<p>这个问题是匹配的正确性,以及借用检查者决定阻止任何违反规则的企图的结合. 其中一条规则是你不能抽出属于某种拥有类型的价值. C ++的一些知识在这里是一个障碍,因为C ++将复制出问题的方式,无论是复制甚至是 <em>说得通</em> . 如果你尝试从一个矢量中抽出一个字符串,你会得到完全相同的错误<code>*v.get(0).unwrap()</code>(<code>*</code>因为索引返回引用. )它不会让你这样做. (有时<code>clone</code>这不是一个坏的解决方案.)</p>
-<p>(顺便一提,正是出于这个原因,<code>v[0]</code>,它不适用于像字符串这样的非可复制值. <code>你必须或者借用</code>&amp;v[0]<code>或clone-</code>v[0].clone()`)</p>
-<p>至于<code>match</code>,你可以看到<code>Str(s)=&gt;</code>作为简称<code>Str(s: String)=&gt;</code>. 局部变量(通常称为 <em>捆绑</em> ) 被建造. 通常推断的类型很酷,当你吃掉一个值并提取其内容时. 但我们真正需要的是<code>s: &amp;String</code>,和<code>ref</code>是一个暗示,确保这一点: 我们只是想借用该字符串.</p>
+<p>现在我们只是借用对包含字符串的引用. 在我们继续前进之前,充满了成功的 Rust 编辑的欣快感,让我们暂停一下. <code>rustc</code>在生成足够上下文以供人类使用非常优秀的 <em>修正</em> 错误,但不一定 <em>理解</em> 错误.</p>
+<p>这个问题是 match 的正确性,以及 借用检查者 决定阻止任何违反规则的企图的结合. 其中一条规则是你不能抽出属于某种拥有类型的价值.  C ++ 的一些知识在这里是一个障碍,因为 C ++ 将复制出问题的方式,无论是复制甚至是 <em>说得通</em> . 如果你尝试从一个 Vec 中抽出一个字符串,你会得到完全相同的错误<code>*v.get(0).unwrap()</code> (因为索引返回引用 使用<code>*</code>. )它不会让你这样做. (有时<code>clone</code>这不是一个坏的解决方案.)</p>
+<p>(顺便一提,正是出于这个原因,<code>v[0]</code>,它不适用于像字符串这样的非可复制值. 你必须或者借用<code>&amp;v[0]</code>或使用 <code>v[0].clone()</code>)</p>
+<p>至于<code>match</code>,你可以看到<code>Str(s)=&gt;</code>作为<code>Str(s: String)=&gt;</code>的简称. 局部变量(通常称为 <em>绑定</em> ) 被建造. 通常推断的类型很酷,当你吃掉一个值并提取其内容时. 但我们真正需要的是<code>s: &amp;String</code>,和<code>ref</code>是一个暗示,确保这一点: 我们只是想借用该字符串.</p>
 <p>在这里,我们确实想提取该字符串,并且不关心之后的枚举值. <code>_</code>像往常一样会匹配任何东西</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -2099,7 +2098,7 @@ impl Value {
     // s? Some(&quot;hello&quot;)
     // println!(&quot;{:?}&quot;, s) // error! s has moved...
 #}</code></pre></pre>
-<p>命名重要 - 这就是所谓的<code>to_str</code>,不是<code>as_str</code>. 你可以编写一个方法,只是将该字符串作为一个借用<code>Option&lt;&amp;String&gt;</code> (引用将需要与枚举值相同的生命周期. ) 但是你不会调用它to_str`.</p>
+<p>命名重要 - 这就是所谓的<code>to_str</code>,不是<code>as_str</code>. 你可以编写一个方法,只是将该字符串作为一个借用<code>Option&lt;&amp;String&gt;</code> (引用 将需要与 枚举变量 相同的生命周期. ) 但是你不会调用<code>to_str</code>.</p>
 <p>你可以写<code>to_str</code>像这样 - 它完全等价:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -2148,7 +2147,7 @@ impl Value {
     // p still lives, since x and y can and will be copied
     // both x and y are f32
 #}</code></pre></pre>
-<p>时间重温<code>match</code>有一些新的模式. 前两种模式完全一样<code>let</code>解构 - 它只匹配第一个元素为零的元组,但是 <em>任何</em> 串;第二个增加了一个<code>if</code>所以它只匹配<code>(1, &quot;hello&quot;)</code>. 最后,只是一个变量匹配 <em>什么</em>. 这是有用的,如果<code>match</code>适用于表达式,并且不希望将变量绑定到该表达式. <code>_</code>像变量一样工作,但被忽略. 这是完成一个常用的方法<code>match</code>.</p>
+<p>前两种模式是<code>let</code>解构 , 下面时间看看<code>match</code>新的模式. - 它只匹配第一个元素为零的元组,而不是 <em>任何</em> 字符串; 第二个增加了一个<code>if</code>所以它只匹配<code>(1, &quot;hello&quot;)</code>. 最后,只是一个变量匹配 <em>随便</em>. 这是有用的,如果<code>match</code>适用于表达式,并且不希望将变量绑定到该表达式. <code>_</code>像变量一样工作,但被忽略. 这是完成一个常用的方法<code>match</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2162,11 +2161,11 @@ fn match_tuple(t: (i32,String)) {
     println!(&quot;{}&quot;, text);
 }
 #}</code></pre></pre>
-<p>为什么不匹配<code>(1, &quot;hello&quot;)</code>?匹配是一个确切的业务,编译器会抱怨:</p>
+<p>为什么不匹配<code>(1,&quot;hello&quot;)</code>? 匹配是一个确切,编译器会抱怨:</p>
 <pre><code>  = note: expected type `std::string::String`
   = note:    found type `&amp;'static str`
 </code></pre>
-<p>我们为什么需要<code>ref s</code>?这是一个稍微隐晦的问题 (查找E00008错误) ,如果你有一个 <em>如果守卫</em> 你需要借用,因为如果守卫发生在不同的环境中,否则将会发生移动. 这是实施漏洞的情况.</p>
+<p>我们为什么需要<code>ref s</code>? 这是一个稍微隐晦的问题 (查找E00008错误) ,如果你有一个需要借用<em>守卫</em>,当守卫发生在不同的环境中,否则将会发生移动. 这是实施漏洞的情况.</p>
 <p>如果类型 <em>是</em> <code>&amp;str</code>那么我们直接匹配它:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -2176,7 +2175,7 @@ fn match_tuple(t: (i32,String)) {
         _ =&gt; println!(&quot;no&quot;)
     };
 #}</code></pre></pre>
-<p>什么适用于<code>match</code>适用于<code>if let</code>. 这是一个很酷的例子,因为如果我们得到一个<code>Some</code>,我们可以在里面匹配,只从元组中提取字符串. 所以没有必要嵌套<code>if let</code>陈述在这里. 我们用<code>_</code>因为我们对元组的第一部分不感兴趣.</p>
+<p><code>match</code>要使用<code>if let</code>的情况. 这是一个很酷的例子,因为如果我们得到一个<code>Some</code>,我们可以在里面匹配,只从元组中提取字符串. 所以没有必要嵌套<code>if let</code>陈述在这里. 我们用<code>_</code>因为我们对元组的第一部分不感兴趣.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2187,7 +2186,7 @@ fn match_tuple(t: (i32,String)) {
     }
     // we just borrowed the string, no 'destructive destructuring'
 #}</code></pre></pre>
-<p>使用时会出现一个有趣的问题<code>解析{parse}</code> (或任何需要从上下文中计算出其返回类型的函数)</p>
+<p>使用<code>解析{parse}</code>时会出现一个有趣的问题 (或任何需要从上下文中计算出其返回 类型 的函数)</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2195,7 +2194,7 @@ fn match_tuple(t: (i32,String)) {
         ...
     }
 #}</code></pre></pre>
-<p>那么,这是什么类型的<code>n</code>?不知何故,你必须提供一个提示 - 什么样的整数?它甚至是一个整数?</p>
+<p>那么,这是什么类型的<code>n</code>? 不知何故,你必须提供一个提示 - 什么样的整数?它甚至是一个整数?</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2210,9 +2209,9 @@ fn match_tuple(t: (i32,String)) {
 #fn main() {
     let n: i32 = &quot;42&quot;.parse()?;
 #}</code></pre></pre>
-<p>但是,解析错误需要转换为错误类型<code>Result</code>,这是我们稍后讨论时要讨论的话题<a href="6-error-handling.html">错误处理</a>.</p>
-<a class="header" href="print.html#a关闭closures" id="a关闭closures"><h2>关闭{Closures}</h2></a>
-<p>Rust的力量来源于很多 <em>关闭</em>. 它们最简单的形式就像快捷功能一样:</p>
+<p>但是,解析错误需要转换为错误类型<code>Result</code>,这是我们稍后讨论时要讨论的话题<a href="./6-error-handling.zh.html">6.错误处理</a>.</p>
+<a class="header" href="print.html#a闭包closures" id="a闭包closures"><h2>闭包{Closures}</h2></a>
+<p>Rust 的很多力量来源于 <em>闭包</em>. 它们最简单的形式就像快捷函数一样:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2224,7 +2223,7 @@ fn match_tuple(t: (i32,String)) {
     // res 100
 #}</code></pre></pre>
 <p>在这个例子中没有明确的类型 - 一切都是从整数字面量10开始推导出来的.</p>
-<p>如果我们运行,我们会收到错误<code>f</code>在不同类型 -  Rust已经决定<code>f</code>必须在整数类型上调用:</p>
+<p>如果我们运行,我们会收到错误<code>f</code>在不同类型 -   Rust 已经决定<code>f</code>必须在整数类型上调用:</p>
 <pre><code>    let res = f(10);
 
     let resf = f(1.2);
@@ -2235,7 +2234,7 @@ fn match_tuple(t: (i32,String)) {
   = note: expected type `{integer}`
   = note:    found type `{float}`
 </code></pre>
-<p>所以,第一次调用修复了参数的类型<code>x</code>. 这相当于这个功能:</p>
+<p>所以,第一次调用修复了参数的类型<code>x</code>. 这相当于这个函数:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2243,7 +2242,7 @@ fn match_tuple(t: (i32,String)) {
         x * x
     }
 #}</code></pre></pre>
-<p>但功能和封闭之间存在很大差异,<em>距离</em> 从明确的打字需要. 这里我们评估一个线性函数:</p>
+<p>但函数和闭包之间存在很大差异,<em>体现</em> 在明确的类型需要. 这里我们评估一个线性函数:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2255,8 +2254,8 @@ fn match_tuple(t: (i32,String)) {
     println!(&quot;res {} {}&quot;, lin(1.0), lin(2.0));
     // res 3 5
 #}</code></pre></pre>
-<p>你不能用明确的做<code>fn</code>形式 - 它不知道封闭范围内的变量. 关闭了 <em>借</em> <code>m</code>和<code>c</code>从其上下文来看.</p>
-<p>现在,这是什么类型<code>lin</code>?只要<code>rustc</code>知道. 在引擎盖下,封闭是一个 <em>结构</em> 这是可调用的 ('实现调用操作符') . 它的行为就好像它是这样写出来的:</p>
+<p>你不能用明确的做<code>fn</code>形式 - 它不知道闭包范围内的变量. 闭包了是从其上下文 <em>借</em> <code>m</code>和<code>c</code>.</p>
+<p>现在,这是什么类型<code>lin</code>? 只要<code>rustc</code>知道. 在引擎盖下,闭包是一个 <em>结构</em> 这是可调用的 ('实现调用操作符') . 它的行为就好像它是这样写出来的:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2271,8 +2270,8 @@ impl &lt;'a&gt;MyAnonymousClosure1&lt;'a&gt; {
     }
 }
 #}</code></pre></pre>
-<p>编译器当然是有帮助的,把简单的闭包语法变成所有的代码!你确实需要知道闭包是一个 <em>结构</em> 和它 <em>借阅</em> 来自其环境的价值. 因此它有一个 <em>lifetime</em>.</p>
-<p>所有关闭都是独特的类型,但它们有共同的特点. 所以即使我们不知道确切的类型,我们知道一般的约束:</p>
+<p>编译器当然是有帮助的,把简单的闭包语法变成所有的代码! 你确实需要知道闭包是一个 <em>结构</em> 和它 <em>借用</em> 来自其环境的价值. 因此它有一个 <em>lifetime</em>.</p>
+<p>所有闭包都是独特的类型,但它们有共同的特点. 所以即使我们不知道确切的类型,我们知道一般的约束:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2284,8 +2283,8 @@ where F: Fn(f64)-&gt;f64  {
     let res1 = apply(3.0,lin);
     let res2 = apply(3.14, |x| x.sin());
 #}</code></pre></pre>
-<p>用英语: <code>应用{apply}</code>效劳于 <em>任何</em> 类型<code>T</code>这样<code>T</code>器物<code>Fn(f64) -&gt; f64</code>- 也就是说,这是一个需要的功能<code>f64</code>并返回<code>f64</code>.</p>
-<p>打完电话后<code>apply(3.0,lin)</code>,试图访问<code>lin</code>给出一个有趣的错误:</p>
+<p>子曰: <code>应用{apply}</code>效劳于 <code>T</code>这样 的 <em>任何</em> 类型且具备<code>Fn(f64) -&gt; f64</code>时- 也就是说,这是一个需要的函数<code>f64</code>并返回<code>f64</code>.</p>
+<p>运行<code>apply(3.0,lin)</code>后,试图访问<code>lin</code>给出一个有趣的错误:</p>
 <pre><code>    let l = lin;
 error[E0382]: use of moved value: `lin`
   --&gt; closure2.rs:22:9
@@ -2300,14 +2299,14 @@ error[E0382]: use of moved value: `lin`
     `[closure@closure2.rs:12:15: 12:26 m:&amp;f64, c:&amp;f64]`,
      which does not implement the `Copy` trait
 </code></pre>
-<p>而已,<code>apply</code>吃了我们的关闭. 还有这个结构的实际类型<code>rustc</code>弥补实施它. 始终将封闭视为结构是有帮助的.</p>
-<p>调用闭包是 <em>方法调用</em>: 三种功能 trait 对应于三种方法:</p>
+<p>就是这样,<code>apply</code>吃了我们的闭包. 还有这个结构的实际类型<code>rustc</code>弥补实施它. 始终将闭包视为结构是有帮助的.</p>
+<p>调用闭包是 <em>方法调用</em>: 三种函数 trait 对应于三种方法:</p>
 <ul>
 <li><code>Fn</code> 结构传递为<code>&amp;self</code></li>
 <li><code>FnMut</code> 结构传递为<code>&amp;mut self</code></li>
 <li><code>FnOnce</code> 结构传递为<code>self</code></li>
 </ul>
-<p>所以封闭可能会改变它的 <em>捕获</em> 引用:</p>
+<p>所以闭包可能会改变它的 <em>来自上层</em> 引用:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2333,7 +2332,7 @@ changer();
 // does an immutable borrow of s
 assert_eq!(s, &quot;world&quot;);
 #}</code></pre></pre>
-<p>无法完成!错误是我们不能借用<code>s</code>在声明中,因为它之前已经被封闭借用过<code>changer</code>作为可变的. 只要封闭存在,其他代码就不能访问<code>s</code>,所以解决方案是通过将闭包放在一个有限的范围内来控制这个生命周期:</p>
+<p>无法完成! 错误是我们不能借用<code>s</code>在声明中,因为它之前已经被闭包<code>changer</code>作为可变的借用过. 只要闭包存在,其他代码就不能访问<code>s</code>,所以解决方案是通过将闭包放在一个 有限的范围 内来控制这个生命周期:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2344,8 +2343,8 @@ let mut s = &quot;world&quot;;
 }
 assert_eq!(s, &quot;world&quot;);
 #}</code></pre></pre>
-<p>在这一点上,如果你习惯了JavaScript或Lua等语言,你可能会想到Rust闭包的复杂性,而不是它们在这些语言中的直截了当. 这是Rust承诺不作出任何分配的必要成本. 在JavaScript中,等效<code>mutate (function(){s =&quot;hello&quot;;})</code>将始终导致动态分配闭包.</p>
-<p>有时你不希望封闭借用这些变量,而是 <em>移动</em> 他们.</p>
+<p>在这一点上,如果你习惯了 JavaScript 或 Lua 等语言,你可能会想到 Rust 闭包的复杂性,而不是它们在这些语言中的直截了当. 这是 Rust 承诺不作出任何分配的必要成本. 在 JavaScript 中,等效<code>mutate(function() {s = &quot;hello&quot;;})</code>, 这将始终导致动态分配闭包.</p>
+<p>有时你不希望闭包借用这些变量,而是 <em>移动</em> 他们.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2360,7 +2359,7 @@ assert_eq!(s, &quot;world&quot;);
 
     println!(&quot;name {}&quot;,name);
 #}</code></pre></pre>
-<p>最后的错误<code>println</code>是: &quot;使用移动值: <code>name</code>&quot;所以这里有一个解决方案 - 如果我们没有 <em>想保持</em> 名称<code>活着 - 是将clone副本移入</code>关闭{move}`中:</p>
+<p>最后的错误<code>println</code>是: &quot;使用移动值: <code>name</code>&quot;所以这里有一个解决方案 - 如果我们没有 <em>想保持</em> <code>name</code>活着 - 是将 复制副本 移入<code>闭包{move}</code>中:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2369,21 +2368,24 @@ assert_eq!(s, &quot;world&quot;);
         println!(&quot;name {} age {}&quot;,cname,age);
     };
 #}</code></pre></pre>
-<p>为什么需要移动<code>关闭{move}</code>? 因为我们可能需要在原始上下文不再存在的地方调用它们. 经典案例是创建一个 <em>thread{线程}</em>. 移动的封闭不会借用,所以没有 <em>lifetime</em> .</p>
+<p>为什么需要移动<code>闭包{move}</code>? 因为我们可能需要在 原始上下文不再存在 的地方调用它们. 经典案例是创建一个 <em>thread{线程}</em>. 移动的闭包不会借用,所以没有 <em>lifetime</em> .</p>
+<blockquote>
+<p>移动后, 线程中, 所使用的变量, 就会与 原上下文 没有关系了</p>
+</blockquote>
 <p>迭代器方法中主要使用闭包. 回想一下<code>范围{range}</code>我们定义的迭代器遍历一系列浮点数. 使用闭包对此 (或任何其他迭代器) 进行操作很简单:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
     let sine: Vec&lt;f64&gt; = range(0.0,1.0,0.1).map(|x| x.sin()).collect();
 #}</code></pre></pre>
-<p><code>map</code>没有在向量上定义 (尽管很容易创建一个这样的trait) ,因为那样 <em>一切</em> 地图将创建一个新的矢量. 这样,我们有一个选择. 总之,没有创建临时对象:</p>
+<p><code>map</code>没有在 Vec 上定义 (尽管很容易创建一个这样的 trait) ,因为那样 <em>一切</em> map 将创建一个新的 Vec . 这样,我们有一个选择. 总之,没有创建临时对象:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
  let sum: f64 = range(0.0,1.0,0.1).map(|x| x.sin()).sum();
 #}</code></pre></pre>
-<p>它 (事实上) 会像写出明确的循环一样快! 如果Rust关闭与Javascript关闭一样&quot;无摩擦{frictionless}&quot;,那么这种性能保证是不可能的.</p>
-<p><code>过滤filter</code>是另一种有用的迭代器方法 - 它只允许通过匹配条件的值:</p>
+<p>它 (事实上) 会像写出明确的循环一样快! 如果 Rust 闭包与 Javascript 闭包一样&quot;无摩擦{frictionless}&quot;,那么这种性能保证是不可能的.</p>
+<p><code>filter</code>是另一种有用的迭代器方法 - 它只允许通过匹配条件的值:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2398,7 +2400,7 @@ assert_eq!(s, &quot;world&quot;);
 #}</code></pre></pre>
 <a class="header" href="print.html#a三种迭代器" id="a三种迭代器"><h2>三种迭代器</h2></a>
 <p>三种类型 (再次) 对应于三种基本参数类型.</p>
-<p>假设我们有一个向量<code>String</code>值.以下是显式的迭代器类型,然后 <em>隐式</em>,以及迭代器返回的实际类型.</p>
+<p>假设我们有一个 Vec <code>String</code>值.以下是显式的迭代器类型,然后 <em>隐式{implicitly}</em>,以及迭代器返回的实际类型.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2412,9 +2414,9 @@ for s in &amp;mut vec {...} // &amp;mut String
 for s in vec {...} // String
 #}</code></pre></pre>
 <p>就我个人而言,我更喜欢明确,但了解这两种形式及其含义非常重要.</p>
-<p><code>into_iter</code> <em>消耗</em> 矢量并提取它的字符串,所以之后矢量不再可用 - 它已被移动. 这是 Pythonistas 过去常说的一个确定的问题<code>for s in vec</code>!</p>
+<p><code>into_iter</code> <em>提取</em> Vec 并提取它的字符串,所以之后 Vec 不再可用 - 它已被移动. 这是 Pythonistas 过去常说的一个确定的问题<code>for s in vec</code>!</p>
 <p>所以隐含的形式<code>for s in &amp;vec</code>通常是你想要的,就像<code>&amp;T</code>在向函数传递参数时是一个很好的默认值.</p>
-<p>理解这三种类型是如何工作是很重要的,因为Rust严重依赖于类型推导 - 在关闭参数中你不会经常看到明确的类型. 这是一件好事,因为如果所有这些类型都明确的话它会很嘈杂 <em>键入</em>. 然而,这个紧凑的代码的价格是你需要知道隐式类型究竟是什么!</p>
+<p>理解这三种类型是如何工作是很重要的,因为 Rust 严重依赖于类型推导 - 在闭包参数中你不会经常看到明确的类型. 这是一件好事, 因为如果所有这些类型都明确的话, 它的 <em>键入</em> 会很嘈杂. 当然,这个紧凑的代码的代价, 是你需要知道隐式类型究竟是什么!</p>
 <p><code>map</code>取得迭代器返回的任何值并将其转换为其他值,但是<code>filter</code>需要一个 <em>引用</em> 到那个价值. 在这种情况下,我们正在使用<code>iter</code>所以迭代器项目类型是<code>&amp;String</code>. 注意<code>filter</code>接收到这种类型的引用.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -2427,7 +2429,7 @@ for s in vec.iter().filter(|x: &amp;&amp;String| x.len() &gt; 2) { // s is &amp;
 ...
 }
 #}</code></pre></pre>
-<p>在调用方法时,Rust会自动删除,所以问题不明显. 但<code>|x:&amp;&amp; String|</code>x ==&quot;one&quot;|将 <em>不会</em> 工作,因为操作员对类型匹配更加严格. <code>rustc</code>会抱怨没有这样的运营商进行比较<code>&amp;&amp;String</code>和<code>&amp;str</code>. 所以你需要明确的选择来做到这一点<code>&amp;&amp;String</code>变成一个<code>&amp;String</code>哪一个 <em>想要</em> match.</p>
+<p>在调用方法时, Rust 会自动 <em>取值</em>,所以问题不明显. 但<code>|x:&amp;&amp; String|</code>x ==&quot;one&quot;|将 <em>不会</em> 工作, 因为操作员对 类型匹配 更加严格. <code>rustc</code>会抱怨没有这样进行比较<code>&amp;&amp;String</code>和<code>&amp;str</code>. 所以你需要明确的 取值 来做到<code>&amp;&amp;String</code>变成哪一个 <em>想要</em> match的<code>&amp;String</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2442,9 +2444,9 @@ for s in vec.iter().filter(|x| *x == &quot;one&quot;) {...}
 for s in vec.iter().filter(|&amp;x| x == &quot;one&quot;)
 #}</code></pre></pre>
 <p>这通常是你将如何看待它写的.</p>
-<a class="header" href="print.html#a用动态数据构建" id="a用动态数据构建"><h2>用动态数据构建</h2></a>
+<a class="header" href="print.html#a动态数据的结构" id="a动态数据的结构"><h2>动态数据的结构</h2></a>
 <p>一个最强大的技术是 <em>一个包含对自身引用的结构</em>.</p>
-<p>这是基本构建块 <em>二叉树</em> ,用C表示 (每个人最喜欢的老亲戚都喜欢使用没有保护的电动工具. )</p>
+<p>这是 <em>二叉树</em> 的基本构建块,用 C 表示 (每个人最喜欢的老亲戚都喜欢使用没有保护的电动工具. )</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2454,10 +2456,10 @@ for s in vec.iter().filter(|&amp;x| x == &quot;one&quot;)
         struct Node *right;
     };
 #}</code></pre></pre>
-<p>你不能这样做 <em>直接{directly}</em> 包含<code>Node</code>领域,因为那么大小<code>Node</code>取决于大小<code>Node</code>...它只是不计算. 所以我们使用指针<code>Node</code>结构,因为指针的大小总是已知的.</p>
+<p>你不能 <em>直接{directly}</em> 这样做 - 包含<code>Node</code>字段,因为那么<code>Node</code>的大小取决于<code>Node</code>的大小... 它只是不计算. 所以我们使用指针<code>Node</code>结构,因为指针的大小总是已知的.</p>
 <p>如果<code>left</code>不是<code>NULL</code>,那<code>Node</code>将有一个<code>左{left}</code>指向另一个节点,因此无限期无限.</p>
-<p>Rust不会<code>NULL</code> (至少不是_安然_) 所以这显然是一份工作<code>Option</code>. 但你不能只是把一个<code>Node</code>在那里面<code>Option</code>,因为我们不知道大小<code>Node</code> (等等) . 这是一份工作<code>Box</code>,因为它包含一个指向数据的分配指针,并且一直具有固定大小.</p>
-<p>所以这里是Rust的等价物,使用<code>type</code>创建一个别名:</p>
+<p>Rust 不会<code>NULL</code> (至少不 <em>安全</em>) , 所以这显然是一份<code>Option</code>. 但你不能只是把一个<code>Node</code>放在那<code>Option</code>里面,因为我们不知道<code>Node</code>的大小 (等等) . 这是<code>Box</code>一部分工作, 因为它分配了包含一个指向数据的指针,并且一直具有固定大小.</p>
+<p>所以这里是 Rust 的等价物,使用<code>type</code>创建一个别名:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2470,7 +2472,7 @@ struct Node {
     right: NodeBox
 }
 #}</code></pre></pre>
-<p>(Rust以这种方式宽恕 - 不需要前瞻性声明. )</p>
+<p>( Rust 以这种方式宽恕 - 不需要前瞻性声明. )</p>
 <p>并且第一个测试程序:</p>
 <pre><pre class="playpen"><code class="language-rust">impl Node {
     fn new(s: &amp;str) -&gt; Node {
@@ -2519,8 +2521,8 @@ fn main() {
     )
 }
 </code></pre>
-<p>现在,什么时候发生<code>root</code>被丢弃? 所有字段都被删除; 如果树的&quot;分支&quot;被丢弃,<em>它们</em> 就会下降其领域等等. <code>Box::new</code>可能是最接近你会得到一个<code>new</code>关键字,但我们没有必要<code>delete</code>要么<code>free</code>.</p>
-<p>我们现在必须为这棵树制定一个用途. 请注意,可以订购字符串: 'bar'&lt;'foo','abba'&gt;'aardvark';所谓的&quot;字母顺序&quot;.  (严格来说,这是词汇顺序,因为人类语言非常多样化,并且有着奇怪的规则. )</p>
+<p>现在, <code>root</code>被丢弃发生了什么 ? 所有字段都被删除; 如果树的&quot;分支&quot;被丢弃,<em>它们</em> 就会扔掉其字段等等. <code>Box::new</code>可能是最接近你会得到一个<code>new</code>关键字,但我们没有必要<code>delete</code>要么<code>free</code>.</p>
+<p>我们现在必须为这棵树制定一个用途. 请注意,可以指定字符串 顺序: 'bar'&lt;'foo','abba'&gt;'aardvark';所谓的&quot;字母顺序&quot;.  (严格来说,这是词汇顺序,因为人类语言非常多样化,并且有着奇怪的规则. )</p>
 <p>这是一个按字符串的顺序插入节点的方法. 我们将新数据与当前节点进行比较 - 如果较少,则尝试插入左侧,否则尝试插入右侧. 左边可能没有节点,那么<code>set_left</code>等等.</p>
 <pre><pre class="playpen"><code class="language-rust">    fn insert(&amp;mut self, data: &amp;str) {
         if data &lt; &amp;self.payload {
@@ -2546,7 +2548,7 @@ fn main() {
         println!(&quot;root {:#?}&quot;, root);
     }
 </code></pre></pre>
-<p>注意<code>match</code>- 如果是的话,我们会提供一个可变的引用<code>Option</code>是<code>Some</code>,并应用<code>insert</code>方法. 否则,我们需要创建一个新的<code>Node</code>对于左侧等等. <code>Box</code>是一个 <em>聪明</em> 指针;请注意,不需要&quot;拆箱{unboxing}&quot;来呼叫<code>Node</code>方法就可以了!</p>
+<p>注意<code>match</code>- 我们会提供一个可变的引用<code>Option</code>,如果是<code>Some</code>的话,并应用<code>insert</code>方法. 否则,我们需要创建一个新的<code>Node</code>对于左侧等等. <code>Box</code>是一个 <em>聪明</em> 指针; 请注意,不需要&quot;拆箱{unboxing}&quot;来呼叫<code>Node</code>方法就可以了!</p>
 <p>这里是输出树:</p>
 <pre><code>root Node {
     payload: &quot;root&quot;,
@@ -2594,9 +2596,9 @@ fn main() {
     // 'root'
     // 'two'
 #}</code></pre></pre>
-<p>所以我们按顺序访问这些字符串!请注意重新出现<code>ref</code>-<code>if let</code>使用完全相同的规则<code>match</code>.</p>
+<p>所以我们按顺序访问这些字符串!请注意重新出现<code>ref</code>-<code>if let</code>使用与<code>match</code>是完全相同的规则.</p>
 <a class="header" href="print.html#a通用结构" id="a通用结构"><h2>通用结构</h2></a>
-<p>考虑前面的二叉树的例子. 这将是 <em>严重刺激</em> 必须为所有可能的有效载荷重写它. 所以这是我们的通用<code>Node</code>与它的类型参数<code>T</code>.</p>
+<p>考虑前面的二叉树的例子. 这将是 <em>严重刺激</em> 不得不重写它, 当为了所有可能的有效载荷. 所以这是我们的通用<code>Node</code>与它的类型参数<code>T</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2609,7 +2611,7 @@ struct Node&lt;T&gt; {
     right: NodeBox&lt;T&gt;
 }
 #}</code></pre></pre>
-<p>该实现显示了语言之间的差异. 有效载荷的基本操作是比较,所以T必须与之相当<code>&lt;</code>等 实施<code>PartialOrd</code>. 类型参数必须在其中声明<code>impl</code>阻止其约束:</p>
+<p>该实现显示了语言之间的差异. 有效载荷的基本操作是比较,所以 T 必须与之相当<code>&lt;</code> 等等 impl <code>PartialOrd</code>. 必须在<code>impl</code>其中声明类型参数:</p>
 <pre><pre class="playpen"><code class="language-rust">impl &lt;T: PartialOrd&gt; Node&lt;T&gt; {
     fn new(s: T) -&gt; Node&lt;T&gt; {
         Node{payload: s, left: None, right: None}
@@ -2652,7 +2654,7 @@ fn main() {
     println!(&quot;root {:#?}&quot;, root);
 }
 </code></pre></pre>
-<p>所以通用结构需要在尖括号中指定类型参数,如C ++. Rust通常足够聪明,可以从上下文中得出这个类型参数 - 它知道它有一个<code>Node&lt;T&gt;</code>,并知道它的<code>insert</code>方法已通过<code>T</code>. 第一次打电话<code>insert</code>钉下来<code>T</code>成为<code>String</code>. 如果有任何进一步的电话不一致,它会投诉.</p>
+<p>所以通用结构需要在 <code>&lt;&gt;</code> 中指定类型参数,如 C ++ .  Rust 通常足够聪明, 可以从上下文中得出这个类型参数 - 它知道它有一个<code>Node&lt;T&gt;</code>,并通过<code>T</code>已知道它的<code>insert</code>方法. <code>insert</code> 的第一次运行把<code>T</code>钉成为<code>String</code>. 如果有任何进一步的运行不一致,它会投诉.</p>
 <p>但是你确实需要适当地限制这种类型!</p>
 <a class="header" href="print.html#a文件系统和进程" id="a文件系统和进程"><h1>文件系统和进程</h1></a>
 <a class="header" href="print.html#a再看看读取-files" id="a再看看读取-files"><h2>再看看读取 Files</h2></a>
