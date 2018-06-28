@@ -2658,11 +2658,11 @@ fn main() {
 <p>但是你确实需要适当地限制这种类型!</p>
 <a class="header" href="print.html#a文件系统和进程" id="a文件系统和进程"><h1>文件系统和进程</h1></a>
 <a class="header" href="print.html#a再看看读取-files" id="a再看看读取-files"><h2>再看看读取 Files</h2></a>
-<p>在第1部分的末尾,我展示了如何将整个文件读入字符串. 自然,这并不总是一个好主意,所以这里是如何逐行读取文件.</p>
-<p><code>fs::File</code> impl <code>io::Read</code>,这是任何可读性的 trait . 这个trait定义了一个<code>read</code>方法将填补一部分<code>u8</code>的字节 - 这是唯一的 <em>需要</em> trait的方法,你会得到一些 <em>提供</em> 免费的方法,很像<code>Iterator</code>. 您可以使用<code>read_to_end</code>用可读的内容填充字节向量,并且<code>read_to_string</code>填充一个字符串 - 必须是 UTF-8 编码.</p>
-<p>这是一个'原始{raw}'阅读,没有缓冲. 对于缓冲阅读有<code>io::BufRead</code>给我们的trait<code>read_line</code>和一个<code>lines</code>迭代器{Iterator}. <code>io::BufReader</code>将给 <em>任何</em> 可读提供执行<code>io::BufRead</code>.</p>
-<p><code>fs::FIle</code> <em>也</em> impl <code>io::Write</code>.</p>
-<p>确保所有这些traits可见的最简单方法是<code>use std::io::prelude::*</code>.</p>
+<p>在 <a href="http://chinanf-boy.github.io/gentle-intro/1-basics.zh.html#a%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6">第1部分的末尾</a>,我展示了如何读取整个文件到字符串. 自然,这并不总是一个好主意,所以这里是如何逐行读取文件.</p>
+<p><code>fs::File</code> impl{实现} 了<code>io::Read</code>,这是一个可读性的  trait  . 这个 trait 定义了一个能填补<code>u8</code>切片的字节<code>read</code>方法 - 这是唯一的 <em>要求</em>  trait 的方法,你会得到一些 <em>提供</em> 免费的方法,很像<code>Iterator</code>. 您可以使用<code>read_to_end</code>填 充可读的内容 到 字节 Vec, 还有<code>read_to_string</code>可以填充一个 string - 必须是 utf-8 编码.</p>
+<p>这是一个'原始{raw}'阅读,没有缓冲. 对于缓冲阅读, 我们有<code>io::BufRead</code> trait ,给出 <code>read_line</code> 和一个<code>lines</code>迭代器{Iterator}. <code>io::BufReader</code>将给 <em>任何</em> 可读性 提供<code>io::BufRead</code>实现.</p>
+<p><code>fs::File</code> <em>也</em> impl <code>io::Write</code>.</p>
+<p>确保所有这些 traits 可用的最简单方法是<code>use std::io::prelude::*</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2682,9 +2682,9 @@ fn read_all_lines(filename: &amp;str) -&gt; io::Result&lt;()&gt; {
     Ok(())
 }
 #}</code></pre></pre>
-<p>该<code>let line = line?</code>可能看起来有点奇怪. 该<code>line</code>返回迭代器的实际上是一个<code>io::Result&lt;String&gt;</code>我们用<code>?</code>解开它. 因为事情 <em>能够</em> 在迭代过程中出现错误 -  I/O错误,吞噬不是 UTF-8 的字节块,等等.</p>
-<p><code>line</code>作为一个迭代器,可以直接使用一个文件读入一个字符串向量<code>collect</code>,或者用行号打印出行<code>enumerate</code>迭代器{Iterator}.</p>
-<p>然而,这并不是读取所有行的最有效方式,因为每行都分配了一个新字符串. 使用<code>read_line</code>效率更高,虽然更尴尬. 请注意,返回的行包含换行x符,可以使用该换行符进行移除<code>trim_right</code>.</p>
+<p>该<code>let line = line?</code>可能看起来有点奇怪. 该<code>line</code>返回的迭代器实际上是一个<code>io::Result&lt;String&gt;</code>我们用<code>?</code>解开它. 因为事情 <em>能够</em> 在迭代过程中出现错误 如: I/O错误,吞噬不是 utf-8 的字节块,等等.</p>
+<p><code>line</code>作为一个迭代器,可以直接使用<code>collect</code>从一个文件读入一个字符串向量,或者用<code>enumerate</code>迭代器{Iterator}打印带行号的 line.</p>
+<p>然而,这并不是读取 所有行 的最有效方式,因为每行都分配了一个新字符串. 使用<code>read_line</code>效率更高,虽然更尴尬. 请注意,返回的行包含换行符,可以使用<code>trim_right</code>进行移除.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2699,9 +2699,9 @@ fn read_all_lines(filename: &amp;str) -&gt; io::Result&lt;()&gt; {
     }
 #}</code></pre></pre>
 <p>这导致分配少得多,因为 <em>clearing{清除}</em> 该字符串不释放其分配的内存;一旦字符串有足够的容量,不会再有分配.</p>
-<p>这是我们使用一个块来控制借用的情况之一. <code>line</code>是借来的<code>buf</code>,这个借用必须在我们修改之前完成<code>buf</code>. Rust再一次试图阻止我们做一些愚蠢的事情,那就是访问<code>line</code> <em>后</em> 我们已经清除了缓冲区.  (借阅检查者有时可能会受到限制,铁锈是由于&quot;非词汇生活时间{non-lexical  lifetime s}&quot;,它会分析代码并看到<code>line</code>之后不使用<code>buf.clear()</code>. ) 这不是很漂亮.</p>
-<p>我不能给你一个适当的迭代器,它返回缓冲区的引用,但我可以给你一些东西容貌 _像_一个迭代器.</p>
-<p>首先定义一个通用结构体; 类型参数<code>R</code>是'任何实现Read的类型'. `它包含读者和我们要借用的缓冲区.</p>
+<p>这是我们使用一个<code>块{}</code>来控制借用的情况之一. <code>line</code>是借用的<code>buf</code>,这个借用必须在我们修改之前完成<code>buf</code>. Rust 再一次试图阻止我们做一些愚蠢的事情,那就是访问<code>line</code> <em>后</em> 我们已经清除了缓冲区.  (借阅检查者 有时可能会受到限制,rust 是由于&quot;非词汇生命周期{non-lexical  lifetimes}&quot;,它会分析代码并看到<code>buf.clear()</code>之后<code>line</code>不使用. )</p>
+<p>这不是很漂亮. 我不能给你一个适当的迭代器,它返回缓冲区的引用,但我可以给你一些 <em>看起来像</em> 一个迭代器的东西.</p>
+<p>首先定义一个通用结构体; 类型参数<code>R</code>是'任意实现 Read 的类型'. `它包含读者{reader} 和我们要借用的 缓冲区{buffer}.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2722,8 +2722,8 @@ impl &lt;R: Read&gt; Lines&lt;R&gt; {
     ...
 }
 #}</code></pre></pre>
-<p>然后<code>next</code>方法. <code>它返回一个</code>Option<code>- 就像迭代器,当它返回时</code>None<code>迭代器{Iterator}结束. 返回的类型是一个</code>Result<code>因为</code>read_line<code>可能会失败,我们 永远不要丢失错误 . 所以如果失败了,我们把它的错误包括进去</code>Some<Result><code>. 否则,它可能读取了零字节,这是文件的自然结束 - 不是错误,只是一个</code>None`.</p>
-<p>此时,缓冲区包含附有换行符 (`\ n') 的行. 修剪掉它,然后打包字符串片.</p>
+<p>然后<code>next</code>方法. 它返回一个<code>Option</code>- 就像迭代器,当它返回<code>None</code>时迭代器{Iterator}结束. 返回的类型是一个<code>Result</code>是因为<code>read_line</code>可能会失败, 我们永远不要丢失错误 . 所以如果失败了,我们把它的错误包括进去<code>Some&lt;Result&gt;</code>. 否则,它可能读取了零字节,这是文件的自然结束 - 不是错误,只是一个<code>None</code>.</p>
+<p>此时,缓冲区包含附有换行符 (<code>\n</code>) 的行. 修剪掉它,然后打包字符串片.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2740,8 +2740,8 @@ impl &lt;R: Read&gt; Lines&lt;R&gt; {
         }
     }
 #}</code></pre></pre>
-<p>现在,请注意生命时间如何工作. 我们需要明确的 lifetime ,因为Rust永远不会让我们在不知道他们的 lifetime 的情况下发放借来的字符串片. 在这里,我们说这个借来的字符串的生命周期在 lifetime 中<code>self</code>.</p>
-<p>而且这个签名与 lifetime 不兼容<code>迭代器{Iterator}</code>. 但是如果兼容性很容易出现问题;考虑<code>collect</code>试图制作这些字符串切片的矢量. 这是不可能的,因为它们都是从同一个可变字符串中借用的! (如果您已阅读 <em>所有</em> 将文件转换为字符串,然后是字符串<code>line</code>迭代器{Iterator}可以返回字符串切片,因为它们都是从中借用的 <em>不同</em> 原始字符串的一部分) .</p>
+<p>现在,请注意 生命周期 如何工作. 我们需要明确的 lifetime ,因为 Rust 永远不会让我们在不知道他们的 lifetime 的情况下发放借用的字符串片. 在这里,我们说这个借用的字符串的 lifetime 在<code>self</code> lifetime 中.</p>
+<p>而且 lifetime 的这个签名不兼容<code>迭代器{Iterator}</code>的接口. 但是如果兼容就很容易出现问题; 考虑<code>collect</code>试图制作这些字符串切片的 Vec . 这是不可能的,因为它们都是从同一个可变字符串中借用的! (如果您已 read <em>所有</em> 文件转换为字符串,然后是字符串<code>line</code>迭代器{Iterator}可以返回字符串切片,因为它们都是借用原始字符串的 <em>不同</em> 部分) .</p>
 <p>由此产生的循环更清晰,文件缓冲对用户是不可见的.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -2758,7 +2758,7 @@ fn read_all_lines(filename: &amp;str) -&gt; io::Result&lt;()&gt; {
     Ok(())
 }
 #}</code></pre></pre>
-<p>你甚至可以这样写循环,因为显式匹配可以将字符串切片拉出来:</p>
+<p>你甚至可以这样写循环,字符串切片拉出来 显式匹配 :</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2766,9 +2766,9 @@ fn read_all_lines(filename: &amp;str) -&gt; io::Result&lt;()&gt; {
         println!(&quot;{}&quot;, line)?;
     }
 #}</code></pre></pre>
-<p>这很诱人,但你在这里抛出一个可能的错误;每当发生错误时,此循环都会静静地停止. 特别是,它将停止在Rust无法将 line 转换为 UTF-8 的第一个位置. 适合休闲代码,不适合生产代码!</p>
-<a class="header" href="print.html#a写入files" id="a写入files"><h2>写入Files</h2></a>
-<p>我们遇到了<code>write!</code>宏执行时<code>Debug</code>- 它也适用于任何实现的东西<code>Write</code>. 所以这是另一种说法<code>print!</code>:</p>
+<p>这很诱人,但你在这里抛出一个可能的错误;每当发生错误时,此循环都会静静地停止. 特别是,它将停止在 Rust 无法将 line 转换为 utf-8 的第一个位置. 适合休闲代码,不适合生产代码!</p>
+<a class="header" href="print.html#a写入到files" id="a写入到files"><h2>写入到Files</h2></a>
+<p>我们遇到了<code>write!</code>宏当遇到<code>Debug</code>实现- 它也适用于任何实现<code>Write</code>的东西. 所以这是另一种<code>print!</code>:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2776,9 +2776,9 @@ fn read_all_lines(filename: &amp;str) -&gt; io::Result&lt;()&gt; {
     ...
     write!(stdout,&quot;answer is {}\n&quot;, 42).expect(&quot;write failed&quot;);
 #}</code></pre></pre>
-<p>如果有错误 <em>可能</em>,你必须处理它. 它可能不是很好 <em>容易</em> 但它可能发生. 它通常很好,因为如果你正在做文件 I/O 你应该在一个上下文中加入<code>?</code>.</p>
-<p>但有一个区别: <code>print!</code>为每个写入锁定标准输出. 这通常是您想要输出的内容,因为没有锁定多线程程序可能会以有趣的方式混淆输出. 但是,如果你抽出大量文字,那么<code>write!</code>将会变得更快.</p>
-<p>对于我们需要的任意文件<code>write!</code>. 该文件关闭<code>out</code>在被丢弃时<code>write_out</code>的结尾,这既方便又重要.</p>
+<p>如果有 <em>可能的</em> 错误,你必须处理它. 它可能不是很 <em>容易</em> 但它可能发生. 它通常很好,因为如果你正在做文件 I/O 你应该在一个上下文中加入<code>?</code>.</p>
+<p>但有一个区别: <code>print!</code>为每个写入锁定标准输出. 这通常是您想要输出的内容,因为没有锁定 多线程程序 可能会 以有趣的方式 混淆输出. 但是,如果你 抽出大量文字,那么<code>write!</code>将会变得更快.</p>
+<p>对于任意文件我们用到<code>write!</code>. 在 <code>write_out</code>的结尾, <code>out</code>会扔掉文件自然关闭</p>
 <pre><pre class="playpen"><code class="language-rust">// file6.rs
 use std::fs::File;
 use std::io;
@@ -2794,10 +2794,10 @@ fn main() {
   write_out(&quot;test.txt&quot;).expect(&quot;write failed&quot;);
 }
 </code></pre></pre>
-<p>如果你关心性能,你需要知道Rust文件默认是无缓冲的. 所以每个小的写入请求都会直接进入操作系统,而且这将会明显变慢. 我提到了这一点,因为这种默认设置与其他编程语言不同,并且可能导致令人震惊的发现: Rust可能被脚本语言遗留下来!就像<code>Read</code>和<code>io::BufReader</code>, 有<code>io::BufWriter</code>缓冲任何<code>Write</code>.</p>
+<p>如果你关心性能,你需要知道 Rust 文件默认是无缓冲的. 所以每个小的写入请求都会直接进入操作系统,而且这将会明显变慢. 我提到了这一点,因为这种默认设置与其他编程语言不同,并且可能导致令人震惊的发现: Rust 可能被脚本语言遗留下来的地方! 就像<code>Read</code>和<code>io::BufReader</code>, <code>io::BufWriter</code>是带缓冲的<code>Write</code>.</p>
 <a class="header" href="print.html#a文件路径和目录" id="a文件路径和目录"><h2>文件,路径和目录</h2></a>
-<p>这是一个用于在机器上打印 Cargo 目录的小程序. 最简单的情况是它是'〜/.cargo'. 这是一个Unix shell扩展,所以我们使用<code>env::home_dir</code>因为它是跨平台的.  (它可能会失败,但没有主目录的计算机无论如何不会托管Rust工具. )</p>
-<p>然后我们创建一个<a href="https://doc.rust-lang.org/std/ops/trait.Mul.html">PathBuf</a>并使用它的<code>push</code>方法从其构建完整的文件路径 <em>组件</em>.  (这比用'/','\'或其他任何东西来要容易得多,取决于系统. )</p>
+<p>这是一个用于在机器上打印 Cargo 目录的小程序. 最简单的情况是它是'〜/.cargo'. 这是一个Unix shell扩展,所以我们使用<code>env::home_dir</code>因为它是跨平台的.  (它可能会失败,但没有主目录的计算机, 无论如何都不会托管 Rust 工具. )</p>
+<p>这里我们创建一个<a href="https://doc.rust-lang.org/std/ops/trait.Mul.html">PathBuf</a>并使用它的<code>push</code>方法构建完整的文件路径就像 <em>组件</em>.  (这比 用'/','\'或其他任何东西来要容易得多,取决于系统. )</p>
 <pre><pre class="playpen"><code class="language-rust">// file7.rs
 use std::env;
 use std::path::PathBuf;
@@ -2814,7 +2814,7 @@ fn main() {
 }
 </code></pre></pre>
 <p>一个<code>PathBuf</code>就好像<code>String</code>- 它拥有一组可扩展的角色,但具有专门用于构建路径的方法. 但其大部分功能都来自借用版本<code>Path</code>,这就像<code>&amp;str</code>. 所以,例如,<code>is_dir</code>是一个<code>Path</code>方法.</p>
-<p>这可能听起来像一种继承形式,但魔法<a href="https://doc.rust-lang.org/book/deref-coercions.html">Deref</a>trait的工作方式不同. 它就像它一样工作<code>String/&amp;str</code>- 参考<code>PathBuf</code>可 <em>裹挟{Coerce}</em> 成为参考<code>Path</code>.  ('Coerce'是一个很强的词,但这确实是Rust为你做转换的少数几个地方之一. )</p>
+<p>这可能听起来像一种继承形式,但魔法<a href="https://doc.rust-lang.org/book/deref-coercions.html">Deref</a> trait 的工作方式不同. 它就像<code>String/&amp;str</code> - <code>PathBuf</code>引用可 <em>包裹{Coerce}</em> 成为<code>Path</code>引用.  ('Coerce'是一个很强的词,但这确实是 Rust 为你做转换的少数几个地方之一. )</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2824,10 +2824,10 @@ let path = PathBuf::from(home);
 foo(&amp;path);
 #}</code></pre></pre>
 <p><code>PathBuf</code>与<code>OsString</code>有亲密的关系,它代表我们直接从系统获得的字符串.  (有一个相应的<code>OsString/&amp;OsStr</code>关系. )</p>
-<p>这样的字符串不是 <em>保证</em> 可以表示为 UTF-8 !现实生活是一个<a href="https://news.ycombinator.com/item?id=10519932">复杂的事情</a>,特别是看到'他们为什么这么辛苦'的答案. 总而言之,首先有几年的ASCII传统编码,以及其他语言的多种特殊编码. 其次,人类语言很复杂. 例如'noël'是 <em>五个</em> Unicode代码点!</p>
-<p>确实,现代操作系统文件名的大部分时间都是 Unicode (Unix方面的 UTF-8 ,Windows方面的UTF-16) ,除非它们不是. Rust必须严格处理这种可能性. 例如,<code>Path</code>有一个方法<code>as_os_str</code>它返回一个<code>&amp;OsStr</code>,但是<code>to_str</code>方法返回一个<code>Option&lt;&amp;str&gt;</code>. 并不总是可能!</p>
-<p>人们在这一点上遇到了麻烦,因为他们已经过分依赖'string'和'character'作为唯一必要的抽象. 正如爱因斯坦所说,编程语言必须尽可能简单,但并不简单. 系统语言 <em>需求</em> 一个<code>String/&amp;str</code>区别 (拥有与借用: 这也非常方便) ,如果它希望在 Unicode 字符串上标准化,那么它需要另一种类型来处理无效 Unicode 的文本 - 因此<code>OsString/&amp;OsStr</code>. 请注意,这些类型没有任何有趣的类似字符串的方法,这正是因为我们不知道编码.</p>
-<p>但是,人们习惯于像处理字符串一样处理文件名,这就是Rust使用文件路径更容易操作的原因<code>PathBuf</code>方法.</p>
+<p>这样的字符串不是 <em>保证</em> 可以表示为 utf-8 !现实生活是一个<a href="https://news.ycombinator.com/item?id=10519932">复杂的事情</a>,特别是看到'他们为什么这么辛苦'的答案. 总而言之,首先有几年的 ASCII 传统编码,以及其他语言的多种特殊编码. 其次,人类语言很复杂. 例如'noël'是 <em>五个</em> Unicode代码点!</p>
+<p>确实,现代操作系统文件名的大部分时间都是 Unicode (Unix方面的 utf-8 ,Windows方面的UTF-16) ,又或者不是. Rust必须严格处理这种可能性. 例如,<code>Path</code>有一个方法<code>as_os_str</code>它返回一个<code>&amp;OsStr</code>, 但是<code>to_str</code>方法返回一个<code>Option&lt;&amp;str&gt;</code>. 并不总是可能!</p>
+<p>人们在这一点上遇到了麻烦,因为他们已经过分依赖'string'和'character'作为唯一必要的抽象. 正如爱因斯坦所说, 编程语言必须尽可能简单,但并不简单. 系统语言 <em>需要</em> 一个<code>String/&amp;str</code>区别 (拥有与借用: 这也非常方便) ,如果它希望在 Unicode 字符串上标准化,那么它需要另一种类型来处理无效 Unicode 的文本 - 因此有了<code>OsString/&amp;OsStr</code>. 请注意,这些类型没有任何有趣的 类似字符串的方法, 因为我们本来就不知道无效 Unicode.</p>
+<p>但是,人们习惯于像处理字符串一样处理文件名,这就是 Rust 使用<code>PathBuf</code>方法操作文件路径更容易的原因.</p>
 <p>您可以<code>pop</code>连续去除路径组件. 这里我们从程序的当前目录开始:</p>
 <pre><pre class="playpen"><code class="language-rust">// file8.rs
 use std::env;
@@ -2848,7 +2848,7 @@ fn main() {
 // /home
 // /
 </code></pre></pre>
-<p>这是一个有用的变化. 我有一个搜索配置文件的程序,其规则是它可能出现在当前目录的任何子目录中. 所以我创建<code>/home/steve/rust/config.txt</code>并启动此程序<code>/home/steve/rust/gentle-intro/code</code>:</p>
+<p>这是一个有用的变化. 我有一个搜索 配置{config} 文件 的程序,其规则是它可能出现在当前目录的任何子目录中. 所以我创建<code>/home/steve/rust/config.txt</code>并 启动此程序<code>/home/steve/rust/gentle-intro/code</code>:</p>
 <pre><pre class="playpen"><code class="language-rust">// file9.rs
 use std::env;
 
@@ -2869,7 +2869,7 @@ fn main() {
 }
 // gotcha /home/steve/rust/config.txt
 </code></pre></pre>
-<p>这几乎是如此 <strong>git</strong> 当它想知道当前的回购是什么时会起作用.</p>
+<p>如此像 <strong>git</strong> 的工作方式当它想知道当前的回购是什么.</p>
 <p>有关文件的详细信息 (其大小,类型等) 被称为它的 <em>元数据</em>. 与往常一样,可能存在错误 - 不仅仅是&quot;找不到&quot;,而且如果我们没有权限读取此文件.</p>
 <pre><pre class="playpen"><code class="language-rust">// file10.rs
 use std::env;
@@ -2894,8 +2894,8 @@ fn main() {
 // modified Ok(SystemTime { tv_sec: 1483866529, tv_nsec: 600495644 })
 </code></pre></pre>
 <p>文件的长度 (以字节为单位) 和修改时间很容易解释.  (注意我们可能无法获得这个时间!) 文件类型有方法<code>is_dir</code>,<code>is_file</code>和<code>is_symlink</code>.</p>
-<p><code>权限{perissions}</code>是一个有趣的. Rust努力成为跨平台的,所以这是'最低公分母'的例子. 一般来说,你可以查询的只是文件是否只读 - '权限'概念在Unix中被扩展,并为用户/群组/其他编码读/写/可执行文件.</p>
-<p>但是,如果您对Windows不感兴趣,那么引入特定于平台的traits将至少为我们提供权限模式位.  (像往常一样,一个traits只有在它可见时才会触发. ) 然后,将该程序应用到它自己的可执行文件中:</p>
+<p><code>权限{perissions}</code>是一个有趣的. Rust 努力成为跨平台的,所以这是'最低公分母'的例子. 一般来说,你可以查询的只是文件是否只读 - '权限'概念在Unix中被扩展,并为 <code>用户/群组/其他</code> 提供 <code>读/写/可执行</code>的权限.</p>
+<p>但是,如果您对 Windows 不感兴趣,那么引入特定于平台的 traits 将至少为我们提供权限模式位.  (像往常一样,一个 trait 只有在它可见时才会触发. ) 然后,应用到程序它自己的能被赋予可执行:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2905,9 +2905,9 @@ println!(&quot;perm {:o}&quot;,data.permissions().mode());
 // perm 755
 #}</code></pre></pre>
 <p>(注意&quot;{:o}&quot;用于打印 <em>八进制</em>)</p>
-<p>(Windows上的文件是否可执行取决于其扩展名. 可执行文件的扩展名可以在PATHEXT`环境变量 - '.exe','. bat'等等) .</p>
+<p>(Windows 上的文件是否可执行取决于其扩展名. 可执行文件的扩展名可以在PATHEXT`环境变量 - '.exe','. bat'等等) .</p>
 <p><code>std::fs</code>包含许多用于处理文件的有用功能,例如复制或移动文件,制作符号链接和创建目录.</p>
-<p>要查找目录的内容,<code>std::fs::read_dir</code>提供了一个迭代器. 以下是扩展名为&quot;.rs&quot;且大小大于1024字节的所有文件:</p>
+<p>要查找目录的内容,<code>std::fs::read_dir</code>提供了一个迭代器. 以下是扩展名为&quot;.rs&quot;且大小大于1024字节 的所有文件:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -2932,12 +2932,12 @@ fn dump_dir(dir: &amp;str) -&gt; io::Result&lt;()&gt; {
 // ./struct6.rs length 1359
 // ./new-sexpr.rs length 7719
 #}</code></pre></pre>
-<p>明显,<code>read_dir</code>可能会失败 (通常是'找不到'或'没有权限') ,但是获取每个新条目可能会失败 (这就像是<code>line</code>迭代器{Iterator}遍历缓冲的阅读器的内容) . 另外,我们可能无法获取与条目对应的元数据. 一个文件可能没有扩展名,所以我们也必须检查.</p>
-<p>为什么不只是一个遍历路径的迭代器? 在Unix上这是这样的<code>opendir</code>系统调用起作用,但在Windows上,您无法在不获取元数据的情况下迭代目录的内容. 所以这是一个相当优雅的妥协方案,它允许跨平台的代码尽可能高效.</p>
-<p>在这一点上你可以原谅感觉'错误疲劳{error fatigue}'. 但请注意 <em>错误总是存在</em> - 这不是Rust正在发明新的. 它只是在努力让你无法忽视它们. 任何操作系统调用都可能失败.</p>
-<p>Java和Python等语言引发异常;像Go和Lua这样的语言返回两个值,其中第一个是Result,第二个是错误: 像Rust一样,它被认为是库函数引发错误的不良方式. 所以有很多错误检查和函数的早期返回.</p>
-<p>Rust使用<code>Result</code>因为它不是 - 或者: 你不能同时得到Result和错误. 问号运算符使处理错误更加清晰.</p>
-<a class="header" href="print.html#a流程" id="a流程"><h2>流程</h2></a>
+<p>明显,<code>read_dir</code>可能会失败 (通常是'找不到'或'没有权限') ,但是获取每个新条目可能会失败 (这就像是<code>line</code>迭代器{Iterator} 遍历 缓冲的阅读器的内容) . 另外,我们可能无法获取与条目对应的元数据. 一个文件可能没有扩展名,所以我们也必须检查.</p>
+<p>为什么不只是一个遍历路径的迭代器? 在 Unix 上这是这样的<code>opendir</code>系统调用起作用,但在 Windows 上,您无法在不获取元数据的情况下 迭代目录的内容. 所以这是一个相当优雅的妥协方案,它允许跨平台的代码尽可能高效.</p>
+<p>在这一点上你可以原谅感觉'错误疲劳{error fatigue}'. 但请注意 <em>错误总是存在</em> - 这不是 Rust 正在发明新的. 它只是在努力让你无法忽视它们. 任何操作系统调用都可能失败.</p>
+<p>Java 和 Python 等语言引发异常;像 Go 和 Lua 这样的语言返回两个值,其中第一个是 Resul t,第二个是 错误: 像 Rust 也一样,它考虑到是库函数引发错误的不良方式. 所以有很多错误检查和函数的早期返回.</p>
+<p>Rust使用<code>Result</code>因为它 either-or{没有或者}: 你不能同时得到 Result 和 错误. 问号运算符 使处理错误更加清晰.</p>
+<a class="header" href="print.html#a进程" id="a进程"><h2>进程</h2></a>
 <p>一个基本的需求是程序运行程序,或者 <em>启动过程</em> . 你的程序可以 <em>启动{launch}</em> 尽可能多的子进程,顾名思义他们与父母有特殊的关系.</p>
 <p>运行程序很简单,使用<code>Command</code>struct,它构建传递给程序的参数:</p>
 <pre><pre class="playpen"><code class="language-rust">use std::process::Command;
@@ -2953,7 +2953,7 @@ fn main() {
 // rustc 1.15.0-nightly (8f02c429a 2016-12-15)
 // cool true code 0
 </code></pre></pre>
-<p>所以<code>new</code>收到该程序的名称 (它将被查找<code>Path</code>如果不是绝对文件名) ,<code>arg</code>增加了一个新的 <em>argument</em> ,并且<code>status</code>导致它运行. 这返回一个<code>Result</code>,这是<code>Ok</code>如果程序实际运行,包含一个<code>退出状态{ExitStatus}</code>. 在这种情况下,程序成功,并返回退出码0(<code>unwrap</code>是因为如果程序被信号杀死了,我们不总是得到代码) .</p>
+<p>所以<code>new</code>收到该程序的名称 (它将查找<code>PATH</code>,如果不是绝对文件名) ,<code>arg</code>增加了一个新的 <em>argument</em> ,并且<code>status</code>导致它运行. 这返回一个<code>Result</code>,这是<code>Ok</code>如果程序实际运行,包含一个<code>退出状态{ExitStatus}</code>. 在这种情况下,程序成功,并返回 退出码0 (使用<code>unwrap</code>是因为如果程序被信号杀死了,我们不总是得到代码) .</p>
 <p>如果我们改变了<code>-V</code>至<code>-v</code> (一个容易的错误) <code>rustc</code>失败: `所以有三种可能性:</p>
 <pre><code>error: no input filename given
 
@@ -2983,10 +2983,10 @@ fn main() {
 //Ok!
 // len stdout 44 stderr 0
 </code></pre></pre>
-<p>与一样<code>状态</code>我们的程序会阻塞,直到子进程结束,我们返回三件事情 - 状态 (如以前) ,标准输出的内容和标准错误的内容.</p>
-<p>捕获的输出很简单<code>Vec&amp;lt;u8&gt;</code>- 只是字节. 回想一下,我们不能保证我们从操作系统收到的数据是正确编码的 UTF-8 字符串. 事实上,我们不能保证它 <em>甚至</em> 是一个字符串 - 程序可能会返回任意二进制数据.</p>
-<p>如果我们确信输出是 UTF-8 ,那么<code>String::from_utf8</code>将转换这些向量或字节 - 它返回一个<code>Result</code>因为这种转换可能不会成功. 一个更马虎的功能是<code>String::from_utf8_lossy</code>这将很好地进行转换并在无效的 Unicode 标记 insert 处插入失败.</p>
-<p>这是一个使用shell运行程序的有用函数. 这使用通常的shell机制将标准错误连接到标准输出. 在Windows上shell的名字是不同的,但是除此之外的东西可以按预期工作.</p>
+<p>与<code>status</code>一样我们的程序会阻塞,直到子进程结束,我们返回三件事情 - 状态 (如以前) ,标准输出的内容和标准错误的内容.</p>
+<p>捕获的输出简单<code>Vec&lt;u8&gt;</code>- 只是字节. 回想一下,我们不能保证我们从操作系统收到的数据是正确编码的 utf-8 字符串. 事实上,我们不能保证它 <em>甚至</em> 是一个字符串 - 程序可能会返回任意二进制数据.</p>
+<p>如果我们确信输出是 utf-8 ,那么<code>String::from_utf8</code>将转换这些 Vec 或字节 - 它返回一个<code>Result</code>因为这种转换可能不会成功. 一个更马虎的功能是<code>String::from_utf8_lossy</code>这将很好地进行转换, 并在失败时插入无效的 Unicode 标记.</p>
+<p>下面是一个使用 shell 运行程序的有用函数. 这使用通常的 shell机制 将标准错误连接到标准输出. 在 Windows上 shell 的名字是不同的,但是除此之外的东西可以按预期工作.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -3011,9 +3011,9 @@ fn shell_success(cmd: &amp;str) -&gt; Option&lt;String&gt; {
     if success {Some(output)} else {None}
 }
 #}</code></pre></pre>
-<p>如果你说的话,我正在修整右边的任何空格<code>shell(&quot;which rustc&quot;)</code>您将获得没有任何额外换行的路径.</p>
-<p>您可以控制由启动的程序的执行<code>Process</code>通过指定它将运行的目录使用<code>current_dir</code>方法和它所使用的环境变量<code>env</code>.</p>
-<p>到目前为止,我们的程序只是等待子进程完成. 如果你使用<code>spawn</code>方法,我们立即返回,并且必须明确地等待它完成 - 或者在此期间去做其他事情!这个例子还显示了如何同时抑制 标准错误和标准错误:</p>
+<p>我修整了右边的任何空格, 所以如果你说的话,<code>shell(&quot;which rustc&quot;)</code>,您将获得没有任何额外换行的路径.</p>
+<p>您可以控制由启动程序的执行通过<code>Process</code>, 指定它将运行的目录使用<code>current_dir</code>方法和它所使用的环境变量<code>env</code>.</p>
+<p>到目前为止,我们的程序只是等待子进程完成. 如果你使用<code>spawn</code>方法,我们立即返回,并且必须明确地等待它完成 - 或者在此期间去做其他事情! 这个例子还显示了如何同时抑制 标准错误和标准错误:</p>
 <pre><pre class="playpen"><code class="language-rust">// process5.rs
 use std::process::{Command,Stdio};
 
@@ -3028,10 +3028,10 @@ fn main() {
     println!(&quot;res {:?}&quot;, res);
 }
 </code></pre></pre>
-<p>默认情况下,子项&quot;继承{inherits}&quot;父项的标准输入和输出. 在这种情况下,我们将孩子的输出手柄重定向到&quot;nowhere&quot;. 这相当于说<code>&gt;/dev/null 2&gt;/dev/null</code>在Unix shell中.</p>
-<p>现在,可以使用shell来完成这些事情 (<code>sh</code>要么<code>cmd</code>) 在Rust. 但通过这种方式,您可以完全程序化地控制流程创建.</p>
-<p>例如,如果我们有<code>.stdout(Stdio::piped())</code>那么孩子的标准输出被重定向到piped. 然后<code>child.stdout</code>是你可以用来直接读取输出的东西 (即implements<code>Read</code>) . 同样,你可以使用<code>.stdout(Stdio::piped())</code>方法,以便您可以写入<code>child.stdin</code>.</p>
-<p>但如果我们使用了<code>wait_with_output</code>代替<code>wait</code>那么它返回一个<code>Result&lt;Output&gt;</code>并将孩子的输出记录下来<code>sudout</code>那个领域<code>Output</code>作为一个<code>Vec&lt;u8&gt;</code>就像以前一样.</p>
+<p>默认情况下,子项&quot;继承{inherits}&quot;父项的标准输入和输出. 在这里,我们将 孩子的输出控制 重定向到&quot;nowhere&quot;. 这相当于在 Unix shell 中说<code>&gt;/dev/null 2&gt;/dev/null</code>.</p>
+<p>现在, 在 Rust可以使用 shell  (<code>sh</code>要么<code>cmd</code>) 来完成这些事情 . 但通过这种方式,您可以完全程序化地控制进程创建.</p>
+<p>例如,如果我们有<code>.stdout(Stdio::piped())</code>那么孩子的标准输出被重定向到管道. 然后<code>child.stdout</code>是你可以用来直接读取输出的东西 (例如: implements <code>Read</code>) . 同样,你可以使用<code>.stdin(Stdio::piped())</code>方法,以便您可以写入<code>child.stdin</code>.</p>
+<p>但如果我们使用了<code>wait_with_output</code>代替<code>wait</code>, 那么它返回一个<code>Result&lt;Output&gt;</code>并将孩子的输出记录到<code>Output</code>的<code>sudout</code>字段作为一个<code>Vec&lt;u8&gt;</code>就像以前一样.</p>
 <p>该<code>Child</code>结构也给你一个明确的<code>kill</code>方法.</p>
 <a class="header" href="print.html#a模块和cargo" id="a模块和cargo"><h1>模块和Cargo</h1></a>
 <a class="header" href="print.html#a模块" id="a模块"><h2>模块</h2></a>
