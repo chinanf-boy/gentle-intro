@@ -135,10 +135,10 @@
                     <main>
                         <a class="header" href="4-modules.zh.html#a模块和cargo" id="a模块和cargo"><h1>模块和Cargo</h1></a>
 <a class="header" href="4-modules.zh.html#a模块" id="a模块"><h2>模块</h2></a>
-<p>随着程序变得越来越大,有必要将它们分散到多个文件中,并将函数和类型放在不同的位置 <em>命名空间</em>. 这两种解决方案都是Rust解决方案 <em>模块</em>.</p>
-<p>C做的是第一个,而不是第二个,所以你最终会遇到类似的可怕名字<code>primitive_display_set_width</code>等等. 实际的文件名可以任意命名.</p>
-<p>Rust在全名看起来像<code>primitive::display::set_width</code>,之后说<code>使用primitive::display</code>你可以把它称为<code>display::set_width</code>. 你甚至可以说<code>使用primitive::display::set_width</code>然后只是说<code>set_width</code>,但这并不是一个好主意. <code>rustc</code>不会混淆,但是 <em>您</em> 稍后可能会感到困惑. 但为了这个工作,文件名必须遵循一些简单的规则.</p>
-<p>一个新的关键字<code>mod</code>用于将模块定义为可以写入Rust类型或函数的块:</p>
+<p>随着程序变得越来越大,有必要将它们分散到多个文件中,并将函数和类型放在不同的 <em>命名空间</em>. 这两种解决方案都是Rust解决方案 <em>模块</em>.</p>
+<p>C 做的是第一个,而不是第二个,所以你最终会遇到类似的可怕名字<code>primitive_display_set_width</code>等等. 实际的文件名可以任意命名.</p>
+<p>Rust 在全名看起来像<code>primitive::display::set_width</code>,之后说<code>use primitive::display</code>你可以把它称为<code>display::set_width</code>. 你甚至可以说<code>use primitive::display::set_width</code>然后只能用<code>set_width</code>, 但这并不是一个好主意. <code>rustc</code>不会混淆,但是 <em>您</em> 稍后可能会感到困惑. 但为了这个工作,文件名必须遵循一些简单的规则.</p>
+<p>一个新的关键字<code>mod</code>用于将模块定义为可以写入 Rust 类型或函数的块:</p>
 <pre><pre class="playpen"><code class="language-rust">mod foo {
     #[derive(Debug)]
     struct Foo {
@@ -151,7 +151,7 @@ fn main(){
     println!(&quot;{:?}&quot;, f);
 }
 </code></pre></pre>
-<p>但它仍然不太正确 - 我们得到'struct Foo is 私人{private}'. 为了解决这个问题,我们需要<code>pub</code>要导出的关键字<code>Foo</code>. 然后错误更改为'结构foo::Foo的字段是私人的',所以放了<code>pub</code>后, 出口<code>Foo::s</code>. 然后事情就会奏效.</p>
+<p>但它仍然不太正确 - 我们得到'struct Foo is 私人{private}'. 为了解决这个问题,我们需要<code>pub</code>要导出的关键字<code>Foo</code>. 然后错误更改为'结构foo::Foo 字段是私人的',所以放了<code>pub</code>后, 出口<code>Foo::s</code>. 然后事情就会奏效.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -179,11 +179,11 @@ fn main(){
     println!(&quot;{:?}&quot;, f);
 }
 </code></pre></pre>
-<p>为什么隐藏实施是一件好事?因为这意味着您可以在不中断界面的情况下稍后进行更改,否则模块的消费者不会太依赖其细节. 大规模编程的大敌是代码纠结的倾向,因此理解一段代码是不可能的.</p>
+<p>为什么「没有pub」隐藏 impl{实现} 是一件好事? 因为这意味着您可以在不中断接口的情况下稍后进行更改,否则模块的使用者不会太依赖其细节. 大规模编程的大敌是代码纠结的倾向,因此理解一段代码实际确切做了什么是不可能的.</p>
 <p>在一个完美的世界里,一个模块做一件事,做得好,并保持自己的秘密.</p>
-<p>何时不要隐藏?正如Stroustrup所说,当接口 <em>是</em> 执行,就像<code>struct Point {x: f32,y: f32}</code>.</p>
+<p>何时不要隐藏? 正如 Stroustrup 所说,当接口 <em>是</em> 实现,就像<code>struct Point {x: f32,y: f32}</code>.</p>
 <p>一个模块 <em>中</em> ,所有项目对所有其他项目都可见. 这是一个舒适的地方,每个人都可以成为朋友,知道彼此的私密细节.</p>
-<p>每个人都可以根据自己的喜好,将程序分成不同的文件. 我开始对500条线路感到不舒服,但我们都同意超过2000条线路正在推动它.</p>
+<p>每个人都可以根据自己的喜好,将程序分成不同的文件. 我开始对 500条线路 感到不舒服,但我们都同意 超过2000条线路 正在推动它.</p>
 <p>那么如何将这个程序分解成单独的文件呢?</p>
 <p>我们把这个<code>foo</code>代码到<code>foo.rs</code>:</p>
 <pre><pre class="playpen"><code class="language-rust">
@@ -201,7 +201,7 @@ impl Foo {
     }
 }
 #}</code></pre></pre>
-<p>并使用一个<code>mod foo</code>声明 <em>没有</em> 主<code>main</code>程序中的一个块:</p>
+<p>并使用一个<code>mod foo</code>声明, 并 <em>没有</em> 在一个<code>区块{}</code> 主<code>main</code>程序中:</p>
 <pre><pre class="playpen"><code class="language-rust">// mod3.rs
 mod foo;
 
@@ -210,8 +210,8 @@ fn main(){
     println!(&quot;{:?}&quot;, f);
 }
 </code></pre></pre>
-<p>现在<code>rustc mod3.rs</code>也会引发<code>foo.rs</code>编译. 没有必要用 makefiles 搞笑!</p>
-<p>编译器也会看<code>modname/mod.rs</code>,所以这将工作,如果我创建一个目录<code>boo</code>包含一个文件<code>mod.rs</code>:</p>
+<p>现在<code>rustc mod3.rs</code>也会引发<code>foo.rs</code>编译. 没有必要用 makefiles 来搞笑!</p>
+<p>编译器也会看<code>MODNAME/mod.rs</code>,所以这将工作,如果我创建一个目录<code>boo</code>包含一个文件<code>mod.rs</code>:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -231,8 +231,8 @@ fn main(){
     println!(&quot;{:?} {}&quot;, f,res);
 }
 </code></pre>
-<p>到目前为止,还有<code>mod3.rs</code>,含有<code>main</code>,一个模块<code>foo.rs</code>和一个目录<code>boo</code>含<code>mod.rs</code>. 通常的惯例是包含的文件<code>main</code>只是叫<code>main.rs</code>.</p>
-<p>为什么有两种方法可以做同样的事情?因为<code>boo/mod.rs</code>可以引用其中定义的其他模块<code>boo</code>,更新<code>boo/mod.rs</code>并添加一个新模块 - 注意这是明确导出的. (没有<code>pub</code>,<code>pub</code>只能在里面看到<code>boo</code>模块).</p>
+<p>到目前为止,还有<code>mod3.rs</code>,含有<code>main</code>,一个模块<code>foo.rs</code>和一个含<code>mod.rs</code>的目录<code>boo</code>. 通常的惯例是包含的文件<code>main</code>只是叫<code>main.rs</code>.</p>
+<p>为什么有两种方法可以做同样的事情? 因为<code>boo/mod.rs</code>可以在<code>boo</code>引用其中定义的其他模块,更新<code>boo/mod.rs</code>并添加一个新模块 - 注意这是明确导出的. (没有<code>pub</code>,<code>bar</code>只能在里面看到<code>boo</code>模块).</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -289,10 +289,10 @@ pub mod bar;
     ...
 }
 #}</code></pre></pre>
-<p>重要的一点是没有 <em>单独编译</em> 这里. 主程序及其模块文件将每次重新编译. 尽管如此,较大的程序需要花费相当长的时间<code>rustc</code>在渐进式编译中越来越好.</p>
+<p>重要的一点是这里没有 <em>单独编译</em> . 主程序及其模块文件将每次重新编译. 尽管如此,较大的程序需要花费相当长的时间, 当然<code>rustc</code>在渐进式编译中越来越好.</p>
 <a class="header" href="4-modules.zh.html#crates" id="crates"><h2>Crates</h2></a>
-<p>Rust的&quot;编译单位&quot;是 <em>箱{crate}</em> ,它是一个可执行文件或一个库.</p>
-<p>要分别编译上一节中的文件,请先构建<code>foo.rs</code>作为锈 <em>静态库</em> 箱:</p>
+<p>Rust 的&quot;编译单位&quot;是 <em>箱{crate}</em> ,它是一个可执行文件或一个库.</p>
+<p>要分别编译上一节中的文件,请先构建<code>foo.rs</code>作为 rust <em>静态库</em> 箱:</p>
 <pre><code>src$ rustc foo.rs --crate-type=lib
 src$ ls -l libfoo.rlib
 -rw-rw-r-- 1 steve steve 7888 Jan  5 13:35 libfoo.rlib
@@ -300,7 +300,7 @@ src$ ls -l libfoo.rlib
 <p>我们现在可以 <em>链接</em> 这到我们的主要程序中:</p>
 <pre><code>src$ rustc mod4.rs --extern foo=libfoo.rlib
 </code></pre>
-<p>但主要程序现在必须像这样,在那里<code>extern</code>名称与链接时使用的名称相同. 有一个隐含的顶级模块<code>foo</code>与 库  crate 相关联:</p>
+<p>但主要程序现在必须像这样,在那里<code>extern</code>名称与链接时使用的名称相同. 有一个隐含的顶级模块<code>foo</code>与 库 crate 相关联:</p>
 <pre><code>// mod4.rs
 extern crate foo;
 
@@ -309,19 +309,19 @@ fn main(){
     println!(&quot;{:?}&quot;, f);
 }
 </code></pre>
-<p>人们开始吟唱'Cargo!Cargo!'让我来证明这个构建Rust的低级视图. 我是'Know Thy Toolchain'的忠实信徒,当我们看着使用Cargo管理项目时,这会减少你需要学习的新魔法数量.</p>
-<p>模块是基本的语言功能,可用于货运项目之外.</p>
+<p>人们已经开始吟唱'Cargo!Cargo!' 让我来证明这个构建 Rust 的快速. 我是'Know Thy Toolchain'的忠实信徒, 当我们看着使用 Cargo 管理项目时,这会减少你需要学习的新魔法数量. 模块是基本的语言功能,可用于 Cargo 项目之外.</p>
+<p>现在该理解为什么 Rust 的二进制文件如此之大:</p>
 <pre><code>src$ ls -lh mod4
 -rwxrwxr-x 1 steve steve 3,4M Jan  5 13:39 mod4
 </code></pre>
-<p>现在该理解为什么Rust的二进制文件如此之大: 这很胖! <em>有一个</em> 批量在该可执行文件中的调试信息.</p>
+<p>这很胖! <em>许多</em> 在该可执行文件中的调试信息.</p>
 <p>这不是一件坏事,如果你想使用一个调试器,并且当你的程序发生混乱时实际上需要有意义的回溯. 那么让我们去除这些调试信息并查看:</p>
 <pre><code>src$ strip mod4
 src$ ls -lh mod4
 -rwxrwxr-x 1 steve steve 300K Jan  5 13:49 mod4
 </code></pre>
-<p>对于如此简单的事情,仍感觉有点大,但是这个程序链接 <em>静态</em> 针对Rust标准库. 这是一件好事,因为您可以将此可执行文件交给任何具有正确操作系统的人 - 他们不需要&quot;Rust运行时&quot;.(和`rustup甚至可以让你为其他操作系统和平台进行交叉编译. )</p>
-<p>我们可以动态链接到Rust运行时并获得真正的小exes:</p>
+<p>对于如此简单的事情,仍感觉有点大,但是这个程序 <em>静态</em> 链接到 Rust 标准库. 这是一件好事,因为您可以将此可执行文件交给任何具有正确操作系统的人 - 他们不需要&quot;Rust 运行时&quot;.(和<code>rustup</code>甚至可以让你为 其他操作系统和平台 进行交叉编译. )</p>
+<p>我们可以 <code>动态-dynamic</code> 链接到 Rust运行时 并获得真正的小:</p>
 <pre><code>src$ rustc -C prefer-dynamic mod4.rs --extern foo=libfoo.rlib
 src$ ls -lh mod4
 -rwxrwxr-x 1 steve steve 14K Jan  5 13:53 mod4
@@ -331,17 +331,17 @@ src$ ldd mod4
     libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6(0x00007f3cd47aa000)
     /lib64/ld-linux-x86-64.so.2(0x00007f3cd4d72000)
 </code></pre>
-<p>这'找不到 no found'是因为<code>rustup</code>不会全局安装动态库. 至少在Unix上我们可以破解我们的快乐方式(是的,我知道最好的解决方案是符号链接).</p>
+<p>这'找不到 no found'是因为<code>rustup</code>不会全局安装动态库. 至少在 Unix 上 我们可以用我们的快乐方式破解(是的,我知道最好的解决方案是符号链接).</p>
 <pre><code>src$ export LD_LIBRARY_PATH=~/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib
 src$ ./mod4
 Foo { s: &quot;hello&quot; }
 </code></pre>
-<p>Rust没有 <em>哲学上</em> 动态链接的问题,与Go一样. 只是当每6周有一个稳定版本时,不得不重新编译所有内容. 如果你有一个适合你的稳定版本,那么很酷. 随着Rust的稳定版本越来越多地被OS包管理器交付,动态链接将变得更加流行.</p>
+<p>Rust 没有 <em>哲学上</em> 动态链接的问题,与 Go 一样. 只是当每6周有一个稳定版本时,不得不重新编译所有内容. 如果你有一个适合你的稳定版本,那么很酷. 随 着Rust的稳定版本 越来越多地被 OS包管理器控制, 动态链接将变得更加流行.</p>
 <a class="header" href="4-modules.zh.html#cargo" id="cargo"><h2>Cargo</h2></a>
-<p>与Java或Python相比,Rust标准库不是很大,</p>
-<p>虽然功能比C或C ++更强大,但主要依赖于操作系统提供的库.</p>
-<p>但访问社区提供的库很简单<a href="https://crates.io">crates.io</a>运用<strong>Cargo</strong>. Cargo将查找正确的版本并为您下载源代码,并确保下载其他所需的 crate .</p>
-<p>我们来创建一个需要阅读JSON的简单程序. 这种数据格式的使用非常广泛,但是对于包含在标准库中的数据格式太专业了. 所以我们初始化一个Cargo项目,使用'--bin',因为默认是创建一个库项目.</p>
+<p>与 Java 或 Python 相比,Rust标准库不是很大,</p>
+<p>虽然功能 比 C 或 C ++ 更强大,但主要依赖于操作系统提供的库.</p>
+<p>但用 <strong>Cargo</strong>访问<a href="https://crates.io">crates.io</a>社区提供的库很简单. Cargo将查找正确的版本并为您下载源代码,并确保下载其他所需的 crate{库/箱} .</p>
+<p>我们来创建一个需要 阅读JSON 的简单程序. 这种数据格式的使用非常广泛,但是对于包含在标准库中的数据格式太专业了. 所以我们初始化一个Cargo项目,使用'--bin',因为默认是创建一个库项目.</p>
 <pre><code>test$ cargo init --bin test-json
      Created binary(application)project
 test$ cd test-json
@@ -353,11 +353,11 @@ authors = [&quot;Your Name &lt;you@example.org&gt;&quot;]
 
 [dependencies]
 </code></pre>
-<p>使项目依赖于<a href="http://json.rs/doc/json/">JSON crate </a>,编辑'Cargo.toml'文件,如下所示:</p>
+<p>使项目依赖于<a href="http://json.rs/doc/json/">JSON crate</a>,编辑'Cargo.toml'文件,如下所示:</p>
 <pre><code>[dependencies]
 json=&quot;0.11.4&quot;
 </code></pre>
-<p>然后用Cargo进行第一次构建:</p>
+<p>然后用 Cargo 进行第一次构建:</p>
 <pre><code>test-json$ cargo build
     Updating registry `https://github.com/rust-lang/crates.io-index`
  Downloading json v0.11.4
@@ -365,8 +365,9 @@ json=&quot;0.11.4&quot;
    Compiling test-json v0.1.0(file:///home/steve/c/rust/test/test-json)
     Finished debug [unoptimized + debuginfo] target(s)in 1.75 secs
 </code></pre>
-<p>这个项目的主文件已经被 <em>创建</em> , 它是'src'目录中的'main.rs'. 它开始时只是一个'你好世界'的应用程序,所以让我们编辑它是一个适当的测试程序.</p>
-<p>请注意非常方便的'primitive'字符串字面值 - 否则我们需要转义那些双引号并以丑为结尾:</p>
+<p>这个项目的主文件已经被 <em>创建</em> , 它是'src'目录中的'main.rs'. 它开始时只是一个'你好世界'的应用程序,所以让它变成一个适当的测试程序.</p>
+<p>请注意非常方便的'原始{raw}'字符串文字 - 否则我们需要转义那些双引号
+并以丑陋结束：</p>
 <pre><pre class="playpen"><code class="language-rust">// test-json/src/main.rs
 extern crate json;
 
@@ -399,8 +400,8 @@ debug Object(Object { store: [(&quot;code&quot;, Number(Number { category: 1, ex
  Array([Short(&quot;awesome&quot;), Short(&quot;easyAPI&quot;), Short(&quot;lowLearningCurve&quot;)]), 0, 0)] }), 0, 0)] })
 display {&quot;code&quot;:200,&quot;success&quot;:true,&quot;payload&quot;:{&quot;features&quot;:[&quot;awesome&quot;,&quot;easyAPI&quot;,&quot;lowLearningCurve&quot;]}}
 </code></pre>
-<p>调试输出display了JSON文档的一些内部细节,但一个普通的&quot;{}&quot;,使用了<code>Display</code>特质,从解析的文档重新生成JSON.</p>
-<p>我们来探索一下JSON API. 如果我们无法提取数值,这将毫无用处. 该<code>as_TYPE</code>方法返回<code>Option&lt;TYPE&gt;</code>因为我们无法确定该字段是否存在或是否属于正确类型. (见<a href="http://json.rs/doc/json/enum.JsonValue.html">文档JsonValue</a>)</p>
+<p>调试输出 display 了JSON文档的一些内部细节,但一个普通的&quot;{}&quot;,使用了<code>Display</code> trait,从解析的文档重新生成JSON.</p>
+<p>我们来探索一下 JSON API. 如果我们无法提取数值,这将毫无用处. 该<code>as_TYPE</code>方法返回<code>Option&lt;TYPE&gt;</code>, 因为我们无法确定该字段是否存在或是否属于正确类型. (见<a href="http://json.rs/doc/json/enum.JsonValue.html">文档JsonValue</a>)</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -418,8 +419,8 @@ display {&quot;code&quot;:200,&quot;success&quot;:true,&quot;payload&quot;:{&quo
     // easyAPI
     // lowLearningCurve
 #}</code></pre></pre>
-<p><code>features</code>这里是一个<code>JsonValue引用</code>- 它必须是一个引用,否则我们会试图移动一个 <em>值</em> 脱离JSON文档. 这里我们知道它是一个数组,所以<code>members()</code>将返回一个非空的迭代器<code>&amp;JsonValue</code>.</p>
-<p>如果&quot;payload&quot;对象没有&quot;features&quot;键,该怎么办?然后<code>features</code>将被设置为<code>空值{Null}</code>. 不会有爆炸. 这种便利表达了JSON的自由形式,任何东西的本质. 如果结构不匹配,您应该检查收到的任何文档的结构并创建自己的错误.</p>
+<p><code>features</code>这里是一个<code>JsonValue</code>引用- 它必须是一个引用,否则我们会试图移动一个 <em>值</em> 会脱离 <code>doc : JSON</code>. 这里我们知道它是一个数组,所以<code>members()</code>将返回一个非空的迭代器<code>&amp;JsonValue</code>.</p>
+<p>如果&quot;payload&quot;对象没有&quot;features&quot;键,该怎么办? 那么<code>features</code>将被设置为<code>空值{Null}</code>. 不会有爆炸. 这种便利表达了 JSON 的自由形式,任何东西的本质. 如果结构不匹配,您应该检查收到的任何文档的结构, 并创建自己的错误.</p>
 <p>您可以修改这些结构. 如果我们有<code>let mut doc</code>那么这会做你所期望的:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -427,7 +428,7 @@ display {&quot;code&quot;:200,&quot;success&quot;:true,&quot;payload&quot;:{&quo
     let features = &amp;mut doc[&quot;payload&quot;][&quot;features&quot;];
     features.push(&quot;cargo!&quot;).expect(&quot;couldn't push&quot;);
 #}</code></pre></pre>
-<p>该<code>push</code>将失败,如果<code>feature</code>不是一个数组,因此它返回<code>Result&lt;()&gt;</code>.</p>
+<p>如果<code>feature</code>不是一个数组,因此它返回<code>Result&lt;()&gt;</code>, 所以该<code>push</code>将失败.</p>
 <p>这是一个非常漂亮的使用宏来生成 <em>JSON literals</em>:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -442,15 +443,15 @@ display {&quot;code&quot;:200,&quot;success&quot;:true,&quot;payload&quot;:{&quo
         r#&quot;{&quot;name&quot;:&quot;John Doe&quot;,&quot;age&quot;:30,&quot;numbers&quot;:[10,53,553]}&quot;#
     );
 #}</code></pre></pre>
-<p>为了这个工作,你需要显式地从JSON箱导入宏:</p>
+<p>为了这个工作,你需要显式地从 JSON箱导入宏 :</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
 #[macro_use]
 extern crate json;
 #}</code></pre></pre>
-<p>由于JSON的无定形,动态类型性质和Rust的结构化,静态性质之间的不匹配,使用这个 crate 有一个缺点. (自述明确提到'摩擦{friction}')所以如果你 <em>没有</em> 想要将 JSON 映射到 Rust 数据结构,您最终会做很多检查,因为您不能认为接收到的结构与您的结构相匹配! 为此,更好的解决方案是<a href="https://github.com/serde-rs/json">serde_json</a>你在哪里 <em>连载</em> Rust数据结构转换为JSON和 <em>反序列化</em> JSON进入Rust.</p>
-<p>为此,请创建另一个Cargo二进制项目<code>Cargo new --bin test-serde-json</code>,进入<code>test-serde-json</code>目录和编辑<code>Cargo.toml</code>. 像这样编辑它:</p>
+<p>由于 JSON的无定形,动态类型性质 和 Rust的结构化,静态性质之间的不匹配,使用这个 crate 有一个缺点. (自述明确提到'摩擦{friction}')所以如果你 <em>没有</em> 想要将 JSON 映射到 Rust 数据结构,您最终会做很多检查,因为您不能认为接收到的结构与您的结构相匹配! 为此,更好的解决方案是<a href="https://github.com/serde-rs/json">serde_json</a>, 它可以 <em>序列</em> Rust数据结构转换为JSON和 <em>反序列化</em> JSON进入Rust.</p>
+<p>为此,请创建另一个 Cargo 二进制项目<code>Cargo new --bin test-serde-json</code>,进入<code>test-serde-json</code>目录和编辑<code>Cargo.toml</code>. 像这样编辑它:</p>
 <pre><code>[dependencies]
 serde=&quot;0.9&quot;
 serde_derive=&quot;0.9&quot;
@@ -487,7 +488,7 @@ fn main(){
     println!(&quot;{:#?}&quot;,p);
 }
 </code></pre></pre>
-<p>你已经看到了<code>derive</code>属性之前,但是<code>serde_derive</code> crate 定义 <em>自定义派生{custom derives}</em> 为特别<code>序列化</code>和<code>反序列化</code>特征. 结果生成的Rust 结构体:</p>
+<p>你已经看到了<code>derive</code>属性之前,但是<code>serde_derive</code> crate 定义 <em>自定义派生{custom derives}</em> 为特别的<code>序列化</code>和<code>反序列化</code> trait . 结果生成的 Rust 结构体:</p>
 <pre><code>Please call John Doe at the number 27726550023
 Person {
     name: &quot;John Doe&quot;,
@@ -501,13 +502,13 @@ Person {
     ]
 }
 </code></pre>
-<p>现在,如果你使用了<code>json</code>那么你需要几百行自定义转换代码,主要是错误处理. 单调乏味,容易搞砸,而不是你想要付出努力的地方.</p>
-<p>如果你从外部来源处理结构良好的JSON(如果需要,可以重新映射字段名称),这显然是最好的解决方案,并为 Rust 程序通过网络与其他程序共享数据提供了一个强大的方法(因为一切都能理解 JSON 这些天). 关于很酷的事情<code>serde</code>(用于SERialization:序列化 DEserialization: 反序列化)是也支持其他文件格式,例如<code>toml</code>,这是 cargo 中常用的配置友好格式. 因此,您的程序可以将.toml文件读入结构中,并将这些结构编写为.json.</p>
-<p>序列化是一项重要的技术,Java和Go存在类似的解决方案 , 但有很大的不同. 在这些语言中,数据的结构可以在这里找到 <em>运行</em> 运用 <em>反射</em>,但在这种情况下,序列化代码是在 <em>编译时间</em>- 更高效!</p>
-<p>Cargo被认为是 Rust 生态系统的一大优势,因为它为我们做了很多工作. 否则,我们不得不从 Github 下载这些库,构建为 静态库-crate ,并将它们与程序链接. 这对于C ++项目来说是很痛苦的,如果 Cargo 不存在的话,对于Rust项目来说,这几乎是痛苦的. C ++在它的痛苦中有点独特,所以我们应该将它与其他语言的包管理器进行比较. npm(用于JavaScript)和pip(用于Python)为您管理依赖关系和下载, 但分发故事更难,因为程序的用户需要安装 NodeJS 或 Python. 但 Rust 程序与它们的 依赖关系 是静态链接的,所以它们可以在没有外部依赖的情况下再次发给你的好友.</p>
+<p>现在,如果你使用了<code>json</code>那么你需要几百行自定义转换代码,主要是错误处理. 单调乏味,容易搞砸,这些都不是你想要付出努力的地方.</p>
+<p>如果你从外部来源处理结构良好的JSON (如果需要,可以重新映射字段名称),这显然是最好的解决方案,并为 Rust 程序通过网络与其他程序共享数据提供了一个强大的方法(因为一切都能理解 JSON 这些天). 关于很酷的事情<code>serde</code>(用于SERialization:序列化 DEserialization: 反序列化)是也支持其他文件格式,例如<code>toml</code>,这是 cargo 中常用的配置友好格式. 因此,您的程序可以将.toml文件读入结构中,并将这些结构编写为.json.</p>
+<p>序列化是一项重要的技术,Java 和 Go 存在类似的解决方案 , 但有很大的不同. 在这些语言中,数据的结构可以在 <em>运行时</em> 运用 <em>反射</em> 这里找到,但在这种情况下,序列化代码是在 <em>编译时</em>- 更高效!</p>
+<p>Cargo 被认为是 Rust 生态系统的一大优势,因为它为我们做了很多工作. 否则,我们不得不从 Github 下载这些库,构建为 静态库-crate ,并将它们与程序链接. 这对于 C ++ 项目来说是很痛苦的,如果 Cargo 不存在的话,对于Rust项目来说,这几乎是痛苦的. C ++ 在它的痛苦中有点独特,所以我们应该将它与其他语言的包管理器进行比较. npm(用于JavaScript) 和 pip(用于Python) 为您管理依赖关系和下载, 但分发故事更难,因为程序的用户需要安装 NodeJS 或 Python. 但 Rust 程序与它们的 依赖关系 是静态链接的,所以它们可以在没有外部依赖的情况下再次发给你的好友.</p>
 <a class="header" href="4-modules.zh.html#a更多宝石" id="a更多宝石"><h2>更多宝石</h2></a>
-<p>处理除简单文本以外的任何内容时,正则表达式使您的生活变得更加轻松. 这些通常适用于大多数语言,我将在这里假定对正则表示法有基本的了解. 使用<a href="https://github.com/rust-lang/regex">正则表达式</a>, 把&quot;regex =&quot;0.2.1&quot;'放在&quot;[dependencies]&quot;在您的Cargo.toml.</p>
-<p>我们将再次使用&quot;raw strings&quot;,以便反斜杠不必转义. 在英语中,这个正则表达式 &quot;完全匹配两个数字,字符':',然后是任意数字. 捕获两组数字:</p>
+<p>处理除简单文本以外的任何内容时,正则表达式使您的生活变得更加轻松. 这些通常适用于大多数语言,我将在这里假定对正则表示法有基本的了解. 使用<a href="https://github.com/rust-lang/regex">正则表达式</a>, 把&quot;regex =&quot;0.2.1&quot;'放在&quot;[dependencies]&quot;在您的 Cargo.toml.</p>
+<p>我们将再次使用&quot;raw strings&quot;,以便反斜杠不必转义. 在中文,这个正则表达式意思是 &quot;完全匹配两个数字,接字符':',然后是任意数字. 捕获两组数字:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -522,8 +523,8 @@ println!(&quot;{:?}&quot;, re.captures(&quot;10:x23&quot;));
 // Some(Captures({0: Some(&quot;22:2&quot;), 1: Some(&quot;22&quot;), 2: Some(&quot;2&quot;)}))
 // None
 #}</code></pre></pre>
-<p>成功的产出实际上有三个 <em>捕获</em>- 整场 match ,和两组数字.  默认情况下这些正则表达式不是 <em>确定</em> , 所以 <em>正则表达式</em> 将追捕第一场 match ,跳过任何不匹配的东西. (如果你遗漏了'()',它只会给我们整场 match . )</p>
-<p>这是可能的 <em>名称</em> 那些捕捉,并且将正则表达式分散在多行,甚至包括注释!编译正则表达式可能会失败(第一个 <em>期望</em>)或者匹配可能失败(第二个 <em>期望</em>). 在这里,我们可以使用结果作为关联数组并查找按名称捕获.</p>
+<p>成功的产出实际上有三个 <em>捕获</em>- 整场 match ,和两组数字.  默认情况下这些正则表达式不是 <em>确定的</em> , 所以 <em>正则表达式</em> 将追捕第一场 match ,跳过任何不匹配的东西. (如果你遗漏了'()',它只会给我们整场 match . )</p>
+<p>可以 <em>命名</em> 那些捕捉,并且将正则表达式分散在多行,甚至包括注释! 编译正则表达式可能会失败(第一个 <em>期望</em>)或者匹配可能失败(第二个 <em>期望</em>). 在这里,我们可以使用结果作为关联数组, 并查找按名称捕获.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -541,7 +542,7 @@ assert_eq!(&quot;03&quot;, &amp;caps[&quot;month&quot;]);
 assert_eq!(&quot;14&quot;, &amp;caps[&quot;day&quot;]);
 #}</code></pre></pre>
 <p>正则表达式可以分解符合模式的字符串,但不会检查它们是否有意义. 也就是说,你可以指定和匹配 <em>句法{syntax}</em> 的 ISO 风格的日期,但 <em>语义</em> 他们可能是无稽之谈,比如&quot;2014-24-52&quot;.</p>
-<p>为此,您需要专门的日期时间处理,由其提供<a href="https://github.com/lifthrasiir/rust-chrono">计时</a>. 你需要在做日期时决定一个时区:</p>
+<p>为此,您需要专门的日期时间处理,由其提供<a href="https://github.com/lifthrasiir/rust-chrono">计时chrono</a>. 你需要在做日期时决定一个时区:</p>
 <pre><pre class="playpen"><code class="language-rust">extern crate chrono;
 use chrono::*;
 
@@ -563,8 +564,8 @@ fn main(){
     println!(&quot;date was {:?}&quot;, date);
     // date was None
 #}</code></pre></pre>
-<p>您还可以直接解析日期时间,无论是以标准UTC格式还是使用自定义<a href="https://lifthrasiir.github.io/rust-chrono/chrono/format/strftime/index.html#specifiers">格式{formats}</a> 这些自我相同的格式允许您按照您想要的格式打印日期. 我特别强调了这两个有用的 crate ,因为它们将成为大多数其他语言的标准库的一部分.</p>
-<p>事实上,这些 crate 的胚胎形态曾经是 Rust stdlib 的一部分,但被切开了. 这是一个蓄意的决定: Rust团队非常重视 stdlib 的稳定性,所以一旦他们在不稳定的夜间版本中进行孵化,只有 beta 和 stable 才能保持稳定. 对于需要实验和改进的 库 来说,他们保持独立并且能够跟踪 Cargo 会更好. 出于所有实际目的,这两个 crate 是 <em>标准</em> 它们不会消失,并且可能会在某个时候折回到stdlib 中.</p>
+<p>您还可以直接解析日期时间,无论是以 标准UTC格式 还是 使用自定义<a href="https://lifthrasiir.github.io/rust-chrono/chrono/format/strftime/index.html#specifiers">格式{formats}</a> 这些自我相同的格式允许您, 按照您想要的格式打印日期. 我特别强调了这两个有用的 crate ,因为它们将成为大多数其他语言的标准库的一部分.</p>
+<p>事实上,这些 crate 的胚胎形态曾经是 Rust stdlib 的一部分,但被切开了. 这是一个蓄意的决定: Rust团队非常重视 stdlib 的稳定性,所以一旦他们在不稳定的夜间版本 中进行孵化, 那么在只有 beta 和 stable 才能保持稳定. 对于需要实验和改进的 库 来说,他们保持独立并且能够跟踪 Cargo 会更好. 出于所有实际目的,这两个 crate 是 <em>标准</em> 它们不会消失,并且可能会在某个时候折回到 stdlib 中.</p>
 
                     </main>
 
