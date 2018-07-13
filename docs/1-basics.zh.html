@@ -252,7 +252,7 @@ fn main() {
 </code></pre></pre>
 <p>当来自其他语言时,这可能令人费解,其中默认情况下变量可以被重写. 它在运行时被分配了一个计算值到某个&quot;可变&quot;的东西 - 这不是一个 <em>不变{constant}</em>. 这也是这个词在数学中的用法,就像我们说'让 n 是 S 中最大的数字「'let n be the largest number in set S'」'.</p>
 <p>声明变量是默认 <em>只读</em> 有原因的. 在更大的程序中,很难跟踪写入的地方. 所以 Rust 能够明确地表现出类似于可变性 ('写入能力') 的东西. 语言中有很多聪明,但它试图不隐藏任何东西.</p>
-<p>Rug既是静态类型又是强类型的,它们通常是混淆的,但是考虑 C (静态但弱类型) 和 Python  (动态但强类型) . 在静态类型中,类型在编译时是已知的,而动态类型仅在运行时知道.</p>
+<p>Rust既是静态类型又是强类型的,它们通常是混淆的,但是考虑 C (静态但弱类型) 和 Python  (动态但强类型) . 在静态类型中,类型在编译时是已知的,而动态类型仅在运行时知道.</p>
 <p>然而,此刻,它感觉像是 rust 了. <em>躲藏{hiding}</em> 那些你的类型. 究竟是什么类型? <code>i</code>? 编译器可以从0开始, <em>类型推断</em> 并提出<code>i32</code> (四字节有符号整数) .</p>
 <p>让我们做一个改变<code>0</code>到<code>0.0</code>. 然后我们得到错误:</p>
 <pre><code>error[E0277]: the trait bound `{float}: std::ops::AddAssign&lt;{integer}&gt;` is not satisfied
@@ -263,8 +263,8 @@ fn main() {
   |
 </code></pre>
 <p>好了,蜜月结束了: 这意味着什么? 每个操作符 (像 <code>+=</code> ) 对应 <em>特质{trait}</em> 而这是一个抽象的接口,必须为每种具体的类型来实现. 稍后我们将详细地处理 trait ,但是这里您需要知道的是<code>附加赋值{AddAssign}</code>实现了该名称<code>+=</code>运算符的 trait ,错误是说浮点数没有实现整数的<code>+=</code>运算符.  (运算符 trait 的完整列表) <a href="https://doc.rust-lang.org/std/ops/index.html">在这里</a>)</p>
-<p>同样,Rust喜欢显式, 它不会默默地把那个整数转换成一个浮标.</p>
-<p>我们必须 <em>铸造{cast}</em> 这个值明显变成一个浮点值.</p>
+<p>同样,Rust喜欢显式, 它不会默默地把那个整数转换成一个浮点数.</p>
+<p>我们必须显式地将该值 <em>转换{cast}</em> 为浮点数.</p>
 <pre><pre class="playpen"><code class="language-rust">// add3.rs
 fn main() {
     let mut sum = 0.0;
