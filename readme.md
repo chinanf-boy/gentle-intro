@@ -1,4 +1,7 @@
-## 温柔的介绍
+## 温柔的介绍 [![translate-svg]][translate-list]
+
+[translate-svg]: http://llever.com/translate.svg
+[translate-list]: https://github.com/chinanf-boy/chinese-translate-list
 
 对 `rust` 的 温柔 介绍 「翻译 」
 
