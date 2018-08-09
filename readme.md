@@ -1,4 +1,7 @@
-## 温柔的介绍
+## 温柔的介绍 [![translate-svg]][translate-list]
+
+[translate-svg]: http://llever.com/translate.svg
+[translate-list]: https://github.com/chinanf-boy/chinese-translate-list
 
 对 `rust` 的 温柔 介绍 「翻译 」
 
@@ -8,9 +11,17 @@
 
 > 欢迎 `Issue/Pull` ✋
 
-## 校对
+## 校对✔
 
-> `src/` 下 `所有 *.zh.md` 文件是翻译, 还没校对
+欢迎 \`Issue\` 和 \`Pull\` ❤️, 最好 \`Pull\` 👏
+
+|翻译的原文|与日期|原文更新|更多
+---|---|---|---
+[commit]|2018 4.18|![last commit][last]|[中文翻译][more]
+
+[commit]:  https://github.com/stevedonovan/gentle-intro/tree/4885a0615a48f1a736f88e71b9e5e3cba887c63c
+[last]: https://img.shields.io/github/last-commit/stevedonovan/gentle-intro.svg
+[more]: https://github.com/chinanf-boy/chinese-translate-list
 
 - [x] [0.介绍](./src/readme.zh.md)
 - [x] [1.基本](./src/1-basics.zh.md)
@@ -25,6 +36,11 @@
 - [x] [10.痛点](./src/pain-points.zh.md)
 
 > // ...
+
+## 生活
+
+[help me live , live need money 💰](https://github.com/chinanf-boy/live-need-money)
+
 
 ## dev
 
