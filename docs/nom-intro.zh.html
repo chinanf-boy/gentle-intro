@@ -1,144 +1,168 @@
 <!DOCTYPE HTML>
 <html lang="en" class="sidebar-visible no-js">
-    <head>
-        <!-- Book generated using mdBook -->
-        <meta charset="UTF-8">
-        <title>用nom解析 - Rust 的绅士介绍</title>
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust语言，标准库和生态系统介绍">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
 
-        <base href="">
+<head>
+    <!-- Book generated using mdBook -->
+    <meta charset="UTF-8">
+    <title>用nom解析 - Rust 的绅士介绍</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta name="description" content="Rust语言，标准库和生态系统介绍">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ffffff" />
 
-        <link rel="stylesheet" href="book.css">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="favicon.png">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/chrome.css">
+    <link rel="stylesheet" href="css/print.css" media="print">
 
-        <link rel="shortcut icon" href="favicon.png">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"
+        rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="_FontAwesome/css/font-awesome.css">
+    <!-- Highlight.js Stylesheets -->
+    <link rel="stylesheet" href="highlight.css">
+    <link rel="stylesheet" href="tomorrow-night.css">
+    <link rel="stylesheet" href="ayu-highlight.css">
 
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+    <!-- Custom theme stylesheets -->
+    
 
-        <!-- Custom theme stylesheets -->
-        
+    
+</head>
 
-        
+<body class="light">
+    <!-- Provide site root to javascript -->
+    <script type="text/javascript">var path_to_root = "";</script>
 
-    </head>
-    <body class="light">
-        <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
-            try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+    <!-- Work around some values being stored in localStorage wrapped in quotes -->
+    <script type="text/javascript">
+        try {
+            var theme = localStorage.getItem('mdbook-theme');
+            var sidebar = localStorage.getItem('mdbook-sidebar');
 
-                if (theme.startsWith('"') && theme.endsWith('"')) {
-                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
-                }
-
-                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
-                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
-                }
-            } catch (e) { }
-        </script>
-
-        <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
-            var theme;
-            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
-            if (theme === null || theme === undefined) { theme = 'light'; }
-            document.body.className = theme;
-            document.querySelector('html').className = theme + ' js';
-        </script>
-
-        <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
-            if (document.body.clientWidth >= 1080) {
-                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
-                sidebar = sidebar || 'visible';
+            if (theme.startsWith('"') && theme.endsWith('"')) {
+                localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
-        </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html" class="active"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
-        </nav>
+            if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+            }
+        } catch (e) { }
+    </script>
 
-        <div id="page-wrapper" class="page-wrapper">
+    <!-- Set the theme before any content is loaded, prevents flash -->
+    <script type="text/javascript">
+        var theme;
+        try { theme = localStorage.getItem('mdbook-theme'); } catch (e) { }
+        if (theme === null || theme === undefined) { theme = 'light'; }
+        document.body.className = theme;
+        document.querySelector('html').className = theme + ' js';
+    </script>
 
-            <div class="page">
-                
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
+    <!-- Hide / unhide sidebar before it is displayed -->
+    <script type="text/javascript">
+        var html = document.querySelector('html');
+        var sidebar = 'hidden';
+        if (document.body.clientWidth >= 1080) {
+            try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch (e) { }
+            sidebar = sidebar || 'visible';
+        }
+        html.classList.remove('sidebar-visible');
+        html.classList.add("sidebar-" + sidebar);
+    </script>
 
-                        <h1 class="menu-title">Rust 的绅士介绍</h1> 
+    <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+        <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html" class="active"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
+    </nav>
 
+    <div id="page-wrapper" class="page-wrapper">
+
+        <div class="page">
+            
+            <div id="menu-bar" class="menu-bar">
+                <div id="menu-bar-sticky-container">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents"
+                            aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <!-- START - Rust Cookbook customization -->
+                        <button id="edit-button" class="icon-button" type="button" title="Fork and edit" aria-label="Fork and edit"
+                            aria-haspopup="true" aria-expanded="false" aria-controls="edit">
+                            <i class="fa fa-edit">Edit</i>
+                        </button>
+                        <!-- END - Rust Cookbook customization -->
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme"
+                            aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)"
+                            aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Rust 的绅士介绍</h1>
+                    
                         <div class="right-buttons">
                             <a href="print.html" title="Print this book" aria-label="Print this book">
                                 <i id="print-button" class="fa fa-print"></i>
                             </a>
+                            
                         </div>
                     </div>
                 </div>
 
-                
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
-                    </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
-                        </ul>
-                    </div>
+            
+            <div id="search-wrapper" class="hidden">
+                <form id="searchbar-outer" class="searchbar-outer">
+                    <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..."
+                        aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                </form>
+                <div id="searchresults-outer" class="searchresults-outer hidden">
+                    <div id="searchresults-header" class="searchresults-header"></div>
+                    <ul id="searchresults">
+                    </ul>
                 </div>
-                
+            </div>
+            
 
-                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
-                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
-                    });
-                </script>
+            <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+            <script type="text/javascript">
+                document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                Array.from(document.querySelectorAll('#sidebar a')).forEach(function (link) {
+                    link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                });
+            </script>
 
-                <div id="content" class="content">
-                    <main>
-                        <a class="header" href="nom-intro.zh.html#a用-nom-解析文本" id="a用-nom-解析文本"><h2>用 nom 解析文本</h2></a>
+            <!-- // START - Rust Cookbook customization -->
+            <script>
+                document.getElementById("edit-button").addEventListener("click", function () {
+                    var editWindow = window.open("https://github.com/chinanf-boy/gentle-intro/edit/master/src/nom-intro.zh.md");
+                });</script>
+            <!-- // END - Rust Cookbook customization -->
+
+            <div id="content" class="content">
+                <main>
+                    <a class="header" href="#a用-nom-解析文本" id="a用-nom-解析文本"><h2>用 nom 解析文本</h2></a>
 <p><a href="https://github.com/Geal/nom">nom</a>,<a href="https://docs.rs/nom"> (在这里记录) </a>是Rust的解析器库,它非常值得初次投资.</p>
 <p>如果你必须解析一个已知的数据格式,比如CSV或者JSON,那么最好使用一个专门的类库<a href="https://github.com/BurntSushi/rust-csv">Rust CSV</a>或者讨论的JSON库<a href="4-modules.html#cargo">第4节</a>.</p>
 <p>同样,对于配置文件使用专用的解析器<a href="https://docs.rs/rust-ini/0.10.0/ini/">ini</a>要么<a href="http://alexcrichton.com/toml-rs/toml/index.html">toml</a>.  (最后一个特别酷,因为它与Serde框架结合在一起,就像我们看到的一样<a href="https://docs.rs/serde_json">serde_json</a>.</p>
 <p>但是如果文本不规则,或者某种格式化,那么你需要扫描那些文本而不写很多乏味的字符串处理代码. 建议的去往往是<a href="https://github.com/rust-lang/regex">正则表达式</a>,但充分参与时,正则表达式可能令人沮丧地不透明. nom 提供了一种解析文本的方法,它可以通过组合更简单的解析器来构建. 例如,正则表达式有其局限性<a href="http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags">使用正则表达式来解析HTML</a>但是你 <em>可以</em> 使用nom解析HTML. 如果你有兴趣编写自己的编程语言,nom是一个很好的地方,你可以从这条艰难的道路开始.</p>
-<p>有一些用于学习nom的优秀教程,但我想从 hello-world 级开始建立一些初步的熟悉性. 您需要了解的基本知识 - 首先,nom一直是宏,其次,nom倾向于使用 slices ,而不是字符串. 首先意味着你必须特别小心才能获得nom表达式,因为错误信息不会很友善. 第二种意思是nom可以用于 <em>任何</em> 数据格式,而不仅仅是文本. 人们使用nom解码二进制协议和文件头. 它也可以在UTF-8以外的编码中使用&quot;文本&quot;.</p>
+<p>有一些用于学习nom的优秀教程,但我想从 hello-world 级开始建立一些初步的熟悉性. 您需要了解的基本知识 - 首先,nom一直是宏,其次,nom倾向于使用 slices ,而不是字符串. 首先意味着你必须特别小心才能获得nom表达式,因为错误信息不会很友善. 第二种意思是nom可以用于 <em>任何</em> 数据格式,而不仅仅是文本. 人们使用nom解码二进制协议和文件头. 它也可以在UTF-8以外的编码中使用”文本”.</p>
 <p>nom的最新版本与字符串切片一起工作良好,但您需要使用以其结尾的宏<code>_s</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">#[macro_use]
 extern crate nom;
@@ -154,9 +178,9 @@ fn main() {
 // Done(&quot; there&quot;, &quot;hi&quot;)
 </code></pre></pre>
 <p>该<code>named!</code>宏创建一些输入类型的函数 (<code>&amp;[u8]</code>默认情况下) 并将第二个类型返回到尖括号中. <code>tag_s!</code>匹配字符流中的文字字符串,其值是表示该文字的字符串片段.  (如果你想与之合作<code>&amp;[u8]</code>然后使用<code>tag!</code>宏) .</p>
-<p>我们称之为定义的解析器<code>get_greeting</code>与<code>&amp;str</code>并找回一个<a href="http://rust.unhandledexpression.com/Nom/enum.IResult.html">IResult</a>事实上,我们恢复了匹配值. 看看&quot; there&quot; - 这是匹配后剩下的字符串切片.</p>
+<p>我们称之为定义的解析器<code>get_greeting</code>与<code>&amp;str</code>并找回一个<a href="http://rust.unhandledexpression.com/Nom/enum.IResult.html">IResult</a>事实上,我们恢复了匹配值. 看看” there” - 这是匹配后剩下的字符串切片.</p>
 <p>我们想忽略空白.</p>
-<p>通过只是包装的<code>tag!</code>在<code>ws!</code>我们可以在空格,制表符或换行符的任何位置匹配&quot;hi&quot;:</p>
+<p>通过只是包装的<code>tag!</code>在<code>ws!</code>我们可以在空格,制表符或换行符的任何位置匹配”hi”:</p>
 <pre><pre class="playpen"><code class="language-rust">named!(get_greeting&lt;&amp;str,&amp;str&gt;,
     ws!(tag_s!(&quot;hi&quot;))
 );
@@ -167,9 +191,9 @@ fn main() {
 }
 // Done(&quot;there&quot;, &quot;hi&quot;)
 </code></pre></pre>
-<p>结果就像之前的&quot;hi&quot;,剩下的字符串是&quot;there&quot;! 空格已被跳过.</p>
-<p>&quot;hi&quot;很好地匹配,尽管这还不是很有用.</p>
-<p>让我们匹配或&quot;hi&quot;或&quot;bye&quot;. 该<code>alt!</code>宏 (&quot;备用&quot;) 采用分隔符表达式分隔<code>|</code>并匹配 <em>任何</em> 其中. 请注意,您可以在这里使用空格来使解析器函数更易于阅读:</p>
+<p>结果就像之前的”hi”,剩下的字符串是”there”! 空格已被跳过.</p>
+<p>“hi”很好地匹配,尽管这还不是很有用.</p>
+<p>让我们匹配或”hi”或”bye”. 该<code>alt!</code>宏 (”备用”) 采用分隔符表达式分隔<code>|</code>并匹配 <em>任何</em> 其中. 请注意,您可以在这里使用空格来使解析器函数更易于阅读:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -183,7 +207,7 @@ println!(&quot;{:?}&quot;, get_greeting(&quot;  hola &quot;));
 // Done(&quot;&quot;, &quot;bye&quot;)
 // Error(Alt)
 #}</code></pre></pre>
-<p>最后一场比赛失败了,因为没有其他选择匹配&quot;hola&quot;.</p>
+<p>最后一场比赛失败了,因为没有其他选择匹配”hola”.</p>
 <p>显然我们需要了解<code>IResult</code>类型多点,但首先让我们比较这与正则表达式的解决方案:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -193,10 +217,10 @@ println!(&quot;{:?}&quot;, get_greeting(&quot;  hola &quot;));
     println!(&quot;{:?}&quot;,caps);
 // Captures({0: Some(&quot; hi &quot;), 1: Some(&quot;hi&quot;)})
 #}</code></pre></pre>
-<p>正则表达式肯定更多 <em>紧凑{compact}</em>!我们需要将'()'放在由'|'分隔的两种可能性中, 所以我们会 <em>捕获</em> greeting 或者没有. 第一个结果是整个字符串,第二个是匹配的捕获. ('|'是正则表达式中的所谓'交替{alternation}'操作符,这是该动机的动机<code>alt!</code>宏语法. )</p>
-<p>但这是一个非常简单的正则表达式,它们很快就会变得复杂. 作为一种文字迷你语言,你必须逃避重要的人物如<code>*</code>和<code>(</code>. 如果我想匹配&quot;(hi)&quot;或&quot;(bye)&quot;,则正则表达式变为 <code>\s*\((hi|bye)\)\s*</code> 但是nom解析器只是变成了<code>alt!(tag_s!(&quot;(hi)&quot;) | tag_s!(&quot;(bye)&quot;))</code>.</p>
-<p>这也是一个重量级的依赖. 在这款相当微弱的i5笔记本电脑上,nom的例子大约需要0.55秒的时间进行编译,这并不比&quot;Hello world&quot;多得多. 但正则表达式的例子大约需要0.90s. nom示例的剥离版本生成可执行文件约为0.3Mb (与静态链接的Rust程序一样小) ,而正则表达式为0.8Mb.</p>
-<a class="header" href="nom-intro.zh.html#a一个nom解析器返回" id="a一个nom解析器返回"><h2>一个nom解析器返回</h2></a>
+<p>正则表达式肯定更多 <em>紧凑{compact}</em>!我们需要将’()’放在由’|’分隔的两种可能性中, 所以我们会 <em>捕获</em> greeting 或者没有. 第一个结果是整个字符串,第二个是匹配的捕获. (’|’是正则表达式中的所谓’交替{alternation}’操作符,这是该动机的动机<code>alt!</code>宏语法. )</p>
+<p>但这是一个非常简单的正则表达式,它们很快就会变得复杂. 作为一种文字迷你语言,你必须逃避重要的人物如<code>*</code>和<code>(</code>. 如果我想匹配”(hi)”或”(bye)”,则正则表达式变为 <code>\s*\((hi|bye)\)\s*</code> 但是nom解析器只是变成了<code>alt!(tag_s!(&quot;(hi)&quot;) | tag_s!(&quot;(bye)&quot;))</code>.</p>
+<p>这也是一个重量级的依赖. 在这款相当微弱的i5笔记本电脑上,nom的例子大约需要0.55秒的时间进行编译,这并不比”Hello world”多得多. 但正则表达式的例子大约需要0.90s. nom示例的剥离版本生成可执行文件约为0.3Mb (与静态链接的Rust程序一样小) ,而正则表达式为0.8Mb.</p>
+<a class="header" href="#a一个nom解析器返回" id="a一个nom解析器返回"><h2>一个nom解析器返回</h2></a>
 <p><a href="http://rust.unhandledexpression.com/nom/enum.IResult.html">IResult</a>与标准有一个有趣的区别<code>Result</code>类型 - 有三种可能性:</p>
 <ul>
 <li><code>Done</code>- 成功 - 您将得到结果和剩余的字节</li>
@@ -238,8 +262,8 @@ fn main() {
 // result Ok(&quot;bye&quot;)
 </code></pre></pre>
 <p>解析器返回任何未解析的文本,并且能够指示它们没有足够的输入字符来决定,对于 流{stream} 解析非常有用. 但通常<code>to_result</code>是你的朋友.</p>
-<a class="header" href="nom-intro.zh.html#a合并解析器" id="a合并解析器"><h2>合并解析器</h2></a>
-<p>让我们继续问候示例,并设想问候语包含&quot;hi&quot;或&quot;bye&quot;,再加上一个名字. <code>Nom::alpha</code>匹配一系列字母字符. 该<code>pair!</code>宏将收集匹配两个解析器作为元组的结果:</p>
+<a class="header" href="#a合并解析器" id="a合并解析器"><h2>合并解析器</h2></a>
+<p>让我们继续问候示例,并设想问候语包含”hi”或”bye”,再加上一个名字. <code>Nom::alpha</code>匹配一系列字母字符. 该<code>pair!</code>宏将收集匹配两个解析器作为元组的结果:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -269,8 +293,8 @@ fn main() {
 // result Ok((&quot;hi&quot;, Some(&quot;Bob&quot;)))
 // result Ok((&quot;bye&quot;, None))
 #}</code></pre></pre>
-<p>请注意,将现有的问候语解析器与分析器合并起来很简单,然后很容易使该名称成为可选项. 这是nom的强大力量,这也是它被称为&quot;解析器组合库&quot;的原因. 您可以从更简单的解析器构建复杂的解析器,您可以单独测试它们.  (在这一点上,等价的正则表达式开始看起来像一个Perl程序: 正则表达式不能很好地结合. )</p>
-<p>但是,我们还没有回家并且干燥!<code>full_greeting(&quot; bye&quot;)</code>将会失败<code>不完全</code>错误. nom知 道&quot;bye&quot;后面可能会有一个名字,并希望我们给它更多的数据. 这是怎么一个 <em>流</em> 解析器需要工作,所以你可以按块填充文件块,但是在这里我们需要告诉nom输入已完成.</p>
+<p>请注意,将现有的问候语解析器与分析器合并起来很简单,然后很容易使该名称成为可选项. 这是nom的强大力量,这也是它被称为”解析器组合库”的原因. 您可以从更简单的解析器构建复杂的解析器,您可以单独测试它们.  (在这一点上,等价的正则表达式开始看起来像一个Perl程序: 正则表达式不能很好地结合. )</p>
+<p>但是,我们还没有回家并且干燥!<code>full_greeting(&quot; bye&quot;)</code>将会失败<code>不完全</code>错误. nom知 道”bye”后面可能会有一个名字,并希望我们给它更多的数据. 这是怎么一个 <em>流</em> 解析器需要工作,所以你可以按块填充文件块,但是在这里我们需要告诉nom输入已完成.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -284,7 +308,7 @@ fn main() {
     println!(&quot;result {:?}&quot;, full_greeting(&quot; bye &quot;).to_result());
 // result Ok((&quot;bye&quot;, None))
 #}</code></pre></pre>
-<a class="header" href="nom-intro.zh.html#a分析数字" id="a分析数字"><h2>分析数字</h2></a>
+<a class="header" href="#a分析数字" id="a分析数字"><h2>分析数字</h2></a>
 <p>nom提供了一个功能<code>数字{digit}</code>它与一系列数字相匹配. 所以我们使用<code>map!</code>,将字符串转换为整数,并返回完整的<code>Result</code>类型.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -340,7 +364,7 @@ named!(maybe_signed_digits&lt;&amp;str,&amp;str&gt;,
 println!(&quot;signed {:?}&quot;, maybe_signed_digits(&quot;+12&quot;));
 // signed Done(&quot;&quot;, &quot;+12&quot;)
 #}</code></pre></pre>
-<p>使用这种技术,我们可以识别浮点数. 我们再次映射到所有这些匹配的字节片的字符串片. <code>tuple!</code>是泛化的<code>pair!</code>,尽管我们对这里生成的元组不感兴趣. <code>complete!</code>是需要解决我们与不完整的问候时使用的相同问题 - &quot;12&quot;是没有可选浮点部分的有效数字.</p>
+<p>使用这种技术,我们可以识别浮点数. 我们再次映射到所有这些匹配的字节片的字符串片. <code>tuple!</code>是泛化的<code>pair!</code>,尽管我们对这里生成的元组不感兴趣. <code>complete!</code>是需要解决我们与不完整的问候时使用的相同问题 - “12”是没有可选浮点部分的有效数字.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -387,9 +411,9 @@ nom_eq!(floating_point, &quot;2.0e-6&quot;);
     );
 #}</code></pre></pre>
 <p>这是解析器组合器对正则表达式的强大优势. 这是分而治之的经典编程策略. 通过</p>
-<a class="header" href="nom-intro.zh.html#a多个匹配进行操作" id="a多个匹配进行操作"><h2>多个匹配进行操作</h2></a>
+<a class="header" href="#a多个匹配进行操作" id="a多个匹配进行操作"><h2>多个匹配进行操作</h2></a>
 <p>我们见面了<code>pairs!</code>和<code>tuple!</code>它将固定数量的匹配捕获为Rust元组.</p>
-<p>还有<code>many0</code>和<code>many1</code>- 他们都捕获无限数量的匹配作为向量. 不同的是,第一个可能会捕获&quot;零或多个&quot;,第二个&quot;一个或多个&quot; (如正则表达式之间的差异<code>*</code>与<code>+</code>) 所以<code>many1!(ws!(float64))</code>会解析&quot;1 2 3&quot;<code>vec![1.0,2.0,3.0]</code>,但会在空字符串上失败.</p>
+<p>还有<code>many0</code>和<code>many1</code>- 他们都捕获无限数量的匹配作为向量. 不同的是,第一个可能会捕获”零或多个”,第二个”一个或多个” (如正则表达式之间的差异<code>*</code>与<code>+</code>) 所以<code>many1!(ws!(float64))</code>会解析”1 2 3”<code>vec![1.0,2.0,3.0]</code>,但会在空字符串上失败.</p>
 <p><code>fold_many0</code>是一个 <em>减少{reducing}</em> 操作. 使用二元运算符将匹配值组合为单个值. 例如,这就是 Rust人 以前如何对迭代器进行求和<code>sum</code>加入;这个折叠从一个初始值 (这里是零) 开始 <em>累加器</em> 并保持使用<code>+</code>该累加器的值.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -454,7 +478,7 @@ nom_eq!(floating_point, &quot;2.0e-6&quot;);
 #}</code></pre></pre>
 <p>我们对该标签的值不感兴趣 (它只能是逗号) ,但我们将两个浮点值分配给用于构建结构的临时值.</p>
 <p>最后的代码可以是任何Rust表达式.</p>
-<a class="header" href="nom-intro.zh.html#a解析算术表达式" id="a解析算术表达式"><h2>解析算术表达式</h2></a>
+<a class="header" href="#a解析算术表达式" id="a解析算术表达式"><h2>解析算术表达式</h2></a>
 <p>随着必要的背景建立,我们可以做简单的算术表达式.</p>
 <p>这是真正无法用正则表达式完成的一个很好的例子.</p>
 <p>这个想法是从下往上建立表达式.</p>
@@ -539,74 +563,84 @@ extern crate approx;
 #}</code></pre></pre>
 <p>凉爽的是现在定义了表达式 <em>递归</em> 在表达方面!</p>
 <p>特别的魔力<code>delimited!</code>是括号可以嵌套 -  nom确保括号匹配.</p>
-<p>我们现在已经超越了正则表达式的能力,0.5Mb的被剥离可执行文件仍然是&quot;hello world&quot;正则表达式程序的一半.</p>
+<p>我们现在已经超越了正则表达式的能力,0.5Mb的被剥离可执行文件仍然是”hello world”正则表达式程序的一半.</p>
 
-                    </main>
+                </main>
 
-                    <nav class="nav-wrapper" aria-label="Page navigation">
-                        <!-- Mobile navigation buttons -->
-                        
-                            <a rel="prev" href="object-orientation.zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
-                            </a>
-                        
-
-                        
-                            <a rel="next" href="pain-points.zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        
-
-                        <div style="clear: both"></div>
-                    </nav>
-                </div>
-            </div>
-
-            <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                
-                    <a href="object-orientation.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                <nav class="nav-wrapper" aria-label="Page navigation">
+                    <!-- Mobile navigation buttons -->
+                    
+                    <a rel="prev" href="object-orientation.zh.html" class="mobile-nav-chapters previous" title="Previous chapter"
+                        aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                
+                    
 
-                
-                    <a href="pain-points.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    
+                    <a rel="next" href="pain-points.zh.html" class="mobile-nav-chapters next" title="Next chapter"
+                        aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
-                
-            </nav>
+                    
 
+                    <div style="clear: both"></div>
+                </nav>
+            </div>
         </div>
 
-        
+        <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            
+            <a href="object-orientation.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter"
+                aria-keyshortcuts="Left">
+                <i class="fa fa-angle-left"></i>
+            </a>
+            
 
-        
+            
+            <a href="pain-points.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter"
+                aria-keyshortcuts="Right">
+                <i class="fa fa-angle-right"></i>
+            </a>
+            
+        </nav>
 
-        
+    </div>
 
-        
-        <script src="ace.js" type="text/javascript" charset="utf-8"></script>
-        <script src="editor.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mode-rust.js" type="text/javascript" charset="utf-8"></script>
-        <script src="theme-dawn.js" type="text/javascript" charset="utf-8"></script>
-        <script src="theme-tomorrow_night.js" type="text/javascript" charset="utf-8"></script>
-        
+    
 
-        
-        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
-        
-        
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        
+    
+    <!-- Google Analytics Tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128555056-1"></script>
+    
+    <script type="text/javascript">
+        var localAddrs = ["localhost", "127.0.0.1", ""];
+        if (localAddrs.indexOf(document.location.hostname) === -1) {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
 
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+            gtag('config', 'UA-128555056-1');
+        }
+    </script>
+    
 
-        <!-- Custom JS scripts -->
-        
+    
 
-    </body>
+    
+    <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+    
+
+    <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+    <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+    <!-- Custom JS scripts -->
+    
+
+    
+
+</body>
+
 </html>

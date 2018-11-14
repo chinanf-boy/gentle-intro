@@ -1,140 +1,164 @@
 <!DOCTYPE HTML>
 <html lang="en" class="sidebar-visible no-js">
-    <head>
-        <!-- Book generated using mdBook -->
-        <meta charset="UTF-8">
-        <title>模块和货物 - Rust 的绅士介绍</title>
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust语言，标准库和生态系统介绍">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
 
-        <base href="">
+<head>
+    <!-- Book generated using mdBook -->
+    <meta charset="UTF-8">
+    <title>模块和货物 - Rust 的绅士介绍</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta name="description" content="Rust语言，标准库和生态系统介绍">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ffffff" />
 
-        <link rel="stylesheet" href="book.css">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="favicon.png">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/chrome.css">
+    <link rel="stylesheet" href="css/print.css" media="print">
 
-        <link rel="shortcut icon" href="favicon.png">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"
+        rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="_FontAwesome/css/font-awesome.css">
+    <!-- Highlight.js Stylesheets -->
+    <link rel="stylesheet" href="highlight.css">
+    <link rel="stylesheet" href="tomorrow-night.css">
+    <link rel="stylesheet" href="ayu-highlight.css">
 
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+    <!-- Custom theme stylesheets -->
+    
 
-        <!-- Custom theme stylesheets -->
-        
+    
+</head>
 
-        
+<body class="light">
+    <!-- Provide site root to javascript -->
+    <script type="text/javascript">var path_to_root = "";</script>
 
-    </head>
-    <body class="light">
-        <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
-            try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+    <!-- Work around some values being stored in localStorage wrapped in quotes -->
+    <script type="text/javascript">
+        try {
+            var theme = localStorage.getItem('mdbook-theme');
+            var sidebar = localStorage.getItem('mdbook-sidebar');
 
-                if (theme.startsWith('"') && theme.endsWith('"')) {
-                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
-                }
-
-                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
-                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
-                }
-            } catch (e) { }
-        </script>
-
-        <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
-            var theme;
-            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
-            if (theme === null || theme === undefined) { theme = 'light'; }
-            document.body.className = theme;
-            document.querySelector('html').className = theme + ' js';
-        </script>
-
-        <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
-            if (document.body.clientWidth >= 1080) {
-                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
-                sidebar = sidebar || 'visible';
+            if (theme.startsWith('"') && theme.endsWith('"')) {
+                localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
-        </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html" class="active"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
-        </nav>
+            if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+            }
+        } catch (e) { }
+    </script>
 
-        <div id="page-wrapper" class="page-wrapper">
+    <!-- Set the theme before any content is loaded, prevents flash -->
+    <script type="text/javascript">
+        var theme;
+        try { theme = localStorage.getItem('mdbook-theme'); } catch (e) { }
+        if (theme === null || theme === undefined) { theme = 'light'; }
+        document.body.className = theme;
+        document.querySelector('html').className = theme + ' js';
+    </script>
 
-            <div class="page">
-                
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
+    <!-- Hide / unhide sidebar before it is displayed -->
+    <script type="text/javascript">
+        var html = document.querySelector('html');
+        var sidebar = 'hidden';
+        if (document.body.clientWidth >= 1080) {
+            try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch (e) { }
+            sidebar = sidebar || 'visible';
+        }
+        html.classList.remove('sidebar-visible');
+        html.classList.add("sidebar-" + sidebar);
+    </script>
 
-                        <h1 class="menu-title">Rust 的绅士介绍</h1> 
+    <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+        <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html" class="active"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
+    </nav>
 
+    <div id="page-wrapper" class="page-wrapper">
+
+        <div class="page">
+            
+            <div id="menu-bar" class="menu-bar">
+                <div id="menu-bar-sticky-container">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents"
+                            aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <!-- START - Rust Cookbook customization -->
+                        <button id="edit-button" class="icon-button" type="button" title="Fork and edit" aria-label="Fork and edit"
+                            aria-haspopup="true" aria-expanded="false" aria-controls="edit">
+                            <i class="fa fa-edit">Edit</i>
+                        </button>
+                        <!-- END - Rust Cookbook customization -->
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme"
+                            aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)"
+                            aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Rust 的绅士介绍</h1>
+                    
                         <div class="right-buttons">
                             <a href="print.html" title="Print this book" aria-label="Print this book">
                                 <i id="print-button" class="fa fa-print"></i>
                             </a>
+                            
                         </div>
                     </div>
                 </div>
 
-                
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
-                    </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
-                        </ul>
-                    </div>
+            
+            <div id="search-wrapper" class="hidden">
+                <form id="searchbar-outer" class="searchbar-outer">
+                    <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..."
+                        aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                </form>
+                <div id="searchresults-outer" class="searchresults-outer hidden">
+                    <div id="searchresults-header" class="searchresults-header"></div>
+                    <ul id="searchresults">
+                    </ul>
                 </div>
-                
+            </div>
+            
 
-                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
-                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
-                    });
-                </script>
+            <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+            <script type="text/javascript">
+                document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                Array.from(document.querySelectorAll('#sidebar a')).forEach(function (link) {
+                    link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                });
+            </script>
 
-                <div id="content" class="content">
-                    <main>
-                        <a class="header" href="4-modules.zh.html#a模块和cargo" id="a模块和cargo"><h1>模块和Cargo</h1></a>
-<a class="header" href="4-modules.zh.html#a模块" id="a模块"><h2>模块</h2></a>
+            <!-- // START - Rust Cookbook customization -->
+            <script>
+                document.getElementById("edit-button").addEventListener("click", function () {
+                    var editWindow = window.open("https://github.com/chinanf-boy/gentle-intro/edit/master/src/4-modules.zh.md");
+                });</script>
+            <!-- // END - Rust Cookbook customization -->
+
+            <div id="content" class="content">
+                <main>
+                    <a class="header" href="#a模块和cargo" id="a模块和cargo"><h1>模块和Cargo</h1></a>
+<a class="header" href="#a模块" id="a模块"><h2>模块</h2></a>
 <p>随着程序变得越来越大,有必要将它们分散到多个文件中,并将函数和类型放在不同的 <em>命名空间</em>. 这两种解决方案都是Rust解决方案 <em>模块</em>.</p>
 <p>C 做的是第一个,而不是第二个,所以你最终会遇到类似的可怕名字<code>primitive_display_set_width</code>等等. 实际的文件名可以任意命名.</p>
 <p>Rust 在全名看起来像<code>primitive::display::set_width</code>,之后说<code>use primitive::display</code>你可以把它称为<code>display::set_width</code>. 你甚至可以说<code>use primitive::display::set_width</code>然后只能用<code>set_width</code>, 但这并不是一个好主意. <code>rustc</code>不会混淆,但是 <em>您</em> 稍后可能会感到困惑. 但为了这个工作,文件名必须遵循一些简单的规则.</p>
@@ -151,7 +175,7 @@ fn main(){
     println!(&quot;{:?}&quot;, f);
 }
 </code></pre></pre>
-<p>但它仍然不太正确 - 我们得到'struct Foo is 私人{private}'. 为了解决这个问题,我们需要<code>pub</code>要导出的关键字<code>Foo</code>. 然后错误更改为'结构foo::Foo 字段是私人的',所以放了<code>pub</code>后, 出口<code>Foo::s</code>. 然后事情就会奏效.</p>
+<p>但它仍然不太正确 - 我们得到’struct Foo is 私人{private}’. 为了解决这个问题,我们需要<code>pub</code>要导出的关键字<code>Foo</code>. 然后错误更改为’结构foo::Foo 字段是私人的’,所以放了<code>pub</code>后, 出口<code>Foo::s</code>. 然后事情就会奏效.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -290,8 +314,8 @@ pub mod bar;
 }
 #}</code></pre></pre>
 <p>重要的一点是这里没有 <em>单独编译</em> . 主程序及其模块文件将每次重新编译. 尽管如此,较大的程序需要花费相当长的时间, 当然<code>rustc</code>在渐进式编译中越来越好.</p>
-<a class="header" href="4-modules.zh.html#crates" id="crates"><h2>Crates</h2></a>
-<p>Rust 的&quot;编译单位&quot;是 <em>箱{crate}</em> ,它是一个可执行文件或一个库.</p>
+<a class="header" href="#crates" id="crates"><h2>Crates</h2></a>
+<p>Rust 的”编译单位”是 <em>箱{crate}</em> ,它是一个可执行文件或一个库.</p>
 <p>要分别编译上一节中的文件,请先构建<code>foo.rs</code>作为 rust <em>静态库</em> 箱:</p>
 <pre><code>src$ rustc foo.rs --crate-type=lib
 src$ ls -l libfoo.rlib
@@ -309,7 +333,7 @@ fn main(){
     println!(&quot;{:?}&quot;, f);
 }
 </code></pre>
-<p>人们已经开始吟唱'Cargo!Cargo!' 让我来证明这个构建 Rust 的快速. 我是'Know Thy Toolchain'的忠实信徒, 当我们看着使用 Cargo 管理项目时,这会减少你需要学习的新魔法数量. 模块是基本的语言功能,可用于 Cargo 项目之外.</p>
+<p>人们已经开始吟唱’Cargo!Cargo!’ 让我来证明这个构建 Rust 的快速. 我是’Know Thy Toolchain’的忠实信徒, 当我们看着使用 Cargo 管理项目时,这会减少你需要学习的新魔法数量. 模块是基本的语言功能,可用于 Cargo 项目之外.</p>
 <p>现在该理解为什么 Rust 的二进制文件如此之大:</p>
 <pre><code>src$ ls -lh mod4
 -rwxrwxr-x 1 steve steve 3,4M Jan  5 13:39 mod4
@@ -320,7 +344,7 @@ fn main(){
 src$ ls -lh mod4
 -rwxrwxr-x 1 steve steve 300K Jan  5 13:49 mod4
 </code></pre>
-<p>对于如此简单的事情,仍感觉有点大,但是这个程序 <em>静态</em> 链接到 Rust 标准库. 这是一件好事,因为您可以将此可执行文件交给任何具有正确操作系统的人 - 他们不需要&quot;Rust 运行时&quot;.(和<code>rustup</code>甚至可以让你为 其他操作系统和平台 进行交叉编译. )</p>
+<p>对于如此简单的事情,仍感觉有点大,但是这个程序 <em>静态</em> 链接到 Rust 标准库. 这是一件好事,因为您可以将此可执行文件交给任何具有正确操作系统的人 - 他们不需要”Rust 运行时”.(和<code>rustup</code>甚至可以让你为 其他操作系统和平台 进行交叉编译. )</p>
 <p>我们可以 <code>动态-dynamic</code> 链接到 Rust运行时 并获得真正的小:</p>
 <pre><code>src$ rustc -C prefer-dynamic mod4.rs --extern foo=libfoo.rlib
 src$ ls -lh mod4
@@ -331,17 +355,17 @@ src$ ldd mod4
     libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6(0x00007f3cd47aa000)
     /lib64/ld-linux-x86-64.so.2(0x00007f3cd4d72000)
 </code></pre>
-<p>这'找不到 no found'是因为<code>rustup</code>不会全局安装动态库. 至少在 Unix 上 我们可以用我们的快乐方式破解(是的,我知道最好的解决方案是符号链接).</p>
+<p>这’找不到 no found’是因为<code>rustup</code>不会全局安装动态库. 至少在 Unix 上 我们可以用我们的快乐方式破解(是的,我知道最好的解决方案是符号链接).</p>
 <pre><code>src$ export LD_LIBRARY_PATH=~/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib
 src$ ./mod4
 Foo { s: &quot;hello&quot; }
 </code></pre>
 <p>Rust 没有 <em>哲学上</em> 动态链接的问题,与 Go 一样. 只是当每6周有一个稳定版本时,不得不重新编译所有内容. 如果你有一个适合你的稳定版本,那么很酷. 随 着Rust的稳定版本 越来越多地被 OS包管理器控制, 动态链接将变得更加流行.</p>
-<a class="header" href="4-modules.zh.html#cargo" id="cargo"><h2>Cargo</h2></a>
+<a class="header" href="#cargo" id="cargo"><h2>Cargo</h2></a>
 <p>与 Java 或 Python 相比,Rust标准库不是很大,</p>
 <p>虽然功能 比 C 或 C ++ 更强大,但主要依赖于操作系统提供的库.</p>
 <p>但用 <strong>Cargo</strong>访问<a href="https://crates.io">crates.io</a>社区提供的库很简单. Cargo将查找正确的版本并为您下载源代码,并确保下载其他所需的 crate{库/箱} .</p>
-<p>我们来创建一个需要 阅读JSON 的简单程序. 这种数据格式的使用非常广泛,但是对于包含在标准库中的数据格式太专业了. 所以我们初始化一个Cargo项目,使用'--bin',因为默认是创建一个库项目.</p>
+<p>我们来创建一个需要 阅读JSON 的简单程序. 这种数据格式的使用非常广泛,但是对于包含在标准库中的数据格式太专业了. 所以我们初始化一个Cargo项目,使用’--bin’,因为默认是创建一个库项目.</p>
 <pre><code>test$ cargo init --bin test-json
      Created binary(application)project
 test$ cd test-json
@@ -353,7 +377,7 @@ authors = [&quot;Your Name &lt;you@example.org&gt;&quot;]
 
 [dependencies]
 </code></pre>
-<p>使项目依赖于<a href="http://json.rs/doc/json/">JSON crate</a>,编辑'Cargo.toml'文件,如下所示:</p>
+<p>使项目依赖于<a href="http://json.rs/doc/json/">JSON crate</a>,编辑’Cargo.toml’文件,如下所示:</p>
 <pre><code>[dependencies]
 json=&quot;0.11.4&quot;
 </code></pre>
@@ -365,8 +389,8 @@ json=&quot;0.11.4&quot;
    Compiling test-json v0.1.0(file:///home/steve/c/rust/test/test-json)
     Finished debug [unoptimized + debuginfo] target(s)in 1.75 secs
 </code></pre>
-<p>这个项目的主文件已经被 <em>创建</em> , 它是'src'目录中的'main.rs'. 它开始时只是一个'你好世界'的应用程序,所以让它变成一个适当的测试程序.</p>
-<p>请注意非常方便的'原始{raw}'字符串文字 - 否则我们需要转义那些双引号
+<p>这个项目的主文件已经被 <em>创建</em> , 它是’src’目录中的’main.rs’. 它开始时只是一个’你好世界’的应用程序,所以让它变成一个适当的测试程序.</p>
+<p>请注意非常方便的’原始{raw}’字符串文字 - 否则我们需要转义那些双引号
 并以丑陋结束：</p>
 <pre><pre class="playpen"><code class="language-rust">// test-json/src/main.rs
 extern crate json;
@@ -400,7 +424,7 @@ debug Object(Object { store: [(&quot;code&quot;, Number(Number { category: 1, ex
  Array([Short(&quot;awesome&quot;), Short(&quot;easyAPI&quot;), Short(&quot;lowLearningCurve&quot;)]), 0, 0)] }), 0, 0)] })
 display {&quot;code&quot;:200,&quot;success&quot;:true,&quot;payload&quot;:{&quot;features&quot;:[&quot;awesome&quot;,&quot;easyAPI&quot;,&quot;lowLearningCurve&quot;]}}
 </code></pre>
-<p>调试输出 display 了JSON文档的一些内部细节,但一个普通的&quot;{}&quot;,使用了<code>Display</code> trait,从解析的文档重新生成JSON.</p>
+<p>调试输出 display 了JSON文档的一些内部细节,但一个普通的”{}”,使用了<code>Display</code> trait,从解析的文档重新生成JSON.</p>
 <p>我们来探索一下 JSON API. 如果我们无法提取数值,这将毫无用处. 该<code>as_TYPE</code>方法返回<code>Option&lt;TYPE&gt;</code>, 因为我们无法确定该字段是否存在或是否属于正确类型. (见<a href="http://json.rs/doc/json/enum.JsonValue.html">文档JsonValue</a>)</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -420,7 +444,7 @@ display {&quot;code&quot;:200,&quot;success&quot;:true,&quot;payload&quot;:{&quo
     // lowLearningCurve
 #}</code></pre></pre>
 <p><code>features</code>这里是一个<code>JsonValue</code>引用- 它必须是一个引用,否则我们会试图移动一个 <em>值</em> 会脱离 <code>doc : JSON</code>. 这里我们知道它是一个数组,所以<code>members()</code>将返回一个非空的迭代器<code>&amp;JsonValue</code>.</p>
-<p>如果&quot;payload&quot;对象没有&quot;features&quot;键,该怎么办? 那么<code>features</code>将被设置为<code>空值{Null}</code>. 不会有爆炸. 这种便利表达了 JSON 的自由形式,任何东西的本质. 如果结构不匹配,您应该检查收到的任何文档的结构, 并创建自己的错误.</p>
+<p>如果”payload”对象没有”features”键,该怎么办? 那么<code>features</code>将被设置为<code>空值{Null}</code>. 不会有爆炸. 这种便利表达了 JSON 的自由形式,任何东西的本质. 如果结构不匹配,您应该检查收到的任何文档的结构, 并创建自己的错误.</p>
 <p>您可以修改这些结构. 如果我们有<code>let mut doc</code>那么这会做你所期望的:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -450,7 +474,7 @@ display {&quot;code&quot;:200,&quot;success&quot;:true,&quot;payload&quot;:{&quo
 #[macro_use]
 extern crate json;
 #}</code></pre></pre>
-<p>由于 JSON的无定形,动态类型性质 和 Rust的结构化,静态性质之间的不匹配,使用这个 crate 有一个缺点. (自述明确提到'摩擦{friction}')所以如果你 <em>没有</em> 想要将 JSON 映射到 Rust 数据结构,您最终会做很多检查,因为您不能认为接收到的结构与您的结构相匹配! 为此,更好的解决方案是<a href="https://github.com/serde-rs/json">serde_json</a>, 它可以 <em>序列</em> Rust数据结构转换为JSON和 <em>反序列化</em> JSON进入Rust.</p>
+<p>由于 JSON的无定形,动态类型性质 和 Rust的结构化,静态性质之间的不匹配,使用这个 crate 有一个缺点. (自述明确提到’摩擦{friction}’)所以如果你 <em>没有</em> 想要将 JSON 映射到 Rust 数据结构,您最终会做很多检查,因为您不能认为接收到的结构与您的结构相匹配! 为此,更好的解决方案是<a href="https://github.com/serde-rs/json">serde_json</a>, 它可以 <em>序列</em> Rust数据结构转换为JSON和 <em>反序列化</em> JSON进入Rust.</p>
 <p>为此,请创建另一个 Cargo 二进制项目<code>Cargo new --bin test-serde-json</code>,进入<code>test-serde-json</code>目录和编辑<code>Cargo.toml</code>. 像这样编辑它:</p>
 <pre><code>[dependencies]
 serde=&quot;0.9&quot;
@@ -506,9 +530,9 @@ Person {
 <p>如果你从外部来源处理结构良好的JSON (如果需要,可以重新映射字段名称),这显然是最好的解决方案,并为 Rust 程序通过网络与其他程序共享数据提供了一个强大的方法(因为一切都能理解 JSON 这些天). 关于很酷的事情<code>serde</code>(用于SERialization:序列化 DEserialization: 反序列化)是也支持其他文件格式,例如<code>toml</code>,这是 cargo 中常用的配置友好格式. 因此,您的程序可以将.toml文件读入结构中,并将这些结构编写为.json.</p>
 <p>序列化是一项重要的技术,Java 和 Go 存在类似的解决方案 , 但有很大的不同. 在这些语言中,数据的结构可以在 <em>运行时</em> 运用 <em>反射</em> 这里找到,但在这种情况下,序列化代码是在 <em>编译时</em>- 更高效!</p>
 <p>Cargo 被认为是 Rust 生态系统的一大优势,因为它为我们做了很多工作. 否则,我们不得不从 Github 下载这些库,构建为 静态库-crate ,并将它们与程序链接. 这对于 C ++ 项目来说是很痛苦的,如果 Cargo 不存在的话,对于Rust项目来说,这几乎是痛苦的. C ++ 在它的痛苦中有点独特,所以我们应该将它与其他语言的包管理器进行比较. npm(用于JavaScript) 和 pip(用于Python) 为您管理依赖关系和下载, 但分发故事更难,因为程序的用户需要安装 NodeJS 或 Python. 但 Rust 程序与它们的 依赖关系 是静态链接的,所以它们可以在没有外部依赖的情况下再次发给你的好友.</p>
-<a class="header" href="4-modules.zh.html#a更多宝石" id="a更多宝石"><h2>更多宝石</h2></a>
-<p>处理除简单文本以外的任何内容时,正则表达式使您的生活变得更加轻松. 这些通常适用于大多数语言,我将在这里假定对正则表示法有基本的了解. 使用<a href="https://github.com/rust-lang/regex">正则表达式</a>, 把&quot;regex =&quot;0.2.1&quot;'放在&quot;[dependencies]&quot;在您的 Cargo.toml.</p>
-<p>我们将再次使用&quot;raw strings&quot;,以便反斜杠不必转义. 在中文,这个正则表达式意思是 &quot;完全匹配两个数字,接字符':',然后是任意数字. 捕获两组数字:</p>
+<a class="header" href="#a更多宝石" id="a更多宝石"><h2>更多宝石</h2></a>
+<p>处理除简单文本以外的任何内容时,正则表达式使您的生活变得更加轻松. 这些通常适用于大多数语言,我将在这里假定对正则表示法有基本的了解. 使用<a href="https://github.com/rust-lang/regex">正则表达式</a>, 把”regex =”0.2.1”’放在”[dependencies]”在您的 Cargo.toml.</p>
+<p>我们将再次使用”raw strings”,以便反斜杠不必转义. 在中文,这个正则表达式意思是 “完全匹配两个数字,接字符’:’,然后是任意数字. 捕获两组数字:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -523,7 +547,7 @@ println!(&quot;{:?}&quot;, re.captures(&quot;10:x23&quot;));
 // Some(Captures({0: Some(&quot;22:2&quot;), 1: Some(&quot;22&quot;), 2: Some(&quot;2&quot;)}))
 // None
 #}</code></pre></pre>
-<p>成功的产出实际上有三个 <em>捕获</em>- 整场 match ,和两组数字.  默认情况下这些正则表达式不是 <em>确定的</em> , 所以 <em>正则表达式</em> 将追捕第一场 match ,跳过任何不匹配的东西. (如果你遗漏了'()',它只会给我们整场 match . )</p>
+<p>成功的产出实际上有三个 <em>捕获</em>- 整场 match ,和两组数字.  默认情况下这些正则表达式不是 <em>确定的</em> , 所以 <em>正则表达式</em> 将追捕第一场 match ,跳过任何不匹配的东西. (如果你遗漏了’()’,它只会给我们整场 match . )</p>
 <p>可以 <em>命名</em> 那些捕捉,并且将正则表达式分散在多行,甚至包括注释! 编译正则表达式可能会失败(第一个 <em>期望</em>)或者匹配可能失败(第二个 <em>期望</em>). 在这里,我们可以使用结果作为关联数组, 并查找按名称捕获.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -541,7 +565,7 @@ assert_eq!(&quot;2010&quot;, &amp;caps[&quot;year&quot;]);
 assert_eq!(&quot;03&quot;, &amp;caps[&quot;month&quot;]);
 assert_eq!(&quot;14&quot;, &amp;caps[&quot;day&quot;]);
 #}</code></pre></pre>
-<p>正则表达式可以分解符合模式的字符串,但不会检查它们是否有意义. 也就是说,你可以指定和匹配 <em>句法{syntax}</em> 的 ISO 风格的日期,但 <em>语义</em> 他们可能是无稽之谈,比如&quot;2014-24-52&quot;.</p>
+<p>正则表达式可以分解符合模式的字符串,但不会检查它们是否有意义. 也就是说,你可以指定和匹配 <em>句法{syntax}</em> 的 ISO 风格的日期,但 <em>语义</em> 他们可能是无稽之谈,比如”2014-24-52”.</p>
 <p>为此,您需要专门的日期时间处理,由其提供<a href="https://github.com/lifthrasiir/rust-chrono">计时chrono</a>. 你需要在做日期时决定一个时区:</p>
 <pre><pre class="playpen"><code class="language-rust">extern crate chrono;
 use chrono::*;
@@ -567,72 +591,82 @@ fn main(){
 <p>您还可以直接解析日期时间,无论是以 标准UTC格式 还是 使用自定义<a href="https://lifthrasiir.github.io/rust-chrono/chrono/format/strftime/index.html#specifiers">格式{formats}</a> 这些自我相同的格式允许您, 按照您想要的格式打印日期. 我特别强调了这两个有用的 crate ,因为它们将成为大多数其他语言的标准库的一部分.</p>
 <p>事实上,这些 crate 的胚胎形态曾经是 Rust stdlib 的一部分,但被切开了. 这是一个蓄意的决定: Rust团队非常重视 stdlib 的稳定性,所以一旦他们在不稳定的夜间版本 中进行孵化, 那么在只有 beta 和 stable 才能保持稳定. 对于需要实验和改进的 库 来说,他们保持独立并且能够跟踪 Cargo 会更好. 出于所有实际目的,这两个 crate 是 <em>标准</em> 它们不会消失,并且可能会在某个时候折回到 stdlib 中.</p>
 
-                    </main>
+                </main>
 
-                    <nav class="nav-wrapper" aria-label="Page navigation">
-                        <!-- Mobile navigation buttons -->
-                        
-                            <a rel="prev" href="3-filesystem.zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
-                            </a>
-                        
-
-                        
-                            <a rel="next" href="5-stdlib-containers.zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        
-
-                        <div style="clear: both"></div>
-                    </nav>
-                </div>
-            </div>
-
-            <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                
-                    <a href="3-filesystem.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                <nav class="nav-wrapper" aria-label="Page navigation">
+                    <!-- Mobile navigation buttons -->
+                    
+                    <a rel="prev" href="3-filesystem.zh.html" class="mobile-nav-chapters previous" title="Previous chapter"
+                        aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                
+                    
 
-                
-                    <a href="5-stdlib-containers.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    
+                    <a rel="next" href="5-stdlib-containers.zh.html" class="mobile-nav-chapters next" title="Next chapter"
+                        aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
-                
-            </nav>
+                    
 
+                    <div style="clear: both"></div>
+                </nav>
+            </div>
         </div>
 
-        
+        <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            
+            <a href="3-filesystem.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter"
+                aria-keyshortcuts="Left">
+                <i class="fa fa-angle-left"></i>
+            </a>
+            
 
-        
+            
+            <a href="5-stdlib-containers.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter"
+                aria-keyshortcuts="Right">
+                <i class="fa fa-angle-right"></i>
+            </a>
+            
+        </nav>
 
-        
+    </div>
 
-        
-        <script src="ace.js" type="text/javascript" charset="utf-8"></script>
-        <script src="editor.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mode-rust.js" type="text/javascript" charset="utf-8"></script>
-        <script src="theme-dawn.js" type="text/javascript" charset="utf-8"></script>
-        <script src="theme-tomorrow_night.js" type="text/javascript" charset="utf-8"></script>
-        
+    
 
-        
-        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
-        
-        
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        
+    
+    <!-- Google Analytics Tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128555056-1"></script>
+    
+    <script type="text/javascript">
+        var localAddrs = ["localhost", "127.0.0.1", ""];
+        if (localAddrs.indexOf(document.location.hostname) === -1) {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
 
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+            gtag('config', 'UA-128555056-1');
+        }
+    </script>
+    
 
-        <!-- Custom JS scripts -->
-        
+    
 
-    </body>
+    
+    <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+    
+
+    <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+    <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+    <!-- Custom JS scripts -->
+    
+
+    
+
+</body>
+
 </html>

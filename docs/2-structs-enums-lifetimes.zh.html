@@ -1,140 +1,164 @@
 <!DOCTYPE HTML>
 <html lang="en" class="sidebar-visible no-js">
-    <head>
-        <!-- Book generated using mdBook -->
-        <meta charset="UTF-8">
-        <title>结构,枚举和匹配 - Rust 的绅士介绍</title>
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust语言，标准库和生态系统介绍">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
 
-        <base href="">
+<head>
+    <!-- Book generated using mdBook -->
+    <meta charset="UTF-8">
+    <title>结构,枚举和匹配 - Rust 的绅士介绍</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta name="description" content="Rust语言，标准库和生态系统介绍">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ffffff" />
 
-        <link rel="stylesheet" href="book.css">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="favicon.png">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/chrome.css">
+    <link rel="stylesheet" href="css/print.css" media="print">
 
-        <link rel="shortcut icon" href="favicon.png">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"
+        rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="_FontAwesome/css/font-awesome.css">
+    <!-- Highlight.js Stylesheets -->
+    <link rel="stylesheet" href="highlight.css">
+    <link rel="stylesheet" href="tomorrow-night.css">
+    <link rel="stylesheet" href="ayu-highlight.css">
 
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+    <!-- Custom theme stylesheets -->
+    
 
-        <!-- Custom theme stylesheets -->
-        
+    
+</head>
 
-        
+<body class="light">
+    <!-- Provide site root to javascript -->
+    <script type="text/javascript">var path_to_root = "";</script>
 
-    </head>
-    <body class="light">
-        <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
-            try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+    <!-- Work around some values being stored in localStorage wrapped in quotes -->
+    <script type="text/javascript">
+        try {
+            var theme = localStorage.getItem('mdbook-theme');
+            var sidebar = localStorage.getItem('mdbook-sidebar');
 
-                if (theme.startsWith('"') && theme.endsWith('"')) {
-                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
-                }
-
-                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
-                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
-                }
-            } catch (e) { }
-        </script>
-
-        <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
-            var theme;
-            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
-            if (theme === null || theme === undefined) { theme = 'light'; }
-            document.body.className = theme;
-            document.querySelector('html').className = theme + ' js';
-        </script>
-
-        <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
-            if (document.body.clientWidth >= 1080) {
-                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
-                sidebar = sidebar || 'visible';
+            if (theme.startsWith('"') && theme.endsWith('"')) {
+                localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
-        </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html" class="active"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
-        </nav>
+            if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+            }
+        } catch (e) { }
+    </script>
 
-        <div id="page-wrapper" class="page-wrapper">
+    <!-- Set the theme before any content is loaded, prevents flash -->
+    <script type="text/javascript">
+        var theme;
+        try { theme = localStorage.getItem('mdbook-theme'); } catch (e) { }
+        if (theme === null || theme === undefined) { theme = 'light'; }
+        document.body.className = theme;
+        document.querySelector('html').className = theme + ' js';
+    </script>
 
-            <div class="page">
-                
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
+    <!-- Hide / unhide sidebar before it is displayed -->
+    <script type="text/javascript">
+        var html = document.querySelector('html');
+        var sidebar = 'hidden';
+        if (document.body.clientWidth >= 1080) {
+            try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch (e) { }
+            sidebar = sidebar || 'visible';
+        }
+        html.classList.remove('sidebar-visible');
+        html.classList.add("sidebar-" + sidebar);
+    </script>
 
-                        <h1 class="menu-title">Rust 的绅士介绍</h1> 
+    <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+        <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html" class="active"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
+    </nav>
 
+    <div id="page-wrapper" class="page-wrapper">
+
+        <div class="page">
+            
+            <div id="menu-bar" class="menu-bar">
+                <div id="menu-bar-sticky-container">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents"
+                            aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <!-- START - Rust Cookbook customization -->
+                        <button id="edit-button" class="icon-button" type="button" title="Fork and edit" aria-label="Fork and edit"
+                            aria-haspopup="true" aria-expanded="false" aria-controls="edit">
+                            <i class="fa fa-edit">Edit</i>
+                        </button>
+                        <!-- END - Rust Cookbook customization -->
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme"
+                            aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)"
+                            aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Rust 的绅士介绍</h1>
+                    
                         <div class="right-buttons">
                             <a href="print.html" title="Print this book" aria-label="Print this book">
                                 <i id="print-button" class="fa fa-print"></i>
                             </a>
+                            
                         </div>
                     </div>
                 </div>
 
-                
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
-                    </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
-                        </ul>
-                    </div>
+            
+            <div id="search-wrapper" class="hidden">
+                <form id="searchbar-outer" class="searchbar-outer">
+                    <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..."
+                        aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                </form>
+                <div id="searchresults-outer" class="searchresults-outer hidden">
+                    <div id="searchresults-header" class="searchresults-header"></div>
+                    <ul id="searchresults">
+                    </ul>
                 </div>
-                
+            </div>
+            
 
-                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
-                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
-                    });
-                </script>
+            <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+            <script type="text/javascript">
+                document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                Array.from(document.querySelectorAll('#sidebar a')).forEach(function (link) {
+                    link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                });
+            </script>
 
-                <div id="content" class="content">
-                    <main>
-                        <a class="header" href="2-structs-enums-lifetimes.zh.html#a结构structs枚举enums和匹配match" id="a结构structs枚举enums和匹配match"><h1>结构{structs},枚举{enums}和匹配{match}</h1></a>
-<a class="header" href="2-structs-enums-lifetimes.zh.html#rust-喜欢-move-它-move-它" id="rust-喜欢-move-它-move-它"><h2>Rust 喜欢 move 它, move 它</h2></a>
+            <!-- // START - Rust Cookbook customization -->
+            <script>
+                document.getElementById("edit-button").addEventListener("click", function () {
+                    var editWindow = window.open("https://github.com/chinanf-boy/gentle-intro/edit/master/src/2-structs-enums-lifetimes.zh.md");
+                });</script>
+            <!-- // END - Rust Cookbook customization -->
+
+            <div id="content" class="content">
+                <main>
+                    <a class="header" href="#a结构structs枚举enums和匹配match" id="a结构structs枚举enums和匹配match"><h1>结构{structs},枚举{enums}和匹配{match}</h1></a>
+<a class="header" href="#rust-喜欢-move-它-move-它" id="rust-喜欢-move-它-move-它"><h2>Rust 喜欢 move 它, move 它</h2></a>
 <p>我想稍微回退一下,给你看一些令人惊讶的东西:</p>
 <pre><pre class="playpen"><code class="language-rust">// move1.rs
 fn main() {
@@ -155,9 +179,9 @@ fn main() {
   = note: move occurs because `s1` has type `std::string::String`,
   which does not implement the `Copy` trait
 </code></pre>
-<p>Rust 与其他语言有不同的行为. 在变量总是<code>引用{references}</code> (如Java或Python) 的语言中,<code>s2</code>成为对引用<code>s1</code>字符串对象的又一个引用. 在 C ++ 中,<code>s1</code>是一种<code>价值{value}</code>,它是 <em>复制</em> 至<code>s2</code>. 但 Rust 会改变价值. 它没有看到<code>字符串{strings}</code>是可复制的 (&quot;没有实现复制trait&quot;) .</p>
-<p>我们不会看到像数字这样的&quot;原始&quot;类型,因为它们只是数值;他们被允许复制,因为他们便宜复制. 但<code>String</code>已经分配了包含&quot;Hello dolly&quot;的内存,并且复制将涉及分配更多内存还要复制<code>字符{char}</code>.  Rust 不会默默地做到这一点.</p>
-<p>考虑一个<code>String</code>包含&quot;Moby-Dick&quot;的全文. 它不是一个很大的结构,只有文本的内存地址,它的大小以及分配块的大小. 复制这将是昂贵的,因为该内存分配在堆上和需要自己的分配区块.</p>
+<p>Rust 与其他语言有不同的行为. 在变量总是<code>引用{references}</code> (如Java或Python) 的语言中,<code>s2</code>成为对引用<code>s1</code>字符串对象的又一个引用. 在 C ++ 中,<code>s1</code>是一种<code>价值{value}</code>,它是 <em>复制</em> 至<code>s2</code>. 但 Rust 会改变价值. 它没有看到<code>字符串{strings}</code>是可复制的 (”没有实现复制trait”) .</p>
+<p>我们不会看到像数字这样的”原始”类型,因为它们只是数值;他们被允许复制,因为他们便宜复制. 但<code>String</code>已经分配了包含”Hello dolly”的内存,并且复制将涉及分配更多内存还要复制<code>字符{char}</code>.  Rust 不会默默地做到这一点.</p>
+<p>考虑一个<code>String</code>包含”Moby-Dick”的全文. 它不是一个很大的结构,只有文本的内存地址,它的大小以及分配块的大小. 复制这将是昂贵的,因为该内存分配在堆上和需要自己的分配区块.</p>
 <pre><code>    String
     | addr | ---------&gt; Call me Ishmael.....
     | size |                    |
@@ -216,7 +240,7 @@ fn dump(s: &amp;str) {
 #}</code></pre></pre>
 <p>然后两个 <code>dump(&amp;s1)</code> 和 <code>dump(&quot;hello world&quot;)</code> 好好工作.  (这里就是<code>Deref</code>起的作用, Rust 会为你转换<code>&amp;String</code>至<code>&amp;str</code>. )</p>
 <p>总而言之,分配 <code>非复制{non-Copy}</code>会将 值 从一个位置<code>移动{move}</code>到另一个位置. 否则,<code>锈{rust}</code>将被迫 <em>隐式</em> 做一个<code>副本{copy}</code>,并打破rust本身 <em>明确分配</em> 的<code>承诺{promise}</code>.</p>
-<a class="header" href="2-structs-enums-lifetimes.zh.html#a变量的范围" id="a变量的范围"><h2>变量的范围</h2></a>
+<a class="header" href="#a变量的范围" id="a变量的范围"><h2>变量的范围</h2></a>
 <p>所以,经验法则是更愿意保留对原始数据的<code>引用{&amp;}</code> - 以此来<code>&quot;借用{borrow}&quot;</code>它.</p>
 <p>但一个引用必须 <em>不能</em> 超过<code>拥有人{owner}</code>!</p>
 <p>首先, Rust 是一个 <em>块范围的{block-scoped}</em> 语言. 变量仅在其块的持续时间内存在:</p>
@@ -242,7 +266,7 @@ fn dump(s: &amp;str) {
 }
 #}</code></pre></pre>
 <p>循环变量 (如<code>i</code>) 有点不同,它们只在循环块中可见. 创建一个使用相同名称的新变量并不是一个错误 (<code>'shadowing'</code>) ,但它可能会造成混淆.</p>
-<p>当一个变量'超出范围',那么它是 <em>扔掉了{dropped}</em>. 任何使用的内存都会被回收,而该变量的其他 <em>资源{resources}</em> 将返回给系统 - 例如,扔掉一个<code>文件{File}</code>就会闭包它. 这是一件好事. 未使用的资源在不需要时立即回收.</p>
+<p>当一个变量’超出范围’,那么它是 <em>扔掉了{dropped}</em>. 任何使用的内存都会被回收,而该变量的其他 <em>资源{resources}</em> 将返回给系统 - 例如,扔掉一个<code>文件{File}</code>就会闭包它. 这是一件好事. 未使用的资源在不需要时立即回收.</p>
 <p>(另一个特定于 Rust 的问题是变量可能看起来在范围内,但其值已经<code>移动{move}</code>. )</p>
 <p>这里有一个引用<code>rs1</code> 到 <code>tmp</code>, 它只在其区块期间<code>{}</code>存在:</p>
 <pre><pre class="playpen"><code class="language-rust">01 // ref1.rs
@@ -268,11 +292,11 @@ fn dump(s: &amp;str) {
 10 | }
    | - borrowed value needs to live until here
 </code></pre>
-<p><code>tmp</code>哪里去了? 走了,死了,回到了天空中的大堆: <em>扔掉了{dropeed}</em>. rust 从 <strong>C</strong> 的可怕的'悬挂指针'问题中拯救你 - 一个指向陈旧数据的引用.</p>
+<p><code>tmp</code>哪里去了? 走了,死了,回到了天空中的大堆: <em>扔掉了{dropeed}</em>. rust 从 <strong>C</strong> 的可怕的’悬挂指针’问题中拯救你 - 一个指向陈旧数据的引用.</p>
 <blockquote>
 <p>在 区块中, <code>rs1</code>-指向-&gt; <code>&amp;tmp</code>, 但在区块结束后, tmp 整个都被 <em>扔掉了{dropped}</em> , 这个时候 <code>rs1</code> 也就指向一个指针 -指向-&gt; 被扔掉地址</p>
 </blockquote>
-<a class="header" href="2-structs-enums-lifetimes.zh.html#a元组" id="a元组"><h2>元组</h2></a>
+<a class="header" href="#a元组" id="a元组"><h2>元组</h2></a>
 <p>从函数返回多个值有时非常有用. 元组是一个方便的解决方案:</p>
 <pre><pre class="playpen"><code class="language-rust">// tuple1.rs
 
@@ -327,7 +351,7 @@ assert_eq!(tuple.2, 'c');
     }
     //  ten 10; hundred 100; thousand 1000;
 #}</code></pre></pre>
-<a class="header" href="2-structs-enums-lifetimes.zh.html#a结构structs" id="a结构structs"><h2>结构{Structs}</h2></a>
+<a class="header" href="#a结构structs" id="a结构structs"><h2>结构{Structs}</h2></a>
 <p>元组很方便,但是在说<code>t.1</code>并且追踪每个部分的含义, 不够直截了当</p>
 <p>rust <em>结构</em> 包含命名 <em>字段{fields}</em> :</p>
 <pre><pre class="playpen"><code class="language-rust">// struct1.rs
@@ -416,7 +440,7 @@ impl Person {
 <p>请注意,之后<code>v.to_tuple()</code>被调用,然后<code>v</code>已经移动并且不再可用.</p>
 <p>总结:</p>
 <ul>
-<li>没有<code>self</code>参数: 您可以将函数与结构关联,如<code>new</code>&quot;constructor&quot;.</li>
+<li>没有<code>self</code>参数: 您可以将函数与结构关联,如<code>new</code>“constructor”.</li>
 <li><code>&amp;self</code>参数: 可以使用结构体的值,但不能改变它们</li>
 <li><code>&amp;mut self</code>参数: 可以修改这些值</li>
 <li><code>self</code>参数: 将消耗和移动的值.</li>
@@ -484,7 +508,7 @@ fn main() {
 // Person { first_name: &quot;Jane&quot;, last_name: &quot;Smith&quot; }
 // (&quot;Jane&quot;, &quot;Smith&quot;)
 </code></pre></pre>
-<a class="header" href="2-structs-enums-lifetimes.zh.html#a生命周期lifetimes开始咬人" id="a生命周期lifetimes开始咬人"><h2>生命周期{Lifetimes}开始咬人</h2></a>
+<a class="header" href="#a生命周期lifetimes开始咬人" id="a生命周期lifetimes开始咬人"><h2>生命周期{Lifetimes}开始咬人</h2></a>
 <p>通常结构体包含值,但通常它们还需要包含<code>引用{&amp;}</code>. 假设我们想在一个结构中放置一个<code>字符串切片{&amp;str}</code>,而不是一个字符串值.</p>
 <pre><pre class="playpen"><code class="language-rust">// life1.rs
 
@@ -507,7 +531,7 @@ fn main() {
 </code></pre>
 <p>为了理解<code>投诉{complaint}</code>,你必须从 Rust 的角度看问题.</p>
 <p>如果不知道它的生命周期,它将不允许存储引用. 所有<code>引用{&amp;}</code>都是从某个价值中<code>借用{borrowed}</code>的,而且所有的<code>价值{value}</code>都是有<code>生命周期{lifetimes}</code>的. 引用的生命周期不能长于该值的生命周期.  Rust 不能允许这种 引用可能突然失效 的情况.</p>
-<p>现在,字符串切片, 借用 <em>字符串文字</em> 像&quot;hello&quot;或来自<code>String</code>值. 字符串文字在整个程序期间存在,称为&quot;静态{static}&quot;生命周期.</p>
+<p>现在,字符串切片, 借用 <em>字符串文字</em> 像”hello”或来自<code>String</code>值. 字符串文字在整个程序期间存在,称为”静态{static}”生命周期.</p>
 <p>所以这是有效的 - 我们向 Rust 保证字符串切片总是指向这样的<code>静态{static}</code>字符串:</p>
 <pre><pre class="playpen"><code class="language-rust">// life2.rs
 
@@ -552,7 +576,7 @@ fn main() {
     println!(&quot;{:?}&quot;, a);
 }
 </code></pre></pre>
-<p><code>生命周期{Lifetimes}</code>通常被称为'a','b'等,您也可以写'我{me}'.</p>
+<p><code>生命周期{Lifetimes}</code>通常被称为’a’,’b’等,您也可以写’我{me}’.</p>
 <p>在这之后,我们的<code>a</code>结构和<code>s</code>字符串受到严格合同的约束: <code>a</code>借用<code>s</code>,并且不能超越<code>s</code>.</p>
 <p>有了这个结构体定义,我们想写一个函数返回一个<code>A</code>值:</p>
 <pre><pre class="playpen"><code class="language-rust">
@@ -563,7 +587,7 @@ fn makes_a() -&gt; A {
     A { s: &amp;string }
 }
 #}</code></pre></pre>
-<p>但 <code>A</code> 需要 lifetime - &quot;预期生命周期参数{expected lifetime parameter}&quot;:</p>
+<p>但 <code>A</code> 需要 lifetime - “预期生命周期参数{expected lifetime parameter}”:</p>
 <pre><code>  = help: this function's return type contains a borrowed value,
    but there is no value for it to be borrowed from
   = help: consider giving it a 'static lifetime
@@ -586,7 +610,7 @@ fn makes_a() -&gt; A&lt;'static&gt; {
 <p>这是无法安全工作的,因为<code>string</code>将在函数结束时被删除,并且引用不可以超过<code>string</code>.</p>
 <p>您可以将生命周期参数视为值类型的一部分.</p>
 <p>有时候,结构中包含一个值 <em>和</em> 从该值中借用的引用 似乎是个好主意. 这基本上是不可能的,因为结构必须是 <em>可移动的</em> ,任何移动都将使引用无效. 没有必要这样做 - 例如,如果你的结构有一个字符串字段-string,并且需要提供切片-str,那么它可以保留索引并且有一个方法来生成实际的切片.</p>
-<a class="header" href="2-structs-enums-lifetimes.zh.html#a特点traits" id="a特点traits"><h2>特点{Traits}</h2></a>
+<a class="header" href="#a特点traits" id="a特点traits"><h2>特点{Traits}</h2></a>
 <p>请注意 Rust 不会拼写<code>struct</code> <em>class</em>. 关键字<code>类</code>在其他语言中是如此超载,意味着它有效地闭包了原来的想法.</p>
 <p>让我们这样说吧:  Rust 结构不能 <em>继承</em> 来自其他结构;他们都是独特的类型. 没有 <em>sub-typing{子}</em> . 他们是愚蠢的数据.</p>
 <p>又怎样 <em>做</em> 一个建立类型之间的关系? 这正是 <em>Traits</em> 进来的时候.</p>
@@ -639,9 +663,9 @@ impl fmt::Debug for Person {
     // John Smith
 #}</code></pre></pre>
 <p><code>write!</code>是一个非常有用的宏 - 在这里<code>f</code>是实现<code>Write</code>.  (这也适用于<code>File</code>- 甚至是一个<code>String</code>. )</p>
-<p><code>显示{Display}</code>控制如何使用&quot;{}&quot;打印值,并执行就像<code>Debug</code>. 作为一个有用的副作用,任何实现<code>Display</code>的,<code>ToString</code>自动实施. - 所以如果我们实现<code>Person</code>的<code>Display</code>, <code>p.to_string()</code>也适用.</p>
-<p><code>Clone</code>定义了该方法<code>clone</code>,并且用&quot;#[deriv(Clone)]&quot;可以简单地定义,如果所有的字段都实施<code>Clone</code>.</p>
-<a class="header" href="2-structs-enums-lifetimes.zh.html#a示例-遍历浮点范围的迭代器" id="a示例-遍历浮点范围的迭代器"><h2>示例: 遍历浮点范围的迭代器</h2></a>
+<p><code>显示{Display}</code>控制如何使用”{}”打印值,并执行就像<code>Debug</code>. 作为一个有用的副作用,任何实现<code>Display</code>的,<code>ToString</code>自动实施. - 所以如果我们实现<code>Person</code>的<code>Display</code>, <code>p.to_string()</code>也适用.</p>
+<p><code>Clone</code>定义了该方法<code>clone</code>,并且用”#[deriv(Clone)]”可以简单地定义,如果所有的字段都实施<code>Clone</code>.</p>
+<a class="header" href="#a示例-遍历浮点范围的迭代器" id="a示例-遍历浮点范围的迭代器"><h2>示例: 遍历浮点范围的迭代器</h2></a>
 <p>我们已经遇到范围之前 (<code>0..n</code>) 但它们不适用于浮点值.  (您可以 <em>强制性</em> 这一点,但最终你会得到一个无趣的1.0. )</p>
 <p>回想一下迭代器的非正式定义;它是一个带有结构体和可能会返回<code>Some</code>事情或<code>None</code>的<code>next</code>方法. 在这个过程中,迭代器本身被修改,它保持迭代的状态 (如 next 索引等等) . 迭代的数据通常不会改变, (但请参阅<code>Vec::drain</code>对于修改其数据的有趣的迭代器) .</p>
 <p>这里是正式的定义: <a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html">迭代器trait</a>.</p>
@@ -655,7 +679,7 @@ trait Iterator {
 }
 #}</code></pre></pre>
 <p>我们在这里看到了<code>迭代器</code> trait 的<a href="https://doc.rust-lang.org/stable/book/associated-types.html">关联类型{associated type}</a>. 这个 trait 必须适用于任何类型,所以你必须以某种方式指定返回类型. 方法<code>next</code>可以在不使用特定类型的情况下编写 - 而是通过<code>Self</code>引用该类型参数的<code>Item</code>.</p>
-<p><code>f64</code>迭代器 trait 写入<code>Iterator&lt;Item=f64&gt;</code>,它可以理解为&quot;Iterator的关联类型Item设置为f64&quot;.</p>
+<p><code>f64</code>迭代器 trait 写入<code>Iterator&lt;Item=f64&gt;</code>,它可以理解为”Iterator的关联类型Item设置为f64”.</p>
 <p>该<code>...</code>指的是<code>迭代器</code>的  <em>提供的方法</em> . 你只需要定义<code>Item</code>和<code>next</code>,并为您定义提供的方法.</p>
 <pre><pre class="playpen"><code class="language-rust">// trait3.rs
 
@@ -709,13 +733,13 @@ fn main() {
 #fn main() {
 println!(&quot;{:.1} &quot;, x);
 #}</code></pre></pre>
-<p>我们得到更清洁的产出 (这个<a href="https://doc.rust-lang.org/std/fmt/index.html">格式</a>意思是'小数点后一位小数'. ) 所有默认的迭代器方法都可用,所以我们可以将这些值收集到一个<code>向量{Vec}</code>中,map 来使用它们等等.</p>
+<p>我们得到更清洁的产出 (这个<a href="https://doc.rust-lang.org/std/fmt/index.html">格式</a>意思是’小数点后一位小数’. ) 所有默认的迭代器方法都可用,所以我们可以将这些值收集到一个<code>向量{Vec}</code>中,map 来使用它们等等.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
     let v: Vec&lt;f64&gt; = range(0.0, 1.0, 0.1).map(|x| x.sin()).collect();
 #}</code></pre></pre>
-<a class="header" href="2-structs-enums-lifetimes.zh.html#a通用函数" id="a通用函数"><h2>通用函数</h2></a>
+<a class="header" href="#a通用函数" id="a通用函数"><h2>通用函数</h2></a>
 <p>我们需要一个函数来抛出实现的任何值<code>Debug</code>. 以下是对通用函数的第一次尝试,我们可以在其中传递引用 <em>任何</em> 价值类型. <code>T</code>是一个类型参数,需要在函数名称后面声明:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -746,7 +770,7 @@ let n = 42;
 dump(&amp;n);
 // value is 42
 #}</code></pre></pre>
-<p>Rust 通用函数需要 <em>Traits bounds</em> 类型 - 我们在这里说&quot;T是实现了Debug的任何类型&quot;. <code>rustc</code>是非常有用的,并且确切地说明需要提供什么界限.</p>
+<p>Rust 通用函数需要 <em>Traits bounds</em> 类型 - 我们在这里说”T是实现了Debug的任何类型”. <code>rustc</code>是非常有用的,并且确切地说明需要提供什么界限.</p>
 <p>现在 Rust 知道这个 <em>trait</em> <code>T</code>,它可以给你敏感的编译器消息:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -759,7 +783,7 @@ let foo = Foo{name: &quot;hello&quot;.to_string()};
 
 dump(&amp;foo)
 #}</code></pre></pre>
-<p>而错误是&quot;<code>Foo</code> <em>Traits</em>  没有实施 <code>std::fmt::Debug</code>&quot;.</p>
+<p>而错误是”<code>Foo</code> <em>Traits</em>  没有实施 <code>std::fmt::Debug</code>“.</p>
 <p>函数在动态语言中已经是泛型的,因为值会带有它们的实际类型,并且类型检查在运行时发生 - 或者惨败. 对于较大的程序,我们确实想在编译时想知道问题!这些语言的程序员不应平静地坐在编译器的错误之中,而必须处理程序运行时才会出现的问题. 墨菲定律意味着这些问题往往会发生在 最不方便/灾难性 的时刻.</p>
 <p>平方数的操作是通用的: <code>x * x</code>将适用于整数,浮点数和一般用于任何关于乘法运算符的知识<code>*</code>. 但是类型边界是什么?</p>
 <pre><pre class="playpen"><code class="language-rust">// gen1.rs
@@ -845,7 +869,7 @@ T sqr(x: T) {
 <p>Rust 通用函数一开始可能看起来有点难接受,但是显式意味着只要看看定义,就能确切地知道可以安全地提供哪种值.</p>
 <p>这些函数被调用 <em>单态{monomorphic}</em> ,与 <em>多态{polymorphic}</em> 相反 . 函数的主体是为每个 唯一类型 分别编译的. 通过多态函数,相同的机器代码可以动态地与每种匹配类型一起工作 <em>调度{dispatching}</em> 正确的方法.</p>
 <p><code>Monomorphic</code>生成更快的代码,专用于特定类型,并且通常可以 <em>内联{inlined}</em>. 所以何时<code>sqr(x)</code>被看到,它被有效地取代<code>x * x</code>. 缺点是大的泛型函数会产生大量的代码,对于每一种可能导致的类型 <em>代码膨胀</em>. 与往常一样,总是有折衷的方式; 有经验的人学会为工作做出正确的选择.</p>
-<a class="header" href="2-structs-enums-lifetimes.zh.html#a简单的枚举" id="a简单的枚举"><h2>简单的枚举</h2></a>
+<a class="header" href="#a简单的枚举" id="a简单的枚举"><h2>简单的枚举</h2></a>
 <p><code>枚举{enums}</code>类型具有一些确定的值. 例如,一个方向只有四个可能的值.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -888,8 +912,8 @@ impl Direction {
         // start Left
 #}</code></pre></pre>
 <p>所以<code>as_str</code>方法并不是真的必要,因为我们总是可以从<code>Debug</code>中得到名字.  (但<code>as_str</code>是 <em>不分配{allocate}</em> ,这可能很重要.)</p>
-<p>你不应该在这里假设任何特定的顺序 - 没有的默许整数&quot;ordinal&quot;值.</p>
-<p>这里有一个方法来定义每个<code>方向</code>值的'后继者'. 非常方便的<em>通配符用法</em>将枚举名称暂时放入方法上下文中：:</p>
+<p>你不应该在这里假设任何特定的顺序 - 没有的默许整数”ordinal”值.</p>
+<p>这里有一个方法来定义每个<code>方向</code>值的’后继者’. 非常方便的<em>通配符用法</em>将枚举名称暂时放入方法上下文中：:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -933,7 +957,7 @@ note: an implementation of `std::cmp::PartialEq` might be missing for `Direction
 </code></pre>
 <p>解决办法就是加上<code>#[derive(Debug,PartialEq)]</code>在<code>enum Direction</code>前面. 这是一个重要的观点 -   Rust 用户定义的类型一开始就是这么新鲜和朴素.</p>
 <p>你通过 impl 共同的特点给他们合理的默认行为. 这也适用于结构 - 如果你要求 Rust 得出 <em>derive</em> <code>PartialEq</code>对于一个结构体来说,它会做出明智的事情,假设所有的字段都实现它并建立一个比较. 如果不是这样,或者你想重新定义平等,那么你可以自由明确定义<code>PartialEq</code>.</p>
-<p>Rust 也有'C 风格的枚举':</p>
+<p>Rust 也有’C 风格的枚举’:</p>
 <pre><pre class="playpen"><code class="language-rust">// enum2.rs
 
 enum Speed {
@@ -959,9 +983,9 @@ enum Difficulty {
     Hard   // is 3
 }
 #}</code></pre></pre>
-<p>顺便说一下,'名字'太模糊了,就像一直在说'thingy'. 这里的合适名词是 <em>变种{variant}</em> -<code>速度-Speed</code>有变种<code>慢-Slow</code>,<code>中-Medium</code>和<code>快速-Fast</code>.</p>
+<p>顺便说一下,’名字’太模糊了,就像一直在说’thingy’. 这里的合适名词是 <em>变种{variant}</em> -<code>速度-Speed</code>有变种<code>慢-Slow</code>,<code>中-Medium</code>和<code>快速-Fast</code>.</p>
 <p>这些枚举 <em>就</em> 有一个自然的顺序,但你必须很好地问. 在<code>enum Speed</code>前面放置<code>#[derive(PartialEq,PartialOrd)]</code>,那确实如此<code>Speed::Fast &gt; Speed::Slow</code>和<code>Speed::Medium != Speed::Slow</code>.</p>
-<a class="header" href="2-structs-enums-lifetimes.zh.html#a枚举赌上全部荣耀" id="a枚举赌上全部荣耀"><h2>枚举赌上全部荣耀</h2></a>
+<a class="header" href="#a枚举赌上全部荣耀" id="a枚举赌上全部荣耀"><h2>枚举赌上全部荣耀</h2></a>
 <p>完全形式的rust 类似于类固醇上的 C 联盟,就像 菲亚特Uno 与 法拉利 相比,. 考虑以 类型安全的方式 存储不同值的问题.</p>
 <pre><pre class="playpen"><code class="language-rust">// enum3.rs
 
@@ -1004,7 +1028,7 @@ eat_and_dump(b);
 //boolean is true
 #}</code></pre></pre>
 <p>(这就是<code>Option</code>和<code>Result</code> - 枚举.)</p>
-<p>我们喜欢这个<code>eat_and_dump</code>函数,但我们希望将该值作为引用传递,因为当前发生了<code>移动{move}</code>并且该值被'吃掉'了:</p>
+<p>我们喜欢这个<code>eat_and_dump</code>函数,但我们希望将该值作为引用传递,因为当前发生了<code>移动{move}</code>并且该值被’吃掉’了:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1078,8 +1102,8 @@ impl Value {
         }
     }
 #}</code></pre></pre>
-<a class="header" href="2-structs-enums-lifetimes.zh.html#a更多关于匹配" id="a更多关于匹配"><h2>更多关于匹配</h2></a>
-<p>回想一下,元组的值可以用'()'来提取:</p>
+<a class="header" href="#a更多关于匹配" id="a更多关于匹配"><h2>更多关于匹配</h2></a>
+<p>回想一下,元组的值可以用’()’来提取:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1169,7 +1193,7 @@ fn match_tuple(t: (i32,String)) {
         ...
     }
 #}</code></pre></pre>
-<p>这种不太优雅的语法被称为&quot;涡轮运算符{turbofish operator}&quot;.</p>
+<p>这种不太优雅的语法被称为”涡轮运算符{turbofish operator}”.</p>
 <p>如果你正在返回一个函数<code>Result</code>,那么问号运算符提供了一个更加优雅的解决方案:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -1177,7 +1201,7 @@ fn match_tuple(t: (i32,String)) {
     let n: i32 = &quot;42&quot;.parse()?;
 #}</code></pre></pre>
 <p>但是,解析错误需要转换为错误类型<code>Result</code>,这是我们稍后讨论时要讨论的话题<a href="./6-error-handling.zh.html">6.错误处理</a>.</p>
-<a class="header" href="2-structs-enums-lifetimes.zh.html#a闭包closures" id="a闭包closures"><h2>闭包{Closures}</h2></a>
+<a class="header" href="#a闭包closures" id="a闭包closures"><h2>闭包{Closures}</h2></a>
 <p>Rust 的很多力量来源于 <em>闭包</em>. 它们最简单的形式就像快捷函数一样:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -1222,7 +1246,7 @@ fn match_tuple(t: (i32,String)) {
     // res 3 5
 #}</code></pre></pre>
 <p>你不能用明确的做<code>fn</code>形式 - 它不知道闭包范围内的变量. 闭包了是从其上下文 <em>借</em> <code>m</code>和<code>c</code>.</p>
-<p>现在,这是什么类型<code>lin</code>? 只要<code>rustc</code>知道. 在引擎盖下,闭包是一个 <em>结构</em> 这是可调用的 ('实现调用操作符') . 它的行为就好像它是这样写出来的:</p>
+<p>现在,这是什么类型<code>lin</code>? 只要<code>rustc</code>知道. 在引擎盖下,闭包是一个 <em>结构</em> 这是可调用的 (’实现调用操作符’) . 它的行为就好像它是这样写出来的:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1326,7 +1350,7 @@ assert_eq!(s, &quot;world&quot;);
 
     println!(&quot;name {}&quot;,name);
 #}</code></pre></pre>
-<p>最后的错误<code>println</code>是: &quot;使用移动值: <code>name</code>&quot;所以这里有一个解决方案 - 如果我们没有 <em>想保持</em> <code>name</code>活着 - 是将 复制副本 移入<code>闭包{move}</code>中:</p>
+<p>最后的错误<code>println</code>是: “使用移动值: <code>name</code>“所以这里有一个解决方案 - 如果我们没有 <em>想保持</em> <code>name</code>活着 - 是将 复制副本 移入<code>闭包{move}</code>中:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1351,7 +1375,7 @@ assert_eq!(s, &quot;world&quot;);
 #fn main() {
  let sum: f64 = range(0.0,1.0,0.1).map(|x| x.sin()).sum();
 #}</code></pre></pre>
-<p>它 (事实上) 会像写出明确的循环一样快! 如果 Rust 闭包与 Javascript 闭包一样&quot;无摩擦{frictionless}&quot;,那么这种性能保证是不可能的.</p>
+<p>它 (事实上) 会像写出明确的循环一样快! 如果 Rust 闭包与 Javascript 闭包一样”无摩擦{frictionless}”,那么这种性能保证是不可能的.</p>
 <p><code>filter</code>是另一种有用的迭代器方法 - 它只允许通过匹配条件的值:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -1365,7 +1389,7 @@ assert_eq!(s, &quot;world&quot;);
     // thirty
     // forty
 #}</code></pre></pre>
-<a class="header" href="2-structs-enums-lifetimes.zh.html#a三种迭代器" id="a三种迭代器"><h2>三种迭代器</h2></a>
+<a class="header" href="#a三种迭代器" id="a三种迭代器"><h2>三种迭代器</h2></a>
 <p>三种类型 (再次) 对应于三种基本参数类型.</p>
 <p>假设我们有一个 Vec <code>String</code>值.以下是显式的迭代器类型,然后 <em>隐式{implicitly}</em>,以及迭代器返回的实际类型.</p>
 <pre><pre class="playpen"><code class="language-rust">
@@ -1396,7 +1420,7 @@ for s in vec.iter().filter(|x: &amp;&amp;String| x.len() &gt; 2) { // s is &amp;
 ...
 }
 #}</code></pre></pre>
-<p>在调用方法时, Rust 会自动 <em>取值</em>,所以问题不明显. 但<code>|x:&amp;&amp; String|</code>x ==&quot;one&quot;|将 <em>不会</em> 工作, 因为操作员对 类型匹配 更加严格. <code>rustc</code>会抱怨没有这样进行比较<code>&amp;&amp;String</code>和<code>&amp;str</code>. 所以你需要明确的 取值 来做到<code>&amp;&amp;String</code>变成哪一个 <em>想要</em> match的<code>&amp;String</code>.</p>
+<p>在调用方法时, Rust 会自动 <em>取值</em>,所以问题不明显. 但<code>|x:&amp;&amp; String|</code>x ==”one”|将 <em>不会</em> 工作, 因为操作员对 类型匹配 更加严格. <code>rustc</code>会抱怨没有这样进行比较<code>&amp;&amp;String</code>和<code>&amp;str</code>. 所以你需要明确的 取值 来做到<code>&amp;&amp;String</code>变成哪一个 <em>想要</em> match的<code>&amp;String</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1411,7 +1435,7 @@ for s in vec.iter().filter(|x| *x == &quot;one&quot;) {...}
 for s in vec.iter().filter(|&amp;x| x == &quot;one&quot;)
 #}</code></pre></pre>
 <p>这通常是你将如何看待它写的.</p>
-<a class="header" href="2-structs-enums-lifetimes.zh.html#a动态数据的结构" id="a动态数据的结构"><h2>动态数据的结构</h2></a>
+<a class="header" href="#a动态数据的结构" id="a动态数据的结构"><h2>动态数据的结构</h2></a>
 <p>一个最强大的技术是 <em>一个包含对自身引用的结构</em>.</p>
 <p>这是 <em>二叉树</em> 的基本构建块,用 C 表示 (每个人最喜欢的老亲戚都喜欢使用没有保护的电动工具. )</p>
 <pre><pre class="playpen"><code class="language-rust">
@@ -1469,7 +1493,7 @@ fn main() {
     println!(&quot;arr {:#?}&quot;, root);
 }
 </code></pre></pre>
-<p>由于&quot;{:#?}&quot; ('#'表示'extended') ,输出结果非常漂亮.</p>
+<p>由于”{:#?}” (’#’表示’extended’) ,输出结果非常漂亮.</p>
 <pre><code>root Node {
     payload: &quot;root&quot;,
     left: Some(
@@ -1488,8 +1512,8 @@ fn main() {
     )
 }
 </code></pre>
-<p>现在, <code>root</code>被丢弃发生了什么 ? 所有字段都被删除; 如果树的&quot;分支&quot;被丢弃,<em>它们</em> 就会扔掉其字段等等. <code>Box::new</code>可能是最接近你会得到一个<code>new</code>关键字,但我们没有必要<code>delete</code>要么<code>free</code>.</p>
-<p>我们现在必须为这棵树制定一个用途. 请注意,可以指定字符串 顺序: 'bar'&lt;'foo','abba'&gt;'aardvark';所谓的&quot;字母顺序&quot;.  (严格来说,这是词汇顺序,因为人类语言非常多样化,并且有着奇怪的规则. )</p>
+<p>现在, <code>root</code>被丢弃发生了什么 ? 所有字段都被删除; 如果树的”分支”被丢弃,<em>它们</em> 就会扔掉其字段等等. <code>Box::new</code>可能是最接近你会得到一个<code>new</code>关键字,但我们没有必要<code>delete</code>要么<code>free</code>.</p>
+<p>我们现在必须为这棵树制定一个用途. 请注意,可以指定字符串 顺序: ‘bar’&lt;‘foo’,’abba’&gt;’aardvark’;所谓的”字母顺序”.  (严格来说,这是词汇顺序,因为人类语言非常多样化,并且有着奇怪的规则. )</p>
 <p>这是一个按字符串的顺序插入节点的方法. 我们将新数据与当前节点进行比较 - 如果较少,则尝试插入左侧,否则尝试插入右侧. 左边可能没有节点,那么<code>set_left</code>等等.</p>
 <pre><pre class="playpen"><code class="language-rust">    fn insert(&amp;mut self, data: &amp;str) {
         if data &lt; &amp;self.payload {
@@ -1515,7 +1539,7 @@ fn main() {
         println!(&quot;root {:#?}&quot;, root);
     }
 </code></pre></pre>
-<p>注意<code>match</code>- 我们会提供一个可变的引用<code>Option</code>,如果是<code>Some</code>的话,并应用<code>insert</code>方法. 否则,我们需要创建一个新的<code>Node</code>对于左侧等等. <code>Box</code>是一个 <em>聪明</em> 指针; 请注意,不需要&quot;拆箱{unboxing}&quot;来呼叫<code>Node</code>方法就可以了!</p>
+<p>注意<code>match</code>- 我们会提供一个可变的引用<code>Option</code>,如果是<code>Some</code>的话,并应用<code>insert</code>方法. 否则,我们需要创建一个新的<code>Node</code>对于左侧等等. <code>Box</code>是一个 <em>聪明</em> 指针; 请注意,不需要”拆箱{unboxing}”来呼叫<code>Node</code>方法就可以了!</p>
 <p>这里是输出树:</p>
 <pre><code>root Node {
     payload: &quot;root&quot;,
@@ -1541,7 +1565,7 @@ fn main() {
     )
 }
 </code></pre>
-<p>比其他字符串'小于'的字符串放在左侧,否则放在右侧.</p>
+<p>比其他字符串’小于’的字符串放在左侧,否则放在右侧.</p>
 <p>参观时间. 这是 <em>按顺序遍历</em> - 我们访问左边,在节点上做点什么,然后访问右边.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -1564,7 +1588,7 @@ fn main() {
     // 'two'
 #}</code></pre></pre>
 <p>所以我们按顺序访问这些字符串!请注意重新出现<code>ref</code>-<code>if let</code>使用与<code>match</code>是完全相同的规则.</p>
-<a class="header" href="2-structs-enums-lifetimes.zh.html#a通用结构" id="a通用结构"><h2>通用结构</h2></a>
+<a class="header" href="#a通用结构" id="a通用结构"><h2>通用结构</h2></a>
 <p>考虑前面的二叉树的例子. 这将是 <em>严重刺激</em> 不得不重写它, 当为了所有可能的有效载荷. 所以这是我们的通用<code>Node</code>与它的类型参数<code>T</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -1624,72 +1648,82 @@ fn main() {
 <p>所以通用结构需要在 <code>&lt;&gt;</code> 中指定类型参数,如 C ++ .  Rust 通常足够聪明, 可以从上下文中得出这个类型参数 - 它知道它有一个<code>Node&lt;T&gt;</code>,并通过<code>T</code>已知道它的<code>insert</code>方法. <code>insert</code> 的第一次运行把<code>T</code>钉成为<code>String</code>. 如果有任何进一步的运行不一致,它会投诉.</p>
 <p>但是你确实需要适当地限制这种类型!</p>
 
-                    </main>
+                </main>
 
-                    <nav class="nav-wrapper" aria-label="Page navigation">
-                        <!-- Mobile navigation buttons -->
-                        
-                            <a rel="prev" href="1-basics.zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
-                            </a>
-                        
-
-                        
-                            <a rel="next" href="3-filesystem.zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        
-
-                        <div style="clear: both"></div>
-                    </nav>
-                </div>
-            </div>
-
-            <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                
-                    <a href="1-basics.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                <nav class="nav-wrapper" aria-label="Page navigation">
+                    <!-- Mobile navigation buttons -->
+                    
+                    <a rel="prev" href="1-basics.zh.html" class="mobile-nav-chapters previous" title="Previous chapter"
+                        aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                
+                    
 
-                
-                    <a href="3-filesystem.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    
+                    <a rel="next" href="3-filesystem.zh.html" class="mobile-nav-chapters next" title="Next chapter"
+                        aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
-                
-            </nav>
+                    
 
+                    <div style="clear: both"></div>
+                </nav>
+            </div>
         </div>
 
-        
+        <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            
+            <a href="1-basics.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter"
+                aria-keyshortcuts="Left">
+                <i class="fa fa-angle-left"></i>
+            </a>
+            
 
-        
+            
+            <a href="3-filesystem.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter"
+                aria-keyshortcuts="Right">
+                <i class="fa fa-angle-right"></i>
+            </a>
+            
+        </nav>
 
-        
+    </div>
 
-        
-        <script src="ace.js" type="text/javascript" charset="utf-8"></script>
-        <script src="editor.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mode-rust.js" type="text/javascript" charset="utf-8"></script>
-        <script src="theme-dawn.js" type="text/javascript" charset="utf-8"></script>
-        <script src="theme-tomorrow_night.js" type="text/javascript" charset="utf-8"></script>
-        
+    
 
-        
-        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
-        
-        
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        
+    
+    <!-- Google Analytics Tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128555056-1"></script>
+    
+    <script type="text/javascript">
+        var localAddrs = ["localhost", "127.0.0.1", ""];
+        if (localAddrs.indexOf(document.location.hostname) === -1) {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
 
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+            gtag('config', 'UA-128555056-1');
+        }
+    </script>
+    
 
-        <!-- Custom JS scripts -->
-        
+    
 
-    </body>
+    
+    <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+    
+
+    <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+    <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+    <!-- Custom JS scripts -->
+    
+
+    
+
+</body>
+
 </html>

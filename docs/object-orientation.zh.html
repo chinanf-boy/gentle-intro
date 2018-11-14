@@ -1,151 +1,175 @@
 <!DOCTYPE HTML>
 <html lang="en" class="sidebar-visible no-js">
-    <head>
-        <!-- Book generated using mdBook -->
-        <meta charset="UTF-8">
-        <title>面向对象编程 - Rust 的绅士介绍</title>
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust语言，标准库和生态系统介绍">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
 
-        <base href="">
+<head>
+    <!-- Book generated using mdBook -->
+    <meta charset="UTF-8">
+    <title>面向对象编程 - Rust 的绅士介绍</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta name="description" content="Rust语言，标准库和生态系统介绍">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ffffff" />
 
-        <link rel="stylesheet" href="book.css">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="favicon.png">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/chrome.css">
+    <link rel="stylesheet" href="css/print.css" media="print">
 
-        <link rel="shortcut icon" href="favicon.png">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"
+        rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="_FontAwesome/css/font-awesome.css">
+    <!-- Highlight.js Stylesheets -->
+    <link rel="stylesheet" href="highlight.css">
+    <link rel="stylesheet" href="tomorrow-night.css">
+    <link rel="stylesheet" href="ayu-highlight.css">
 
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+    <!-- Custom theme stylesheets -->
+    
 
-        <!-- Custom theme stylesheets -->
-        
+    
+</head>
 
-        
+<body class="light">
+    <!-- Provide site root to javascript -->
+    <script type="text/javascript">var path_to_root = "";</script>
 
-    </head>
-    <body class="light">
-        <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
-            try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+    <!-- Work around some values being stored in localStorage wrapped in quotes -->
+    <script type="text/javascript">
+        try {
+            var theme = localStorage.getItem('mdbook-theme');
+            var sidebar = localStorage.getItem('mdbook-sidebar');
 
-                if (theme.startsWith('"') && theme.endsWith('"')) {
-                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
-                }
-
-                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
-                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
-                }
-            } catch (e) { }
-        </script>
-
-        <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
-            var theme;
-            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
-            if (theme === null || theme === undefined) { theme = 'light'; }
-            document.body.className = theme;
-            document.querySelector('html').className = theme + ' js';
-        </script>
-
-        <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
-            if (document.body.clientWidth >= 1080) {
-                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
-                sidebar = sidebar || 'visible';
+            if (theme.startsWith('"') && theme.endsWith('"')) {
+                localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
-        </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html" class="active"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
-        </nav>
+            if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+            }
+        } catch (e) { }
+    </script>
 
-        <div id="page-wrapper" class="page-wrapper">
+    <!-- Set the theme before any content is loaded, prevents flash -->
+    <script type="text/javascript">
+        var theme;
+        try { theme = localStorage.getItem('mdbook-theme'); } catch (e) { }
+        if (theme === null || theme === undefined) { theme = 'light'; }
+        document.body.className = theme;
+        document.querySelector('html').className = theme + ' js';
+    </script>
 
-            <div class="page">
-                
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
+    <!-- Hide / unhide sidebar before it is displayed -->
+    <script type="text/javascript">
+        var html = document.querySelector('html');
+        var sidebar = 'hidden';
+        if (document.body.clientWidth >= 1080) {
+            try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch (e) { }
+            sidebar = sidebar || 'visible';
+        }
+        html.classList.remove('sidebar-visible');
+        html.classList.add("sidebar-" + sidebar);
+    </script>
 
-                        <h1 class="menu-title">Rust 的绅士介绍</h1> 
+    <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+        <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html" class="active"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
+    </nav>
 
+    <div id="page-wrapper" class="page-wrapper">
+
+        <div class="page">
+            
+            <div id="menu-bar" class="menu-bar">
+                <div id="menu-bar-sticky-container">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents"
+                            aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <!-- START - Rust Cookbook customization -->
+                        <button id="edit-button" class="icon-button" type="button" title="Fork and edit" aria-label="Fork and edit"
+                            aria-haspopup="true" aria-expanded="false" aria-controls="edit">
+                            <i class="fa fa-edit">Edit</i>
+                        </button>
+                        <!-- END - Rust Cookbook customization -->
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme"
+                            aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)"
+                            aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Rust 的绅士介绍</h1>
+                    
                         <div class="right-buttons">
                             <a href="print.html" title="Print this book" aria-label="Print this book">
                                 <i id="print-button" class="fa fa-print"></i>
                             </a>
+                            
                         </div>
                     </div>
                 </div>
 
-                
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
-                    </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
-                        </ul>
-                    </div>
+            
+            <div id="search-wrapper" class="hidden">
+                <form id="searchbar-outer" class="searchbar-outer">
+                    <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..."
+                        aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                </form>
+                <div id="searchresults-outer" class="searchresults-outer hidden">
+                    <div id="searchresults-header" class="searchresults-header"></div>
+                    <ul id="searchresults">
+                    </ul>
                 </div>
-                
+            </div>
+            
 
-                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
-                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
-                    });
-                </script>
+            <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+            <script type="text/javascript">
+                document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                Array.from(document.querySelectorAll('#sidebar a')).forEach(function (link) {
+                    link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                });
+            </script>
 
-                <div id="content" class="content">
-                    <main>
-                        <a class="header" href="object-orientation.zh.html#a面向对象的rust" id="a面向对象的rust"><h2>面向对象的Rust</h2></a>
+            <!-- // START - Rust Cookbook customization -->
+            <script>
+                document.getElementById("edit-button").addEventListener("click", function () {
+                    var editWindow = window.open("https://github.com/chinanf-boy/gentle-intro/edit/master/src/object-orientation.zh.md");
+                });</script>
+            <!-- // END - Rust Cookbook customization -->
+
+            <div id="content" class="content">
+                <main>
+                    <a class="header" href="#a面向对象的rust" id="a面向对象的rust"><h2>面向对象的Rust</h2></a>
 <p>每个人都来自某个地方,以前的编程语言以特定的方式实现了面向对象编程 (OOP) 的可能性很大:</p>
 <ul>
-<li>'classes'作为工厂生成 <em>对象</em> (通常被称为 <em>实例</em>) 并定义唯一的类型.</li>
+<li>‘classes’作为工厂生成 <em>对象</em> (通常被称为 <em>实例</em>) 并定义唯一的类型.</li>
 <li>类可能 <em>继承</em> 来自其他 class (他们的 <em>父母</em>) ,继承数据 (<em>fields</em>) 和行为 (<em>方法</em>)</li>
 <li>如果 A 是 B 的 父母,那么可以将B的一个实例传递给期望A (<em>分类{subtyping}</em>)</li>
 <li>一个对象应该隐藏它的数据 (<em>封装</em>) ,只能用方法操作.</li>
 </ul>
-<p>面向对象 <em>设计</em> 然后是识别类 ('名词') 和方法 ('动词') ,然后建立它们之间的关系, <em>是一个</em> 和 <em>有一个</em>.</p>
-<p>在旧版&quot;星际迷航&quot;系列中,医生会对船长说: &quot;这是人生,吉姆,而不是我们所知道的生活&quot;. 这非常适用于Rust风格的面向对象: 它会带来震撼,因为Rust数据聚合 (结构,枚举和元组) 是愚蠢的. 你可以在其上定义方法,并使数据本身是私有的,所有通常的封装策略,但它们都是 <em>无关的类型</em>. 没有数据分类和数据继承 (除了专门的案例) <code>Deref</code>强制转换. )</p>
+<p>面向对象 <em>设计</em> 然后是识别类 (’名词’) 和方法 (’动词’) ,然后建立它们之间的关系, <em>是一个</em> 和 <em>有一个</em>.</p>
+<p>在旧版”星际迷航”系列中,医生会对船长说: “这是人生,吉姆,而不是我们所知道的生活”. 这非常适用于Rust风格的面向对象: 它会带来震撼,因为Rust数据聚合 (结构,枚举和元组) 是愚蠢的. 你可以在其上定义方法,并使数据本身是私有的,所有通常的封装策略,但它们都是 <em>无关的类型</em>. 没有数据分类和数据继承 (除了专门的案例) <code>Deref</code>强制转换. )</p>
 <p>Rust中各种数据类型之间的关系使用 _ trait {traits}_. 学习Rust的很大一部分是理解标准库 trait 如何操作,因为这是将所有数据类型粘合在一起的意义网络.</p>
 <p>特质{trait} 很有趣,因为它们与主流语言的概念之间没有一一对应的关系. 这取决于你是动态还是静态思考. 在动态的情况下,它们更像Java或Go接口 - interfaces.</p>
-<a class="header" href="object-orientation.zh.html#a特质trait-对象" id="a特质trait-对象"><h3>特质{trait} 对象</h3></a>
+<a class="header" href="#a特质trait-对象" id="a特质trait-对象"><h3>特质{trait} 对象</h3></a>
 <p>考虑一下第一个用来介绍特质{trait} 的例子:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -193,10 +217,10 @@ for d in &amp;show_list {
 }
 #}</code></pre></pre>
 <p>不同之处在于,您现在可以使用此 Vec ,将其作为引用传递给它,或者不必跟踪任何借用的引用就可以将其传递出去. 当 Vec 被丢弃时,这些框将被丢弃,并且所有的内存都被回收.</p>
-<a class="header" href="object-orientation.zh.html#a动物" id="a动物"><h2>动物</h2></a>
+<a class="header" href="#a动物" id="a动物"><h2>动物</h2></a>
 <p>出于某种原因,任何关于面向对象和继承的讨论似乎最终都会讨论动物.
-它创造了一个不错的故事: &quot;看,猫是食肉动物,食肉动物是动物&quot;.</p>
-<p>但我会从Ruby宇宙的经典口号开始: &quot;如果它嘎嘎叫,那就是鸭子&quot;. 你所有的对象必须做的是定义 <code>嘎嘎{quacks}</code> 他们可以被认为是鸭子,虽然在一个非常狭窄的方式.</p>
+它创造了一个不错的故事: “看,猫是食肉动物,食肉动物是动物”.</p>
+<p>但我会从Ruby宇宙的经典口号开始: “如果它嘎嘎叫,那就是鸭子”. 你所有的对象必须做的是定义 <code>嘎嘎{quacks}</code> 他们可以被认为是鸭子,虽然在一个非常狭窄的方式.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -266,9 +290,9 @@ let ducks: Vec&lt;&amp;Quack&gt; = vec![&amp;duck1,&amp;duck2,&amp;parrot,&amp;i
 // quack 0 quack 1 quack 2 quack 3
 #}</code></pre></pre>
 <p>我能说什么? 它嘎嘎声叫,它一定是一只鸭子.
-有趣的是,你可以将你的 trait 应用于任何 rust 值,而不仅仅是&quot;对象&quot;.
+有趣的是,你可以将你的 trait 应用于任何 rust 值,而不仅仅是”对象”.
 (以来<code>嘎嘎</code>通过引用,有明确的解除引用<code>*</code>得到整数. )</p>
-<p>然而,你只能用同一个库的特质{trait} 和类型来做这件事,所以标准库不能'猴子补丁',这是另一块红宝石人的做法 (也不是最受人羡慕的) .</p>
+<p>然而,你只能用同一个库的特质{trait} 和类型来做这件事,所以标准库不能’猴子补丁’,这是另一块红宝石人的做法 (也不是最受人羡慕的) .</p>
 <p>到目前为止,这个特质{trait} <code>嘎嘎</code>表现得非常像Java接口,并且像现代Java接口一样 <em>提供</em> 这个方法.如果你已经实现了,它将提供一个默认实现 <em>需要</em> 方法.  (该<code>迭代器</code>特质{trait} 就是一个很好的例子. )</p>
 <p>但是,请注意特质{trait} 不属于 <em>定义类型</em> 和实施任何类型的新 trait ,但要受同一库限制.</p>
 <p>可以将引用传递给任何人<code>嘎嘎</code>实施者:</p>
@@ -287,8 +311,8 @@ quack_ref(&amp;d);
 <p>所以Rust的特质{trait} 允许传​​统 <em>多态</em> OOP. 但是遗传呢?人们通常是指 <em>实现继承{impl}</em> 而Rust则是 <em>接口继承</em>. 就好像一位Java程序员从未使用过<code>延伸{extend}</code>而是使用<code>实现{implements}</code>. 实际上,这是<a href="http://www.javaworld.com/article/2073649/core-java/why-extends-is-evil.html">推荐的做法</a>通过Alan Holub. 他说:</p>
 <blockquote>
 <p>我曾经参加过一个Java用户组会议,James Gosling (Java的发明人) 是这个会议的特色</p>
-<p>扬声器. 在令人难忘的问答环节中,有人问他: &quot;如果你能再一次做Java,</p>
-<p>你会改变什么?&quot;&quot;我会放弃 class ,&quot;他回答说,在笑声平息后,</p>
+<p>扬声器. 在令人难忘的问答环节中,有人问他: “如果你能再一次做Java,</p>
+<p>你会改变什么?””我会放弃 class ,”他回答说,在笑声平息后,</p>
 </blockquote>
 <blockquote>
 <p>他解释说,真正的问题不是类本身,而是实现继承{implementation inheritance}(扩展关系{extends relationship}) .</p>
@@ -303,7 +327,7 @@ quack_ref(&amp;d);
 <p>实现继承有一些严重的问题.</p>
 <p>但它的确如此 <em>方便</em>. 有这个胖基类叫动物和它有很多有用的功能 (它甚至可能暴露它的内部!) ,我们的派生类<code>猫</code>可以使用. 也就是说,它是一种代码重用的形式.</p>
 <p>但是代码重用是一个单独的问题. 理解Rust时,区分 实现 和 接口继承 很重要.</p>
-<p>请注意, trait 可能有 <em>提供</em> 方法. 考虑<code>迭代器</code>- 你只 <em>需要</em> 重写<code>next</code>,但却免费获得大量的方法. 这与现代Java接口的&quot;default&quot;方法类似. 这里我们只定义<code>名称{name}</code>和<code>upper_case</code>是为我们定义的. 我们 也是 <em>可以</em> 覆盖<code>upper_case</code>,但事实并非如此 <em>需要</em>.</p>
+<p>请注意, trait 可能有 <em>提供</em> 方法. 考虑<code>迭代器</code>- 你只 <em>需要</em> 重写<code>next</code>,但却免费获得大量的方法. 这与现代Java接口的”default”方法类似. 这里我们只定义<code>名称{name}</code>和<code>upper_case</code>是为我们定义的. 我们 也是 <em>可以</em> 覆盖<code>upper_case</code>,但事实并非如此 <em>需要</em>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -329,7 +353,7 @@ assert_eq!(f.name(),&quot;boo&quot;.to_string());
 assert_eq!(f.upper_case(),&quot;BOO&quot;.to_string());
 #}</code></pre></pre>
 <p>这是一个 <em>类</em> 的代码重用,为真,但请注意,它不适用于数据,只有 接口!</p>
-<a class="header" href="object-orientation.zh.html#a鸭子和泛型" id="a鸭子和泛型"><h2>鸭子和泛型</h2></a>
+<a class="header" href="#a鸭子和泛型" id="a鸭子和泛型"><h2>鸭子和泛型</h2></a>
 <p>Rust中一个通用友好的鸭子函数的例子就是这样一个简单的例子:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -376,9 +400,9 @@ quack_everyone(ducks.into_iter());
 <p>Rust中的迭代器不是鸭式的,但是必须是 impl <code>迭代器</code>的类型
 ,在这种情况下,迭代器提供了一些盒子<code>嘎嘎</code>. 所涉及的类型没有歧义,值必须满足<code>嘎嘎</code>. 通常,函数签名是关于通用Rust函数的最具挑战性的事情,这就是为什么我建议阅读标准库的源代码 - impl 通常比 声明 简单得多!</p>
 <p>这里唯一的类型参数是实际的迭代器类型,这意味着这将适用于任何可以传递序列的任何东西<code>Box&lt;Duck&gt;</code>,而不仅仅是一个向量迭代器.</p>
-<a class="header" href="object-orientation.zh.html#a继承" id="a继承"><h2>继承</h2></a>
+<a class="header" href="#a继承" id="a继承"><h2>继承</h2></a>
 <p>面向对象设计的一个常见问题是试图将事情强加到一个 <em>是一个</em> 关系,而忽视 <em>有一个</em> 关系. <a href="https://en.wikipedia.org/wiki/Design_Patterns">该四人帮 </a>
-二十二年前在他们的设计模式书中说过&quot;首选组合继承&quot;.</p>
+二十二年前在他们的设计模式书中说过”首选组合继承”.</p>
 <p>这里有一个例子: 你想模拟一些公司的员工,并且<code>雇员{Employee}</code>似乎是一个 class 的好名字.</p>
 <p>然后,经理是一个员工 (这是真的) ,所以我们开始用一个构建我们的层次结构</p>
 <p><code>雇员</code>的子类<code>经理{Manager}</code>. <code>这并不像看起来那么聪明. 也许我们对识别重要名词感到厌倦,也许我们 (无意识地) 认为经理和员工是不同种类的动物? 这更好的是雇员</code>有一个<code>角色</code>集合,然后一个经理就是一个<code>雇员</code>有更多的责任和能力.</p>
@@ -386,7 +410,7 @@ quack_everyone(ducks.into_iter());
 <p>构成在Rust中更为重要,原因很明显,您无法从基类以惰性方式继承功能.</p>
 <p>组合也很重要,因为借用检查器足够聪明,可以知道借用不同的结构域是单独的借入.</p>
 <p>你可以有一个字段的可变借入,同时拥有另一个字段的不可变借入,等等. Rust不能告诉一个方法只访问一个字段,所以为了方便实现,这些字段应该用自己的方法来构造.  (该 <em>外部</em> 结构的接口可以是任何你喜欢使用合适的 trait 的. )</p>
-<p>&quot;拆分拆分{split borrowing}&quot;的一个具体例子会使这个更清晰.</p>
+<p>“拆分拆分{split borrowing}”的一个具体例子会使这个更清晰.</p>
 <p>我们拥有一个一些字符串的结构,并且有一个可变的借用第一个字符串的方法.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -422,8 +446,8 @@ impl Foo {
     }
 #}</code></pre></pre>
 <p>这很好,因为借款检查员认为这些是独立的借款.</p>
-<p>所以想象这些字段是一些任意的类型,你可以看到在这些字段上调用的方法, 不会导致借用问题. 有一种限制但非常重要的&quot;继承&quot;<a href="https://rust-lang.github.io/book/second-edition/ch15-02-deref.html">Deref</a>
-这是'取消引用'操作符'*<code>的 trait 。</code>String<code>实现</code>Deref&lt;Target=str&gt;<code>，所以</code>＆str<code>上定义的所有方法都是自动的 也可用于</code>String<code>! 以类似的方式，</code>Foo<code>的方法可以直接 调用</code>Box<Foo>`。 有些人觉得这有点神奇，但它非常方便。
+<p>所以想象这些字段是一些任意的类型,你可以看到在这些字段上调用的方法, 不会导致借用问题. 有一种限制但非常重要的”继承”<a href="https://rust-lang.github.io/book/second-edition/ch15-02-deref.html">Deref</a>
+这是’取消引用’操作符’*<code>的 trait 。</code>String<code>实现</code>Deref&lt;Target=str&gt;<code>，所以</code>＆str<code>上定义的所有方法都是自动的 也可用于</code>String<code>! 以类似的方式，</code>Foo<code>的方法可以直接 调用</code>Box<Foo>`。 有些人觉得这有点神奇，但它非常方便。
 现代Rust中有一种更简单的语言，但使用起来并不令人愉快。
 它确实应该用于那些拥有可变类型和更简单借用的情况
 类型。</p>
@@ -486,7 +510,7 @@ macro_rules! dbg {
     }
 }
 #}</code></pre></pre>
-<p>它需要一个参数 (用<code>$x</code>表示) 必须是'表达'. 我们打印出它的价值,并且一个 <em>字符串化</em> 值的版本. C程序员可以是在这一点上 <em>小</em> 得意,但这意味着如果我通过了<code>1 + 2</code> (一个表达) <code>stringify!(1 + 2)</code>是文字字符串&quot;1 + 2&quot;. 这会为我们在玩代码时节省一些打字的时间:</p>
+<p>它需要一个参数 (用<code>$x</code>表示) 必须是’表达’. 我们打印出它的价值,并且一个 <em>字符串化</em> 值的版本. C程序员可以是在这一点上 <em>小</em> 得意,但这意味着如果我通过了<code>1 + 2</code> (一个表达) <code>stringify!(1 + 2)</code>是文字字符串”1 + 2”. 这会为我们在玩代码时节省一些打字的时间:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -522,8 +546,8 @@ show(&amp;boo);
 // s.show() = &quot;Alice&quot;
 #}</code></pre></pre>
 <p>这个 <em>是</em> 面向对象,而不是你习惯的那种.</p>
-<p>请注意<code>Show</code>引用传递给<code>show</code>, 不可能是 <em>动态</em> 升级为<code>ShowTell</code>! 具有更多动态类系统的语言允许您检查给定对象是否是类的实例, 然后对该类型执行动态转换. 一般来说这不是一个好主意,因为这个原因,特别是不能在Rust中工作, <code>Show</code>引用已经&quot;忘记&quot;它最初是一个<code>ShowTell</code>引用.</p>
-<p>你总是有选择: 多态,通过特质{trait} 对象,或单态,通过泛型约束的特质{trait} . 现代C ++和Rust标准库倾向于采用通用路由,但多态路由并未过时. 您必须了解不同的权衡 - 泛型生成最快的代码,可以内联. 这可能会导致代码膨胀. 但并非所有事情都必须如此 <em>尽可能快</em>- 在典型的程序 run 的生命周期中,它可能只发生&quot;少&quot;几次.</p>
+<p>请注意<code>Show</code>引用传递给<code>show</code>, 不可能是 <em>动态</em> 升级为<code>ShowTell</code>! 具有更多动态类系统的语言允许您检查给定对象是否是类的实例, 然后对该类型执行动态转换. 一般来说这不是一个好主意,因为这个原因,特别是不能在Rust中工作, <code>Show</code>引用已经”忘记”它最初是一个<code>ShowTell</code>引用.</p>
+<p>你总是有选择: 多态,通过特质{trait} 对象,或单态,通过泛型约束的特质{trait} . 现代C ++和Rust标准库倾向于采用通用路由,但多态路由并未过时. 您必须了解不同的权衡 - 泛型生成最快的代码,可以内联. 这可能会导致代码膨胀. 但并非所有事情都必须如此 <em>尽可能快</em>- 在典型的程序 run 的生命周期中,它可能只发生”少”几次.</p>
 <p>所以,这里有一个总结:</p>
 <ul>
 <li><code>类</code>扮演的角色在数据和 trait 之间共享</li>
@@ -534,9 +558,9 @@ show(&amp;boo);
 <li>trait 可以提供方法,允许接口代码重用</li>
 <li>trait 给你两个虚拟方法 (多态) 和通用约束 (单态)</li>
 </ul>
-<a class="header" href="object-orientation.zh.html#a示例-windows-api" id="a示例-windows-api"><h2>示例: Windows API</h2></a>
+<a class="header" href="#a示例-windows-api" id="a示例-windows-api"><h2>示例: Windows API</h2></a>
 <p>GUI工具包是传统OOP广泛使用的领域之一. 一个<code>EditControl</code>或者一个<code>ListWindow</code>是-一个<code>窗口{Window}</code>等等. 这使得编写Rust绑定到GUI工具包比编写它更困难.</p>
-<p>Win32编程可以在Rust中完成<a href="https://www.codeproject.com/Tips/1053658/Win-GUI-Programming-In-Rust-Language">直接</a>,它比原来的C稍微笨拙一点. 当我从C到C ++毕业时,我想要更干净的东西,并且做了我自己的OOP包装. 典型的Win32 API函数是<a href="https://docs.rs/user32-sys/0.0.9/i686-pc-windows-gnu/user32_sys/fn.ShowWindow.html">ShowWindow</a>用于控制窗口的可见性. 现在,一个<code>EditControl</code>有一些专门的功能,但它都是用Win32完成的<code>HWND</code> ('handle to window') 不透明的值. 你想要<code>EditControl</code>也有一个<code>show</code>方法,传统上这将通过实现继承来完成. 您 <em>不</em> 想要为每种类型输出所有这些继承的方法!但Rust trait 提供了一个解决方案. 会有一个<code>窗口{Window}</code> trait :</p>
+<p>Win32编程可以在Rust中完成<a href="https://www.codeproject.com/Tips/1053658/Win-GUI-Programming-In-Rust-Language">直接</a>,它比原来的C稍微笨拙一点. 当我从C到C ++毕业时,我想要更干净的东西,并且做了我自己的OOP包装. 典型的Win32 API函数是<a href="https://docs.rs/user32-sys/0.0.9/i686-pc-windows-gnu/user32_sys/fn.ShowWindow.html">ShowWindow</a>用于控制窗口的可见性. 现在,一个<code>EditControl</code>有一些专门的功能,但它都是用Win32完成的<code>HWND</code> (’handle to window’) 不透明的值. 你想要<code>EditControl</code>也有一个<code>show</code>方法,传统上这将通过实现继承来完成. 您 <em>不</em> 想要为每种类型输出所有这些继承的方法!但Rust trait 提供了一个解决方案. 会有一个<code>窗口{Window}</code> trait :</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -556,77 +580,87 @@ trait Window {
 }
 #}</code></pre></pre>
 <p>所以,实现struct为<code>EditControl</code>可以包含一个<code>HWND</code>, 并通过定义一种方法执行<code>窗口{Window}</code>;<code>EditControl</code>是一种继承自的<code>窗口{Window}</code>特质{trait} 并定义扩展接口. 就像是<code>ComboxBox</code>- 其行为像一个<code>EditControl</code> <em>和</em> 一个<code>ListWindow</code>可以通过 trait 继承轻松实现.</p>
-<p>Win32 API ('32'不再意味着'32位') 实际上是面向对象的,但是老式的,受 Alan Kay 定义的影响: 对象包含隐藏的数据,并且由 <em>消息{messages}</em> 控制. 因此,任何Windows应用程序的核心都有一个消息循环,各种窗口 (称为'窗口类') 都用它们自己的switch 语句实现这些方法. 有一个消息叫<code>WM_SETTEXT</code>但实现可能会有所不同: 标签的文本更改,但顶级窗口的标题更改.</p>
+<p>Win32 API (’32’不再意味着’32位’) 实际上是面向对象的,但是老式的,受 Alan Kay 定义的影响: 对象包含隐藏的数据,并且由 <em>消息{messages}</em> 控制. 因此,任何Windows应用程序的核心都有一个消息循环,各种窗口 (称为’窗口类’) 都用它们自己的switch 语句实现这些方法. 有一个消息叫<code>WM_SETTEXT</code>但实现可能会有所不同: 标签的文本更改,但顶级窗口的标题更改.</p>
 <p><a href="https://gabdube.github.io/native-windows-gui/book_20.html">这里</a>是一个相当有前途的最小Windows GUI框架. 但根据我的口味,有太多了<code>unwrap</code>实例正在发生 - 其中一些甚至没有错误.</p>
 <p>这是因为 NWG 正在利用消息的松散动态性质. 通过适当的类型安全接口,编译时会捕获更多的错误.</p>
 <p>在<a href="https://rust-lang.github.io/book/second-edition/ch17-00-oop.html">下一版</a>Rust编程语言手册 对Rust中 面向对象的含义 进行了很好的讨论.</p>
 
-                    </main>
+                </main>
 
-                    <nav class="nav-wrapper" aria-label="Page navigation">
-                        <!-- Mobile navigation buttons -->
-                        
-                            <a rel="prev" href="7-shared-and-networking.zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
-                            </a>
-                        
-
-                        
-                            <a rel="next" href="nom-intro.zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        
-
-                        <div style="clear: both"></div>
-                    </nav>
-                </div>
-            </div>
-
-            <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                
-                    <a href="7-shared-and-networking.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                <nav class="nav-wrapper" aria-label="Page navigation">
+                    <!-- Mobile navigation buttons -->
+                    
+                    <a rel="prev" href="7-shared-and-networking.zh.html" class="mobile-nav-chapters previous" title="Previous chapter"
+                        aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                
+                    
 
-                
-                    <a href="nom-intro.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    
+                    <a rel="next" href="nom-intro.zh.html" class="mobile-nav-chapters next" title="Next chapter"
+                        aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
-                
-            </nav>
+                    
 
+                    <div style="clear: both"></div>
+                </nav>
+            </div>
         </div>
 
-        
+        <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            
+            <a href="7-shared-and-networking.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter"
+                aria-keyshortcuts="Left">
+                <i class="fa fa-angle-left"></i>
+            </a>
+            
 
-        
+            
+            <a href="nom-intro.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter"
+                aria-keyshortcuts="Right">
+                <i class="fa fa-angle-right"></i>
+            </a>
+            
+        </nav>
 
-        
+    </div>
 
-        
-        <script src="ace.js" type="text/javascript" charset="utf-8"></script>
-        <script src="editor.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mode-rust.js" type="text/javascript" charset="utf-8"></script>
-        <script src="theme-dawn.js" type="text/javascript" charset="utf-8"></script>
-        <script src="theme-tomorrow_night.js" type="text/javascript" charset="utf-8"></script>
-        
+    
 
-        
-        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
-        
-        
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        
+    
+    <!-- Google Analytics Tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128555056-1"></script>
+    
+    <script type="text/javascript">
+        var localAddrs = ["localhost", "127.0.0.1", ""];
+        if (localAddrs.indexOf(document.location.hostname) === -1) {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
 
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+            gtag('config', 'UA-128555056-1');
+        }
+    </script>
+    
 
-        <!-- Custom JS scripts -->
-        
+    
 
-    </body>
+    
+    <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+    
+
+    <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+    <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+    <!-- Custom JS scripts -->
+    
+
+    
+
+</body>
+
 </html>

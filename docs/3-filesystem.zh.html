@@ -1,143 +1,167 @@
 <!DOCTYPE HTML>
 <html lang="en" class="sidebar-visible no-js">
-    <head>
-        <!-- Book generated using mdBook -->
-        <meta charset="UTF-8">
-        <title>文件系统和进程 - Rust 的绅士介绍</title>
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust语言，标准库和生态系统介绍">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
 
-        <base href="">
+<head>
+    <!-- Book generated using mdBook -->
+    <meta charset="UTF-8">
+    <title>文件系统和进程 - Rust 的绅士介绍</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta name="description" content="Rust语言，标准库和生态系统介绍">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ffffff" />
 
-        <link rel="stylesheet" href="book.css">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="favicon.png">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/chrome.css">
+    <link rel="stylesheet" href="css/print.css" media="print">
 
-        <link rel="shortcut icon" href="favicon.png">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"
+        rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="_FontAwesome/css/font-awesome.css">
+    <!-- Highlight.js Stylesheets -->
+    <link rel="stylesheet" href="highlight.css">
+    <link rel="stylesheet" href="tomorrow-night.css">
+    <link rel="stylesheet" href="ayu-highlight.css">
 
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+    <!-- Custom theme stylesheets -->
+    
 
-        <!-- Custom theme stylesheets -->
-        
+    
+</head>
 
-        
+<body class="light">
+    <!-- Provide site root to javascript -->
+    <script type="text/javascript">var path_to_root = "";</script>
 
-    </head>
-    <body class="light">
-        <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
-            try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+    <!-- Work around some values being stored in localStorage wrapped in quotes -->
+    <script type="text/javascript">
+        try {
+            var theme = localStorage.getItem('mdbook-theme');
+            var sidebar = localStorage.getItem('mdbook-sidebar');
 
-                if (theme.startsWith('"') && theme.endsWith('"')) {
-                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
-                }
-
-                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
-                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
-                }
-            } catch (e) { }
-        </script>
-
-        <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
-            var theme;
-            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
-            if (theme === null || theme === undefined) { theme = 'light'; }
-            document.body.className = theme;
-            document.querySelector('html').className = theme + ' js';
-        </script>
-
-        <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
-            if (document.body.clientWidth >= 1080) {
-                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
-                sidebar = sidebar || 'visible';
+            if (theme.startsWith('"') && theme.endsWith('"')) {
+                localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
-        </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html" class="active"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
-        </nav>
+            if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+            }
+        } catch (e) { }
+    </script>
 
-        <div id="page-wrapper" class="page-wrapper">
+    <!-- Set the theme before any content is loaded, prevents flash -->
+    <script type="text/javascript">
+        var theme;
+        try { theme = localStorage.getItem('mdbook-theme'); } catch (e) { }
+        if (theme === null || theme === undefined) { theme = 'light'; }
+        document.body.className = theme;
+        document.querySelector('html').className = theme + ' js';
+    </script>
 
-            <div class="page">
-                
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
+    <!-- Hide / unhide sidebar before it is displayed -->
+    <script type="text/javascript">
+        var html = document.querySelector('html');
+        var sidebar = 'hidden';
+        if (document.body.clientWidth >= 1080) {
+            try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch (e) { }
+            sidebar = sidebar || 'visible';
+        }
+        html.classList.remove('sidebar-visible');
+        html.classList.add("sidebar-" + sidebar);
+    </script>
 
-                        <h1 class="menu-title">Rust 的绅士介绍</h1> 
+    <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+        <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html" class="active"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
+    </nav>
 
+    <div id="page-wrapper" class="page-wrapper">
+
+        <div class="page">
+            
+            <div id="menu-bar" class="menu-bar">
+                <div id="menu-bar-sticky-container">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents"
+                            aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <!-- START - Rust Cookbook customization -->
+                        <button id="edit-button" class="icon-button" type="button" title="Fork and edit" aria-label="Fork and edit"
+                            aria-haspopup="true" aria-expanded="false" aria-controls="edit">
+                            <i class="fa fa-edit">Edit</i>
+                        </button>
+                        <!-- END - Rust Cookbook customization -->
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme"
+                            aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)"
+                            aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Rust 的绅士介绍</h1>
+                    
                         <div class="right-buttons">
                             <a href="print.html" title="Print this book" aria-label="Print this book">
                                 <i id="print-button" class="fa fa-print"></i>
                             </a>
+                            
                         </div>
                     </div>
                 </div>
 
-                
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
-                    </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
-                        </ul>
-                    </div>
+            
+            <div id="search-wrapper" class="hidden">
+                <form id="searchbar-outer" class="searchbar-outer">
+                    <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..."
+                        aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                </form>
+                <div id="searchresults-outer" class="searchresults-outer hidden">
+                    <div id="searchresults-header" class="searchresults-header"></div>
+                    <ul id="searchresults">
+                    </ul>
                 </div>
-                
+            </div>
+            
 
-                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
-                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
-                    });
-                </script>
+            <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+            <script type="text/javascript">
+                document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                Array.from(document.querySelectorAll('#sidebar a')).forEach(function (link) {
+                    link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                });
+            </script>
 
-                <div id="content" class="content">
-                    <main>
-                        <a class="header" href="3-filesystem.zh.html#a文件系统和进程" id="a文件系统和进程"><h1>文件系统和进程</h1></a>
-<a class="header" href="3-filesystem.zh.html#a再看看读取-files" id="a再看看读取-files"><h2>再看看读取 Files</h2></a>
+            <!-- // START - Rust Cookbook customization -->
+            <script>
+                document.getElementById("edit-button").addEventListener("click", function () {
+                    var editWindow = window.open("https://github.com/chinanf-boy/gentle-intro/edit/master/src/3-filesystem.zh.md");
+                });</script>
+            <!-- // END - Rust Cookbook customization -->
+
+            <div id="content" class="content">
+                <main>
+                    <a class="header" href="#a文件系统和进程" id="a文件系统和进程"><h1>文件系统和进程</h1></a>
+<a class="header" href="#a再看看读取-files" id="a再看看读取-files"><h2>再看看读取 Files</h2></a>
 <p>在 <a href="http://chinanf-boy.github.io/gentle-intro/1-basics.zh.html#a%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6">第1部分的末尾</a>,我展示了如何读取整个文件到字符串. 自然,这并不总是一个好主意,所以这里是如何逐行读取文件.</p>
 <p><code>fs::File</code> impl{实现} 了<code>io::Read</code>,这是一个可读性的  trait  . 这个 trait 定义了一个能填补<code>u8</code>切片的字节<code>read</code>方法 - 这是唯一的 <em>要求</em>  trait 的方法,你会得到一些 <em>提供</em> 免费的方法,很像<code>Iterator</code>. 您可以使用<code>read_to_end</code>填 充可读的内容 到 字节 Vec, 还有<code>read_to_string</code>可以填充一个 string - 必须是 utf-8 编码.</p>
-<p>这是一个'原始{raw}'阅读,没有缓冲. 对于缓冲阅读, 我们有<code>io::BufRead</code> trait ,给出 <code>read_line</code> 和一个<code>lines</code>迭代器{Iterator}. <code>io::BufReader</code>将给 <em>任何</em> 可读性 提供<code>io::BufRead</code>实现.</p>
+<p>这是一个’原始{raw}’阅读,没有缓冲. 对于缓冲阅读, 我们有<code>io::BufRead</code> trait ,给出 <code>read_line</code> 和一个<code>lines</code>迭代器{Iterator}. <code>io::BufReader</code>将给 <em>任何</em> 可读性 提供<code>io::BufRead</code>实现.</p>
 <p><code>fs::File</code> <em>也</em> impl <code>io::Write</code>.</p>
 <p>确保所有这些 traits 可用的最简单方法是<code>use std::io::prelude::*</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
@@ -176,9 +200,9 @@ fn read_all_lines(filename: &amp;str) -&gt; io::Result&lt;()&gt; {
     }
 #}</code></pre></pre>
 <p>这导致分配少得多,因为 <em>clearing{清除}</em> 该字符串不释放其分配的内存;一旦字符串有足够的容量,不会再有分配.</p>
-<p>这是我们使用一个<code>块{}</code>来控制借用的情况之一. <code>line</code>是借用的<code>buf</code>,这个借用必须在我们修改之前完成<code>buf</code>. Rust 再一次试图阻止我们做一些愚蠢的事情,那就是访问<code>line</code> <em>后</em> 我们已经清除了缓冲区.  (借阅检查者 有时可能会受到限制,rust 是由于&quot;非词汇生命周期{non-lexical  lifetimes}&quot;,它会分析代码并看到<code>buf.clear()</code>之后<code>line</code>不使用. )</p>
+<p>这是我们使用一个<code>块{}</code>来控制借用的情况之一. <code>line</code>是借用的<code>buf</code>,这个借用必须在我们修改之前完成<code>buf</code>. Rust 再一次试图阻止我们做一些愚蠢的事情,那就是访问<code>line</code> <em>后</em> 我们已经清除了缓冲区.  (借阅检查者 有时可能会受到限制,rust 是由于”非词汇生命周期{non-lexical  lifetimes}”,它会分析代码并看到<code>buf.clear()</code>之后<code>line</code>不使用. )</p>
 <p>这不是很漂亮. 我不能给你一个适当的迭代器,它返回缓冲区的引用,但我可以给你一些 <em>看起来像</em> 一个迭代器的东西.</p>
-<p>首先定义一个通用结构体; 类型参数<code>R</code>是'任意实现 Read 的类型'. `它包含读者{reader} 和我们要借用的 缓冲区{buffer}.</p>
+<p>首先定义一个通用结构体; 类型参数<code>R</code>是’任意实现 Read 的类型’. `它包含读者{reader} 和我们要借用的 缓冲区{buffer}.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -244,7 +268,7 @@ fn read_all_lines(filename: &amp;str) -&gt; io::Result&lt;()&gt; {
     }
 #}</code></pre></pre>
 <p>这很诱人,但你在这里抛出一个可能的错误;每当发生错误时,此循环都会静静地停止. 特别是,它将停止在 Rust 无法将 line 转换为 utf-8 的第一个位置. 适合休闲代码,不适合生产代码!</p>
-<a class="header" href="3-filesystem.zh.html#a写入到files" id="a写入到files"><h2>写入到Files</h2></a>
+<a class="header" href="#a写入到files" id="a写入到files"><h2>写入到Files</h2></a>
 <p>我们遇到了<code>write!</code>宏当遇到<code>Debug</code>实现- 它也适用于任何实现<code>Write</code>的东西. 所以这是另一种<code>print!</code>:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -272,9 +296,9 @@ fn main() {
 }
 </code></pre></pre>
 <p>如果你关心性能,你需要知道 Rust 文件默认是无缓冲的. 所以每个小的写入请求都会直接进入操作系统,而且这将会明显变慢. 我提到了这一点,因为这种默认设置与其他编程语言不同,并且可能导致令人震惊的发现: Rust 可能被脚本语言遗留下来的地方! 就像<code>Read</code>和<code>io::BufReader</code>, <code>io::BufWriter</code>是带缓冲的<code>Write</code>.</p>
-<a class="header" href="3-filesystem.zh.html#a文件路径和目录" id="a文件路径和目录"><h2>文件,路径和目录</h2></a>
-<p>这是一个用于在机器上打印 Cargo 目录的小程序. 最简单的情况是它是'〜/.cargo'. 这是一个Unix shell扩展,所以我们使用<code>env::home_dir</code>因为它是跨平台的.  (它可能会失败,但没有主目录的计算机, 无论如何都不会托管 Rust 工具. )</p>
-<p>这里我们创建一个<a href="https://doc.rust-lang.org/std/ops/trait.Mul.html">PathBuf</a>并使用它的<code>push</code>方法构建完整的文件路径就像 <em>组件</em>.  (这比 用'/','\'或其他任何东西来要容易得多,取决于系统. )</p>
+<a class="header" href="#a文件路径和目录" id="a文件路径和目录"><h2>文件,路径和目录</h2></a>
+<p>这是一个用于在机器上打印 Cargo 目录的小程序. 最简单的情况是它是’〜/.cargo’. 这是一个Unix shell扩展,所以我们使用<code>env::home_dir</code>因为它是跨平台的.  (它可能会失败,但没有主目录的计算机, 无论如何都不会托管 Rust 工具. )</p>
+<p>这里我们创建一个<a href="https://doc.rust-lang.org/std/ops/trait.Mul.html">PathBuf</a>并使用它的<code>push</code>方法构建完整的文件路径就像 <em>组件</em>.  (这比 用’/’,’\‘或其他任何东西来要容易得多,取决于系统. )</p>
 <pre><pre class="playpen"><code class="language-rust">// file7.rs
 use std::env;
 use std::path::PathBuf;
@@ -291,7 +315,7 @@ fn main() {
 }
 </code></pre></pre>
 <p>一个<code>PathBuf</code>就好像<code>String</code>- 它拥有一组可扩展的角色,但具有专门用于构建路径的方法. 但其大部分功能都来自借用版本<code>Path</code>,这就像<code>&amp;str</code>. 所以,例如,<code>is_dir</code>是一个<code>Path</code>方法.</p>
-<p>这可能听起来像一种继承形式,但魔法<a href="https://doc.rust-lang.org/book/deref-coercions.html">Deref</a> trait 的工作方式不同. 它就像<code>String/&amp;str</code> - <code>PathBuf</code>引用可 <em>包裹{Coerce}</em> 成为<code>Path</code>引用.  ('Coerce'是一个很强的词,但这确实是 Rust 为你做转换的少数几个地方之一. )</p>
+<p>这可能听起来像一种继承形式,但魔法<a href="https://doc.rust-lang.org/book/deref-coercions.html">Deref</a> trait 的工作方式不同. 它就像<code>String/&amp;str</code> - <code>PathBuf</code>引用可 <em>包裹{Coerce}</em> 成为<code>Path</code>引用.  (’Coerce’是一个很强的词,但这确实是 Rust 为你做转换的少数几个地方之一. )</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -301,9 +325,9 @@ let path = PathBuf::from(home);
 foo(&amp;path);
 #}</code></pre></pre>
 <p><code>PathBuf</code>与<code>OsString</code>有亲密的关系,它代表我们直接从系统获得的字符串.  (有一个相应的<code>OsString/&amp;OsStr</code>关系. )</p>
-<p>这样的字符串不是 <em>保证</em> 可以表示为 utf-8 !现实生活是一个<a href="https://news.ycombinator.com/item?id=10519932">复杂的事情</a>,特别是看到'他们为什么这么辛苦'的答案. 总而言之,首先有几年的 ASCII 传统编码,以及其他语言的多种特殊编码. 其次,人类语言很复杂. 例如'noël'是 <em>五个</em> Unicode代码点!</p>
+<p>这样的字符串不是 <em>保证</em> 可以表示为 utf-8 !现实生活是一个<a href="https://news.ycombinator.com/item?id=10519932">复杂的事情</a>,特别是看到’他们为什么这么辛苦’的答案. 总而言之,首先有几年的 ASCII 传统编码,以及其他语言的多种特殊编码. 其次,人类语言很复杂. 例如’noël’是 <em>五个</em> Unicode代码点!</p>
 <p>确实,现代操作系统文件名的大部分时间都是 Unicode (Unix方面的 utf-8 ,Windows方面的UTF-16) ,又或者不是. Rust必须严格处理这种可能性. 例如,<code>Path</code>有一个方法<code>as_os_str</code>它返回一个<code>&amp;OsStr</code>, 但是<code>to_str</code>方法返回一个<code>Option&lt;&amp;str&gt;</code>. 并不总是可能!</p>
-<p>人们在这一点上遇到了麻烦,因为他们已经过分依赖'string'和'character'作为唯一必要的抽象. 正如爱因斯坦所说, 编程语言必须尽可能简单,但并不简单. 系统语言 <em>需要</em> 一个<code>String/&amp;str</code>区别 (拥有与借用: 这也非常方便) ,如果它希望在 Unicode 字符串上标准化,那么它需要另一种类型来处理无效 Unicode 的文本 - 因此有了<code>OsString/&amp;OsStr</code>. 请注意,这些类型没有任何有趣的 类似字符串的方法, 因为我们本来就不知道无效 Unicode.</p>
+<p>人们在这一点上遇到了麻烦,因为他们已经过分依赖’string’和’character’作为唯一必要的抽象. 正如爱因斯坦所说, 编程语言必须尽可能简单,但并不简单. 系统语言 <em>需要</em> 一个<code>String/&amp;str</code>区别 (拥有与借用: 这也非常方便) ,如果它希望在 Unicode 字符串上标准化,那么它需要另一种类型来处理无效 Unicode 的文本 - 因此有了<code>OsString/&amp;OsStr</code>. 请注意,这些类型没有任何有趣的 类似字符串的方法, 因为我们本来就不知道无效 Unicode.</p>
 <p>但是,人们习惯于像处理字符串一样处理文件名,这就是 Rust 使用<code>PathBuf</code>方法操作文件路径更容易的原因.</p>
 <p>您可以<code>pop</code>连续去除路径组件. 这里我们从程序的当前目录开始:</p>
 <pre><pre class="playpen"><code class="language-rust">// file8.rs
@@ -347,7 +371,7 @@ fn main() {
 // gotcha /home/steve/rust/config.txt
 </code></pre></pre>
 <p>如此像 <strong>git</strong> 的工作方式当它想知道当前的回购是什么.</p>
-<p>有关文件的详细信息 (其大小,类型等) 被称为它的 <em>元数据</em>. 与往常一样,可能存在错误 - 不仅仅是&quot;找不到&quot;,而且如果我们没有权限读取此文件.</p>
+<p>有关文件的详细信息 (其大小,类型等) 被称为它的 <em>元数据</em>. 与往常一样,可能存在错误 - 不仅仅是”找不到”,而且如果我们没有权限读取此文件.</p>
 <pre><pre class="playpen"><code class="language-rust">// file10.rs
 use std::env;
 use std::path::Path;
@@ -371,7 +395,7 @@ fn main() {
 // modified Ok(SystemTime { tv_sec: 1483866529, tv_nsec: 600495644 })
 </code></pre></pre>
 <p>文件的长度 (以字节为单位) 和修改时间很容易解释.  (注意我们可能无法获得这个时间!) 文件类型有方法<code>is_dir</code>,<code>is_file</code>和<code>is_symlink</code>.</p>
-<p><code>权限{perissions}</code>是一个有趣的. Rust 努力成为跨平台的,所以这是'最低公分母'的例子. 一般来说,你可以查询的只是文件是否只读 - '权限'概念在Unix中被扩展,并为 <code>用户/群组/其他</code> 提供 <code>读/写/可执行</code>的权限.</p>
+<p><code>权限{perissions}</code>是一个有趣的. Rust 努力成为跨平台的,所以这是’最低公分母’的例子. 一般来说,你可以查询的只是文件是否只读 - ‘权限’概念在Unix中被扩展,并为 <code>用户/群组/其他</code> 提供 <code>读/写/可执行</code>的权限.</p>
 <p>但是,如果您对 Windows 不感兴趣,那么引入特定于平台的 traits 将至少为我们提供权限模式位.  (像往常一样,一个 trait 只有在它可见时才会触发. ) 然后,应用到程序它自己的能被赋予可执行:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -381,10 +405,10 @@ use std::os::unix::fs::PermissionsExt;
 println!(&quot;perm {:o}&quot;,data.permissions().mode());
 // perm 755
 #}</code></pre></pre>
-<p>(注意&quot;{:o}&quot;用于打印 <em>八进制</em>)</p>
-<p>(Windows 上的文件是否可执行取决于其扩展名. 可执行文件的扩展名可以在PATHEXT`环境变量 - '.exe','. bat'等等) .</p>
+<p>(注意”{:o}”用于打印 <em>八进制</em>)</p>
+<p>(Windows 上的文件是否可执行取决于其扩展名. 可执行文件的扩展名可以在PATHEXT`环境变量 - ‘.exe’,’. bat’等等) .</p>
 <p><code>std::fs</code>包含许多用于处理文件的有用功能,例如复制或移动文件,制作符号链接和创建目录.</p>
-<p>要查找目录的内容,<code>std::fs::read_dir</code>提供了一个迭代器. 以下是扩展名为&quot;.rs&quot;且大小大于1024字节 的所有文件:</p>
+<p>要查找目录的内容,<code>std::fs::read_dir</code>提供了一个迭代器. 以下是扩展名为”.rs”且大小大于1024字节 的所有文件:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -409,12 +433,12 @@ fn dump_dir(dir: &amp;str) -&gt; io::Result&lt;()&gt; {
 // ./struct6.rs length 1359
 // ./new-sexpr.rs length 7719
 #}</code></pre></pre>
-<p>明显,<code>read_dir</code>可能会失败 (通常是'找不到'或'没有权限') ,但是获取每个新条目可能会失败 (这就像是<code>line</code>迭代器{Iterator} 遍历 缓冲的阅读器的内容) . 另外,我们可能无法获取与条目对应的元数据. 一个文件可能没有扩展名,所以我们也必须检查.</p>
+<p>明显,<code>read_dir</code>可能会失败 (通常是’找不到’或’没有权限’) ,但是获取每个新条目可能会失败 (这就像是<code>line</code>迭代器{Iterator} 遍历 缓冲的阅读器的内容) . 另外,我们可能无法获取与条目对应的元数据. 一个文件可能没有扩展名,所以我们也必须检查.</p>
 <p>为什么不只是一个遍历路径的迭代器? 在 Unix 上这是这样的<code>opendir</code>系统调用起作用,但在 Windows 上,您无法在不获取元数据的情况下 迭代目录的内容. 所以这是一个相当优雅的妥协方案,它允许跨平台的代码尽可能高效.</p>
-<p>在这一点上你可以原谅感觉'错误疲劳{error fatigue}'. 但请注意 <em>错误总是存在</em> - 这不是 Rust 正在发明新的. 它只是在努力让你无法忽视它们. 任何操作系统调用都可能失败.</p>
+<p>在这一点上你可以原谅感觉’错误疲劳{error fatigue}’. 但请注意 <em>错误总是存在</em> - 这不是 Rust 正在发明新的. 它只是在努力让你无法忽视它们. 任何操作系统调用都可能失败.</p>
 <p>Java 和 Python 等语言引发异常;像 Go 和 Lua 这样的语言返回两个值,其中第一个是 Resul t,第二个是 错误: 像 Rust 也一样,它考虑到是库函数引发错误的不良方式. 所以有很多错误检查和函数的早期返回.</p>
 <p>Rust使用<code>Result</code>因为它 either-or{没有或者}: 你不能同时得到 Result 和 错误. 问号运算符 使处理错误更加清晰.</p>
-<a class="header" href="3-filesystem.zh.html#a进程" id="a进程"><h2>进程</h2></a>
+<a class="header" href="#a进程" id="a进程"><h2>进程</h2></a>
 <p>一个基本的需求是程序运行程序,或者 <em>启动过程</em> . 你的程序可以 <em>启动{launch}</em> 尽可能多的子进程,顾名思义他们与父母有特殊的关系.</p>
 <p>运行程序很简单,使用<code>Command</code>struct,它构建传递给程序的参数:</p>
 <pre><pre class="playpen"><code class="language-rust">use std::process::Command;
@@ -505,78 +529,88 @@ fn main() {
     println!(&quot;res {:?}&quot;, res);
 }
 </code></pre></pre>
-<p>默认情况下,子项&quot;继承{inherits}&quot;父项的标准输入和输出. 在这里,我们将 孩子的输出控制 重定向到&quot;nowhere&quot;. 这相当于在 Unix shell 中说<code>&gt;/dev/null 2&gt;/dev/null</code>.</p>
+<p>默认情况下,子项”继承{inherits}”父项的标准输入和输出. 在这里,我们将 孩子的输出控制 重定向到”nowhere”. 这相当于在 Unix shell 中说<code>&gt;/dev/null 2&gt;/dev/null</code>.</p>
 <p>现在, 在 Rust可以使用 shell  (<code>sh</code>要么<code>cmd</code>) 来完成这些事情 . 但通过这种方式,您可以完全程序化地控制进程创建.</p>
 <p>例如,如果我们有<code>.stdout(Stdio::piped())</code>那么孩子的标准输出被重定向到管道. 然后<code>child.stdout</code>是你可以用来直接读取输出的东西 (例如: implements <code>Read</code>) . 同样,你可以使用<code>.stdin(Stdio::piped())</code>方法,以便您可以写入<code>child.stdin</code>.</p>
 <p>但如果我们使用了<code>wait_with_output</code>代替<code>wait</code>, 那么它返回一个<code>Result&lt;Output&gt;</code>并将孩子的输出记录到<code>Output</code>的<code>sudout</code>字段作为一个<code>Vec&lt;u8&gt;</code>就像以前一样.</p>
 <p>该<code>Child</code>结构也给你一个明确的<code>kill</code>方法.</p>
 
-                    </main>
+                </main>
 
-                    <nav class="nav-wrapper" aria-label="Page navigation">
-                        <!-- Mobile navigation buttons -->
-                        
-                            <a rel="prev" href="2-structs-enums-lifetimes.zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
-                            </a>
-                        
-
-                        
-                            <a rel="next" href="4-modules.zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        
-
-                        <div style="clear: both"></div>
-                    </nav>
-                </div>
-            </div>
-
-            <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                
-                    <a href="2-structs-enums-lifetimes.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                <nav class="nav-wrapper" aria-label="Page navigation">
+                    <!-- Mobile navigation buttons -->
+                    
+                    <a rel="prev" href="2-structs-enums-lifetimes.zh.html" class="mobile-nav-chapters previous" title="Previous chapter"
+                        aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                
+                    
 
-                
-                    <a href="4-modules.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    
+                    <a rel="next" href="4-modules.zh.html" class="mobile-nav-chapters next" title="Next chapter"
+                        aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
-                
-            </nav>
+                    
 
+                    <div style="clear: both"></div>
+                </nav>
+            </div>
         </div>
 
-        
+        <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            
+            <a href="2-structs-enums-lifetimes.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter"
+                aria-keyshortcuts="Left">
+                <i class="fa fa-angle-left"></i>
+            </a>
+            
 
-        
+            
+            <a href="4-modules.zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter"
+                aria-keyshortcuts="Right">
+                <i class="fa fa-angle-right"></i>
+            </a>
+            
+        </nav>
 
-        
+    </div>
 
-        
-        <script src="ace.js" type="text/javascript" charset="utf-8"></script>
-        <script src="editor.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mode-rust.js" type="text/javascript" charset="utf-8"></script>
-        <script src="theme-dawn.js" type="text/javascript" charset="utf-8"></script>
-        <script src="theme-tomorrow_night.js" type="text/javascript" charset="utf-8"></script>
-        
+    
 
-        
-        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
-        
-        
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        
+    
+    <!-- Google Analytics Tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128555056-1"></script>
+    
+    <script type="text/javascript">
+        var localAddrs = ["localhost", "127.0.0.1", ""];
+        if (localAddrs.indexOf(document.location.hostname) === -1) {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
 
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+            gtag('config', 'UA-128555056-1');
+        }
+    </script>
+    
 
-        <!-- Custom JS scripts -->
-        
+    
 
-    </body>
+    
+    <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+    
+
+    <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+    <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+    <!-- Custom JS scripts -->
+    
+
+    
+
+</body>
+
 </html>

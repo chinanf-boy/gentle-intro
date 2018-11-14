@@ -1,152 +1,176 @@
 <!DOCTYPE HTML>
 <html lang="en" class="sidebar-visible no-js">
-    <head>
-        <!-- Book generated using mdBook -->
-        <meta charset="UTF-8">
-        <title>痛点 - Rust 的绅士介绍</title>
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Rust语言，标准库和生态系统介绍">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
 
-        <base href="">
+<head>
+    <!-- Book generated using mdBook -->
+    <meta charset="UTF-8">
+    <title>痛点 - Rust 的绅士介绍</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta name="description" content="Rust语言，标准库和生态系统介绍">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ffffff" />
 
-        <link rel="stylesheet" href="book.css">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="favicon.png">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/chrome.css">
+    <link rel="stylesheet" href="css/print.css" media="print">
 
-        <link rel="shortcut icon" href="favicon.png">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"
+        rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="_FontAwesome/css/font-awesome.css">
+    <!-- Highlight.js Stylesheets -->
+    <link rel="stylesheet" href="highlight.css">
+    <link rel="stylesheet" href="tomorrow-night.css">
+    <link rel="stylesheet" href="ayu-highlight.css">
 
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+    <!-- Custom theme stylesheets -->
+    
 
-        <!-- Custom theme stylesheets -->
-        
+    
+</head>
 
-        
+<body class="light">
+    <!-- Provide site root to javascript -->
+    <script type="text/javascript">var path_to_root = "";</script>
 
-    </head>
-    <body class="light">
-        <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
-            try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+    <!-- Work around some values being stored in localStorage wrapped in quotes -->
+    <script type="text/javascript">
+        try {
+            var theme = localStorage.getItem('mdbook-theme');
+            var sidebar = localStorage.getItem('mdbook-sidebar');
 
-                if (theme.startsWith('"') && theme.endsWith('"')) {
-                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
-                }
-
-                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
-                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
-                }
-            } catch (e) { }
-        </script>
-
-        <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
-            var theme;
-            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
-            if (theme === null || theme === undefined) { theme = 'light'; }
-            document.body.className = theme;
-            document.querySelector('html').className = theme + ' js';
-        </script>
-
-        <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
-            if (document.body.clientWidth >= 1080) {
-                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
-                sidebar = sidebar || 'visible';
+            if (theme.startsWith('"') && theme.endsWith('"')) {
+                localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
-        </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html" class="active"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
-        </nav>
+            if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+            }
+        } catch (e) { }
+    </script>
 
-        <div id="page-wrapper" class="page-wrapper">
+    <!-- Set the theme before any content is loaded, prevents flash -->
+    <script type="text/javascript">
+        var theme;
+        try { theme = localStorage.getItem('mdbook-theme'); } catch (e) { }
+        if (theme === null || theme === undefined) { theme = 'light'; }
+        document.body.className = theme;
+        document.querySelector('html').className = theme + ' js';
+    </script>
 
-            <div class="page">
-                
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
+    <!-- Hide / unhide sidebar before it is displayed -->
+    <script type="text/javascript">
+        var html = document.querySelector('html');
+        var sidebar = 'hidden';
+        if (document.body.clientWidth >= 1080) {
+            try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch (e) { }
+            sidebar = sidebar || 'visible';
+        }
+        html.classList.remove('sidebar-visible');
+        html.classList.add("sidebar-" + sidebar);
+    </script>
 
-                        <h1 class="menu-title">Rust 的绅士介绍</h1> 
+    <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+        <ol class="chapter"><li class="affix"><a href="readme.zh.html">介绍</a></li><li><a href="1-basics.zh.html"><strong aria-hidden="true">1.</strong> 基本</a></li><li><a href="2-structs-enums-lifetimes.zh.html"><strong aria-hidden="true">2.</strong> 结构,枚举和匹配</a></li><li><a href="3-filesystem.zh.html"><strong aria-hidden="true">3.</strong> 文件系统和进程</a></li><li><a href="4-modules.zh.html"><strong aria-hidden="true">4.</strong> 模块和货物</a></li><li><a href="5-stdlib-containers.zh.html"><strong aria-hidden="true">5.</strong> 标准库容器</a></li><li><a href="6-error-handling.zh.html"><strong aria-hidden="true">6.</strong> 错误处理</a></li><li><a href="7-shared-and-networking.zh.html"><strong aria-hidden="true">7.</strong> 线程,网络和共享</a></li><li><a href="object-orientation.zh.html"><strong aria-hidden="true">8.</strong> 面向对象编程</a></li><li><a href="nom-intro.zh.html"><strong aria-hidden="true">9.</strong> 用nom解析</a></li><li><a href="pain-points.zh.html" class="active"><strong aria-hidden="true">10.</strong> 痛点</a></li></ol>
+    </nav>
 
+    <div id="page-wrapper" class="page-wrapper">
+
+        <div class="page">
+            
+            <div id="menu-bar" class="menu-bar">
+                <div id="menu-bar-sticky-container">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents"
+                            aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <!-- START - Rust Cookbook customization -->
+                        <button id="edit-button" class="icon-button" type="button" title="Fork and edit" aria-label="Fork and edit"
+                            aria-haspopup="true" aria-expanded="false" aria-controls="edit">
+                            <i class="fa fa-edit">Edit</i>
+                        </button>
+                        <!-- END - Rust Cookbook customization -->
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme"
+                            aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)"
+                            aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Rust 的绅士介绍</h1>
+                    
                         <div class="right-buttons">
                             <a href="print.html" title="Print this book" aria-label="Print this book">
                                 <i id="print-button" class="fa fa-print"></i>
                             </a>
+                            
                         </div>
                     </div>
                 </div>
 
-                
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
-                    </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
-                        </ul>
-                    </div>
+            
+            <div id="search-wrapper" class="hidden">
+                <form id="searchbar-outer" class="searchbar-outer">
+                    <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..."
+                        aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                </form>
+                <div id="searchresults-outer" class="searchresults-outer hidden">
+                    <div id="searchresults-header" class="searchresults-header"></div>
+                    <ul id="searchresults">
+                    </ul>
                 </div>
-                
+            </div>
+            
 
-                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
-                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
-                    });
-                </script>
+            <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+            <script type="text/javascript">
+                document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                Array.from(document.querySelectorAll('#sidebar a')).forEach(function (link) {
+                    link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                });
+            </script>
 
-                <div id="content" class="content">
-                    <main>
-                        <a class="header" href="pain-points.zh.html#a痛点" id="a痛点"><h2>痛点</h2></a>
-<p>可以说 Rust 是一门比大多数&quot;主流&quot;语言更难学的语言. 有特殊的人不觉得这么难,但要注意'特殊'的严格意义 - 他们是 <em>例外</em>. 一开始许多人挣扎,后成功. 最初的困难是不能预测后来的!</p>
-<p>我们都来自某个地方,在编程语言的情况下,这意味着以前主流语言的遗留,如Python之类的&quot;动态&quot;语言 或 C ++之类的&quot;静态&quot;语言之一. 无论哪种方式, Rust 都有很大的不同,需要转变思路. 有经验的聪明人 加入进来,对他们的聪明不立即获得回报感到失望;自我 值 较低的人 认为自己不够&quot;聪明&quot;.</p>
+            <!-- // START - Rust Cookbook customization -->
+            <script>
+                document.getElementById("edit-button").addEventListener("click", function () {
+                    var editWindow = window.open("https://github.com/chinanf-boy/gentle-intro/edit/master/src/pain-points.zh.md");
+                });</script>
+            <!-- // END - Rust Cookbook customization -->
+
+            <div id="content" class="content">
+                <main>
+                    <a class="header" href="#a痛点" id="a痛点"><h2>痛点</h2></a>
+<p>可以说 Rust 是一门比大多数”主流”语言更难学的语言. 有特殊的人不觉得这么难,但要注意’特殊’的严格意义 - 他们是 <em>例外</em>. 一开始许多人挣扎,后成功. 最初的困难是不能预测后来的!</p>
+<p>我们都来自某个地方,在编程语言的情况下,这意味着以前主流语言的遗留,如Python之类的”动态”语言 或 C ++之类的”静态”语言之一. 无论哪种方式, Rust 都有很大的不同,需要转变思路. 有经验的聪明人 加入进来,对他们的聪明不立即获得回报感到失望;自我 值 较低的人 认为自己不够”聪明”.</p>
 <p>对于那些具有动态语言经验的人 (我将包括Java) ,所有内容都是 <code>引用&amp;</code>,并且所有引用默认都是可变的. 和垃圾收集 <em>会</em> 使编写内存安全的程序更容易. 以内存使用和可预测性为代价,JVM进展非常迅速. 通常这种成本被认为是值得的 - 旧的新想法认为程序员的生产力 比 计算机的性能更重要.</p>
 <p>但是世界上大多数电脑 - 处理汽车阀门控制 等真正重要的事情 - 并不具备便宜笔记本电脑所拥有的大量资源,而且他们需要 <em>即时的</em> 响应. 同样,基础软件基础架构需要 正确,稳健和快速 (旧的工程三位一体) . 这大部分都是在本质上是不安全的 C和C ++ 中完成的,这个不安全的东西的 <em>总成本</em> 是在这里看的东西. 也许你更快地组合项目,但是 <em>之后</em> 真正的开发才开始.</p>
 <p>系统语言无法承担垃圾回收,因为它们是所有东西都依赖的基础. 只要你认为合适,他们让你可以自由地浪费资源.</p>
 <p>如果没有垃圾回收,则内存必须以其他方式进行管理. <em>手动内存管理</em> - 我抓住内存,使用它,并明确地将其退回 - 很难找到正确的内容. 您可以在几周内学会足够的C语言以提高工作效率和危险性 - 但要成为一名安全的C语言程序员需要花费数年时间,并检查每种可能的错误情况.</p>
-<p>Rust 像现代C ++一样管理内存 - 随着对象被破坏,内存被回收. 你可以在堆上分配内存<code>Box</code>,但只要该函数在函数结束,'超出范围'时,内存就会被回收. 所以有像<code>new{新建}</code>这样的事情但没有<code>删除{delete}</code>. 你可以创建一个<code>File</code>,和在最后文件控制 (一个宝贵的资源) 被闭包. 在 Rust 中,这被称为 <em>扔掉{dropping}</em>.</p>
+<p>Rust 像现代C ++一样管理内存 - 随着对象被破坏,内存被回收. 你可以在堆上分配内存<code>Box</code>,但只要该函数在函数结束,’超出范围’时,内存就会被回收. 所以有像<code>new{新建}</code>这样的事情但没有<code>删除{delete}</code>. 你可以创建一个<code>File</code>,和在最后文件控制 (一个宝贵的资源) 被闭包. 在 Rust 中,这被称为 <em>扔掉{dropping}</em>.</p>
 <p>你需要共享资源 - 复制一切都是非常低效的 - 这就是事情变得有趣的地方. C ++也有引用,尽管 Rust 引用更像C指针 - 你需要使用<code>*r</code>才能用  值 {value} ,你需要说<code>&amp;</code>一个值作为引用传递.</p>
 <p>Rust 的 <em>借用检查器</em> 确保在原始值被销毁后引用不可能存在.</p>
-<a class="header" href="pain-points.zh.html#a类型推断" id="a类型推断"><h2>类型推断</h2></a>
-<p>&quot;静态&quot;和&quot;动态&quot;之间的区别不是一切. 与大多数事情一样,还有更多维度在发挥. C 是静态类型的 (每个变量在编译时都有一个类型) ,但是类型很弱 (例如,<code>void*</code>可以指向 <em>任何{anything}</em>) ;Python是动态类型的 (类型在值中,而不是变量) ,但却是强类型的. Java是静态/非常强类型的 (反射「reflection」 就像 方便/危险的逃逸阀) , Rust 是静态/强类型的,没有运行时反射.</p>
+<a class="header" href="#a类型推断" id="a类型推断"><h2>类型推断</h2></a>
+<p>“静态”和”动态”之间的区别不是一切. 与大多数事情一样,还有更多维度在发挥. C 是静态类型的 (每个变量在编译时都有一个类型) ,但是类型很弱 (例如,<code>void*</code>可以指向 <em>任何{anything}</em>) ;Python是动态类型的 (类型在值中,而不是变量) ,但却是强类型的. Java是静态/非常强类型的 (反射「reflection」 就像 方便/危险的逃逸阀) , Rust 是静态/强类型的,没有运行时反射.</p>
 <p>Java因需要在麻木的细节中 <em>键入</em> 所有的类型而出名, Rust 喜欢 <em>推断</em> 类型. 这通常是一个好主意,但这确实意味着你有时需要计算出实际类型. 你会看见<code>let n = 100</code>并想知道 - 这是什么样的整数? 默认情况下,它会是<code>i32</code>- 一个四字节有符号整数. 现在大家都同意 C 的未指定整数类型 (比如<code>int</code>和<code>long</code>) 是一个坏主意; 最好是明确的. 你可以随时拼出类型,如<code>let n: u32 = 100</code>或者让文字强制类型,如<code>let n = 100u32</code>. 但是类型推断比这更进一步! 如果你声明<code>let n = 100</code>然后全部<code>rustc</code>知道这一点<code>n</code>一定是 <em>一些</em> 整数类型. 如果你然后通过<code>n</code>到一个期望一个<code>u64</code>函数, 那么这一定是这种类型的<code>n</code>!</p>
-<p>之后,你尝试给<code>n</code>到期望<code>u32</code>函数. <code>rustc</code>不会让你这样做,因为<code>n</code>已被束缚到<code>u64</code>和它 <em>将不会</em> 采取简单的方法为您转换该整数. 这是强有力的类型行动 - 没有任何一点转换和促销活动让你的生活更流畅,直到整数溢出突然咬住你的屁股. 你必须明确地通过<code>n</code>如<code>n as u32</code>- 一个 Rust 类型. 幸好,<code>rustc</code>善于以&quot;可行&quot;的方式打破坏消息 - 也就是说,您可以按照编译器的意见来解决问题.</p>
+<p>之后,你尝试给<code>n</code>到期望<code>u32</code>函数. <code>rustc</code>不会让你这样做,因为<code>n</code>已被束缚到<code>u64</code>和它 <em>将不会</em> 采取简单的方法为您转换该整数. 这是强有力的类型行动 - 没有任何一点转换和促销活动让你的生活更流畅,直到整数溢出突然咬住你的屁股. 你必须明确地通过<code>n</code>如<code>n as u32</code>- 一个 Rust 类型. 幸好,<code>rustc</code>善于以”可行”的方式打破坏消息 - 也就是说,您可以按照编译器的意见来解决问题.</p>
 <p>所以, Rust 代码可以非常明确的类型:</p>
 <pre><code class="language-Rust">let mut v = Vec::new();
 // v is deduced to have type Vec&lt;i32&gt;
@@ -178,10 +202,10 @@ for d in display {
     println!(&quot;got {:?}&quot;, d);
 }
 </code></pre>
-<a class="header" href="pain-points.zh.html#a可变引用" id="a可变引用"><h2>可变引用</h2></a>
+<a class="header" href="#a可变引用" id="a可变引用"><h2>可变引用</h2></a>
 <p>规则是: 一次只有一个可变引用. 原因在于追踪 <em>到处都是</em> 可变性很难. 在小笨蛋程序中不明显,但在大型代码库中可能会变得糟糕.</p>
 <p>进一步的限制是,当有可变引用出现时,你不能拥有不可变引用. 否则,任何有这些引用的人都不能保证他们不会改变. C ++也有不可变的引用 (例如<code>const string&amp;</code>) 但是 <em>不能</em> 给你这个保证,是因为有人不能保留一个<code>string&amp;</code>引用并在背后修改它.</p>
-<p>如果您习惯于每个引用都是可变的语言,这是一个挑战! 不安全的&quot;放松&quot;语言取决于人们了解他们自己的计划并高高兴兴地决定不做坏事. 但是大型项目是由不止一个人编写的,并且超出了单个人详细理解的能力.</p>
+<p>如果您习惯于每个引用都是可变的语言,这是一个挑战! 不安全的”放松”语言取决于人们了解他们自己的计划并高高兴兴地决定不做坏事. 但是大型项目是由不止一个人编写的,并且超出了单个人详细理解的能力.</p>
 <p>该 <em>刺激性</em> 事情是,借用检查器并不像它那样聪明.</p>
 <pre><code class="language-Rust">let mut m = HashMap::new();
 m.insert(&quot;one&quot;, 1);
@@ -220,8 +244,8 @@ match m.entry(&quot;one&quot;) {
 <p>当 <em>非词汇生命周期</em> 今年某个时候到达, 借用检查器获得更少的挫败感.</p>
 <p>借用检查器 <em>还是</em> 了解一些重要的案例,然而. 如果你有一个结构,字段可以独立借用. 所以构造是你的朋友;一个大结构体应该包含更小的结构体,它们有自己的方法. 当你不能修改内容就定义大结构体上的所有可变方法的情况,即使这些方法可能只涉及一个字段.</p>
 <p>对于可变数据,有一些独立处理数据部分的特殊方法. 例如,如果你有一个可变切片,那么<code>split_at_mut</code>将它分成两个可变切片. 这是完全安全的,因为 Rust 知道切片不重叠.</p>
-<a class="header" href="pain-points.zh.html#a引用和生命时间" id="a引用和生命时间"><h2>引用和生命时间</h2></a>
-<p>Rust 不能允许一个引用超过 值 的情况. 否则,我们会有一个&quot;悬挂引用&quot;,它指的是一个死亡值 - 一个段错误是不可避免的.</p>
+<a class="header" href="#a引用和生命时间" id="a引用和生命时间"><h2>引用和生命时间</h2></a>
+<p>Rust 不能允许一个引用超过 值 的情况. 否则,我们会有一个”悬挂引用”,它指的是一个死亡值 - 一个段错误是不可避免的.</p>
 <p><code>rustc</code>往往可以对函数的生命周期做出合理的假设:</p>
 <pre><code class="language-Rust">fn pair(s: &amp;str, ch: char) -&gt; (&amp;str, &amp;str) {
     if let Some(idx) = s.find(ch) {
@@ -259,12 +283,12 @@ let sc = |x| m*x.cos()
 </code></pre>
 <p><code>linear</code>和<code>sc</code>都实行<code>Fn(x: f64)-&gt;f64</code>但他们是 <em>不是</em> 同样的动物 - 他们有不同的类型和大小! 所以要存储它们,你必须做出一个<code>Box&lt;Fn(x: f64)-&gt;f64 + 'a&gt;</code>.</p>
 <p>非常烦人,如果你习惯了JavaScript 或 Lua 的流畅闭包,但C ++与 Rust 类似,并且需要<code>std::function</code>存储不同的闭包,对虚拟呼叫采取一点点惩罚.</p>
-<a class="header" href="pain-points.zh.html#a字符串" id="a字符串"><h2>字符串</h2></a>
+<a class="header" href="#a字符串" id="a字符串"><h2>字符串</h2></a>
 <p>在开始时,通常会对 Rust 字符串感到恼火. 有不同的方式来创建它们,并且它们都感觉冗长:</p>
 <pre><code class="language-Rust">let s1 = &quot;hello&quot;.to_string();
 let s2 = String::from(&quot;dolly&quot;);
 </code></pre>
-<p>&quot;hello&quot; 不是 <em>已经是</em> 一个字符串? 好吧,在某种程度上. <code>String</code>是一个 <em>拥有的「owned」</em> 字符串,分配在堆上; 字符串文字&quot;hello&quot;是类型的<code>&amp;str</code> (&quot;字符串切片&quot;) ,并可能被烘焙到 可执行 (&quot;静态{static}&quot;) 或借用<code>String</code>. 系统语言需要这种区别 - 考虑一个微型微控制器,它有 一点RAM 和更多的ROM . 切片字符串 将被存储在ROM (&quot;只读&quot;) 中 ,这既便宜又消耗更少的功率.</p>
+<p>“hello” 不是 <em>已经是</em> 一个字符串? 好吧,在某种程度上. <code>String</code>是一个 <em>拥有的「owned」</em> 字符串,分配在堆上; 字符串文字”hello”是类型的<code>&amp;str</code> (”字符串切片”) ,并可能被烘焙到 可执行 (”静态{static}”) 或借用<code>String</code>. 系统语言需要这种区别 - 考虑一个微型微控制器,它有 一点RAM 和更多的ROM . 切片字符串 将被存储在ROM (”只读”) 中 ,这既便宜又消耗更少的功率.</p>
 <p>但是 (你可能会说) 在C ++中它非常简单:</p>
 <pre><code class="language-C">std::string s = &quot;hello&quot;;
 </code></pre>
@@ -291,7 +315,7 @@ let s2 = String::from(&quot;dolly&quot;);
 </code></pre>
 <p>(该<code>unwrap</code>是因为空的迭代器没有最大值,我们必须覆盖这种情况. )</p>
 <p>该<code>collect</code>方法返回一个<code>Vec&lt;&amp;str&gt;</code>,其中的部分是从原始字符串中借用的 - 我们只需要为引用分配空间. 在C ++中没有像这样的方法,但直到最近才需要单独分配每个子字符串.  (C ++ 17有<code>std::string_view</code>其行为像一个 Rust 字符串切片. )</p>
-<a class="header" href="pain-points.zh.html#a关于分号的说明" id="a关于分号的说明"><h2>关于分号的说明</h2></a>
+<a class="header" href="#a关于分号的说明" id="a关于分号的说明"><h2>关于分号的说明</h2></a>
 <p>分号是 <em>不</em> 可选的,但通常在与C相同的地方被排除,例如,后<code>{}</code>块. 之后他们也不需要<code>enum</code>要么<code>struct</code> (这是一个C特性. ) 但是,如果该块必须有一个 <em>值</em> ,那么分号将被丢弃:</p>
 <pre><code class="language-Rust">    let msg = if ok {&quot;ok&quot;} else {&quot;error&quot;};
 </code></pre>
@@ -302,13 +326,13 @@ let s2 = String::from(&quot;dolly&quot;);
 }
 </code></pre>
 <p><code>rustc</code>在这种情况下会给你一个明确的错误.</p>
-<a class="header" href="pain-points.zh.html#a特定于c-的问题" id="a特定于c-的问题"><h2>特定于C ++的问题</h2></a>
-<a class="header" href="pain-points.zh.html#rust-值语义是不同的" id="rust-值语义是不同的"><h3>Rust 值语义是不同的</h3></a>
+<a class="header" href="#a特定于c-的问题" id="a特定于c-的问题"><h2>特定于C ++的问题</h2></a>
+<a class="header" href="#rust-值语义是不同的" id="rust-值语义是不同的"><h3>Rust 值语义是不同的</h3></a>
 <p>在C ++中,可以定义类型类似于原始并复制它们自己. 另外,可以定义移动构造函数来指定如何将值移出临时上下文.</p>
 <p>在 Rust 里,原始人的行为和预期一样,但是<code>Copy</code>trait只能在集合类型 (结构{struct},元组{tuple}或枚举{enum}) 本身只包含可复制类型的情况下定义. 任意类型可能有<code>Clone</code>,但你必须使用<code>clone</code>方法.  Rust 要求任何分配都是明确的,不要隐藏在复制构造函数或赋值运算符中.</p>
 <p>所以,复制和移动总是被定义为只是 移动位 而不能被覆盖.</p>
 <p>如果<code>s1</code>不是<code>Copy</code>值类型,像<code>s2 = s1;</code>导致移动发生,而这 <em>消耗</em> <code>s1</code>!所以,当你真的想要一个副本,使用<code>clone</code>.</p>
-<p>借用通常比复制要好,但是你必须遵循借用规则. 幸运的是,借用 <em>是</em> 一个可覆盖的行为. 例如,<code>String</code>可以借用成<code>&amp;str</code>,并共享所有不可变的方法<code>&amp;str</code>.  <em>字符串切片</em> 与类似的C ++&quot;借用{borrowing}&quot;操作相比,这是非常强类型的函数,它将提取一个<code>const char *</code>运用<code>c_str</code>. <code>&amp;str</code>由一个指向一些拥有的字节 (或字符串文字) 指针 和 一个 <em>尺寸「size」</em> 组成. 这导致了一些非常有效的内存模式. 你可以有一个<code>Vec&lt;&amp;str&gt;</code>所有的字符串都是从一些底层字符串中借用的 - 只需要分配 Vec 空间:</p>
+<p>借用通常比复制要好,但是你必须遵循借用规则. 幸运的是,借用 <em>是</em> 一个可覆盖的行为. 例如,<code>String</code>可以借用成<code>&amp;str</code>,并共享所有不可变的方法<code>&amp;str</code>.  <em>字符串切片</em> 与类似的C ++”借用{borrowing}”操作相比,这是非常强类型的函数,它将提取一个<code>const char *</code>运用<code>c_str</code>. <code>&amp;str</code>由一个指向一些拥有的字节 (或字符串文字) 指针 和 一个 <em>尺寸「size」</em> 组成. 这导致了一些非常有效的内存模式. 你可以有一个<code>Vec&lt;&amp;str&gt;</code>所有的字符串都是从一些底层字符串中借用的 - 只需要分配 Vec 空间:</p>
 <p>例如,按空格拆分:</p>
 <pre><code class="language-Rust">fn split_whitespace(s: &amp;str) -&gt; Vec&lt;&amp;str&gt; {
     s.split_whitespace().collect()
@@ -316,7 +340,7 @@ let s2 = String::from(&quot;dolly&quot;);
 </code></pre>
 <p>同样,一个C ++<code>s.substr(0,2)</code>调用将始终复制字符串,但切片只会借用: <code>&amp;s[0..2]</code>.</p>
 <p><code>Vec&lt;T&gt;</code>和<code>&amp;[T]</code>之间有一个等价的关系.</p>
-<a class="header" href="pain-points.zh.html#a共享引用" id="a共享引用"><h3>共享引用</h3></a>
+<a class="header" href="#a共享引用" id="a共享引用"><h3>共享引用</h3></a>
 <p>Rust 有 <em>聪明的指针</em> 像C ++  - 例如,相当于<code>std::unique_ptr</code>是<code>Box</code>. 没有必要<code>删除</code>,因为任何内存或其他资源将在盒子超出范围时被回收 ( Rust 非常包含RAII) .</p>
 <pre><code class="language-Rust">let mut answer = Box::new(&quot;hello&quot;.to_string());
 *answer = &quot;world&quot;.to_string();
@@ -331,7 +355,7 @@ println!(&quot;{} {}&quot;, answer, answer.len());
 <li>即使数据是只读的,不断修改引用计数也会导致缓存失效</li>
 <li><code>std::shared_ptr</code>被设计成线程安全的并且也承载锁定开销</li>
 </ul>
-<p>在 Rust ,<code>std::rc::Rc</code>也像使用引用计数的共享智能指针一样工作. 但是,它仅适用于不可变引用! 如果你想要一个线程安全的变体,请使用<code>std::sync::Arc</code> ('Atomic Rc') . 所以 Rust 在提供两种变体方面有些尴尬,但你可以避免非线程操作的锁定开销.</p>
+<p>在 Rust ,<code>std::rc::Rc</code>也像使用引用计数的共享智能指针一样工作. 但是,它仅适用于不可变引用! 如果你想要一个线程安全的变体,请使用<code>std::sync::Arc</code> (’Atomic Rc’) . 所以 Rust 在提供两种变体方面有些尴尬,但你可以避免非线程操作的锁定开销.</p>
 <p>这些必须是不可变的引用,因为这是 Rust 内存模型的基础. 但是,有一张退出卡: <code>std::cell::RefCell</code>. 如果您将共享引用定义为<code>Rc&lt;RefCell&lt;T&gt;&gt;</code>那么你可以可变地借用它的<code>borrow_mut</code>方法. 这适用 Rust 的借用规则 <em>动态</em>- 例如任何尝试使用<code>borrow_mut</code>,然而借用已经发生会引起恐慌.</p>
 <p>这仍然是 <em>安全</em>. 恐慌会任何内存都被不当地触动 <em>之前</em> 发生! 像例外情况一样,他们展开调用堆栈. 所以对于这样一个结构化的过程来说这是一个不幸的词 - 这是一个有序的撤退 而不是 恐慌的撤退.</p>
 <p>完整的<code>Rc&lt;RefCell&lt;T&gt;&gt;</code>类型笨拙,但应用程序代码并不令人不快.  Rust  (再次) 倾向于明确表示.</p>
@@ -347,10 +371,10 @@ println!(&quot;{} {}&quot;, answer, answer.len());
 </code></pre>
 <p>为什么<code>unwrap</code>? 如果前面的持有线程恐慌,那么这个<code>锁</code>失败.  (这是文档中的一个地方,<code>unwrap</code>被认为是合理的事情,因为事情显然已经严重错误. 恐慌总是可以在线索中发现. )</p>
 <p>重要的是 (像往常一样使用 Mutex 锁) 这个排他锁尽可能少地保留下来. 所以它们在一个有限的范围内发生是很常见的 - 然后当可变引用超出范围时锁定结束.</p>
-<p>与C ++中显然更简单的情况 (&quot;use shared_ptr dude&quot;) ,这看起来很尴尬,但是现在任何共享状态的 <em>修改</em> 都变得明显，
+<p>与C ++中显然更简单的情况 (”use shared_ptr dude”) ,这看起来很尴尬,但是现在任何共享状态的 <em>修改</em> 都变得明显，
 和“互斥锁{Mutex}”锁定模式强制线程安全。</p>
 <p>像所有内容一样，使用共享引用<a href="https://news.ycombinator.com/item?id=11698784">警告</a></p>
-<a class="header" href="pain-points.zh.html#a迭代器" id="a迭代器"><h3>迭代器</h3></a>
+<a class="header" href="#a迭代器" id="a迭代器"><h3>迭代器</h3></a>
 <p>C ++中的迭代器非常非正式地定义;</p>
 <p>他们涉及智能指针,通常从头开始<code>c.begin()</code>并以<code>c.end()</code>结束. 迭代器上的操作然后作为独立的模板函数来实现,如<code>std::find_if</code>.</p>
 <p>Rust 迭代器由<code>Iterator</code> trait 定义;<code>next</code>返回一个<code>Option</code>和什么时候<code>Option</code>是<code>None</code>我们结束了.</p>
@@ -360,68 +384,76 @@ if let Some(res) = arr.find(|x| x == 2) {
     // res is 2
 }
 </code></pre>
-<a class="header" href="pain-points.zh.html#a不安全和链接列表" id="a不安全和链接列表"><h3>不安全和链接列表</h3></a>
-<p>Rust  stdlib 的某些部分实现是使用 <code>unsafe</code>的. 并不是什么秘密. 这并不妨碍借 用检查员 的保守方法. 请记住,&quot;unsafe&quot;具有特殊意义 -   Rust 在编译时无法完全验证的操作. 从 Rust 的角度来看,C ++始终处于不安全的模式!所以如果一个大的应用程序需要几十行不安全的代码,那很好,因为这几行代码可以被人仔细检查. 人类不善于检查 100Kloc +的代码.</p>
+<a class="header" href="#a不安全和链接列表" id="a不安全和链接列表"><h3>不安全和链接列表</h3></a>
+<p>Rust  stdlib 的某些部分实现是使用 <code>unsafe</code>的. 并不是什么秘密. 这并不妨碍借 用检查员 的保守方法. 请记住,”unsafe”具有特殊意义 -   Rust 在编译时无法完全验证的操作. 从 Rust 的角度来看,C ++始终处于不安全的模式!所以如果一个大的应用程序需要几十行不安全的代码,那很好,因为这几行代码可以被人仔细检查. 人类不善于检查 100Kloc +的代码.</p>
 <p>我提到这一点,因为似乎有一种模式: 一个有经验的 C ++人 试图实现 链表或树结构,并且感到沮丧. 那么,一个双链表 <em>是</em> 可能在安全的 Rust ,与<code>Rc</code>引用前进,和<code>Weak</code>引用回去. 但是标准库在使用指针方面仍需要获得了更多的性能.</p>
 
-                    </main>
+                </main>
 
-                    <nav class="nav-wrapper" aria-label="Page navigation">
-                        <!-- Mobile navigation buttons -->
-                        
-                            <a rel="prev" href="nom-intro.zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
-                            </a>
-                        
-
-                        
-
-                        <div style="clear: both"></div>
-                    </nav>
-                </div>
-            </div>
-
-            <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                
-                    <a href="nom-intro.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                <nav class="nav-wrapper" aria-label="Page navigation">
+                    <!-- Mobile navigation buttons -->
+                    
+                    <a rel="prev" href="nom-intro.zh.html" class="mobile-nav-chapters previous" title="Previous chapter"
+                        aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                
+                    
 
-                
-            </nav>
+                    
 
+                    <div style="clear: both"></div>
+                </nav>
+            </div>
         </div>
 
-        
+        <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            
+            <a href="nom-intro.zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter"
+                aria-keyshortcuts="Left">
+                <i class="fa fa-angle-left"></i>
+            </a>
+            
 
-        
+            
+        </nav>
 
-        
+    </div>
 
-        
-        <script src="ace.js" type="text/javascript" charset="utf-8"></script>
-        <script src="editor.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mode-rust.js" type="text/javascript" charset="utf-8"></script>
-        <script src="theme-dawn.js" type="text/javascript" charset="utf-8"></script>
-        <script src="theme-tomorrow_night.js" type="text/javascript" charset="utf-8"></script>
-        
+    
 
-        
-        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
-        
-        
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        
+    
+    <!-- Google Analytics Tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128555056-1"></script>
+    
+    <script type="text/javascript">
+        var localAddrs = ["localhost", "127.0.0.1", ""];
+        if (localAddrs.indexOf(document.location.hostname) === -1) {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
 
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+            gtag('config', 'UA-128555056-1');
+        }
+    </script>
+    
 
-        <!-- Custom JS scripts -->
-        
+    
 
-    </body>
+    
+    <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+    
+
+    <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+    <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+    <!-- Custom JS scripts -->
+    
+
+    
+
+</body>
+
 </html>
