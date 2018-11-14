@@ -13,15 +13,18 @@
 
 ## 校对✔
 
-欢迎 \`Issue\` 和 \`Pull\` ❤️, 最好 \`Pull\` 👏
-
-|翻译的原文|与日期|原文更新|更多
+<!-- doc-templite START generated -->
+<!-- repo = 'stevedonovan/gentle-intro' -->
+<!-- commit = '4885a0615a48f1a736f88e71b9e5e3cba887c63c' -->
+<!-- time = '2018 4.18' -->
+翻译的原文 | 与日期 | 最新更新 | 更多
 ---|---|---|---
-[commit]|2018 4.18|![last commit][last]|[中文翻译][more]
+[commit] | ⏰ 2018 4.18 | ![last] | [中文翻译][translate-list]
 
-[commit]:  https://github.com/stevedonovan/gentle-intro/tree/4885a0615a48f1a736f88e71b9e5e3cba887c63c
 [last]: https://img.shields.io/github/last-commit/stevedonovan/gentle-intro.svg
-[more]: https://github.com/chinanf-boy/chinese-translate-list
+[commit]: https://github.com/stevedonovan/gentle-intro/tree/4885a0615a48f1a736f88e71b9e5e3cba887c63c
+
+<!-- doc-templite END generated -->
 
 - [x] [0.介绍](./src/readme.zh.md)
 - [x] [1.基本](./src/1-basics.zh.md)
