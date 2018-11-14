@@ -5,6 +5,8 @@
 
 对 `rust` 的 温柔 介绍 「翻译 」
 
+[中文](./readme.md) | [english](https://github.com/stevedonovan/gentle-intro)
+
 ## 使用 
 
 翻译书-网址 https://chinanf-boy.github.io/gentle-intro
@@ -44,6 +46,9 @@
 
 [help me live , live need money 💰](https://github.com/chinanf-boy/live-need-money)
 
+### 贡献
+
+欢迎 👏 勘误/校对/更新贡献 😊 [具体贡献请看](https://github.com/chinanf-boy/chinese-translate-list#贡献)
 
 ## dev
 
@@ -60,32 +65,3 @@ mdbook serve
 ### SUMMARY.md 
 
 [SUMMARY.md](./src/SUMMARY.md)是 书的目录, 注意 md文件路径命名不能错
-
-<details>
-
-<summary> 目录 内容</summary>
-
-``` m
-# 概要
-
-[介绍](./readme.zh.md)
-
--   [基本](./1-basics.zh.md)
--   [结构,枚举和匹配](./2-structs-enums-lifetimes.zh.md)
--   [文件系统和进程](./3-filesystem.zh.md)
--   [模块和货物](./4-modules.zh.md)
--   [标准库容器](./5-stdlib-containers.zh.md)
--   [错误处理](./6-error-handling.zh.md)
--   [线程,网络和共享](./7-shared-and-networking.zh.md)
--   [面向对象编程](./object-orientation.zh.md)
--   [用nom解析](./nom-intro.zh.md)
--   [痛点](./pain-points.zh.md)
-
-```
-
-</details>
-
-
-## 工具
-
-- `translate-mds` >> https://github.com/chinanf-boy/translate-mds 提供翻译初稿
