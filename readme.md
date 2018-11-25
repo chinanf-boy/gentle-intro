@@ -13,7 +13,7 @@
 
 > 欢迎 `Issue/Pull` ✋
 
-## 校对✔
+## 更新 中
 
 <!-- doc-templite START generated -->
 <!-- repo = 'stevedonovan/gentle-intro' -->
@@ -28,17 +28,17 @@
 
 <!-- doc-templite END generated -->
 
-- [x] [0.介绍](./src/readme.zh.md)
-- [x] [1.基本](./src/1-basics.zh.md)
-- [x] [2.结构,枚举和匹配](./src/2-structs-enums-lifetimes.zh.md)
-- [x] [3.文件系统和进程](./src/3-filesystem.zh.md)
-- [x] [4.模块和货物](./src/4-modules.zh.md)
-- [x] [5.标准库容器](./src/5-stdlib-containers.zh.md)
-- [x] [6.错误处理](./src/6-error-handling.zh.md)
-- [x] [7.线程,网络和共享](./src/7-shared-and-networking.zh.md)
-- [x] [8.面向对象编程](./src/object-orientation.zh.md)
-- [x] [9.用nom解析](./src/nom-intro.zh.md)
-- [x] [10.痛点](./src/pain-points.zh.md)
+- [ ] [0.介绍](./src/readme.zh.md)
+- [ ] [1.基本](./src/1-basics.zh.md)
+- [ ] [2.结构,枚举和匹配](./src/2-structs-enums-lifetimes.zh.md)
+- [ ] [3.文件系统和进程](./src/3-filesystem.zh.md)
+- [ ] [4.模块和货物](./src/4-modules.zh.md)
+- [ ] [5.标准库容器](./src/5-stdlib-containers.zh.md)
+- [ ] [6.错误处理](./src/6-error-handling.zh.md)
+- [ ] [7.线程,网络和共享](./src/7-shared-and-networking.zh.md)
+- [ ] [8.面向对象编程](./src/object-orientation.zh.md)
+- [ ] [9.用nom解析](./src/nom-intro.zh.md)
+- [ ] [10.痛点](./src/pain-points.zh.md)
 
 > // ...
 
