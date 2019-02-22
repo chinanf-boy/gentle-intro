@@ -15,7 +15,9 @@ power of the language to want to go deeper.
 As Einstein might have said, "As gentle as possible, but no gentler.". There is a
 lot of new stuff to learn here, and it's different enough to require some
 rearrangement of your mental furniture. By 'gentle' I mean that the features are
-presented practically with examples; as we encounter difficulties, I hope to
+presented practically with examples; 
+
+as we encounter difficulties, I hope to
 show how Rust solves these problems. It is important to understand the problems before
 the solutions make sense. To put it in flowery language, we are going for a hike
 in hilly country and I will point out some interesting rock formations on the way,
