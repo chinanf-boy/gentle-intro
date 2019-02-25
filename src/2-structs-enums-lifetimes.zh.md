@@ -1,5 +1,29 @@
 # 结构{structs},枚举{enums}和匹配{match}
 
+## 目录
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Rust 喜欢 move 它, move 它](#rust-%E5%96%9C%E6%AC%A2-move-%E5%AE%83-move-%E5%AE%83)
+- [变量的范围](#%E5%8F%98%E9%87%8F%E7%9A%84%E8%8C%83%E5%9B%B4)
+- [元组](#%E5%85%83%E7%BB%84)
+- [结构{Structs}](#%E7%BB%93%E6%9E%84structs)
+- [生命周期{Lifetimes}开始咬人啦](#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9Flifetimes%E5%BC%80%E5%A7%8B%E5%92%AC%E4%BA%BA%E5%95%A6)
+- [特点{Traits}](#%E7%89%B9%E7%82%B9traits)
+- [示例: 遍历浮点范围的迭代器](#%E7%A4%BA%E4%BE%8B-%E9%81%8D%E5%8E%86%E6%B5%AE%E7%82%B9%E8%8C%83%E5%9B%B4%E7%9A%84%E8%BF%AD%E4%BB%A3%E5%99%A8)
+- [泛型函数](#%E6%B3%9B%E5%9E%8B%E5%87%BD%E6%95%B0)
+- [简单的枚举](#%E7%AE%80%E5%8D%95%E7%9A%84%E6%9E%9A%E4%B8%BE)
+- [枚举的全部荣耀](#%E6%9E%9A%E4%B8%BE%E7%9A%84%E5%85%A8%E9%83%A8%E8%8D%A3%E8%80%80)
+- [关于匹配的 更多](#%E5%85%B3%E4%BA%8E%E5%8C%B9%E9%85%8D%E7%9A%84-%E6%9B%B4%E5%A4%9A)
+- [闭包{Closures}](#%E9%97%AD%E5%8C%85closures)
+- [三种迭代器](#%E4%B8%89%E7%A7%8D%E8%BF%AD%E4%BB%A3%E5%99%A8)
+- [具有动态数据的结构](#%E5%85%B7%E6%9C%89%E5%8A%A8%E6%80%81%E6%95%B0%E6%8D%AE%E7%9A%84%E7%BB%93%E6%9E%84)
+- [泛型结构](#%E6%B3%9B%E5%9E%8B%E7%BB%93%E6%9E%84)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Rust 喜欢 move 它, move 它
 
 我想稍微回退一下，给你看一些惊奇的东西:
