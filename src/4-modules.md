@@ -300,6 +300,8 @@ Let's create a simple program which needs to read JSON. This data format is very
 but is too specialized for inclusion in the standard library. So we initialize a Cargo project,
 using '--bin' because the default is to create a library project.
 
+> 已修改，
+
 ```
 test$ cargo init --bin test-json
      Created binary (application) project
