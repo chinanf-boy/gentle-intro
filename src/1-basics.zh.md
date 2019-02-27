@@ -5,7 +5,6 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [你好,世界!](#%E4%BD%A0%E5%A5%BD%E4%B8%96%E7%95%8C)
 - [循环和条件语句](#%E5%BE%AA%E7%8E%AF%E5%92%8C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5)
 - [开始堆积木吧](#%E5%BC%80%E5%A7%8B%E5%A0%86%E7%A7%AF%E6%9C%A8%E5%90%A7)
@@ -865,10 +864,10 @@ Rust 中的字符串比其他语言中的字符串更复杂一些; `String`类�
 像`Vec`，动态分配并可调整大小。 （所以它就像 C ++ 的`std::string`
 但不像 Java 和 Python 的不可变字符串。）但是一个程序可能包含很多
 _string literals {字符串常量}_（如"hello"）和系统语言应该能够在执行时静态存储这些
-。 若放在微型嵌入式来说，这可能意味着让
-他们在 廉价的 ROM 而不是 昂贵的 RAM（对低功耗设备来说，RAM 是
+。 若放在微型嵌入式来说，这可能意味着存在
+于 廉价的 ROM 而不是 昂贵的 RAM（对低功耗设备来说，RAM 是
 在功耗方面也很昂贵。）所以 _系统_ 语言必须具有
-两种字符串，分配的或静态的。
+两种字符串，分配的与静态的。
 
 所以"hello"不是`String`类型。 它是`＆str`类型（发音为'string slice'）。
 这就像 C ++ 中 `const char*`和 `std::string` 之间的区别，除了
@@ -882,19 +881,19 @@ fn dump(s: &str) {
 }
 
 fn main() {
-    let text = "hello dolly";  // the string slice
-    let s = text.to_string();  // it's now an allocated string
+    let text = "hello dolly";  // string 切片
+    let s = text.to_string();  // 现变成 已分配的 string
 
     dump(text);
     dump(&s);
 }
 ```
 
-再次, 借用符号 可以迫使`String`成为`&str`, 就像`Vec<T>`能会被迫使进`&[T]`。
+再次, 借用符号 可以迫使`String`成为`&str`, 就像`Vec<T>`能被迫使进`&[T]`。
 
 在引擎盖下，`String`基本上是一个`Vec<u8>`，和`&str`是一个`&[u8]`, 但是那些字节 _必须_ 表示有效的 UTF-8 文本。
 
-就像一个向量，你可以`push`一个字符，和`pop`出`String`结尾:
+就像一个 Vec，你可以`push`一个字符，和`pop`出`String`结尾:
 
 ```rust
 // string5.rs
@@ -912,7 +911,7 @@ fn main() {
 }
 ```
 
-`to_string`可以将许多类型转换为字符串。 (如果可以用"{}"打印它们，那么它们就可以被转换) . `format!`宏是像`println!`使用相同的格式字符串，来构建更复杂的字符串的一种非常有用的方法。
+`to_string`可以将许多类型转换为字符串。 (如果可以用"{}"打印它们，那么它们就可以被转换) . `format!`是像`println!`使用相同的格式字符串，但构建更复杂的字符串的一种非常有用的方法。
 
 ```rust
 // string6.rs
@@ -935,7 +934,9 @@ fn main() {
 }
 ```
 
-注意`&`在前面的`v.to_string()`- `&`符号是在一个字符串切片上，而不是`String`，因此,它需要一点手法来匹配。
+注意`&`在前面的`v.to_string()`- `&`符号表示一个字符串切片，不是`String`自身(`to_string`返回)，因此，它需要一点手法来匹配。
+
+> 小课堂：`v`本身是`&i32`类型，通过`to_string`转为`String`,再通过`&`符号转为`&str`，让 res 的`+=`语法糖(也就是`add_assign`方法)操作可以成功。[官方文档](https://doc.rust-lang.org/std/string/struct.String.html#impl-AddAssign%3C%26%27a%20str%3E)
 
 用于切片的`..`也与字符串一起工作:
 
@@ -953,7 +954,7 @@ fn main() {
 // slices "tatic" "na"
 ```
 
-但是，你不能索引字符串! 这是因为它们使用的是 唯(一)真(正)编码 UTF-8，其中的"character"可能是一个字节数.
+但是，你不能索引字符串! 这是因为它们使用的是 唯(一)真(正)编码 UTF-8，其中的"character"可能是一个字节数。
 
 ```rust
 // string3.rs
