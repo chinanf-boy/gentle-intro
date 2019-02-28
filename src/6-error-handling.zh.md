@@ -5,10 +5,11 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [基本的错误处理](#%E5%9F%BA%E6%9C%AC%E7%9A%84%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86)
-- [simeple-error 的简单错误](#simeple-error-%E7%9A%84%E7%AE%80%E5%8D%95%E9%94%99%E8%AF%AF)
-- [严重错误的 error-chain](#%E4%B8%A5%E9%87%8D%E9%94%99%E8%AF%AF%E7%9A%84-error-chain)
-- [链接错误](#%E9%93%BE%E6%8E%A5%E9%94%99%E8%AF%AF)
+- [提供简单错误的 simeple-error](#%E6%8F%90%E4%BE%9B%E7%AE%80%E5%8D%95%E9%94%99%E8%AF%AF%E7%9A%84-simeple-error)
+- [提供严重错误的 error-chain](#%E6%8F%90%E4%BE%9B%E4%B8%A5%E9%87%8D%E9%94%99%E8%AF%AF%E7%9A%84-error-chain)
+- [错误的链化](#%E9%94%99%E8%AF%AF%E7%9A%84%E9%93%BE%E5%8C%96)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

@@ -3,11 +3,12 @@
 ## 目录
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION， INSTEAD RE-RUN doctoc TO UPDATE -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 
 - [阅读文档](#%E9%98%85%E8%AF%BB%E6%96%87%E6%A1%A3)
 - [Maps](#maps)
-- [示例: 计算单词](#%E7%A4%BA%E4%BE%8B-%E8%AE%A1%E7%AE%97%E5%8D%95%E8%AF%8D)
+- [示例: 计算词数](#%E7%A4%BA%E4%BE%8B-%E8%AE%A1%E7%AE%97%E8%AF%8D%E6%95%B0)
 - [Sets](#sets)
 - [示例: 交互式命令处理](#%E7%A4%BA%E4%BE%8B-%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%91%BD%E4%BB%A4%E5%A4%84%E7%90%86)
 
