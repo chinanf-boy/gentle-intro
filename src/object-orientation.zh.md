@@ -1,10 +1,11 @@
 ## 目录
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION， INSTEAD RE-RUN doctoc TO UPDATE -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [面向对象的 Rust](#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84-rust)
-  - [trait 对象](#%E7%89%B9%E8%B4%A8trait-%E5%AF%B9%E8%B1%A1)
+
+- [Rust 中的面向对象](#rust-%E4%B8%AD%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1)
+  - [trait 对象](#trait-%E5%AF%B9%E8%B1%A1)
 - [动物](#%E5%8A%A8%E7%89%A9)
 - [鸭子和泛型](#%E9%B8%AD%E5%AD%90%E5%92%8C%E6%B3%9B%E5%9E%8B)
 - [继承](#%E7%BB%A7%E6%89%BF)

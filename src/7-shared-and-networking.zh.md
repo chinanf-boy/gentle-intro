@@ -5,8 +5,9 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [改变不可变的](#%E6%94%B9%E5%8F%98%E4%B8%8D%E5%8F%AF%E5%8F%98%E7%9A%84)
-- [共享引用](#%E5%85%B1%E4%BA%AB%E5%BC%95%E7%94%A8)
+- [共享的引用](#%E5%85%B1%E4%BA%AB%E7%9A%84%E5%BC%95%E7%94%A8)
 - [多线程](#%E5%A4%9A%E7%BA%BF%E7%A8%8B)
 - [线程不借](#%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%80%9F)
 - [通道](#%E9%80%9A%E9%81%93)
