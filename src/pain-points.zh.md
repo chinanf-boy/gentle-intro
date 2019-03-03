@@ -3,13 +3,14 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [痛点](#%E7%97%9B%E7%82%B9)
 - [类型推断](#%E7%B1%BB%E5%9E%8B%E6%8E%A8%E6%96%AD)
 - [可变引用](#%E5%8F%AF%E5%8F%98%E5%BC%95%E7%94%A8)
-- [引用和生命周期](#%E5%BC%95%E7%94%A8%E5%92%8C%E7%94%9F%E5%91%BD%E6%97%B6%E9%97%B4)
+- [引用和生命周期](#%E5%BC%95%E7%94%A8%E5%92%8C%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F)
 - [字符串](#%E5%AD%97%E7%AC%A6%E4%B8%B2)
 - [关于分号的说明](#%E5%85%B3%E4%BA%8E%E5%88%86%E5%8F%B7%E7%9A%84%E8%AF%B4%E6%98%8E)
-- [特定于 C ++的问题](#%E7%89%B9%E5%AE%9A%E4%BA%8E-c-%E7%9A%84%E9%97%AE%E9%A2%98)
+- [专怼 C ++问题](#%E4%B8%93%E6%80%BC-c-%E9%97%AE%E9%A2%98)
   - [Rust 值语义是不同的](#rust-%E5%80%BC%E8%AF%AD%E4%B9%89%E6%98%AF%E4%B8%8D%E5%90%8C%E7%9A%84)
   - [共享引用](#%E5%85%B1%E4%BA%AB%E5%BC%95%E7%94%A8)
   - [迭代器](#%E8%BF%AD%E4%BB%A3%E5%99%A8)

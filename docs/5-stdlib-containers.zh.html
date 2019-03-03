@@ -157,36 +157,47 @@
 
             <div id="content" class="content">
                 <main>
-                    <a class="header" href="#a标准库容器" id="a标准库容器"><h1>标准库容器</h1></a>
+                    <a class="header" href="#a标准库范畴" id="a标准库范畴"><h1>标准库范畴</h1></a>
+<a class="header" href="#a目录" id="a目录"><h2>目录</h2></a>
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<ul>
+<li><a href="#%E9%98%85%E8%AF%BB%E6%96%87%E6%A1%A3">阅读文档</a></li>
+<li><a href="#maps">Maps</a></li>
+<li><a href="#%E7%A4%BA%E4%BE%8B-%E8%AE%A1%E7%AE%97%E8%AF%8D%E6%95%B0">示例: 计算词数</a></li>
+<li><a href="#sets">Sets</a></li>
+<li><a href="#%E7%A4%BA%E4%BE%8B-%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%91%BD%E4%BB%A4%E5%A4%84%E7%90%86">示例: 交互式命令处理</a></li>
+</ul>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 <a class="header" href="#a阅读文档" id="a阅读文档"><h2>阅读文档</h2></a>
-<p>在本节中,我将简要介绍 Rust 标准库的一些常见部分. 文档非常好,但有一点讲解和一些例子总是有用的.</p>
-<p>最初,阅读 Rust 文档可能很具挑战性,所以我会经历<code>Vec</code>举个例子. 一个有用的提示是勾选’[-]’框来折叠文档.(如果使用下载标准库源代码<code>rustup component add rust-src</code> 一个 ‘[src]’链接将出现在此旁边.)这可以让您全面了解所有可用的方法.</p>
-<p>首先要注意的是 <em>并非所有可能的方法</em> 被定义<code>Vec</code>本身. 它们是(大部分) 可改变 vec 的方法,例如<code>push</code>. 有些方法仅适用于类型匹配某些约束的 Vec.例如,你只能打电话<code>dedup</code>(删除重复项) ,如果这个类型确实是可以相互比较的东西. 有多个<code>impl</code>定义的块<code>Vec</code>针对不同类型的约束.</p>
-<p>然后是非常特殊的关系<code>Vec&lt;T&gt;</code>和<code>&amp;[T]</code>. 任何在 切片 上工作的方法也可以直接在 vec 上工作,而不必明确地使用<code>as_slice</code>方法. 这种关系表达为<code>Deref&lt;Target=[T]&gt;</code>. 当你通过引用预计会发生 切片 的东西来传递一个 Vec 时,这也会起作用 - 这是类型之间自动转换的少数几个地方之一. 所以像 切片 方法<code>first</code>,它可能 - 返回对第一个元素的引用,或者<code>last</code>,也为 Vec 工作. 许多方法与相应的字符串方法类似,所以就是这样<code>split_at</code>为了在索引处获得一对 切片 ,<code>starts_with</code>检查 vec 是否以值序列开始,并且<code>contains</code>检查 vec 是否包含特定值.</p>
-<p>没有<code>search</code>方法来查找特定值的索引,但这里有一条经验法则: 如果在容器上找不到方法,请在 迭代器 上查找一个方法:</p>
+<p>在本节中，我将简要介绍 Rust 标准库的一些常见部分。文档非常好，但有一点讲解和一些例子总是有好处的。</p>
+<p>最初，阅读 Rust 文档可能很具挑战性，所以我会举个<code>Vec</code>例子。 一个有用的提示是勾选’[-]’框来折叠文档。(如果使用下载标准库源代码<code>rustup component add rust-src</code> ，一个 ‘[src]’链接将出现在此旁边。)这些可以让您全面了解所有可用的方法。</p>
+<p>首先要注意的是， <em>并非所有可能的方法</em> 都定义<code>Vec</code>本身。 它们是(大部分) 可改变 vec 的方法，例如<code>push</code>。有些方法仅适用于类型匹配某些约束的 Vec。例如，你只能调用<code>dedup</code>(删除重复项) ，如果这个类型确实是可以相互比较的东西。 <code>Vec</code>有多个<code>impl</code>定义块，针对不同类型的约束。</p>
+<p>然后是<code>Vec&lt;T&gt;</code>和<code>&amp;[T]</code>间非常特殊的关系。 任何在切片上工作的方法也可以直接在 vec 上工作，而不必明确地使用<code>as_slice</code>方法。 这种关系表达为<code>Deref&lt;Target=[T]&gt;</code>。当你为需要 切片 的函数传递一个 Vec 时，这也会起作用 - 这是类型之间自动转换的几个之一。 所以像切片方法<code>first</code>，它可能 - 返回对第一个元素的引用，或者<code>last</code>，同时也为 Vec 工作。 许多切片方法与相应的字符串方法类似，所以就有了，为了在索引处获得一对切片的<code>split_at</code>方法，和<code>starts_with</code>能检查 vec 是否以某值序列开始，还有<code>contains</code>能检查 vec 是否包含特定值。</p>
+<p>要知道，是没有查找特定值的索引的<code>search</code>方法的，但这里有一条经验法则: 如果在方法集上找不到想要的方法，请在 迭代器 上查找方法:</p>
 <pre><code class="language-Rust">    let v = vec![10,20,30,40,50];
     assert_eq!(v.iter().position(|&amp;i| i == 30).unwrap(), 2);
 </code></pre>
-<p>(该<code>&amp;</code>是因为这是一个 迭代器  _引用 _- 或者你可以说<code>*i== 30</code>为了比较).</p>
-<p>同样,没有<code>map</code>对 vec 的方法,因为<code>iter().map(...).collect()</code>也会做这项工作.  Rust 不喜欢不必要地分配 - 通常你不需要这样的结果<code>map</code>作为实际分配的 Vec.</p>
-<p>所以我建议你熟悉所有的 迭代器 方法,因为它们对编写好的 Rust 代码至关重要,而不必一直写出循环. 与往常一样,编写小程序来探索 迭代器 方法,而不是在更复杂的程序中与它们搏斗.</p>
-<p>该<code>Vec&lt;T&gt;</code>和<code>&amp;[T]</code>方法之后是共同的 trait :  Vec 知道如何进行自己的调试显示(但只有在元素实现时才是如此) <code>Debug</code>).同样,如果它们的元素是可克隆的,它们是可克隆的. 他们执行<code>Drop</code>当 vec 最终死亡时发生这种情况;内存被释放,并且所有元素也被丢弃.</p>
-<p>该<code>Extend</code> trait 意味着来自 迭代器 的值可以被添加到一个没有循环的 Vec 中:</p>
+<p>(该<code>&amp;</code>是因为这是一个建于 <em>引用</em> 上 的迭代器 - 或者你可以用<code>*i == 30</code>)。</p>
+<p>同样， vec 上没有<code>map</code>方法，因为<code>iter().map(...).collect()</code>会做这项工作。 Rust 不喜欢不必要地分配(内存) - 通常你不需要<code>map</code>这样的过程结果，因这会是实际分配的 Vec，浪费。</p>
+<p>所以我建议你熟悉所有的 迭代器 方法，因为它们对编写好的 Rust 代码至关重要，不必一直写出循环。 与往常一样，编写小程序来探索 迭代器 方法，而不是在更复杂的程序中与它们搏斗。</p>
+<p><code>Vec&lt;T&gt;</code>和<code>&amp;[T]</code>方法拥抱共同的 trait : Vec 知道如何进行自己的调试显示(但，只有其元素也实现<code>Debug</code>，才如此。) 同样，如果它们的元素是可克隆的，那就是可克隆的。 他们实现了<code>Drop</code>，那当 vec 最终死亡时就会发生对应情况; 内存被释放，并且所有元素也被释放。</p>
+<p>该<code>Extend</code> trait 是说，不需要一个循环，就可以让 迭代器 的值添加到一个 Vec 中:</p>
 <pre><code class="language-Rust">v.extend([60,70,80].iter());
 let mut strings = vec![&quot;hello&quot;.to_string(), &quot;dolly&quot;.to_string()];
 strings.extend([&quot;you&quot;,&quot;are&quot;,&quot;fine&quot;].iter().map(|s| s.to_string()));
 </code></pre>
-<p>还有<code>FromIterator</code>,它可以让 vec <em>初始化{constructed}</em> 来自 迭代器 .(迭代器  <code>collect</code>方法倾向于此).</p>
-<p>任何容器都需要可迭代. 回想一下有<a href="2-structs-enums-lifetimes.html#the-three-kinds-of-iterators">三种 迭代器 </a></p>
-<pre><code class="language-Rust">for x in v {...} // returns T, consumes v
-for x in &amp;v {...} // returns &amp;T
-for x in &amp;mut v {...} // returns &amp;mut T
+<p>还有<code>FromIterator</code>，它可以让 vec 由迭代器 <em>构成{constructed}</em> 。(迭代器<code>collect</code>方法依赖这个)。</p>
+<p>任何容器(vec...)都需要可迭代。 回想一下有<a href="./2-structs-enums-lifetimes.zh.html#%E4%B8%89%E7%A7%8D%E8%BF%AD%E4%BB%A3%E5%99%A8">三种迭代器</a></p>
+<pre><code class="language-Rust">for x in v {...} // 返回 T, 消耗 v
+for x in &amp;v {...} // 返回 &amp;T
+for x in &amp;mut v {...} // 返回 &amp;mut T
 </code></pre>
-<p>该<code>for</code>声明依赖于<code>IntoIterator</code>特质,实际上有三种实现.</p>
-<p>然后是索引,由<code>Index</code>控制(从 vec 中读取) 和<code>IndexMut</code>(修改一个 Vec). 有很多可能性,因为还有分片索引,就像<code>v[0..2]</code>,返回这些返回片,以及平原<code>v[0]</code>它返回对第一个元素的引用.</p>
-<p>这里有一些实现<code>From</code> trait.例如<code>Vec::from(&quot;hello&quot;.to_string())</code>会给你一个字符串底层字节的 Vec <code>Vec&lt;u8&gt;</code>. 现在,已经有一种方法<code>into_bytes</code>在<code>String</code>上,为什么冗余?有多种方式来做同样的事情似乎令人困惑. 但是这是必要的,因为显式 trait 使泛型方法成为可能.</p>
-<p>有时候 Rust 类型系统的局限性会让事情变得笨拙. 这里的一个例子是如何<code>PartialEq</code>是 <em>分别</em> 定义为最大尺寸为32的阵列!(这会变得更好.)这可以方便地将 Vec 与数组进行比较,但要注意大小限制.</p>
-<p>还有[隐藏的宝石](http://xion.io/post/code/ Rust -iter-patterns.html)深埋在文档中. 正如 Karol Kuczmarski 所说: “因为说实话: 没有人滚动那么远”. 如何处理 迭代器 中的错误? 假设你映射了一些可能失败并返回的操作<code>Result</code>,然后想要收集结果:</p>
+<p>该<code>for</code>声明依赖于<code>IntoIterator</code>trait，实际上有三种实现。</p>
+<p>然后是索引，由<code>Index</code>控制(从 vec 中读取) 和<code>IndexMut</code>(修改一个 Vec)。存在很多可能性，因为还有切片索引，像<code>v[0..2]</code>会返回切片，以及<code>v[0]</code>会返回对第一个元素的引用。</p>
+<p>这里有一些<code>From</code> trait 的实现。例如<code>Vec::from(&quot;hello&quot;.to_string())</code>会给你一个字符串底层字节<code>Vec&lt;u8&gt;</code>的 Vec 。 现在，已经有一种<code>into_bytes</code>方法在<code>String</code>上，为什么要重复? 有多种方式来做同样的事情似乎很困惑，但是这是必要的，因为显式 trait 使泛型方法成为可能。</p>
+<p>有时候， Rust 类型系统的局限性会让事情变得笨拙。 这里的一个例子是<code>PartialEq</code> 要为尺寸 32 的数组 <em>单独</em> 定义!(以后会变得更好。) 虽然可以将 Vec 与数组进行方便地比较，但要注意大小限制。</p>
+<p>还有<a href="http://xion.io/post/code/rust-iter-patterns.html">隐藏的珠宝</a>深埋在文档中。 正如 Karol Kuczmarski 所说: “因为说实话: 没有人会滚动那么远”。 如何处理迭代器中的错误? 假设你映射了一些可能失败的操作，就返回<code>Result</code>好了，然后收集结果:</p>
 <pre><code class="language-Rust">fn main() {
     let nums =[&quot;5&quot;,&quot;52&quot;,&quot;65&quot;];
     let iter = nums.iter().map(|s| s.parse::&lt;i32&gt;());
@@ -195,27 +206,27 @@ for x in &amp;mut v {...} // returns &amp;mut T
 }
 //[Ok(5), Ok(52), Ok(65)]
 </code></pre>
-<p>很公平,但现在你必须小心地解开这些错误! 但是,如果你要求 vec 的话, Rust 已经知道如何做正确的事情 <em>包括</em> 在一个<code>Result</code>- 也就是说,无论是 vec 还是错误:</p>
+<p>还行，但现在你必须小心地解开这些错误! 但是，如果你要求 vec <em>包裹</em> 在一个<code>Result</code>的话， 那 Rust 会知道如何做正确的事情 - 也就是说，无论是一个 vec 还是一个错误，都能处理了:</p>
 <pre><code class="language-Rust">    let converted: Result&lt;Vec&lt;_&gt;,_&gt; = iter.collect();
 //Ok([5, 52, 65])
 </code></pre>
-<p>如果转换错误?然后你会得到<code>Err</code>遇到第一个错误. 这是非常灵活的一个很好的例子 <code>collect</code>是.(这里的符号可能会吓人 -<code>Vec&lt;_&gt;</code>意味着”这是一个 Vec ,为我制定出实际的类型<code>和</code>Result&lt;vec&lt;<em>&gt;</em>&gt;还要求 Rust 计算错误类型.)</p>
-<p>所以有一个 <em>批量{lot}</em> 文档中的详细信息. 但它肯定比C ++文档所说的更清晰<code>的std::vec</code></p>
+<p>如果这有个错误? 然后你会在遇到第一个错误时得到<code>Err</code>。 这是一个灵活<code>collect</code>的好例子。(这里的符号可能会吓人 -<code>Vec&lt;_&gt;</code>意味着”这是一个 Vec ，忽略实际的类型，和<code>Result&lt;Vec&lt;_&gt;,_&gt;</code>还要求 Rust 忽略错误类型。)</p>
+<p>文档中有 <em>许多</em> 的详细信息。 但它肯定比 C ++文档所说的<code>std::vec</code>更清晰。</p>
 <blockquote>
-<p>对元素施加的要求取决于对容器执行的实际操作. 一般来说,要求元素类型是完整类型并且符合Erasable的要求,但是许多成员函数会施加更严格的要求.</p>
+<p>对元素施加的要求取决于对容器执行的实际操作。 一般来说，要求元素类型是完整类型并且符合 Erasable 的要求，但是许多成员函数会施加更严格的要求。</p>
 </blockquote>
-<p>用C ++,你是独立的. rust 的清晰度一开始令人望而生畏,但当你学习阅读约束条件时,你将确切地知道任何特定的方法<code>Vec</code>需要.</p>
-<p>我建议你使用源代码<code>rustup component add rust-src</code>,因为标准库源代码非常易读,并且方法实现通常不如方法声明那么可怕.</p>
+<p>用 C ++，你是独立思考的。 Rust 的清晰度一开始就让人尊敬，但当你学习阅读约束条件时，你将确切地知道<code>Vec</code>要的任何特定方法.</p>
+<p>我建议你使用<code>rustup component add rust-src</code>获得源代码，因为标准库源代码非常易读，并且方法实现通常不如方法声明那么可怕。</p>
 <a class="header" href="#maps" id="maps"><h2>Maps</h2></a>
-<p><em>Maps</em>(有时叫 <em>关联数组</em> 要么 <em>dicts{字典}</em> ); 让你查看与一个相关的值 <em>key{key}</em>. 这不是一个真正的花式概念,可以用一系列元组来完成:</p>
+<p><em>Maps</em>(有时叫 <em>关联数组</em> 要么 <em>dicts{字典}</em> ); 可以让你存放 键值对的数据结构。这不是一个光想的概念，可以用元组+数组来完成:</p>
 <pre><code class="language-Rust">    let entries =[(&quot;one&quot;,&quot;eins&quot;),(&quot;two&quot;,&quot;zwei&quot;),(&quot;three&quot;,&quot;drei&quot;)];
 
     if let Some(val) = entries.iter().find(|t| t.0 == &quot;two&quot;) {
         assert_eq!(val.1,&quot;zwei&quot;);
     }
 </code></pre>
-<p>这对于小 map 来说很好,只需要为key定义相等,但搜索需要线性时间 - 与 map 大小成比例.</p>
-<p>一个<code>HashMap</code>有一个更好 <em>批量{lot}</em> 要搜索的 key/值 对的列表:</p>
+<p>对小 map 来说，还能用，且只需要与 定义的 key 相等就好啦，但搜索需要线性时间 - 与 map 大小成比例。</p>
+<p>要想搜索 <em>许多</em> 键/值 对，有个更好的<code>HashMap</code>:</p>
 <pre><code class="language-Rust">use std::collections::HashMap;
 
 let mut map = HashMap::new();
@@ -226,8 +237,8 @@ map.insert(&quot;three&quot;,&quot;drei&quot;);
 assert_eq!(map.contains_key(&quot;two&quot;), true);
 assert_eq!(map.get(&quot;two&quot;), Some(&amp;&quot;zwei&quot;));
 </code></pre>
-<p><code>&amp;&quot;zwei&quot;</code>?这是因为<code>get</code>返回一个 <em>引用</em> 到价值,而不是价值本身. 这里的值类型是<code>&amp;str</code>,所以我们得到一个<code>&amp;&amp;str</code>. 一般来说它 <em>具有</em> 作为引用,因为我们不能 <em>移动{move}</em> 一种超出其拥有类型的价值.</p>
-<p><code>get_mut</code>就好像<code>get</code>但返回一个可能的可变引用. 这里我们有一个从字符串到整数的映射,并希望更新key’two’的值:</p>
+<p>为什么是<code>&amp;&quot;zwei&quot;</code>? 这是因为<code>get</code>返回一个 <em>引用</em> ，而不是 <strong>值本身</strong> 。而 <strong>这个值</strong> 的类型是<code>&amp;str</code>，所以我们得到一个<code>&amp;&amp;str</code>。 一般来说，它 <em>必须</em> 作为一个引用，因为我们不能只 <em>移动</em> 值，而不管其拥有的类型。</p>
+<p><code>get_mut</code>就好像<code>get</code>，但返回一个可能的可变引用。 这里我们有一个字符串/整数的映射，并希望更新’two’键的值:</p>
 <pre><code class="language-Rust">let mut map = HashMap::new();
 map.insert(&quot;one&quot;,1);
 map.insert(&quot;two&quot;,2);
@@ -244,9 +255,9 @@ println!(&quot;after {}&quot;, map.get(&quot;two&quot;).unwrap());
 // before 2
 // after 20
 </code></pre>
-<p>请注意,获取可写入的引用发生在它自己的块中 - 否则,我们将有一个可变的借位持续到结束,然后 Rust 不会允许您从<code>map</code>再次借与<code>map.get(&quot;two&quot;)</code>;它不能允许任何可读的引用,同时已经有一个可写引用的范围.(如果是这样,它不能保证那些可读的引用将保持有效.)所以解决方案是确保可变借用不会持续很长时间.</p>
-<p>这不是最优雅的API,但我们不能抛弃任何可能的错误. Python会抛出一个异常,而C ++只会创建一个默认值.(这很方便,但偷偷摸摸;容易忘记的价格a_map[ “two”]`总是返回一个整数是我们不能区分 zero 和 ‘未找到’ 之间的区别, <em>加</em> 一个额外的条目被创建!)</p>
-<p>没有人只是运行 <code>unwrap</code>, 除了例子中除外. 但是,您看到的大多数 Rust 代码都由一些独立的示例组成!比赛发生的可能性更大: 我们可以遍历key/值对,但不是以任何特定的顺序.</p>
+<p>请注意，获取的可写引用发生在它自己的块中 - 否则，我们将有一个可变的借用持续到结束，那样的话， Rust 不会允许<code>map.get(&quot;two&quot;)</code>从<code>map</code>再次借用; 同一作用域内已经有一个可变引用，不允许再出现(同一个 map 的)任何引用。(因为，它不能保证那些只读的引用保持有效。)所以解决方案是确保可变借用，不会持续很长时间。</p>
+<p>这不是最优雅的 API，但我们不能抛弃任何可能的错误。 Python 会抛出一个异常，而 C ++只会创建一个默认值。(这很方便，但偷偷摸摸;容易忘记<code>a_map[&quot;two&quot;]</code>的成本，也总是返回一个整数，让我们不能区分 <code>0</code> 和 ‘未找到’ 之间的区别， <em>还加上</em> 一个额外项被创建!)</p>
+<p>其实，没有人只调用<code>unwrap</code>, 除了例子外。 但是，您看到的大多数 Rust 代码都由一些独立的示例组成! 匹配发生的可能性更大:</p>
 <pre><code class="language-Rust">if let Some(v) = map.get(&quot;two&quot;) {
     let res = v + 1;
     assert_eq!(res, 3);
@@ -257,7 +268,7 @@ match map.get_mut(&quot;two&quot;) {
     None =&gt; panic!(&quot;_now_ we can panic!&quot;)
 }
 </code></pre>
-<p>也有</p>
+<p>我们可以遍历 key/值对，但(实际)不以任何特定的顺序。</p>
 <pre><code class="language-Rust">for(k,v) in map.iter() {
     println!(&quot;key {} value {}&quot;, k,v);
 }
@@ -265,11 +276,11 @@ match map.get_mut(&quot;two&quot;) {
 // key three value drei
 // key two value zwei
 </code></pre>
-<p>按<code>key</code>和<code>值</code>方法分别通过key和值返回 迭代器 ,这使得创建值的 Vec 变得容易.</p>
-<a class="header" href="#a示例-计算单词" id="a示例-计算单词"><h2>示例: 计算单词</h2></a>
-<p>与文本有关的一个有趣的事情是计数字频率.</p>
-<p>将文本分解为单词很简单<code>split_whitespace</code>,但是我们真的要尊重标点符号.  所以这些词应该被定义为只包含字母字符. 这些词也需要作为小写字母进行比较. 在 map 上做一个可变的查找很简单,但是处理查找失败的情况有点尴尬.</p>
-<p>幸运的是,有一种更新 map 值的方式:</p>
+<p>也有分别按键和值，返回迭代器的<code>key</code>/<code>values</code>方法，这使得创建值的 Vec 变得容易。</p>
+<a class="header" href="#a示例-计算词数" id="a示例-计算词数"><h2>示例: 计算词数</h2></a>
+<p>与文本有关的一个有趣的事情是，计数字的频率。</p>
+<p>用<code>split_whitespace</code>将文本分解为单词很简单，但是我们要真的遵循标点符号。总之，这些词应该被定义为只包含字母字符，也需要换成小写字母进行比较。</p>
+<p>直接在 一个 map 上做一个可变的查找，虽然处理查找失败的情况有点尴尬。但幸运的是，有一种更新 map 值的方式:</p>
 <pre><code class="language-Rust">let mut map = HashMap::new();
 
 for s in text.split(|c: char| ! c.is_alphabetic()) {
@@ -278,22 +289,22 @@ for s in text.split(|c: char| ! c.is_alphabetic()) {
     *count += 1;
 }
 </code></pre>
-<p>如果没有对应于某个单词的现有计数,那么让我们为该单词和单词创建一个包含零和 <em>插{insert}</em> 它进入 map.它正是C ++映射所做的,除非它明确地完成并且没有偷偷摸摸.</p>
-<p>这段代码中只有一个显式类型,这就是<code>char</code>因为弦的怪癖而需要<code>模式{Pattern}</code>使用的特质<code>split</code>. 但我们可以推断出 key 类型是<code>String</code>和 value 类型是<code>i32</code>.</p>
-<p>运用<a href="http://www.gutenberg.org/cache/epub/1661/pg1661.txt">福尔摩斯历险记</a>来自古腾堡计划,我们可以更彻底地进行测试. 唯一字词的总数(<code>map.len()</code>) 是8071.</p>
-<p>如何找到最常见的二十个单词?首先,将映射转换为(key, value) 元组的 Vec .(因为我们使用了,所以这消耗了 map <code>into_iter</code>.)</p>
+<p>如果没有对应于某个单词的现有计数，那么让我们为该单词创建一个包含零的项，并 <em>插{insert}</em> 进 map。它正是 C ++映射所做的，除了它是明确的，不是偷偷摸摸的。</p>
+<p>这段代码中只有一个显式类型<code>char</code>，因为<code>split</code>的使用关系到字符串<code>Pattern</code>trait 的怪癖。但我们可以推断出 key 类型是<code>String</code>和 value 类型是<code>i32</code>。</p>
+<p>根据 Gutenberg 项目 的<a href="http://www.gutenberg.org/cache/epub/1661/pg1661.txt">福尔摩斯历险记</a>，我们可以更彻底地进行测试。 唯一字词的总数(<code>map.len()</code>) 是 8071。</p>
+<p>如何找到最常见的二十个单词? 首先，将 map 转换为 (key, value) 元组的 Vec。(若我们使用了<code>into_iter</code>，会消耗了 map。)</p>
 <pre><code class="language-Rust">let mut entries: Vec&lt;_&gt; = map.into_iter().collect();
 </code></pre>
-<p>接下来我们可以按降序排列. <code>sort_by</code>期待的结果<code>cmp</code>方法来自于<code>Ord</code> trait ,它是由整型值类型实现的:</p>
+<p>接下来，我们可以按降序排列。 <code>sort_by</code>接收来自于<code>Ord</code> trait 的<code>cmp</code>方法的结果，它是由整型值类型实现的:</p>
 <pre><code class="language-Rust">    entries.sort_by(|a,b| b.1.cmp(&amp;a.1));
 </code></pre>
-<p>最后打印出前20个条目:</p>
+<p>最后打印出，前 20 个项:</p>
 <pre><code class="language-Rust">    for e in entries.iter().take(20) {
         println!(&quot;{} {}&quot;, e.0, e.1);
     }
 </code></pre>
-<p>(好吧,你 <em>可以</em> 只是循环<code>0..20</code>并在这里给这个 Vec 编制索引 - 这没有错,只是有点不经意 - 而且对于大型迭代来说可能更昂贵.)</p>
-<pre><code> 38765
+<p>(好吧，你也 <em>可以</em> 只是用<code>0..20</code>循环，并索引 Vec 就好了 - 这虽然没有错，但有点随便 - 而且对于大型迭代来说，可能更昂贵。)</p>
+<pre><code>  38765
 the 5810
 and 3088
 i 3038
@@ -314,10 +325,10 @@ with 877
 as 863
 had 830
 </code></pre>
-<p>有点惊喜 - 那个空的文本是什么?这是因为<code>split</code>适用于单字符分隔符,因此任何标点符号或额外空格都会导致新的分割.</p>
+<p>有点惊喜 - 首个空文本是什么? 这是因为<code>split</code>，适用于单字符分隔符，因此任何标点符号或额外空格都会导致新的分割。</p>
 <a class="header" href="#sets" id="sets"><h2>Sets</h2></a>
-<p>Sets 是 map ,您只关心关key字,而不关联任何关联的值. 所以<code>inserts</code>只需要一个值,然后使用<code>contains</code>用于测试一个值是否在一个集合中.</p>
-<p>像所有容器一样,您可以创建一个<code>HashSet</code>来自 迭代器.这正是什么 <code>collect</code>确实,一旦你给了它必要的类型提示.</p>
+<p>Sets(集合) 是 只关心 key 的 map，而不关联任何值。 所以<code>inserts</code>只需要一个值，可使用<code>contains</code>用于测试一个值是否在一个集合中。</p>
+<p>像所有容器一样，您可以用迭代器创建一个<code>HashSet</code>。这正是 <code>collect</code>所做的，一旦你给了它必要的类型提示。</p>
 <pre><code class="language-Rust">// set1.rs
 use std::collections::HashSet;
 
@@ -332,8 +343,8 @@ fn main() {
 }
 // {&quot;orange&quot;, &quot;pear&quot;, &quot;apple&quot;}
 </code></pre>
-<p>注意(如预期的那样) 重复插入同一个key不起作用,并且集合中值的顺序并不重要.</p>
-<p>没有通常的操作,它们不会被设置:</p>
+<p>注意(如预期的那样) 重复插入同一个 key 是不起作用的，且，集合中值的顺序并不重要。</p>
+<p>没有常用操作，它们不会成为集合:</p>
 <pre><code class="language-Rust">let fruit = make_set(&quot;apple orange pear&quot;);
 let colours = make_set(&quot;brown purple orange yellow&quot;);
 
@@ -342,8 +353,8 @@ for c in fruit.intersection(&amp;colours) {
 }
 // &quot;orange&quot;
 </code></pre>
-<p>他们都创建 迭代器 ,并且可以使用 <code>collect</code>使这些成为集合.</p>
-<p>这是一个快捷方式,就像我们为 vec 定义的那样:</p>
+<p>他们都创建 迭代器，并且可以使用 <code>collect</code>使这些成为集合。</p>
+<p>这是一个快捷方式，就像我们为 vec 定义的那样:</p>
 <pre><code class="language-Rust">use std::hash::Hash;
 
 trait ToSet&lt;T&gt; {
@@ -362,24 +373,24 @@ where T: Eq + Hash, I: Iterator&lt;Item=T&gt; {
 
 let intersect = fruit.intersection(&amp;colours).to_set();
 </code></pre>
-<p>就像所有的 Rust 泛型一样,你需要限制类型 - 这只能用于理解平等的类型(<code>Eq</code>) 并且为其存在”散列函数”(<code>Hash</code>).请记住,没有 <em>类型</em> 叫<code>迭代器</code>,所以<code>I</code>代表任何类型 <em>impl</em> <code>迭代器</code>.</p>
-<p>这种在标准库类型上实现我们自己的方法的技术似乎有点过于强大,但是同样存在规则. 我们只能为自己的特质做到这一点. 如果结构和 trait 来自同一个箱子(特别是 stdlib ) ,那么这种实现将不被允许. 通过这种方式,您可以避免造成混乱.</p>
-<p>在祝贺自己如此聪明,方便的捷径之前,您应该意识到后果. 如果<code>make_set</code>是这样写的,所以这些是拥有字符串的集合,然后是实际类型<code>相交{intersect}</code>可能会惊喜:</p>
+<p>就像所有的 Rust 泛型一样，你需要限制类型 - 这只能为理解平等(<code>Eq</code>) 的类型和存在一个”散列函数”(<code>Hash</code>)的<code>T</code>实现。请记住，没有叫<code>Iterator</code>的 <em>类型</em> ，所以<code>I</code>代表任何 <em>实现</em> <code>Iterator</code>的类型。</p>
+<p>这种在标准库类型上，实现我们自己的方法的技术似乎有点过于强大，但是同样存在规则。 我们只能为自己的 trait 做到这一点。 如果结构和 trait 来自同一个箱子(特别是 stdlib ) ，那么这种实现将不被允许。这种方式，您可以避免造成混乱。</p>
+<p>在祝贺有如此聪明，方便的捷径之前，您应该意识到后果。 如果<code>make_set</code>是这样写的，若这些是所有权字符串的集合，那<code>intersect</code>的实际类型可能会是个’惊喜’:</p>
 <pre><code class="language-Rust">fn make_set(words: &amp;str) -&gt; HashSet&lt;String&gt; {
     words.split_whitespace().map(|s| s.to_string()).collect()
 }
 ...
-// intersect is HashSet&lt;&amp;String&gt;!
+// intersect 是 HashSet&lt;&amp;String&gt;!
 let intersect = fruit.intersection(&amp;colours).to_set();
 </code></pre>
-<p>除此之外, Rust 不会突然开始复制拥有的字符串. <code>相交</code>contains单个<code>&amp;String</code>借来<code>fruit</code>. 我可以向你保证,当你开始修补生命时,这会给你带来麻烦!更好的解决方案是使用 迭代器 <code>clone</code>方法来创建交集的所有字符串副本.</p>
-<pre><code class="language-Rust">// intersect is HashSet&lt;String&gt; - much better
+<p>一般情况下， Rust 不会突然开始复制所有权字符串。 <code>intersect</code>包含从<code>fruit</code>借来的单个<code>&amp;String</code>。我可以向你保证，当你开始修补生命周期时，这会给你带来麻烦! 更好的解决方案是使用迭代器的<code>cloned</code>方法来创建 <code>intersection</code> 的所有权字符串副本。</p>
+<pre><code class="language-Rust">// intersect 是 HashSet&lt;String&gt; - 更好了
 let intersect = fruit.intersection(&amp;colours).cloned().to_set();
 </code></pre>
-<p>一个更强大的定义<code>to_set</code>可能<code>self.cloned().collect()</code>,我邀请您试用.</p>
+<p>比<code>to_set</code>更强大，可能会是<code>self.cloned().collect()</code>，我邀请您试试。</p>
 <a class="header" href="#a示例-交互式命令处理" id="a示例-交互式命令处理"><h2>示例: 交互式命令处理</h2></a>
-<p>与程序进行交互式会话通常很有用. 每行都被读入并分成单词;该命令在第一个单词上查找,其余单词作为参数传递给该命令.</p>
-<p>自然实现是从命令名到闭包的映射. 但是,我们如何存储关闭,因为它们都会有不同的大小? 拳击他们将他们复制到堆上:</p>
+<p>与程序进行交互式会话通常很有用。 每行都被读入并分割成单词; 该命令在第一个单词上查找，其余单词作为参数传递给该命令。</p>
+<p>一个自然的实现是 命令名称/闭包 的 map。 但是，我们如何存储闭包，因为它们都会有不同的大小? 将他们放入盒子(Box)，那么他们会复制到堆上:</p>
 <p>这是第一次尝试:</p>
 <pre><code class="language-Rust">    let mut v = Vec::new();
     v.push(Box::new(|x| x * x));
@@ -390,18 +401,18 @@ let intersect = fruit.intersection(&amp;colours).cloned().to_set();
         println!(&quot;res {}&quot;, res);
     }
 </code></pre>
-<p>我们在第二次推动时遇到了非常明显的错误:</p>
+<p>我们在第二次 push 时，遇到了非常明显的错误:</p>
 <pre><code>  = note: expected type `[closure@closure4.rs:4:21: 4:28]`
   = note:    found type `[closure@closure4.rs:5:21: 5:28]`
 note: no two closures, even if identical, have the same type
 </code></pre>
-<p><code>rustc</code>导出了一个过于具体的类型,所以有必要强制该 Vec 具有该类型 <em>盒装 trait 类型</em> 在事情刚刚开始之前:</p>
+<p><code>rustc</code>导出了一个过于省略的类型，所以在事情刚刚开始之前，有必要强制该 Vec 具有 <em>Box trait 类型</em> :</p>
 <pre><code class="language-Rust">    let mut v: Vec&lt;Box&lt;Fn(f64)-&gt;f64&gt;&gt; = Vec::new();
 </code></pre>
-<p>我们现在可以使用相同的技巧,并将这些盒装封口保存在一个<code>HashMap</code>. 我们仍然需要警惕终身,因为关闭可以从他们的环境中借用.</p>
-<p>作为第一个制作它们很诱人<code>FnMut</code>- 也就是说,他们可以修改任何捕获的变量. 但是我们会有不止一个命令,每个命令都有自己的闭包,所以你不能随意借用相同的变量.</p>
-<p>所以关闭通过了_可变引用_作为一个参数,加上一段字符串 切片(<code>&amp;[&amp;str]</code>) 代表命令参数. 他们会返回一些<code>Result</code>- 我们会用<code>String</code>首先是错误.</p>
-<p><code>D</code>是数据类型,可以是任何大小的数据.</p>
+<p>我们现在可以使用相同的技巧，并将这些盒化的闭包保存在一个<code>HashMap</code>。 我们仍然需要警惕生命周期，因为闭包可以从他们的环境中借用。</p>
+<p>直接选择<code>FnMut</code>作为闭包签名具有诱导性- 换句话说，他们可以修改任何捕获的变量。 但，我们会有不止一个命令，每个命令都有自己的闭包，所以你不能随意可变借用相同的变量。</p>
+<p>最后，闭包被传递一个<em>可变引用</em>作为一个参数，加上一段字符串切片(<code>&amp;[&amp;str]</code>) 代表命令参数，会返回一些<code>Result</code>- 若为错误我们会用<code>String</code>。</p>
+<p><code>D</code>是数据类型，可以是任何带有一个固有大小的数据。</p>
 <pre><code class="language-Rust">type CliResult = Result&lt;String,String&gt;;
 
 struct Cli&lt;'a,D&gt; {
@@ -416,11 +427,11 @@ impl&lt;'a,D: Sized&gt; Cli&lt;'a,D&gt; {
 
     fn cmd&lt;F&gt;(&amp;mut self, name: &amp;str, callback: F)
     where F: Fn(&amp;mut D, &amp;[&amp;str])-&gt;CliResult + 'a {
-        self.callbacks.insert(name.to_string(),Box::new(callback));
+        self.callbacks.insert(name.to_string(),Box::new(callback)); // 装箱
     }
 </code></pre>
-<p><code>cmd</code>传递一个名称和任何与我们的签名相匹配的封闭,这个签名被装箱并输入到 map 中. <code>Fn</code>意味着我们的关闭借用他们的环境,但不能修改它. 它是声明比实际实现更可怕的通用方法之一!忘记明确的生命是一个常见的错误 -   Rust 不会让我们忘记这些封闭只限于他们的环境!</p>
-<p>现在阅读和运行命令:</p>
+<p><code>cmd</code>被传递一个名称和任何与我们的签名相匹配的闭包，这个闭包被装箱并输入到 map 。 <code>Fn</code>意味着我们的闭包借用他们的环境，但不能修改。 它是一个声明比实际实现更可怕的泛型方法! 忘记明确生命周期是一个常见的错误 - Rust 不会让我们忘记这些闭包限于他们环境的生命周期!</p>
+<p>现在读取和运行命令:</p>
 <pre><code class="language-Rust">    fn process(&amp;mut self,line: &amp;str) -&gt; CliResult {
         let parts: Vec&lt;_&gt; = line.split_whitespace().collect();
         if parts.len() == 0 {
@@ -445,8 +456,8 @@ impl&lt;'a,D: Sized&gt; Cli&lt;'a,D&gt; {
         }
     }
 </code></pre>
-<p>这是非常简单明了的 - 将行分成单词作为 vec ,查找 map 中的第一个单词,并用存储的可变数据和其余单词调用闭包. 空行会被忽略,不会被视为错误.</p>
-<p>接下来,让我们定义一些帮助函数,使我们的闭包更容易返回正确和不正确的结果. 有一个 有点 <em>小</em> 聪明在继续;它们是通用函数,适用于任何可以转换为的类型<code>String</code>.</p>
+<p>非常简单明了 - 将行分成单词，做成 vec ，查找 map 中的第一个单词，并用存储的可变数据和其余单词调用闭包。 空行会被忽略，不会被视为错误。</p>
+<p>接下来，让我们定义一些帮助函数，使我们的闭包更容易返回正确和不正确的结果。 这有点 <em>小</em> 聪明;它们是泛型函数，适用于任何可以转换为<code>String</code>的类型。</p>
 <pre><code class="language-Rust">fn ok&lt;T: ToString&gt;(s: T) -&gt; CliResult {
     Ok(s.to_string())
 }
@@ -455,7 +466,7 @@ fn err&lt;T: ToString&gt;(s: T) -&gt; CliResult {
     Err(s.to_string())
 }
 </code></pre>
-<p>最后,主程序. 看看如何<code>OK(答案)</code>作品 - 因为整数知道如何将自己转换为字符串!</p>
+<p>最后，主程序。看看<code>ok(answer)</code>如何工作 - 试因为整数知道如何将自己转换为字符串!</p>
 <pre><code class="language-Rust">use std::error::Error;
 
 fn main() {
@@ -484,8 +495,8 @@ fn main() {
     cli.go();
 }
 </code></pre>
-<p>这里的错误处理有点笨拙,我们稍后会看到如何在这种情况下使用问号运算符. 基本上,特定的错误<code>std::num::ParseIntError</code>实现这个特点 <code>std::error::Error</code>,我们必须把它带入使用范围<code>描述</code>方法 - 铁锈不让 trait 运作,除非它们是可见的.</p>
-<p>在行动中:</p>
+<p>这里的错误处理有点笨拙，我们稍后会看到如何在这种情况下，使用问号运算符。 基本上来说，特定的<code>std::num::ParseIntError</code>错误实现<code>std::error::Error</code> trait，为了使用<code>description</code>方法，要导入该 trait - Rust 在 trait 是可见的情况下，才让 它们 运作。</p>
+<p>一次行动:</p>
 <pre><code>Welcome to the Interactive Prompt!
 go 32
 got[&quot;32&quot;]
@@ -500,7 +511,7 @@ Ok(&quot;42&quot;)
 go boo!
 Err(&quot;invalid digit found in string&quot;)
 </code></pre>
-<p>以下是一些明显的改进,供您尝试. 首先,如果我们给<code>cmd</code>第三个参数是帮助行,然后我们可以存储这些帮助行并自动执行”帮助”命令. 其次,有一些命令编辑和历史是 <em>非常</em> 方便,所以使用[ Rust yline](https://crates.io/crates/ Rust yline)从Cargo的库中.</p>
+<p>以下是一些供您尝试的明显改进。 首先，如果我们给到<code>cmd</code>第二参数是帮助行，那么我们可以存储这些帮助行，并自动执行一个”help”命令。 其次，有一些命令编辑和历史是 <em>非常</em> 方便的，所以从 Cargo 的库中使用<a href="https://crates.io/crates/rustyline">rustyline</a>crate。</p>
 
                 </main>
 

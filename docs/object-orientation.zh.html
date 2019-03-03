@@ -157,20 +157,35 @@
 
             <div id="content" class="content">
                 <main>
-                    <a class="header" href="#a面向对象的rust" id="a面向对象的rust"><h2>面向对象的Rust</h2></a>
-<p>每个人都来自某个地方,以前的编程语言以特定的方式实现了面向对象编程 (OOP) 的可能性很大:</p>
+                    <a class="header" href="#a目录" id="a目录"><h2>目录</h2></a>
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 <ul>
-<li>‘classes’作为工厂生成 <em>对象</em> (通常被称为 <em>实例</em>) 并定义唯一的类型.</li>
-<li>类可能 <em>继承</em> 来自其他 class (他们的 <em>父母</em>) ,继承数据 (<em>fields</em>) 和行为 (<em>方法</em>)</li>
-<li>如果 A 是 B 的 父母,那么可以将B的一个实例传递给期望A (<em>分类{subtyping}</em>)</li>
-<li>一个对象应该隐藏它的数据 (<em>封装</em>) ,只能用方法操作.</li>
+<li><a href="#rust-%E4%B8%AD%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1">Rust 中的面向对象</a>
+<ul>
+<li><a href="#trait-%E5%AF%B9%E8%B1%A1">trait 对象</a></li>
 </ul>
-<p>面向对象 <em>设计</em> 然后是识别类 (’名词’) 和方法 (’动词’) ,然后建立它们之间的关系, <em>是一个</em> 和 <em>有一个</em>.</p>
-<p>在旧版”星际迷航”系列中,医生会对船长说: “这是人生,吉姆,而不是我们所知道的生活”. 这非常适用于Rust风格的面向对象: 它会带来震撼,因为Rust数据聚合 (结构,枚举和元组) 是愚蠢的. 你可以在其上定义方法,并使数据本身是私有的,所有通常的封装策略,但它们都是 <em>无关的类型</em>. 没有数据分类和数据继承 (除了专门的案例) <code>Deref</code>强制转换. )</p>
-<p>Rust中各种数据类型之间的关系使用 _ trait {traits}_. 学习Rust的很大一部分是理解标准库 trait 如何操作,因为这是将所有数据类型粘合在一起的意义网络.</p>
-<p>特质{trait} 很有趣,因为它们与主流语言的概念之间没有一一对应的关系. 这取决于你是动态还是静态思考. 在动态的情况下,它们更像Java或Go接口 - interfaces.</p>
-<a class="header" href="#a特质trait-对象" id="a特质trait-对象"><h3>特质{trait} 对象</h3></a>
-<p>考虑一下第一个用来介绍特质{trait} 的例子:</p>
+</li>
+<li><a href="#%E5%8A%A8%E7%89%A9">动物</a></li>
+<li><a href="#%E9%B8%AD%E5%AD%90%E5%92%8C%E6%B3%9B%E5%9E%8B">鸭子和泛型</a></li>
+<li><a href="#%E7%BB%A7%E6%89%BF">继承</a></li>
+<li><a href="#%E7%A4%BA%E4%BE%8B-windows-api">示例: Windows API</a></li>
+</ul>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<a class="header" href="#rust-中的面向对象" id="rust-中的面向对象"><h2>Rust 中的面向对象</h2></a>
+<p>世界各地的人们，以前的编程语言，是以某种方式实现面向对象编程 (OOP) 的可能性很大:</p>
+<ul>
+<li>‘类’作为生成 <em>对象</em> (通常被称为 <em>实例</em>) 并定义唯一的类型的工厂。</li>
+<li>类可能 <em>继承</em> 其他类 (<em>父母</em>) 的数据 (<em>字段</em>) 和行为 (<em>方法</em>)。</li>
+<li>如果 B 继承 A，那么将 B 的一个实例传递给希望接收 A (<em>子类</em>)的函数，是可能的。</li>
+<li>一个对象应该隐藏它的数据 (<em>封装</em>) ，只用方法操作。</li>
+</ul>
+<p>面向对象的 <em>设计理念</em> 在于识别类 (’名词’) 和方法 (’动词’) ，然后建立它们之间的关系，关心它 <em>是一个</em> 什么 和它 <em>有一个</em> 什么。</p>
+<p>在旧版”星际迷航”系列中，医生会对船长说: “这是人生，吉姆，但不是我们所知道的人生”。 这非常适用于 Rust 的面向对象风格: 它会带来震撼，因为 Rust 数据容器类型 (结构，枚举和元组) 都是很笨的，虽然你可以在其上定义方法，使数据本身是私有的，搭上所有常用的封装策略，但是它们之间都是 <em>不相干的类型</em>。 没有父类，没有继承 (除了<code>Deref</code>强制转换的个例。)</p>
+<p>Rust 中各种数据类型之间的关系，由所拥有的 <em>trait</em> 来确立。 要学好 Rust 的很大一部分，是理解标准库 trait 是如何操作的，因为这是把所有数据类型粘在一起的意识网络。</p>
+<p>trait 很有趣，因为它们与主流语言的概念之间没有一一对应的关系。 这取决于你是站在动态还是静态的角度思考。 在动态的情况下，它们更像 Java 或 Go 的接口。</p>
+<a class="header" href="#trait-对象" id="trait-对象"><h3>trait 对象</h3></a>
+<p>考虑一下，第一个介绍 trait 的例子:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -190,7 +205,7 @@ impl Show for f64 {
     }
 }
 #}</code></pre></pre>
-<p>这是一个有很大影响的小程序:</p>
+<p>受到很大影响的小程序，如下:</p>
 <pre><pre class="playpen"><code class="language-rust">fn main() {
     let answer = 42;
     let maybe_pi = 3.14;
@@ -202,9 +217,9 @@ impl Show for f64 {
 // show four-byte signed 42
 // show eight-byte float 3.14
 </code></pre></pre>
-<p>这是一个Rust需要某种类型指导的情况 - 我特别需要一个引用的向量是关于 impl 的<code>显示{Show}</code>. 现在请注意i32<code>和</code>f64<code>彼此没有任何关系,但他们都明白这一点</code>显示`方法,因为它们都实施相同的特质{trait} . 这种方法是 <em>虚拟{virtual}</em>,因为实际的方法对于不同的类型有不同的代码,但是正确的方法是基于的 <em>运行时{runtime}</em> 信息. 这些引用被调用<a href="https://doc.rust-lang.org/stable/book/trait-objects.html">特质{trait} 对象</a></p>
-<p>和 <em>那</em> 是如何将不同类型的对象放在同一个 向量{Vec} 中. 如果您来自Java或Go背景,您可以考虑<code>显示{Show}</code>充当接口.</p>
-<p>这个例子的一点细化 - 我们 <em>框{box}</em> 价值. 一个盒子包含对分配在堆上的数据的引用,并且非常像引用 - 它是一个 <em>智能指针</em>. 当库超出范围和<code>Drop</code>启动,然后释放内存.</p>
+<p>这是 Rust 需要一些类型指导的一种情况 - 我指定了一个 Vec，其存有实现了 <code>Show</code> 的引用 。请注意 i32<code>和</code>f64<code>彼此之间是没有任何关系的，但他们都知道</code>show`方法，因为它们都实现了相同的 trait 。 这些名称方法是 <em>虚构的</em>，因为不同类型的实际方法有不同的代码，而正确的那个方法要根据 <em>运行时</em> 信息决定。或<a href="https://doc.rust-lang.org/stable/book/trait-objects.html">trait 对象</a>信息。</p>
+<p><em>这</em> 就是你可以将不同类型的对象放在同一个 Vec 的原因(<code>Vec&lt;&amp;Show&gt;</code>)。 如果您有 Java 或 Go 背景，您可以把<code>Show</code>想成是接口。</p>
+<p>细化下 - 我们把值放进<code>Box</code>。一个盒子包含对分配在堆上数据的引用，并在行为上非常像引用 - 它是一个 <em>智能指针</em>。 像引用，当盒子超出作用域和<code>Drop</code>会启动，然后释放内存。</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -216,11 +231,11 @@ for d in &amp;show_list {
     println!(&quot;show {}&quot;,d.show());
 }
 #}</code></pre></pre>
-<p>不同之处在于,您现在可以使用此 Vec ,将其作为引用传递给它,或者不必跟踪任何借用的引用就可以将其传递出去. 当 Vec 被丢弃时,这些框将被丢弃,并且所有的内存都被回收.</p>
+<p>不同之处在于，您现在可以使用该 Vec，当成一个引用去传递，或者不必跟踪任何借用的引用就可以将其传递出去。 当 Vec 被释放时，这些盒子值跟被释放，并且所有的内存都被回收。</p>
 <a class="header" href="#a动物" id="a动物"><h2>动物</h2></a>
-<p>出于某种原因,任何关于面向对象和继承的讨论似乎最终都会讨论动物.
-它创造了一个不错的故事: “看,猫是食肉动物,食肉动物是动物”.</p>
-<p>但我会从Ruby宇宙的经典口号开始: “如果它嘎嘎叫,那就是鸭子”. 你所有的对象必须做的是定义 <code>嘎嘎{quacks}</code> 他们可以被认为是鸭子,虽然在一个非常狭窄的方式.</p>
+<p>出于某种原因，任何关于面向对象和继承的讨论，似乎最终都会讨论到动物。
+它创造了一个不错的故事: “看，猫是食肉动物，而食肉动物是动物”。</p>
+<p>但我会从 Ruby 宇宙的经典口号: “如果它嘎嘎叫，那就是鸭子” 开始。 你所有的对象必须做的，就是定义 <code>嘎嘎{quacks}</code>方法和，狭义来看，它就是鸭子。</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -263,14 +278,14 @@ for d in &amp;ducks {
 // quack!
 // squawk!
 #}</code></pre></pre>
-<p>在这里,我们有两种完全不同的类型 (其中一个非常愚蠢,甚至没有数据) ,并且是的,它们都是<code>quacks()</code>.
-其中一个有点奇怪 (对于鸭子) ,但他们共享相同的方法名称,Rust可以从类型安全的方式保存这些对象的集合.</p>
-<p>类型安全是一件奇妙的事情. 没有静态类型,你可以插入一个 <em>猫</em> 进入这个Quackers集合,导致运行时混乱.</p>
+<p>在这里，我们有两种完全不同的类型 (其中一个非常笨，甚至没有数据) ，并且是的，它们都能<code>quacks()</code>。
+其中一个的行为有点奇怪 (比如:一只鸭子(duck))，但他们共享相同的方法名称，Rust 可以从类型安全的方式，保存这类对象的集合。</p>
+<p>类型安全是一件奇妙的事情。若没有静态类型，你甚至可以插入一个 <em>猫</em> 进入这个 Quackers 集合，最终导致运行时的混乱。</p>
 <p>这是一个有趣的:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-// and why the hell not!
+// 为什么不是!
 impl Quack for i32 {
     fn quack(&amp;self) {
         for i in 0..*self {
@@ -289,13 +304,13 @@ let ducks: Vec&lt;&amp;Quack&gt; = vec![&amp;duck1,&amp;duck2,&amp;parrot,&amp;i
 // squawk!
 // quack 0 quack 1 quack 2 quack 3
 #}</code></pre></pre>
-<p>我能说什么? 它嘎嘎声叫,它一定是一只鸭子.
-有趣的是,你可以将你的 trait 应用于任何 rust 值,而不仅仅是”对象”.
-(以来<code>嘎嘎</code>通过引用,有明确的解除引用<code>*</code>得到整数. )</p>
-<p>然而,你只能用同一个库的特质{trait} 和类型来做这件事,所以标准库不能’猴子补丁’,这是另一块红宝石人的做法 (也不是最受人羡慕的) .</p>
-<p>到目前为止,这个特质{trait} <code>嘎嘎</code>表现得非常像Java接口,并且像现代Java接口一样 <em>提供</em> 这个方法.如果你已经实现了,它将提供一个默认实现 <em>需要</em> 方法.  (该<code>迭代器</code>特质{trait} 就是一个很好的例子. )</p>
-<p>但是,请注意特质{trait} 不属于 <em>定义类型</em> 和实施任何类型的新 trait ,但要受同一库限制.</p>
-<p>可以将引用传递给任何人<code>嘎嘎</code>实施者:</p>
+<p>我能说什么? 它嘎嘎声叫，它一定是一只鸭子。
+有趣的是，你可以把你的 trait 应用到任何 Rust 值，而不仅仅是”对象”。</p>
+<p>(因<code>quack</code>以引用类型的方式传递，需要有明确的解引用符号<code>*</code>，来得到整数。)</p>
+<p>然而，你只能用同一个库的 trait 和类型来做这件事，标准库是不允许打’补丁’的，这是另一个 Ruby 人的做法 (也还不是最受欢迎的做法) 。</p>
+<p>到目前为止，这个 <code>Quack</code> trait 表现得非常像 Java 接口，并且同现代 Java 接口一样，实现 <em>必要</em> 方法， <em>提供</em> 这个方法的默认实现。 (该<code>Iterator</code>trait 就是一个很好的例子。 )</p>
+<p>但是，请注意 trait 不属于 <em>定义类型</em> ，和为任何类型实现新的 trait ，但要受到同一个库的限制。</p>
+<p>还能要求，只接收<code>Quack</code>实现者的引用:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -305,29 +320,28 @@ fn quack_ref (q: &amp;Quack) {
 
 quack_ref(&amp;d);
 #}</code></pre></pre>
-<p>这是分类,Rust风格.</p>
-<p>由于我们在这里进行编程语言比较101,所以我会提到Go对这个嘎嘎的业务有一个有趣的看法 - 如果有一个Go接口<code>嘎嘎</code>,而一个类型有一个<code>嘎嘎</code>方法,那么类型就满足了<code>嘎嘎</code>而不需要明确的定义. `这也打破了定义好的Java模型,并且允许编译时鸭式输入,代价是一些清晰和类型安全. 但是鸭子打字有一个问题.</p>
-<p>坏OOP的标志之一是, 太多的方法有一些通用名称<code>run</code>. <code>&quot;如果它已经有了 run(),它必须是可 run 的&quot;</code>,听起来不像原来那么容易! 所以Go接口可能会是 <em>偶然</em> 有效 在Rust,两者都是<code>Debug</code>和<code>Display</code>特质{trait} 定义<code>fmt</code>方法,但他们真的意味着不同的事情.</p>
-<p>所以Rust的特质{trait} 允许传​​统 <em>多态</em> OOP. 但是遗传呢?人们通常是指 <em>实现继承{impl}</em> 而Rust则是 <em>接口继承</em>. 就好像一位Java程序员从未使用过<code>延伸{extend}</code>而是使用<code>实现{implements}</code>. 实际上,这是<a href="http://www.javaworld.com/article/2073649/core-java/why-extends-is-evil.html">推荐的做法</a>通过Alan Holub. 他说:</p>
+<p>而这，就是 Rust 风格的’类’。</p>
+<p>由于我们在这里进行 101 编程语言比较，所以我提个， Go 对这个嘎嘎工程的一个有趣看法 - 如果有一个 Go 接口<code>Quack</code>，和具有<code>quack</code>方法的一个类型，那么类型就满足了<code>Quack</code>接口，不需要明确的定义。这也打破了定义好的 Java 模型，并且允许编译时填鸭式类型，代价是一些清晰和类型安全。</p>
+<p>但是填鸭式类型有一个问题。OOP 的坏标志之一是，太多的方法有一些通用方法名称，如<code>run</code>。”如果它已经有了 run()，它必是能运行的”，听起来不像鸭鸭那么友善! 所以这让 Go 接口变成了 <em>偶然</em> 有效。在 Rust，虽然<code>Debug</code>和<code>Display</code>trait 两者都定义了<code>fmt</code>方法，但他们真的就是不同的事情。</p>
+<p>所以 Rust 的 trait 允许传统 <em>多态</em> OOP。但继承怎么办呢? 人们常指 <em>实现继承</em> ，Rust 则是 <em>接口继承</em>。就好像一位 Java 程序员不去<code>extend</code>(扩展)，改为<code>implements</code>(实现)。实际上，这是<a href="http://www.javaworld.com/article/2073649/core-java/why-extends-is-evil.html">推荐的做法</a>来自 Alan Holub。他说:</p>
 <blockquote>
-<p>我曾经参加过一个Java用户组会议,James Gosling (Java的发明人) 是这个会议的特色</p>
-<p>扬声器. 在令人难忘的问答环节中,有人问他: “如果你能再一次做Java,</p>
+<p>我曾经参加过一个 Java 用户组会议，James Gosling (Java 的发明人) 是这个会议的功能</p>
+<p>演讲者. 在令人难忘的问答环节中,有人问他: “如果你能再一次做 Java,</p>
 <p>你会改变什么?””我会放弃 class ,”他回答说,在笑声平息后,</p>
 </blockquote>
 <blockquote>
-<p>他解释说,真正的问题不是类本身,而是实现继承{implementation inheritance}(扩展关系{extends relationship}) .</p>
+<p>他解释说,真正的问题不是类本身,而是实现继承{implementation inheritance}，老是在扩展关系{extends relationship}。</p>
 </blockquote>
 <blockquote>
-<p>接口继承 (实现关系{the implements relationshup}) 是可取的.</p>
+<p>接口继承 (实现关系{the implements relationshup}) 是可取的。</p>
 </blockquote>
 <blockquote>
 <p>尽可能避免实现继承{implementation inheritance}</p>
 </blockquote>
-<p>所以即使在Java中,你也可能过度使用类.</p>
-<p>实现继承有一些严重的问题.</p>
-<p>但它的确如此 <em>方便</em>. 有这个胖基类叫动物和它有很多有用的功能 (它甚至可能暴露它的内部!) ,我们的派生类<code>猫</code>可以使用. 也就是说,它是一种代码重用的形式.</p>
-<p>但是代码重用是一个单独的问题. 理解Rust时,区分 实现 和 接口继承 很重要.</p>
-<p>请注意, trait 可能有 <em>提供</em> 方法. 考虑<code>迭代器</code>- 你只 <em>需要</em> 重写<code>next</code>,但却免费获得大量的方法. 这与现代Java接口的”default”方法类似. 这里我们只定义<code>名称{name}</code>和<code>upper_case</code>是为我们定义的. 我们 也是 <em>可以</em> 覆盖<code>upper_case</code>,但事实并非如此 <em>需要</em>.</p>
+<p>所以即使在 Java 中，你也可能过度使用类。</p>
+<p>实现继承有一些严重的问题。但它的确很 <em>方便</em>。 如有个臃肿的基类，叫动物和它有很多有用的功能 (它甚至可能暴露它的内部!)，到了我们的派生类，<code>猫</code>就可以使用。也就是说，它是一种代码重用的形式。但是代码重用是一个单独的问题。</p>
+<p>理解 Rust 时，区分 实现/接口继承 很重要。</p>
+<p>请注意， trait 可能有 <em>已提供</em> 的方法。想想<code>Iterator</code>- 你只 <em>需要</em> 重写<code>next</code>方法，却免费获得大量的方法。 这与现代 Java 接口的”default”方法类似。下面，我们只定义<code>name</code>，和<code>upper_case</code>是定义好(默认)的。 我们 <em>可以</em> 覆盖<code>upper_case</code>，但没有 <em>必要</em>。</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -352,9 +366,9 @@ let f = Boo();
 assert_eq!(f.name(),&quot;boo&quot;.to_string());
 assert_eq!(f.upper_case(),&quot;BOO&quot;.to_string());
 #}</code></pre></pre>
-<p>这是一个 <em>类</em> 的代码重用,为真,但请注意,它不适用于数据,只有 接口!</p>
+<p>这是个 <em>如同</em> 代码重用的示例，是真的，但注意，它不适用于数据，只适用于接口!</p>
 <a class="header" href="#a鸭子和泛型" id="a鸭子和泛型"><h2>鸭子和泛型</h2></a>
-<p>Rust中一个通用友好的鸭子函数的例子就是这样一个简单的例子:</p>
+<p>Rust 中一个泛型友好的鸭子函数，就是这样一个简单的例子:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -366,15 +380,16 @@ where Q: Quack {
 let d = Duck();
 quack(&amp;d);
 #}</code></pre></pre>
-<p>类型参数是 <em>任何</em> 实现的类型<code>嘎嘎{Quack}</code>. 之间有一个重要的区别<code>嘎嘎</code>和<code>quack_ref</code>在上一节中定义. 这个函数的 main 是编译的 <em>每个</em> 调用类型,并且不需要虚拟方法;这些功能可以完全内联. 它使用特质{trait} <code>嘎嘎</code>以不同的方式,作为一个 <em>约束{where}</em> 在泛型类型上.</p>
-<p>这是相当于通用的C ++<code>嘎嘎</code> (注意<code>常量</code>) :</p>
+<p>类型参数是 <em>任何</em> 实现了<code>Quack</code>的类型。<code>quack</code>与上节提到的<code>quack_ref</code>之间有一个重要的区别。 这函数的主体会为 <em>每个</em> 调用类型进行编译，并且不需要虚构方法; 这些函数可以完全内联编译。不同的方式使用 <code>Quack</code> trait ，作为在泛型类型上的一个 <em>约束</em>。</p>
+<p>这是相当于 C ++的泛型<code>quack</code> (注意这个<code>const</code>) :</p>
 <pre><code class="language-cpp">template &lt;class Q&gt;
 void quack(const Q&amp; q) {
     q.quack();
 }
 </code></pre>
-<p>请注意,类型参数不受任何限制.</p>
-<p>这是非常多的编译时鸭式输入 - 如果我们将 非quackable 类型引用传递,那么编译器会抱怨 <code>不嘎嘎</code> 方法. 至少这个错误是在编译时发现的,但是当一个类型被意外Quackable时会更糟,就像Go一样. 更多涉及的模板函数和类导致可怕的错误消息,因为 <em>没有</em> 对泛型的限制. 你可以定义一个可以处理Quacker指针迭代的函数:</p>
+<p>请注意，类型参数不受任何限制。</p>
+<p>这是非常多的编译时鸭式输入 - 如果我们传递一个不存在<code>quack</code>方法的类型的引用，那么编译器会抱怨没有 <code>quack</code> 方法。 至少这个错误是在编译时发现的，但是当一个类型被意外有<code>quack</code>时会更糟，Go 就可能发生。 相关的更多模板函数和类会导致可怕的错误消息，因为 <em>没有</em> 对泛型的限制。</p>
+<p>你可以定义一个函数，它可以处理在 Quacker 指针上的迭代:</p>
 <pre><code class="language-cpp">template &lt;class It&gt;
 void quack_everyone (It start, It finish) {
     for (It i = start; i != finish; i++) {
@@ -382,7 +397,7 @@ void quack_everyone (It start, It finish) {
     }
 }
 </code></pre>
-<p>这将会被执行 <em>每个</em> 迭代器类型<code>It</code>. Rust的等价物有点更具挑战性:</p>
+<p><em>每个</em> 迭代器类型<code>It</code>都实现。 Rust 的等价物多少更具挑战性:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -397,21 +412,20 @@ let ducks: Vec&lt;Box&lt;Quack&gt;&gt; = vec![Box::new(duck1),Box::new(duck2),Bo
 
 quack_everyone(ducks.into_iter());
 #}</code></pre></pre>
-<p>Rust中的迭代器不是鸭式的,但是必须是 impl <code>迭代器</code>的类型
-,在这种情况下,迭代器提供了一些盒子<code>嘎嘎</code>. 所涉及的类型没有歧义,值必须满足<code>嘎嘎</code>. 通常,函数签名是关于通用Rust函数的最具挑战性的事情,这就是为什么我建议阅读标准库的源代码 - impl 通常比 声明 简单得多!</p>
-<p>这里唯一的类型参数是实际的迭代器类型,这意味着这将适用于任何可以传递序列的任何东西<code>Box&lt;Duck&gt;</code>,而不仅仅是一个向量迭代器.</p>
+<p>Rust 中的迭代器不是鸭类型的，必须是实现了<code>Iterator</code>的类型
+，在这种情况下，迭代器提供了一些盒化<code>Quack</code>。 所涉及的类型没有歧义，值必须满足<code>Quack</code>。 通常，函数签名是一个 Rust 泛型函数的最具挑战性的事情，这就是为什么我建议阅读标准库的源代码 - 实现 通常比 声明简单得多!</p>
+<p>这里唯一的类型参数是实际的迭代器类型，意味着，任何可以具有<code>Box&lt;Duck&gt;</code>序列的迭代器都能用，而不仅仅是一个 Vec 迭代器。</p>
 <a class="header" href="#a继承" id="a继承"><h2>继承</h2></a>
-<p>面向对象设计的一个常见问题是试图将事情强加到一个 <em>是一个</em> 关系,而忽视 <em>有一个</em> 关系. <a href="https://en.wikipedia.org/wiki/Design_Patterns">该四人帮 </a>
-二十二年前在他们的设计模式书中说过”首选组合继承”.</p>
-<p>这里有一个例子: 你想模拟一些公司的员工,并且<code>雇员{Employee}</code>似乎是一个 class 的好名字.</p>
-<p>然后,经理是一个员工 (这是真的) ,所以我们开始用一个构建我们的层次结构</p>
-<p><code>雇员</code>的子类<code>经理{Manager}</code>. <code>这并不像看起来那么聪明. 也许我们对识别重要名词感到厌倦,也许我们 (无意识地) 认为经理和员工是不同种类的动物? 这更好的是雇员</code>有一个<code>角色</code>集合,然后一个经理就是一个<code>雇员</code>有更多的责任和能力.</p>
-<p>或考虑车辆 - 从自行车到300吨矿车. 有多种方式可以考虑车辆,道路 (全地形,城市,铁路等) ,电源 (电力,柴油,柴油电力等) ,货物或人等等. 您根据一个方面创建的任何固定层次的类都会忽略所有其他方面. 也就是说,有多种可能的车辆分类!</p>
-<p>构成在Rust中更为重要,原因很明显,您无法从基类以惰性方式继承功能.</p>
-<p>组合也很重要,因为借用检查器足够聪明,可以知道借用不同的结构域是单独的借入.</p>
-<p>你可以有一个字段的可变借入,同时拥有另一个字段的不可变借入,等等. Rust不能告诉一个方法只访问一个字段,所以为了方便实现,这些字段应该用自己的方法来构造.  (该 <em>外部</em> 结构的接口可以是任何你喜欢使用合适的 trait 的. )</p>
-<p>“拆分拆分{split borrowing}”的一个具体例子会使这个更清晰.</p>
-<p>我们拥有一个一些字符串的结构,并且有一个可变的借用第一个字符串的方法.</p>
+<p>面向对象设计的一个常见问题是，试图将事情强加到一个 <em>是一个</em> 什么的关系中，而忽视 <em>有一个</em> 什么的关系。 <a href="https://en.wikipedia.org/wiki/Design_Patterns">四人帮</a>
+二十二年前在他们的设计模式书中，说过”首选继承布局”。</p>
+<p>这里有一个例子: 你想模拟一些公司的员工，并且<code>雇员{Employee}</code>似乎是一个类的好名字。然后，经理 <strong>是一个</strong> 员工 (这是真的) ，所以我们开始用一个构建我们的层次结构：</p>
+<p><code>Employee</code>的子类<code>经理{Manager}</code>。这并不像看起来那么流畅。 也许是我们对识别重要名词感到厌倦，也许我们 (无意识地) 认为经理和员工是不同种类的动物? 更好的方式，是雇员 <strong>有一个</strong> 一个 <code>Roles（角色）</code>的集合，然后一个经理，仅仅是一个有更多的责任和能力的<code>Employee</code>。</p>
+<p>或考虑车辆 - 从自行车到 300 吨矿车。 有多种方式可以考虑车辆，道路需求 (全地形，城市，铁路等) ，电源来源 (电力，柴油，柴油电力等) ，运货物还是人等等。当您根据一个方面，去创建任何固定层次的类，都会忽略所有其他方面。也就是说，可能有多种的车辆分类!</p>
+<p>布局在 Rust 中更为重要，原因很明显，您无法从基类以惰性方式继承功能。</p>
+<p>布局还是很重要，因为借用检查器足够聪明，可以知道借来的不同结构字段都是独立的借用。你可以有一个字段的可变借用，同时拥有另一个字段的不可变借用，等等。</p>
+<p>Rust 不能说，一个方法只访问一个字段，所以为了实现方便，这些字段应该用自己的方法来构造。 (结构的 <em>外部</em> 接口，可以是任何你喜欢使用的合适 trait。 )</p>
+<p>“拆分借来的{split borrowing}”的一个具体例子，会使这个更清晰。</p>
+<p>有个拥有一些字符串的结构，和一个方法，是说能可变借用第一字符串。</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -427,8 +441,8 @@ impl Foo {
     ....
 }
 #}</code></pre></pre>
-<p>(这是Rust命名约定的一个例子 - 这些方法应该以<code>_mut</code>) `</p>
-<p>现在,一种借用两个字符串的方法,重用第一种方法:</p>
+<p>(这是 Rust 命名约定的一个例子 - 这类方法应该以<code>_mut</code>结尾)</p>
+<p>现在，一种借用两个字符串的方法，重用第一种方法:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -436,7 +450,7 @@ impl Foo {
         (self.borrow_one_mut(), &amp;self.two)
     }
 #}</code></pre></pre>
-<p>不行! 我们从可变的<code>self</code>和 <em>也</em> 从中 不可变 借用 <code>self</code>. 如果Rust允许这样的情况发生,那么无法保证 不可改变的引用 不会改变.</p>
+<p>这会失败! 因我们既有个<code>self</code>的可变借用，<em>又</em>有个 <em>也</em> <code>self</code>的不可变借用。 如果 Rust 允许这样的情况发生，那么无法保证 不可变引用(借用) 不会改变。</p>
 <p>解决方案很简单:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -445,13 +459,11 @@ impl Foo {
         (&amp;self.one, &amp;self.two)
     }
 #}</code></pre></pre>
-<p>这很好,因为借款检查员认为这些是独立的借款.</p>
-<p>所以想象这些字段是一些任意的类型,你可以看到在这些字段上调用的方法, 不会导致借用问题. 有一种限制但非常重要的”继承”<a href="https://rust-lang.github.io/book/second-edition/ch15-02-deref.html">Deref</a>
-这是’取消引用’操作符’*<code>的 trait 。</code>String<code>实现</code>Deref&lt;Target=str&gt;<code>，所以</code>＆str<code>上定义的所有方法都是自动的 也可用于</code>String<code>! 以类似的方式，</code>Foo<code>的方法可以直接 调用</code>Box<Foo>`。 有些人觉得这有点神奇，但它非常方便。
-现代Rust中有一种更简单的语言，但使用起来并不令人愉快。
-它确实应该用于那些拥有可变类型和更简单借用的情况
-类型。</p>
-<p>一般在Rust中有 <em>特质{trait} 继承</em>:</p>
+<p>好了，因为借用检查员，认为这些是独立的借用。所以想象这些字段是一些任意类型，你可以看到在这些字段上调用的方法，不会导致借用问题。</p>
+<p>使用<a href="https://rust-lang.github.io/book/second-edition/ch15-02-deref.html">Deref</a>是一种限制但非常重要的”继承”，这是’解引用’符号<code>*</code>(语法糖)的 实际 trait 。<code>String</code>实现了<code>Deref&lt;Target=str&gt;</code>，所以<code>＆str</code>上定义的所有方法，自动都可用于<code>String</code>! 类似的，<code>Foo</code>的方法可以直接调用<code>Box&lt;Foo&gt;</code>，有些人觉得这有点... 神奇，但它是非常方便能力。
+现代 Rust 中有一种更简单的语言，但使用起来并不令人愉快。
+它确实应该用于，一个具有所有权-可变的类型和一个简单的借用类型的情况。</p>
+<p>一般来说， 这就是 Rust 中的 <em>trait 继承</em>:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -465,7 +477,7 @@ trait Location {
 
 trait ShowTell: Show + Location {}
 #}</code></pre></pre>
-<p>最后一个 trait 简单地将我们两个不同的 trait 合并为一个,尽管它可以指定其他方法.</p>
+<p>最后一个 trait 简单地将我们两个不同的 trait 合并为一个，尽管它可以指定其他方法。</p>
 <p>现在的情况和以前一样:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -499,7 +511,7 @@ impl Location for Foo {
 
 impl ShowTell for Foo {}
 #}</code></pre></pre>
-<p>现在,如果我有价值<code>foo</code>类型<code>Foo</code>,那么对该值的引用将会满足<code>&amp;Show</code>,<code>&amp;Location</code>要么<code>&amp;ShowTell</code> (这暗示着两者) .</p>
+<p>现在，如果我有<code>Foo</code>类型的<code>foo</code>值，那么对该值的引用将会满足<code>&amp;Show</code>，<code>&amp;Location</code>或是<code>&amp;ShowTell</code> (这暗示着两者) 三个。</p>
 <p>这是一个有用的小宏:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -510,7 +522,7 @@ macro_rules! dbg {
     }
 }
 #}</code></pre></pre>
-<p>它需要一个参数 (用<code>$x</code>表示) 必须是’表达’. 我们打印出它的价值,并且一个 <em>字符串化</em> 值的版本. C程序员可以是在这一点上 <em>小</em> 得意,但这意味着如果我通过了<code>1 + 2</code> (一个表达) <code>stringify!(1 + 2)</code>是文字字符串”1 + 2”. 这会为我们在玩代码时节省一些打字的时间:</p>
+<p>它需要一个参数 (用<code>$x</code>表示) 必须是一个’表达式(expression)’。 我们打印出它的值，和一个 <em>字符串化</em> 的版本。 C 程序员会在这一点上有些 <em>小</em> 得意，这意味着如果我传递了<code>1 + 2</code> (一个表达式) <code>stringify!(1 + 2)</code>是字面字符串”1 + 2”。 这会为我们在玩代码时节省一些打字的时间:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -535,7 +547,7 @@ fn show(s: &amp;Show) {
     dbg!(s.show());
 }
 
-show(&amp;boo);
+show(&amp;boo); // `Show`引用传递给`show`
 
 // foo.show() = &quot;Pete&quot;
 // foo.location() = &quot;bathroom&quot;
@@ -545,45 +557,46 @@ show(&amp;boo);
 // r.location() = &quot;cupboard&quot;
 // s.show() = &quot;Alice&quot;
 #}</code></pre></pre>
-<p>这个 <em>是</em> 面向对象,而不是你习惯的那种.</p>
-<p>请注意<code>Show</code>引用传递给<code>show</code>, 不可能是 <em>动态</em> 升级为<code>ShowTell</code>! 具有更多动态类系统的语言允许您检查给定对象是否是类的实例, 然后对该类型执行动态转换. 一般来说这不是一个好主意,因为这个原因,特别是不能在Rust中工作, <code>Show</code>引用已经”忘记”它最初是一个<code>ShowTell</code>引用.</p>
-<p>你总是有选择: 多态,通过特质{trait} 对象,或单态,通过泛型约束的特质{trait} . 现代C ++和Rust标准库倾向于采用通用路由,但多态路由并未过时. 您必须了解不同的权衡 - 泛型生成最快的代码,可以内联. 这可能会导致代码膨胀. 但并非所有事情都必须如此 <em>尽可能快</em>- 在典型的程序 run 的生命周期中,它可能只发生”少”几次.</p>
-<p>所以,这里有一个总结:</p>
+<p>这些就 <em>是</em> 面向对象，但不是你习惯的那种。</p>
+<p>请注意，<code>Show</code>引用传递给<code>show</code>，它不可能是 <em>动态</em> 升级为<code>ShowTell</code>! 占据更多动态类系统范畴的语言，允许您检查给定对象是否是类的实例，然后对该类型执行动态转换。 一般来说这不是一个好主意，特别是不能在 Rust 中工作，因为<code>Show</code>引用已经”忘记”它最初是一个<code>ShowTell</code>引用。</p>
+<p>你总有选择: 多态，通过 trait 对象，或是单态，通过泛型约束的 trait 。 现代 C ++和 Rust 标准库倾向于采用泛型路由，但多态路由并未过时。 您必须了解’路’的不同 - 泛型生成最快的代码，且可以内联。 这可能会导致代码膨胀。 但并非所有事情都要 <em>尽可能快</em>- 有时某个程序运行的生命周期中，可能只发生”那么”几次。</p>
+<p>最后，这里有一个总结:</p>
 <ul>
-<li><code>类</code>扮演的角色在数据和 trait 之间共享</li>
-<li>结构和枚举是愚蠢的,虽然你可以定义方法和做数据隐藏</li>
-<li>一个 <em>有限</em> 子类型的形式是可能的数据使用<code>Deref</code> trait</li>
-<li>trait 没有任何数据,但可以实现任何类型 (不仅仅是结构)</li>
-<li>trait 可以从其他 trait 继承</li>
-<li>trait 可以提供方法,允许接口代码重用</li>
-<li>trait 给你两个虚拟方法 (多态) 和通用约束 (单态)</li>
+<li><code>class</code>所扮演的角色在数据和 traits 之间共享。</li>
+<li>结构和枚举是笨的，虽然你可以定义方法和做数据隐藏。</li>
+<li>使用<code>Deref</code> trait ，可以对数据进行一个子类型化的 <em>限制</em> 形式。</li>
+<li>trait 没有任何数据，但可以实现任何类型 (不仅仅是结构)。</li>
+<li>trait 可以从其他 trait 继承。</li>
+<li>trait 可以提供方法，允许接口代码重用。</li>
+<li>trait 给你两个虚构方法 (多态) 和泛型约束 (单态)。</li>
 </ul>
 <a class="header" href="#a示例-windows-api" id="a示例-windows-api"><h2>示例: Windows API</h2></a>
-<p>GUI工具包是传统OOP广泛使用的领域之一. 一个<code>EditControl</code>或者一个<code>ListWindow</code>是-一个<code>窗口{Window}</code>等等. 这使得编写Rust绑定到GUI工具包比编写它更困难.</p>
-<p>Win32编程可以在Rust中完成<a href="https://www.codeproject.com/Tips/1053658/Win-GUI-Programming-In-Rust-Language">直接</a>,它比原来的C稍微笨拙一点. 当我从C到C ++毕业时,我想要更干净的东西,并且做了我自己的OOP包装. 典型的Win32 API函数是<a href="https://docs.rs/user32-sys/0.0.9/i686-pc-windows-gnu/user32_sys/fn.ShowWindow.html">ShowWindow</a>用于控制窗口的可见性. 现在,一个<code>EditControl</code>有一些专门的功能,但它都是用Win32完成的<code>HWND</code> (’handle to window’) 不透明的值. 你想要<code>EditControl</code>也有一个<code>show</code>方法,传统上这将通过实现继承来完成. 您 <em>不</em> 想要为每种类型输出所有这些继承的方法!但Rust trait 提供了一个解决方案. 会有一个<code>窗口{Window}</code> trait :</p>
+<p>GUI 工具包是广泛使用传统 OOP 的领域之一。 一个<code>EditControl</code>或者一个<code>ListWindow</code><strong>是一个</strong><code>Window</code>等等。这使得编写 Rust 绑定到 GUI 工具包，比使用它更困难。</p>
+<p>Win32 编程在 Rust 中可以<a href="https://www.codeproject.com/Tips/1053658/Win-GUI-Programming-In-Rust-Language">直接</a>完成，它比原来的 C 稍微笨拙一点。 当我从 C 到 C ++ 毕业时，我想要更干净的东西，并且做了我自己的 OOP 包装。</p>
+<p>一个典型的 Win32 API 函数是<a href="https://docs.rs/user32-sys/0.0.9/i686-pc-windows-gnu/user32_sys/fn.ShowWindow.html">ShowWindow</a>，用于控制窗口的可见性。 现在，一个<code>EditControl</code>有一些专门的功能，但它都是用 Win32 <code>HWND</code> (’handle to window’) 不透明的值完成的。若你想要<code>EditControl</code>也有一个<code>show</code>方法，传统上这将通过实现继承来完成，但您 <em>不</em> 想要为每种类型输出所有这些继承的方法! 而 Rust trait 提供了一个解决方案，这会有一个<code>Window</code> trait :</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
 trait Window {
-    // you need to define this!
+    // 你需要定义这个！
     fn get_hwnd(&amp;self) -&gt; HWND;
 
-    // and all these will be provided
+    // 所有这些都将提供
     fn show(&amp;self, visible: bool) {
         unsafe {
          user32_sys::ShowWindow(self.get_hwnd(), if visible {1} else {0})
         }
     }
 
-    // ..... oodles of methods operating on Windows
+    // .....在 Windows 上运行的大量方法
 
 }
 #}</code></pre></pre>
-<p>所以,实现struct为<code>EditControl</code>可以包含一个<code>HWND</code>, 并通过定义一种方法执行<code>窗口{Window}</code>;<code>EditControl</code>是一种继承自的<code>窗口{Window}</code>特质{trait} 并定义扩展接口. 就像是<code>ComboxBox</code>- 其行为像一个<code>EditControl</code> <em>和</em> 一个<code>ListWindow</code>可以通过 trait 继承轻松实现.</p>
-<p>Win32 API (’32’不再意味着’32位’) 实际上是面向对象的,但是老式的,受 Alan Kay 定义的影响: 对象包含隐藏的数据,并且由 <em>消息{messages}</em> 控制. 因此,任何Windows应用程序的核心都有一个消息循环,各种窗口 (称为’窗口类’) 都用它们自己的switch 语句实现这些方法. 有一个消息叫<code>WM_SETTEXT</code>但实现可能会有所不同: 标签的文本更改,但顶级窗口的标题更改.</p>
-<p><a href="https://gabdube.github.io/native-windows-gui/book_20.html">这里</a>是一个相当有前途的最小Windows GUI框架. 但根据我的口味,有太多了<code>unwrap</code>实例正在发生 - 其中一些甚至没有错误.</p>
-<p>这是因为 NWG 正在利用消息的松散动态性质. 通过适当的类型安全接口,编译时会捕获更多的错误.</p>
-<p>在<a href="https://rust-lang.github.io/book/second-edition/ch17-00-oop.html">下一版</a>Rust编程语言手册 对Rust中 面向对象的含义 进行了很好的讨论.</p>
+<p>所以，<code>EditControl</code>的实现结构只能包含一个<code>HWND</code>，并通过定义一种方法实现<code>Window</code>; <code>EditControl</code>是一种继承自<code>Window</code>的 trait ，并定义了扩展接口。比如像<code>ComboxBox</code>这样的 - 其行为像一个<code>EditControl</code> <em>和</em> 可以通过 trait 继承轻松实现 一个<code>ListWindow</code>。</p>
+<p>Win32 API (’32’不再意味着’32 位’) 实际上是面向对象的，但是老一辈，受 Alan Kay 定义的影响: 对象包含隐藏的数据，并且由 <em>消息{messages}</em> 控制。因此，任何 Windows 应用程序的核心都有一个消息循环，各种窗口 (称为’窗口类’) 都用它们自己的 switch 语句实现这些方法。 其中有一个消息，可能有不同的实现，叫<code>WM_SETTEXT</code>: 标签的文本更改，顶级窗口的标题会变化。</p>
+<p><a href="https://gabdube.github.io/native-windows-gui/book_20.html">这里</a>是一个相当有前途的最小 Windows GUI 框架。 但根据我的口味，有太多了<code>unwrap</code>实例 - 其中一些甚至没有错误。</p>
+<p>这是因为 NWG 正在利用消息的松散动态性质。通过适当的类型安全接口，编译时会捕获更多的错误。</p>
+<p>在<a href="https://rust-lang.github.io/book/second-edition/ch17-00-oop.html">下一版</a>的 Rust 编程语言手册中， Rust 对面向对象的含义进行了很好的讨论。</p>
 
                 </main>
 
