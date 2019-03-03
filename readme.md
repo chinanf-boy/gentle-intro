@@ -13,16 +13,15 @@
 
 > 欢迎 `Issue/Pull` ✋
 
-## 校对 中
+## 校对 ✅ 2019-3-3
 
 <!-- doc-templite START generated -->
 <!-- repo = 'stevedonovan/gentle-intro' -->
 <!-- commit = '4885a0615a48f1a736f88e71b9e5e3cba887c63c' -->
 <!-- time = '2018 4.18' -->
-
-| 翻译的原文 | 与日期       | 最新更新 | 更多                       |
-| ---------- | ------------ | -------- | -------------------------- |
-| [commit]   | ⏰ 2018 4.18 | ![last]  | [中文翻译][translate-list] |
+翻译的原文 | 与日期 | 最新更新 | 更多
+---|---|---|---
+[commit] | ⏰ 2018 4.18 | ![last] | [中文翻译][translate-list]
 
 [last]: https://img.shields.io/github/last-commit/stevedonovan/gentle-intro.svg
 [commit]: https://github.com/stevedonovan/gentle-intro/tree/4885a0615a48f1a736f88e71b9e5e3cba887c63c
@@ -39,7 +38,7 @@
 - [x] [7.线程,网络和共享](./src/7-shared-and-networking.zh.md)
 - [x] [8.面向对象编程](./src/object-orientation.zh.md)
 - [x] [9.用 nom 解析](./src/nom-intro.zh.md)
-- [ ] [10.痛点](./src/pain-points.zh.md)
+- [x] [10.痛点](./src/pain-points.zh.md)
 
 > // ...
 
